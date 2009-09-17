@@ -27,12 +27,15 @@ $(driver): $(obj) $(xerces_c.l)
 $(obj) $(dep): cpp_options := -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options)
 
-gen :=  $(out_base)/$(xsd:.xsd=-pskel.hxx)  \
-        $(out_base)/$(xsd:.xsd=-pskel.ixx)  \
-        $(out_base)/$(xsd:.xsd=-pskel.cxx)  \
-        $(out_base)/$(xsd:.xsd=-pimpl.hxx)  \
-	$(out_base)/$(xsd:.xsd=-pimpl.cxx)  \
-	$(out_base)/$(xsd:.xsd=-driver.cxx)
+genf := $(xsd:.xsd=-pskel.hxx)  \
+        $(xsd:.xsd=-pskel.ixx)  \
+        $(xsd:.xsd=-pskel.cxx)  \
+        $(xsd:.xsd=-pimpl.hxx)  \
+	$(xsd:.xsd=-pimpl.cxx)  \
+	$(xsd:.xsd=-driver.cxx)
+
+gen  := $(addprefix $(out_base)/,$(genf))
+
 
 $(gen): xsd := $(out_root)/xsd/xsd
 $(gen): xsd_options := --generate-print-impl --generate-test-driver \
@@ -65,6 +68,17 @@ $(clean): $(driver).o.clean                                  \
   $(addprefix $(out_base)/,$(xsd:.xsd=-pskel.cxx.xsd.clean)) \
   $(addprefix $(out_base)/,$(xsd:.xsd=-pimpl.cxx.xsd.clean))
 
+# Generated .gitignore.
+#
+ifeq ($(out_base),$(src_base))
+$(gen): | $(out_base)/.gitignore
+$(driver): | $(out_base)/.gitignore
+
+$(out_base)/.gitignore: files := $(xsd:.xsd=-driver) $(genf)
+$(clean): $(out_base)/.gitignore.clean
+
+$(call include,$(bld_root)/git/gitignore.make)
+endif
 
 # How to.
 #

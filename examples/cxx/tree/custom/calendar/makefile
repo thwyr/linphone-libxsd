@@ -42,22 +42,19 @@ $(out_root)/xsd/xsd cxx-tree --output-dir $(out_base) --generate-xml-schema \
 
 #
 #
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): xsd := $(out_root)/xsd/xsd
+genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
+gen  := $(addprefix $(out_base)/,$(genf))
+
+$(gen): xsd := $(out_root)/xsd/xsd
 
 # We have to double-escape '#' because the message function
 # (which is used in command scripts) expands things twice.
 #
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): xsd_options := \
+$(gen): xsd_options := \
 --generate-inline \
 --extern-xml-schema xml-schema.xsd
 
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): $(out_root)/xsd/xsd
+$(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep))
 
@@ -77,6 +74,17 @@ $(clean): $(driver).o.clean                            \
   $(addprefix $(out_base)/,$(xsd:.xsd=.cxx.xsd.clean))
 	$(call message,rm $$1,rm -f $$1,$(out_base)/xml-schema.hxx)
 
+# Generated .gitignore.
+#
+ifeq ($(out_base),$(src_base))
+$(gen): | $(out_base)/.gitignore
+$(driver): | $(out_base)/.gitignore
+
+$(out_base)/.gitignore: files := driver xml-schema.hxx $(genf)
+$(clean): $(out_base)/.gitignore.clean
+
+$(call include,$(bld_root)/git/gitignore.make)
+endif
 
 # How to.
 #

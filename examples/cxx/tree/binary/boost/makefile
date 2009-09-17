@@ -33,21 +33,17 @@ $(driver): $(obj) $(xerces_c.l) $(boost_serialization.l)
 $(obj) $(dep): cpp_options := -I$(src_root)/libxsd -I$(src_root)
 $(obj) $(dep): $(xerces_c.l.cpp-options) $(boost_serialization.l.cpp-options)
 
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): xsd := $(out_root)/xsd/xsd
+genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
+gen  := $(addprefix $(out_base)/,$(genf))
 
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): xsd_options :=         \
---generate-ostream                                   \
+$(gen): xsd := $(out_root)/xsd/xsd
+
+$(gen): xsd_options := --generate-ostream \
 --hxx-prologue-file $(src_base)/library-prologue.hxx \
---generate-insertion boost::archive::text_oarchive   \
+--generate-insertion boost::archive::text_oarchive \
 --generate-extraction boost::archive::text_iarchive
 
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): $(out_root)/xsd/xsd
+$(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep))
 
@@ -66,6 +62,17 @@ $(clean): $(driver).o.clean                            \
   $(addsuffix .cxx.clean,$(dep))                       \
   $(addprefix $(out_base)/,$(xsd:.xsd=.cxx.xsd.clean))
 
+# Generated .gitignore.
+#
+ifeq ($(out_base),$(src_base))
+$(gen): | $(out_base)/.gitignore
+$(driver): | $(out_base)/.gitignore
+
+$(out_base)/.gitignore: files := driver $(genf)
+$(clean): $(out_base)/.gitignore.clean
+
+$(call include,$(bld_root)/git/gitignore.make)
+endif
 
 # How to.
 #

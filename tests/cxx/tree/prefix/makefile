@@ -30,7 +30,8 @@ $(driver): $(obj) $(xerces_c.l)
 $(obj) $(dep): cpp_options := -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options)
 
-gen := $(addprefix $(out_base)/,$(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx))
+genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
+gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
 $(gen): xsd_options := --generate-serialization --generate-polymorphic \
@@ -62,6 +63,17 @@ $(clean): $(driver).o.clean                                \
   $(addsuffix .cxx.clean,$(dep))                           \
   $(addprefix $(out_base)/,$(xsd:.xsd=.cxx.xsd.clean))
 
+# Generated .gitignore.
+#
+ifeq ($(out_base),$(src_base))
+$(gen): | $(out_base)/.gitignore
+$(driver): | $(out_base)/.gitignore
+
+$(out_base)/.gitignore: files := driver $(genf)
+$(clean): $(out_base)/.gitignore.clean
+
+$(call include,$(bld_root)/git/gitignore.make)
+endif
 
 # How to.
 #

@@ -29,19 +29,13 @@ $(driver): $(obj) $(xerces_c.l)
 $(obj) $(dep): cpp_options := -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options)
 
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): xsd := $(out_root)/xsd/xsd
+genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
+gen  := $(addprefix $(out_base)/,$(genf))
 
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): xsd_options := --generate-serialization \
-                                             --suppress-parsing       \
-                                             --root-element-all
-
-$(out_base)/$(xsd:.xsd=.hxx) \
-$(out_base)/$(xsd:.xsd=.ixx) \
-$(out_base)/$(xsd:.xsd=.cxx): $(out_root)/xsd/xsd
+$(gen): xsd := $(out_root)/xsd/xsd
+$(gen): xsd_options := --generate-serialization --suppress-parsing \
+--root-element-all
+$(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep))
 
@@ -61,6 +55,17 @@ $(clean): $(driver).o.clean                            \
   $(addprefix $(out_base)/,$(xsd:.xsd=.cxx.xsd.clean))
 	$(call message,rm $$1,rm -f $$1,$(out_base)/out.xml)
 
+# Generated .gitignore.
+#
+ifeq ($(out_base),$(src_base))
+$(gen): | $(out_base)/.gitignore
+$(driver): | $(out_base)/.gitignore
+
+$(out_base)/.gitignore: files := driver $(genf)
+$(clean): $(out_base)/.gitignore.clean
+
+$(call include,$(bld_root)/git/gitignore.make)
+endif
 
 # How to.
 #

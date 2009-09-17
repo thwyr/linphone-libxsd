@@ -114,7 +114,7 @@ $(out_base)/: $(xsd)
 $(install): $(xsd)
 	$(call install-exec,$<,$(install_bin_dir)/xsd)
 
-# clean
+# Clean.
 #
 .PHONY: $(clean)
 
@@ -123,8 +123,18 @@ $(clean):                            \
   $(addsuffix .cxx.clean,$(cxx_obj)) \
   $(addsuffix .cxx.clean,$(cxx_od))
 
+# Generated .gitignore.
+#
+ifeq ($(out_base),$(src_base))
+$(xsd): | $(out_base)/.gitignore
 
-# how to
+$(out_base)/.gitignore: files := xsd
+$(clean): $(out_base)/.gitignore.clean
+
+$(call include,$(bld_root)/git/gitignore.make)
+endif
+
+# How to.
 #
 $(call include,$(bld_root)/cxx/o-e.make)
 $(call include,$(bld_root)/cxx/cxx-o.make)
