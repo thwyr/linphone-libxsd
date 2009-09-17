@@ -2,7 +2,7 @@ Version 3.3.0
 
   * When built with Xerces-C++ 3-series, enable handling of multiple
     imports for the same namespace. Before, all subsequent imports for
-    a namespace were ignored which caused error in some schemas.
+    a namespace were ignored which caused errors in some schemas.
 
   * Warning id's have changed to start with a letter identifying the
     component issuing the warning. F - compiler frontend, D - compiler
