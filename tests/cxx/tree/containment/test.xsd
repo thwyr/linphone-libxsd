@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:t="test" targetNamespace="test">
+
+  <complexType name="id-ex">
+    <simpleContent>
+      <extension base="ID">
+        <attribute name="id" type="ID"/>
+      </extension>
+    </simpleContent>
+  </complexType>
+
+  <complexType name="inner">
+    <sequence>
+      <element name="id" type="ID" minOccurs="0"/>
+      <element name="id-ex" type="t:id-ex" minOccurs="0"/>
+      <element name="ref" type="IDREF" minOccurs="0"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="outer">
+    <sequence>
+      <element name="i" type="t:inner" minOccurs="0"/>
+      <element name="ref" type="IDREF" minOccurs="0"/>
+    </sequence>
+  </complexType>
+
+</schema>

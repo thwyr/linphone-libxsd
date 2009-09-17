@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!--
+
+file      : examples/cxx/tree/streaming/records.xsd
+author    : Boris Kolpackov <boris@codesynthesis.com>
+copyright : not copyrighted - public domain
+
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:complexType name="record">
+    <xsd:sequence>
+      <xsd:element name="data" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <!--
+
+  We need this global element so that we get serialization functions
+  for record. Note that global elements are always qualified. As a
+  result, if you are using XML namespaces (this example is not), you
+  will need to make sure the record element inside the records type
+  is also qualified.
+
+  -->
+  <xsd:element name="record" type="record"/>
+
+  <xsd:complexType name="records">
+    <xsd:sequence>
+      <xsd:element name="record" type="record" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="records" type="records"/>
+
+</xsd:schema>
