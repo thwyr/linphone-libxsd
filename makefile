@@ -5,16 +5,18 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))build/bootstrap.make
 
-default := $(out_base)/
-test    := $(out_base)/.test
-install := $(out_base)/.install
-clean   := $(out_base)/.clean
+default  := $(out_base)/
+test     := $(out_base)/.test
+install  := $(out_base)/.install
+clean    := $(out_base)/.clean
+cleandoc := $(out_base)/.cleandoc
 
 .PHONY: $(default) $(test) $(install) $(clean)
 
 $(default): $(out_base)/xsd/      \
             $(out_base)/tests/    \
-            $(out_base)/examples/
+            $(out_base)/examples/ \
+            $(out_base)/documentation/
 
 $(test): $(out_base)/tests/.test
 
@@ -31,6 +33,8 @@ $(install): $(out_base)/xsd/.install           \
 $(clean): $(out_base)/xsd/.clean      \
           $(out_base)/tests/.clean    \
           $(out_base)/examples/.clean
+
+$(cleandoc): $(out_base)/documentation/.cleandoc
 
 $(call include,$(bld_root)/install.make)
 

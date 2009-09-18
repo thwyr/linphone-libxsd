@@ -5,10 +5,14 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../build/bootstrap.make
 
-install   := $(out_base)/.install
+default  := $(out_base)/
+install  := $(out_base)/.install
+cleandoc := $(out_base)/.cleandoc
 
-.PHONY: $(install)
+$(default): $(out_base)/cxx/
 
+# Install.
+#
 $(install):
 	$(call install-dir,$(src_base)/cxx,$(install_doc_dir)/xsd/cxx)
 	$(call install-data,$(src_base)/default.css,$(install_doc_dir)/xsd/default.css)
@@ -17,4 +21,10 @@ $(install):
 	$(call install-data,$(src_base)/xsd.xhtml,$(install_doc_dir)/xsd/xsd.xhtml)
 	$(call install-data,$(src_base)/xsd.1,$(install_man_dir)/man1/xsd.1)
 
+# Clean.
+#
+$(cleandoc): $(src_base)/cxx/.cleandoc
+
 $(call include,$(bld_root)/install.make)
+
+$(call import,$(src_base)/cxx/makefile)
