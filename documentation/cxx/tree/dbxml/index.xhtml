@@ -68,9 +68,19 @@
   <p>Our examples will be based on simple XML for book library. The XML
      Schema definition for the library is in
      <a href="./library.xsd">library.xsd</a> and is compiled by XSD
-     to obtain <a href="./library.hxx">library.hxx</a> and
-     <a href="./library.cxx">library.cxx</a>. A sample XML document
-     is presented below:</p>
+     to obtain <code>library.hxx</code> and <code>library.cxx</code>.
+     All C++ code fragments that are presented in this guide are available
+     as a single program in <a href="./driver.cxx">driver.cxx</a>.
+     The complete example is available in the
+     <code>examples/cxx/tree/dbxml</code> directory of the XSD distribution.</p>
+
+  <p>Note that due to the incomplete DOM API implementation provided by DB
+     XML (as of version 2.3.10), the generated code and your application
+     should be compiled with the <code>DBXML_DOM</code> macro defined in
+     order to avoid using unsupported parts of the API.
+  </p>
+
+  <p>A sample XML document for the library schema is presented below:</p>
 
   <pre>
 &lt;lib:catalog xmlns:lib="http://www.codesynthesis.com/library">
@@ -93,18 +103,6 @@
   &lt;/book>
 &lt;/lib:catalog>
   </pre>
-
-  <p>All C++ code fragments that are presented in this guide are available
-     as a single program in <a href="./driver.cxx">driver.cxx</a>.
-     The complete example is available in the
-     <code>examples/cxx/tree/dbxml</code> directory of the XSD distribution.
-  </p>
-
-  <p>Note that due to the incomplete DOM API implementation provided by DB
-     XML (as of version 2.3.10), the generated code and your application
-     should be compiled with the <code>DBXML_DOM</code> macro defined in
-     order to avoid using unsupported parts of the API.
-  </p>
 
   <h1>Create Document from Object Model</h1>
 
