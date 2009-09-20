@@ -6,8 +6,6 @@
 #ifndef CXX_TREE_STREAM_INSERTION_HEADER_HXX
 #define CXX_TREE_STREAM_INSERTION_HEADER_HXX
 
-#include <xsd-frontend/semantic-graph/schema.hxx>
-
 #include <cxx/tree/elements.hxx>
 
 namespace CXX

@@ -6,8 +6,6 @@
 #ifndef CXX_TREE_TREE_FORWARD_HXX
 #define CXX_TREE_TREE_FORWARD_HXX
 
-#include <xsd-frontend/semantic-graph/schema.hxx>
-
 #include <cxx/tree/elements.hxx>
 
 namespace CXX

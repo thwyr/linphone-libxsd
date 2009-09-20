@@ -6,8 +6,6 @@
 #ifndef CXX_TREE_EXTRACTION_SOURCE_HXX
 #define CXX_TREE_EXTRACTION_SOURCE_HXX
 
-#include <xsd-frontend/semantic-graph/schema.hxx>
-
 #include <cxx/tree/elements.hxx>
 
 namespace CXX

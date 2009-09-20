@@ -6,8 +6,6 @@
 #ifndef CXX_TREE_PARSER_SOURCE_HXX
 #define CXX_TREE_PARSER_SOURCE_HXX
 
-#include <xsd-frontend/semantic-graph/schema.hxx>
-
 #include <cxx/tree/elements.hxx>
 
 namespace CXX
@@ -15,9 +13,7 @@ namespace CXX
   namespace Tree
   {
     Void
-    generate_parser_source (Context&,
-                            UnsignedLong first,
-                            UnsignedLong last);
+    generate_parser_source (Context&, UnsignedLong first, UnsignedLong last);
   }
 }
 
