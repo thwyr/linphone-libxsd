@@ -13,8 +13,6 @@ dist-win := $(out_base)/.dist-win
 clean    := $(out_base)/.clean
 cleandoc := $(out_base)/.cleandoc
 
-.PHONY: $(default) $(test) $(install) $(clean)
-
 $(default): $(out_base)/xsd/      \
             $(out_base)/tests/    \
             $(out_base)/examples/ \

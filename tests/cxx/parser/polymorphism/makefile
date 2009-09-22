@@ -5,15 +5,11 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
-
 tests := same-type
-
 
 default   := $(out_base)/
 test      := $(out_base)/.test
 clean     := $(out_base)/.clean
-
-.PHONY: $(default) $(test) $(clean)
 
 $(default): $(addprefix $(out_base)/,$(addsuffix /,$(tests)))
 $(test): $(addprefix $(out_base)/,$(addsuffix /.test,$(tests)))

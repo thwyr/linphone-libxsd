@@ -51,14 +51,11 @@ $(call include-dep,$(dep))
 
 # Convenience alias for default target.
 #
-.PHONY: $(out_base)/
 $(out_base)/: $(driver)
 
 
 # Test.
 #
-.PHONY: $(test)
-
 # We need to cd to src_base in order to have the schema in the working
 # directory.
 #
@@ -71,8 +68,6 @@ $(src_base)/attributes.xml $(src_base)/inherited.xml
 
 # Clean.
 #
-.PHONY: $(clean)
-
 $(clean): $(driver).o.clean                            \
   $(addsuffix .cxx.clean,$(obj))                       \
   $(addsuffix .cxx.clean,$(dep))                       \

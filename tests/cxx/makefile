@@ -9,8 +9,6 @@ default   := $(out_base)/
 test      := $(out_base)/.test
 clean     := $(out_base)/.clean
 
-.PHONY: $(default) $(test) $(clean)
-
 $(default): $(out_base)/parser/ $(out_base)/tree/
 $(test): $(out_base)/parser/.test $(out_base)/tree/.test
 $(clean): $(out_base)/parser/.clean $(out_base)/tree/.clean

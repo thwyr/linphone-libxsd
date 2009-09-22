@@ -106,7 +106,6 @@ $(call include-dep,$(cxx_od))
 
 # Alias for default target.
 #
-.PHONY: $(out_base)/
 $(out_base)/: $(xsd)
 
 # Install
