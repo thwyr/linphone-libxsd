@@ -10,12 +10,9 @@ dist     := $(out_base)/.dist
 dist-win := $(out_base)/.dist-win
 cleandoc := $(out_base)/.cleandoc
 
-.PHONY: $(default) $(dist) $(dist-win) $(cleandoc)
-
 # Build.
 #
 $(default): $(out_base)/cxx-parser-guide.ps $(out_base)/cxx-parser-guide.pdf
-
 
 $(out_base)/cxx-parser-guide.ps: $(src_base)/index.xhtml   \
                                  $(src_base)/figure-1.png  \

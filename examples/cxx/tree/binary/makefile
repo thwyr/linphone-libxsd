@@ -5,26 +5,47 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
-examples :=
+all_examples   := boost cdr xdr
+build_examples :=
 
 ifeq ($(xsd_with_boost_serialization),y)
-examples += boost
+build_examples += boost
 endif
 
 ifeq ($(xsd_with_ace),y)
-examples += cdr
+build_examples += cdr
 endif
 
 ifeq ($(xsd_with_xdr),y)
-examples += xdr
+build_examples += xdr
 endif
 
-default   := $(out_base)/
-clean     := $(out_base)/.clean
+default  := $(out_base)/
+dist     := $(out_base)/.dist
+dist-win := $(out_base)/.dist-win
+clean    := $(out_base)/.clean
 
-.PHONY: $(default) $(clean)
+# Build.
+#
+$(default): $(addprefix $(out_base)/,$(addsuffix /,$(build_examples)))
 
-$(default): $(addprefix $(out_base)/,$(addsuffix /,$(examples)))
-$(clean): $(addprefix $(out_base)/,$(addsuffix /.clean,$(examples)))
+# Dist.
+#
+$(dist) $(dist-win): path := $(subst $(src_root)/,,$(src_base))
 
-$(foreach e,$(examples),$(call import,$(src_base)/$e/makefile))
+$(dist): $(addprefix $(out_base)/,$(addsuffix /.dist,$(all_examples)))
+	$(call install-data,$(src_base)/README,$(dist_prefix)/$(path)/README)
+
+$(dist-win): $(addprefix $(out_base)/,$(addsuffix /.dist-win,$(all_examples)))
+	$(call install-data,$(src_base)/README,$(dist_prefix)/$(path)/README.txt)
+	$(call message,,unix2dos $(dist_prefix)/$(path)/README.txt)
+
+# Clean.
+#
+$(clean): $(addprefix $(out_base)/,$(addsuffix /.clean,$(build_examples)))
+
+ifneq ($(filter $(MAKECMDGOALS),dist dist-win),)
+$(foreach e,$(all_examples),$(call import,$(src_base)/$e/makefile))
+else
+$(foreach e,$(build_examples),$(call import,$(src_base)/$e/makefile))
+endif

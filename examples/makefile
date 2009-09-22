@@ -5,12 +5,14 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../build/bootstrap.make
 
-default   := $(out_base)/
-clean     := $(out_base)/.clean
-
-.PHONY: $(default) $(clean)
+default  := $(out_base)/
+dist     := $(out_base)/.dist
+dist-win := $(out_base)/.dist-win
+clean    := $(out_base)/.clean
 
 $(default): $(out_base)/cxx/parser/ $(out_base)/cxx/tree/
+$(dist): $(out_base)/cxx/parser/.dist $(out_base)/cxx/tree/.dist
+$(dist-win): $(out_base)/cxx/parser/.dist-win $(out_base)/cxx/tree/.dist-win
 $(clean): $(out_base)/cxx/parser/.clean $(out_base)/cxx/tree/.clean
 
 $(call import,$(src_base)/cxx/parser/makefile)

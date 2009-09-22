@@ -60,9 +60,11 @@ cxx_tun += processing/cardinality/processor.cxx \
 cxx_obj := $(addprefix $(out_base)/,$(cxx_tun:.cxx=.o))
 cxx_od  := $(cxx_obj:.o=.o.d)
 
-xsd     := $(out_base)/xsd
-clean   := $(out_base)/.clean
-install := $(out_base)/.install
+xsd      := $(out_base)/xsd
+install  := $(out_base)/.install
+dist     := $(out_base)/.dist
+dist-win := $(out_base)/.dist-win
+clean    := $(out_base)/.clean
 
 # Import.
 #
@@ -107,17 +109,21 @@ $(call include-dep,$(cxx_od))
 .PHONY: $(out_base)/
 $(out_base)/: $(xsd)
 
-# install
+# Install
 #
-.PHONY: $(install)
-
 $(install): $(xsd)
 	$(call install-exec,$<,$(install_bin_dir)/xsd)
 
+# Dist.
+#
+$(dist): $(xsd)
+	$(call install-exec,$<,$(dist_prefix)/bin/xsd)
+
+$(dist-win): $(xsd)
+	$(call install-exec,$<,$(dist_prefix)/bin/xsd.exe)
+
 # Clean.
 #
-.PHONY: $(clean)
-
 $(clean):                            \
   $(xsd).o.clean                     \
   $(addsuffix .cxx.clean,$(cxx_obj)) \

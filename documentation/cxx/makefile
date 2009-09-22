@@ -5,7 +5,7 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../build/bootstrap.make
 
-docs := parser/guide tree/guide tree/manual
+docs := parser tree
 
 default  := $(out_base)/
 dist     := $(out_base)/.dist
