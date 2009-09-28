@@ -403,7 +403,7 @@ namespace CXX
             return true;
           }
 
-          r = i->pat.merge (name, i->type_sub);
+          r = i->pat.merge (i->type_sub, name);
           return true;
         }
       }
@@ -456,7 +456,7 @@ namespace CXX
         {
           if (!i->base_sub.empty ())
           {
-            r = i->pat.merge (name, i->base_sub);
+            r = i->pat.merge (i->base_sub, name);
           }
           else
             r.clear ();
