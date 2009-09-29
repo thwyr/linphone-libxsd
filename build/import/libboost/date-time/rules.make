@@ -1,6 +1,6 @@
 # file      : build/import/libboost/date-time/rules.make
 # author    : Boris Kolpackov <boris@kolpackov.net>
-# copyright : Copyright (c) 2005-2009 Boris Kolpackov
+# copyright : Copyright (c) 2005-2008 Boris Kolpackov
 # license   : GNU GPL v2; see accompanying LICENSE file
 
 $(dcf_root)/import/libboost/%: root := $(libboost_root)
@@ -11,13 +11,13 @@ $(dcf_root)/import/libboost/date-time/date-time.l: \
 ifeq ($(libboost_type),archive)
 
 $(dcf_root)/import/libboost/date-time/date-time.l: \
-  $(libboost_root)/stage/lib/libboost_date_time-gcc$(libboost_toolset)-$(libboost_version).a
+  $(libboost_root)/stage/lib/libboost_date_time$(libboost_suffix).a
 	@echo $< >$@
 
 else
 
 $(dcf_root)/import/libboost/date-time/date-time.l: \
-  $(libboost_root)/stage/lib/libboost_date_time-gcc$(libboost_toolset)-$(libboost_version).so
+  $(libboost_root)/stage/lib/libboost_date_time$(libboost_suffix).so
 	@echo $< >$@
 	@echo rpath:$(root)/stage/lib >>$@
 
