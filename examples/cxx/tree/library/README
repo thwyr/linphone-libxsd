@@ -28,5 +28,5 @@ To run the example on the sample XML instance document simply execute:
 
 $ ./driver library.xml
 
-This example also shows how to to use the ID/IDREF cross-referencing
+This example also shows how to use the ID/IDREF cross-referencing
 mechanism and the xsd:enumeration to C++ enum mapping.

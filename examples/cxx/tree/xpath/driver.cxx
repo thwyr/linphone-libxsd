@@ -95,7 +95,7 @@ main (int argc, char* argv[])
 
     // Iterate over the result.
     //
-    cout << "Records matching the query:" << endl;
+    cerr << "Records matching the query:" << endl;
 
     while (r->iterateNext ())
     {
@@ -109,7 +109,7 @@ main (int argc, char* argv[])
 
       // Print the data using the object model.
       //
-      cout << endl
+      cerr << endl
            << "First  : " << p->first_name () << endl
            << "Last   : " << p->last_name () << endl
            << "Gender : " << p->gender () << endl
