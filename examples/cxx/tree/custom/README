@@ -22,6 +22,9 @@ double
   XML Schema built-in type. It can be used as a guide on how to customize
   built-in XML Schema types that are mapped to fundamental C++ types.
 
+mixed
+  Shows how to use type customization to parse and serialize mixed content.
+
 taxonomy
   Shows how to map user-defined XML Schema types to custom C++ classes.
   This example presents the complex case where the customized types are

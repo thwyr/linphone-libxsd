@@ -1,6 +1,9 @@
 This example shows how to access the underlying DOM nodes in the
 C++/Tree mapping in order to handle raw, "type-less content" such
 as mixed content models, anyType/anySimpleType, and any/anyAttribute.
+For an alternative approach that employes type customization see
+examples in the custom/ directory, in particular, custom/mixed and 
+custom/wildcard.
 
 In this example we use mixed content model to describe text with
 embedded links, e.g.,

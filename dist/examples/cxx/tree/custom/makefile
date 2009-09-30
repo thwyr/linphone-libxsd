@@ -1,4 +1,4 @@
-dirs := comments contacts double taxonomy wildcard
+dirs := comments contacts double mixed taxonomy wildcard
 
 ifeq ($(WITH_BOOST),1)
 dirs += calendar

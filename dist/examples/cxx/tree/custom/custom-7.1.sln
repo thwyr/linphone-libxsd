@@ -19,6 +19,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "double", "double\double-7.1
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mixed", "mixed\mixed-7.1.vcproj", "{26CE0C08-7621-403A-88A7-206E64F32C66}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -45,6 +49,10 @@ Global
 		{CCE6AE91-39AC-49B6-8763-742B65FCD92E}.Debug.Build.0 = Debug|Win32
 		{CCE6AE91-39AC-49B6-8763-742B65FCD92E}.Release.ActiveCfg = Release|Win32
 		{CCE6AE91-39AC-49B6-8763-742B65FCD92E}.Release.Build.0 = Release|Win32
+		{26CE0C08-7621-403A-88A7-206E64F32C66}.Debug.ActiveCfg = Debug|Win32
+		{26CE0C08-7621-403A-88A7-206E64F32C66}.Debug.Build.0 = Debug|Win32
+		{26CE0C08-7621-403A-88A7-206E64F32C66}.Release.ActiveCfg = Release|Win32
+		{26CE0C08-7621-403A-88A7-206E64F32C66}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

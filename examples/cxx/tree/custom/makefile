@@ -5,8 +5,8 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
-all_examples   := comments contacts double taxonomy wildcard calendar
-build_examples := comments contacts double taxonomy wildcard
+all_examples   := comments contacts double mixed taxonomy wildcard calendar
+build_examples := comments contacts double mixed taxonomy wildcard
 
 ifeq ($(xsd_with_boost_date_time),y)
 build_examples += calendar
