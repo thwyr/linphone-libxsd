@@ -39,12 +39,17 @@ $(xsd_parser_pattern): xsd_options := $(ops)
 
 .PRECIOUS: $(xsd_parser_pattern)
 
-$(xsd_parser_pattern): $(out_base)/%.xsd | $$(dir $$@).
+ifeq ($(out_base),$(src_base))
+
+$(xsd_parser_pattern): $(src_base)/%.xsd
 	$(call message,xsd $<,$(xsd) $(xsd_command) $(xsd_options) --output-dir $(dir $@) $<)
 
-ifneq ($(out_base),$(src_base))
+else
 
 $(xsd_parser_pattern): $(src_base)/%.xsd | $$(dir $$@).
+	$(call message,xsd $<,$(xsd) $(xsd_command) $(xsd_options) --output-dir $(dir $@) $<)
+
+$(xsd_parser_pattern): $(out_base)/%.xsd | $$(dir $$@).
 	$(call message,xsd $<,$(xsd) $(xsd_command) $(xsd_options) --output-dir $(dir $@) $<)
 
 endif
