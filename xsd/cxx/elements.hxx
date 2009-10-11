@@ -7,6 +7,7 @@
 #define CXX_ELEMENTS_HXX
 
 #include <cult/types.hxx>
+#include <cult/containers/set.hxx>
 #include <cult/containers/map.hxx>
 #include <cult/containers/vector.hxx>
 
@@ -118,6 +119,7 @@ namespace CXX
     typedef Cult::Containers::Map<String, String> MappingCache;
 
     typedef Cult::Containers::Map<String, String> ReservedNameMap;
+    typedef Cult::Containers::Set<String> KeywordSet;
 
   public:
     Context (std::wostream& o,
@@ -154,7 +156,8 @@ namespace CXX
           nsm_mapping (c.nsm_mapping),
           include_mapping (c.include_mapping),
           trace_include_regex (c.trace_include_regex),
-          reserved_name_map (c.reserved_name_map)
+          reserved_name_map (c.reserved_name_map),
+          keyword_set (c.keyword_set)
     {
     }
 
@@ -177,7 +180,8 @@ namespace CXX
           nsm_mapping (c.nsm_mapping),
           include_mapping (c.include_mapping),
           trace_include_regex (c.trace_include_regex),
-          reserved_name_map (c.reserved_name_map)
+          reserved_name_map (c.reserved_name_map),
+          keyword_set (c.keyword_set)
     {
     }
 
@@ -346,6 +350,9 @@ namespace CXX
 
     ReservedNameMap const& reserved_name_map;
     ReservedNameMap reserved_name_map_;
+
+    KeywordSet const& keyword_set;
+    KeywordSet keyword_set_;
   };
 
   inline UnsignedLong Context::
