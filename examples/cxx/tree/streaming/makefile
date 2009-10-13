@@ -5,8 +5,8 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
-xsd := records.xsd
-cxx := driver.cxx
+xsd := position.xsd
+cxx := driver.cxx parser.cxx serializer.cxx
 
 obj := $(addprefix $(out_base)/,$(cxx:.cxx=.o) $(xsd:.xsd=.o))
 dep := $(obj:.o=.o.d)
@@ -35,8 +35,7 @@ genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options := --generate-serialization --suppress-parsing \
---root-element-all
+$(gen): xsd_options := --generate-serialization
 $(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep))
@@ -53,7 +52,12 @@ $(dist) $(dist-win) $(dist-common): path := $(subst $(src_root)/,,$(src_base))
 
 $(dist-common):
 	$(call install-data,$(src_base)/driver.cxx,$(dist_prefix)/$(path)/driver.cxx)
-	$(call install-data,$(src_base)/records.xsd,$(dist_prefix)/$(path)/records.xsd)
+	$(call install-data,$(src_base)/parser.cxx,$(dist_prefix)/$(path)/parser.cxx)
+	$(call install-data,$(src_base)/parser.hxx,$(dist_prefix)/$(path)/parser.hxx)
+	$(call install-data,$(src_base)/serializer.cxx,$(dist_prefix)/$(path)/serializer.cxx)
+	$(call install-data,$(src_base)/serializer.hxx,$(dist_prefix)/$(path)/serializer.hxx)
+	$(call install-data,$(src_base)/position.xsd,$(dist_prefix)/$(path)/position.xsd)
+	$(call install-data,$(src_base)/position.xml,$(dist_prefix)/$(path)/position.xml)
 
 $(dist): $(dist-common)
 	$(call install-data,$(src_base)/README,$(dist_prefix)/$(path)/README)

@@ -350,8 +350,14 @@
 				>
 			</File>
 			<File
-				RelativePath=".\records.cxx"
+				RelativePath=".\position.cxx"
 				>
+			</File>
+			<File
+				RelativePath=".\parser.cxx">
+			</File>
+			<File
+				RelativePath=".\serializer.cxx">
 			</File>
 		</Filter>
 		<Filter
@@ -360,8 +366,14 @@
 			UniqueIdentifier="{94F3375D-5EB8-4D2C-8739-4D47E9AB7072}"
 			>
 			<File
-				RelativePath=".\records.hxx"
+				RelativePath=".\position.hxx"
 				>
+			</File>
+			<File
+				RelativePath=".\parser.hxx">
+			</File>
+			<File
+				RelativePath=".\serializer.hxx">
 			</File>
 		</Filter>
 		<Filter
@@ -369,16 +381,16 @@
 			Filter="xsd"
 			>
 			<File
-				RelativePath=".\records.xsd"
+				RelativePath=".\position.xsd"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="xsd records.xsd"
-						CommandLine="xsd.exe cxx-tree --generate-serialization --suppress-parsing --generate-intellisense --root-element-all records.xsd"
-						Outputs="records.cxx;records.hxx"
+						Description="xsd position.xsd"
+						CommandLine="xsd.exe cxx-tree --generate-serialization --generate-intellisense position.xsd"
+						Outputs="position.cxx;position.hxx"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -386,9 +398,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="xsd records.xsd"
-						CommandLine="xsd.exe cxx-tree --generate-serialization --suppress-parsing --generate-intellisense --root-element-all records.xsd"
-						Outputs="records.cxx;records.hxx"
+						Description="xsd position.xsd"
+						CommandLine="xsd.exe cxx-tree --generate-serialization --generate-intellisense position.xsd"
+						Outputs="position.cxx;position.hxx"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -396,9 +408,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="xsd records.xsd"
-						CommandLine="xsd.exe cxx-tree --generate-serialization --suppress-parsing --generate-intellisense --root-element-all records.xsd"
-						Outputs="records.cxx;records.hxx"
+						Description="xsd position.xsd"
+						CommandLine="xsd.exe cxx-tree --generate-serialization --generate-intellisense position.xsd"
+						Outputs="position.cxx;position.hxx"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -406,9 +418,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="xsd records.xsd"
-						CommandLine="xsd.exe cxx-tree --generate-serialization --suppress-parsing --generate-intellisense --root-element-all records.xsd"
-						Outputs="records.cxx;records.hxx"
+						Description="xsd position.xsd"
+						CommandLine="xsd.exe cxx-tree --generate-serialization --generate-intellisense position.xsd"
+						Outputs="position.cxx;position.hxx"
 					/>
 				</FileConfiguration>
 			</File>

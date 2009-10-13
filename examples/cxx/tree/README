@@ -55,11 +55,12 @@ custom/
   overview of each example in this directory.
 
 streaming
-  Shows how to create an XML document by performing multiple
-  serializations of its smaller parts. This can be useful when the
-  document is too large to fit into memory or when the other end
-  needs to start processing without waiting for the whole document
-  (streaming).
+  Shows how to perform stream-oriented, partially in-memory XML
+  processing using the C++/Tree mapping. With the partially in-memory
+  parsing and serialization only a part of the object model is in
+  memory at any given time. With this approach we can process parts
+  of the document as they become available as well as handle documents
+  that are too large to fit into memory.
 
 binary/
   A collection of examples that show how to serialize the object model

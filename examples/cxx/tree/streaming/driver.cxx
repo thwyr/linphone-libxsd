@@ -5,61 +5,172 @@
 #include <iostream>
 #include <fstream>
 
-#include "records.hxx"
+#include <xercesc/dom/DOM.hpp>
 
-using std::cerr;
-using std::endl;
-using std::ios_base;
+#include <xsd/cxx/xml/string.hxx>  // xml::string
+
+#include "parser.hxx"
+#include "serializer.hxx"
+#include "position.hxx"
+
+using namespace std;
+using namespace xercesc;
+
+static void
+measure_position (unsigned int n, float& lat, float& lon);
 
 int
-main ()
+main (int argc, char* argv[])
 {
+  if (argc != 2)
+  {
+    cerr << "usage: " << argv[0] << " position.xml" << endl;
+    return 1;
+  }
+
+  int r (0);
+
+  // We need to initialize the Xerces-C++ runtime because we are doing
+  // the XML-to-DOM parsing ourselves.
+  //
+  xercesc::XMLPlatformUtils::Initialize ();
+
   try
   {
-    std::ofstream ofs;
+    using namespace op;
+    namespace xml = xsd::cxx::xml;
+
+    // Parse.
+    //
+
+    ifstream ifs;
+    ifs.exceptions (ifstream::badbit | ifstream::failbit);
+    ifs.open (argv[1]);
+
+    parser p;
+
+    // The first document we get is the "carcase" of the complete document.
+    // That is, the root element with all the attributes but without any
+    // content. We may need it to get to the attributes in the root element.
+    //
+    // There are two ways this can be done. The easiest approach is to
+    // instantiate the root element's type (object in our case). This
+    // will only work if all the content in the root element is optional.
+    // Alternatively, we can manually look up attributes that we are
+    // interested in and instantiate the corresponding type. The following
+    // fragment shows how to use the second approach.
+    //
+    xml_schema::dom::auto_ptr<DOMDocument> doc (p.start (ifs, argv[1], true));
+
+    // Find the id attribute.
+    //
+    DOMAttr* id_attr (
+      doc->getDocumentElement ()->getAttributeNode (
+        xml::string ("id").c_str ()));
+
+    // Use the type and traits aliases from the object model.
+    //
+    object::id_type id (object::id_traits::create (*id_attr, 0, 0));
+    cerr << "id:   " << id << endl;
+
+    // The next chunk we get is the header element.
+    //
+    doc = p.next ();
+    header hdr (*doc->getDocumentElement ());
+    cerr << "name: " << hdr.name () << endl
+         << "type: " << hdr.type () << endl;
+
+    // The rest is position elements.
+    //
+    for (doc = p.next (); doc.get () != 0; doc = p.next ())
+    {
+      position p (*doc->getDocumentElement ());
+      cerr << "lat: " << p.lat () << " lon: " << p.lon () << endl;
+    }
+
+    // Serialize.
+    //
+
+    ofstream ofs;
     ofs.exceptions (ios_base::badbit | ios_base::failbit);
     ofs.open ("out.xml");
 
-    // We will need to create XML declaration as well as open and close
-    // the root tag ourselves.
+    serializer s;
+
+    // With this approach we manually write the XML declaration, opening
+    // and closing root element tags, as well as any attributes in the
+    // root element.
     //
     ofs << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl
-        << "<records>" << endl;
+        << "<op:object xmlns:op=\"http://www.codesynthesis.com/op\"" << endl
+        << "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" << endl
+        << "  xsi:schemaLocation=\"http://www.codesynthesis.com/op " <<
+      "position.xsd\"" << endl
+        << "  id=\"" << 123 << "\">" << endl;
 
-    // For performance reasons, we would like to initialize/terminate
-    // Xerces-C++ ourselves once instead of letting the serialization
-    // function do it for every record.
+    s.start (ofs);
+
+    // Serialize the header.
     //
-    xercesc::XMLPlatformUtils::Initialize ();
+    header h ("Lion's Head", "rock");
+    s.next ("header", h);
 
-    xml_schema::namespace_infomap map;
-
-    for (unsigned long i (0); i < 1000; ++i)
+    // Serialize position elements, one at a time.
+    //
+    for (unsigned short i (0); i < 8; i++)
     {
-      // Create the next record.
-      //
-      record r ("data");
-      
-      record_ (ofs,
-               r,
-               map,
-               "UTF-8",
-               xml_schema::flags::dont_initialize |
-               xml_schema::flags::no_xml_declaration);
+      float lat, lon;
+      measure_position (i, lat, lon);
+      position p (lat, lon);
+      s.next ("position", p);
     }
 
-    xercesc::XMLPlatformUtils::Terminate ();
+    // Close the root element.
+    //
+    ofs << endl
+        << "</op:object>" << endl;
 
-    ofs << "</records>" << endl;
   }
   catch (const xml_schema::exception& e)
   {
     cerr << e << endl;
-    return 1;
+    r = 1;
   }
-  catch (const std::ios_base::failure&)
+  catch (const ios_base::failure&)
   {
     cerr << "io failure" << endl;
-    return 1;
+    r = 1;
   }
+
+  xercesc::XMLPlatformUtils::Terminate ();
+  return r;
+}
+
+// Position measurement instrument interface.
+//
+struct measurements
+{
+  float lat;
+  float lon;
+};
+
+measurements test_measurements [8] =
+{
+  {-33.8569F, 18.5083F},
+  {-33.8568F, 18.5083F},
+  {-33.8568F, 18.5082F},
+  {-33.8570F, 18.5083F},
+  {-33.8569F, 18.5084F},
+  {-33.8570F, 18.5084F},
+  {-33.8570F, 18.5082F},
+  {-33.8569F, 18.5082F}
+};
+
+static void
+measure_position (unsigned int n, float& lat, float& lon)
+{
+  // Call the instrument to measure the position.
+  //
+  lat = test_measurements[n].lat;
+  lon = test_measurements[n].lon;
 }

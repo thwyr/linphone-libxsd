@@ -34,6 +34,13 @@ Version 3.3.0
   * New example, custom/mixed, shows how to use type customization to parse 
     and serialize mixed content.
 
+  * The streaming example has been extended to shows how to perform stream-
+    oriented, partially in-memory XML processing using the C++/Tree mapping.
+    With the partially in-memory parsing and serialization only a part of
+    the object model is in memory at any given time. With this approach one
+    can process parts of the document as they become available as well as 
+    handle documents that are too large to fit into memory.
+
 Version 3.2.0
 
   * New option, --disable-warning, disables printing of a warning with

@@ -116,7 +116,7 @@ serialization (const char* file, unsigned long iter)
       writer->writeNode (&ft, *doc);
 #endif
 
-      eh.throw_if_failed<xml_schema::parsing> ();
+      eh.throw_if_failed<xml_schema::serialization> ();
     }
 
     os::time end;
