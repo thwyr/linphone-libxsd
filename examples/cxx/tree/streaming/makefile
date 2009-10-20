@@ -81,7 +81,7 @@ ifeq ($(out_base),$(src_base))
 $(gen): | $(out_base)/.gitignore
 $(driver): | $(out_base)/.gitignore
 
-$(out_base)/.gitignore: files := driver $(genf)
+$(out_base)/.gitignore: files := driver out.xml $(genf)
 $(clean): $(out_base)/.gitignore.clean
 
 $(call include,$(bld_root)/git/gitignore.make)
