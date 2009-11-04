@@ -22,16 +22,22 @@ $(default): $(out_base)/xsd/      \
 #
 $(test): $(out_base)/tests/.test
 
+
 # Install.
 #
 $(install): $(out_base)/xsd/.install           \
             $(out_base)/libxsd/.install        \
+	    $(out_base)/examples/.install      \
             $(out_base)/documentation/.install
+	$(call install-dir,$(src_base)/dist/examples/build,$(install_doc_dir)/xsd/examples/build)
+	$(call install-dir,$(src_base)/dist/examples/cxx,$(install_doc_dir)/xsd/examples/cxx,-name makefile)
+	$(call install-data,$(src_base)/dist/examples/makefile,$(install_doc_dir)/xsd/examples/makefile)
 	$(call install-data,$(src_base)/FLOSSE,$(install_doc_dir)/xsd/FLOSSE)
 	$(call install-data,$(src_base)/GPLv2,$(install_doc_dir)/xsd/GPLv2)
 	$(call install-data,$(src_base)/LICENSE,$(install_doc_dir)/xsd/LICENSE)
 	$(call install-data,$(src_base)/NEWS,$(install_doc_dir)/xsd/NEWS)
-	$(call install-data,$(src_base)/README,$(install_doc_dir)/xsd/README)
+	$(call install-data,$(src_base)/dist/README-UNIX,$(install_doc_dir)/xsd/README)
+
 
 # Dist.
 #

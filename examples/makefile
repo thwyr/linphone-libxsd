@@ -6,11 +6,13 @@
 include $(dir $(lastword $(MAKEFILE_LIST)))../build/bootstrap.make
 
 default  := $(out_base)/
+install  := $(out_base)/.install
 dist     := $(out_base)/.dist
 dist-win := $(out_base)/.dist-win
 clean    := $(out_base)/.clean
 
 $(default): $(out_base)/cxx/parser/ $(out_base)/cxx/tree/
+$(install): $(out_base)/cxx/parser/.install $(out_base)/cxx/tree/.install
 $(dist): $(out_base)/cxx/parser/.dist $(out_base)/cxx/tree/.dist
 $(dist-win): $(out_base)/cxx/parser/.dist-win $(out_base)/cxx/tree/.dist-win
 $(clean): $(out_base)/cxx/parser/.clean $(out_base)/cxx/tree/.clean

@@ -12,6 +12,7 @@ obj := $(addprefix $(out_base)/,$(cxx:.cxx=.o) $(xsd:.xsd=-pskel.o))
 dep := $(obj:.o=.o.d)
 
 driver   := $(out_base)/driver
+install  := $(out_base)/.install
 dist     := $(out_base)/.dist
 dist-win := $(out_base)/.dist-win
 clean    := $(out_base)/.clean
@@ -44,11 +45,23 @@ $(call include-dep,$(dep))
 #
 $(out_base)/: $(driver)
 
-# Dist.
+
+# Install & Dist.
 #
 dist-common := $(out_base)/.dist-common
 
-$(dist) $(dist-win) $(dist-common): path := $(subst $(src_root)/,,$(src_base))
+$(install) $(dist) $(dist-win) $(dist-common): path := $(subst $(src_root)/,,$(src_base))
+
+$(install):
+	$(call install-data,$(src_base)/README,$(install_doc_dir)/xsd/$(path)/README)
+	$(call install-data,$(src_base)/driver.cxx,$(install_doc_dir)/xsd/$(path)/driver.cxx)
+	$(call install-data,$(src_base)/test.xsd,$(install_doc_dir)/xsd/$(path)/test.xsd)
+	$(call install-data,$(src_base)/test-5k.xml,$(install_doc_dir)/xsd/$(path)/test-5k.xml)
+	$(call install-data,$(src_base)/test-50k.xml,$(install_doc_dir)/xsd/$(path)/test-50k.xml)
+	$(call install-data,$(src_base)/test-500k.xml,$(install_doc_dir)/xsd/$(path)/test-500k.xml)
+	$(call install-data,$(src_base)/time.hxx,$(install_doc_dir)/xsd/$(path)/time.hxx)
+	$(call install-data,$(src_base)/time.cxx,$(install_doc_dir)/xsd/$(path)/time.cxx)
+	$(call install-data,$(src_base)/gen.cxx,$(install_doc_dir)/xsd/$(path)/gen.cxx)
 
 $(dist-common):
 	$(call install-data,$(src_base)/driver.cxx,$(dist_prefix)/$(path)/driver.cxx)

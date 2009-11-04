@@ -70,9 +70,10 @@ include-dep =
 endif
 
 
-# For dist, don't include dependecies in examples, and tests.
+# For dist, install don't include dependencies in examples, and tests
+# since we might be cross-compiling.
 #
-ifneq ($(filter $(MAKECMDGOALS),dist dist-win),)
+ifneq ($(filter $(MAKECMDGOALS),dist dist-win install),)
 
 ifneq ($(subst $(src_root)/tests/,,$(src_base)),$(src_base))
 include-dep =

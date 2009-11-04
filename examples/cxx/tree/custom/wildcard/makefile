@@ -12,6 +12,7 @@ obj := $(addprefix $(out_base)/,$(cxx:.cxx=.o) $(xsd:.xsd=.o))
 dep := $(obj:.o=.o.d)
 
 driver   := $(out_base)/driver
+install  := $(out_base)/.install
 dist     := $(out_base)/.dist
 dist-win := $(out_base)/.dist-win
 clean    := $(out_base)/.clean
@@ -54,11 +55,20 @@ $(call include-dep,$(dep))
 #
 $(out_base)/: $(driver)
 
-# Dist.
+
+# Install & Dist.
 #
 dist-common := $(out_base)/.dist-common
 
-$(dist) $(dist-win) $(dist-common): path := $(subst $(src_root)/,,$(src_base))
+$(install) $(dist) $(dist-win) $(dist-common): path := $(subst $(src_root)/,,$(src_base))
+
+$(install):
+	$(call install-data,$(src_base)/README,$(install_doc_dir)/xsd/$(path)/README)
+	$(call install-data,$(src_base)/driver.cxx,$(install_doc_dir)/xsd/$(path)/driver.cxx)
+	$(call install-data,$(src_base)/wildcard.xsd,$(install_doc_dir)/xsd/$(path)/wildcard.xsd)
+	$(call install-data,$(src_base)/wildcard.xml,$(install_doc_dir)/xsd/$(path)/wildcard.xml)
+	$(call install-data,$(src_base)/wildcard-custom.hxx,$(install_doc_dir)/xsd/$(path)/wildcard-custom.hxx)
+	$(call install-data,$(src_base)/wildcard-custom.cxx,$(install_doc_dir)/xsd/$(path)/wildcard-custom.cxx)
 
 $(dist-common):
 	$(call install-data,$(src_base)/driver.cxx,$(dist_prefix)/$(path)/driver.cxx)

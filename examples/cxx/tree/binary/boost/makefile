@@ -12,6 +12,7 @@ obj := $(addprefix $(out_base)/,$(cxx:.cxx=.o) $(xsd:.xsd=.o))
 dep := $(obj:.o=.o.d)
 
 driver   := $(out_base)/driver
+install  := $(out_base)/.install
 dist     := $(out_base)/.dist
 dist-win := $(out_base)/.dist-win
 clean    := $(out_base)/.clean
@@ -23,7 +24,7 @@ $(call import,\
   $(scf_root)/import/libxerces-c/stub.make,\
   l: xerces_c.l,cpp-options: xerces_c.l.cpp-options)
 
-ifeq ($(filter $(MAKECMDGOALS),dist dist-win),)
+ifeq ($(filter $(MAKECMDGOALS),dist dist-win install),)
 $(call import,\
   $(scf_root)/import/libboost/serialization/stub.make,\
   l: boost_serialization.l,cpp-options: boost_serialization.l.cpp-options)
@@ -55,11 +56,21 @@ $(call include-dep,$(dep))
 #
 $(out_base)/: $(driver)
 
-# Dist.
+
+# Install & Dist.
 #
 dist-common := $(out_base)/.dist-common
 
-$(dist) $(dist-win) $(dist-common): path := $(subst $(src_root)/,,$(src_base))
+$(install) $(dist) $(dist-win) $(dist-common): path := $(subst $(src_root)/,,$(src_base))
+
+$(install):
+	$(call install-data,$(src_base)/README,$(install_doc_dir)/xsd/$(path)/README)
+	$(call install-data,$(src_base)/driver.cxx,$(install_doc_dir)/xsd/$(path)/driver.cxx)
+	$(call install-data,$(src_base)/library.xsd,$(install_doc_dir)/xsd/$(path)/library.xsd)
+	$(call install-data,$(src_base)/library.xml,$(install_doc_dir)/xsd/$(path)/library.xml)
+	$(call install-data,$(src_base)/library-prologue.hxx,$(install_doc_dir)/xsd/$(path)/library-prologue.hxx)
+	$(call install-data,$(src_base)/boost-archive-extraction.hxx,$(install_doc_dir)/xsd/$(path)/boost-archive-extraction.hxx)
+	$(call install-data,$(src_base)/boost-archive-insertion.hxx,$(install_doc_dir)/xsd/$(path)/boost-archive-insertion.hxx)
 
 $(dist-common):
 	$(call install-data,$(src_base)/driver.cxx,$(dist_prefix)/$(path)/driver.cxx)
