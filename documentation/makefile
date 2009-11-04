@@ -15,8 +15,7 @@ $(default): $(out_base)/cxx/
 
 # Install.
 #
-$(install):
-	$(call install-dir,$(src_base)/cxx,$(install_doc_dir)/xsd/cxx)
+$(install): $(out_base)/cxx/.install	
 	$(call install-data,$(src_base)/default.css,$(install_doc_dir)/xsd/default.css)
 	$(call install-data,$(src_base)/future.xhtml,$(install_doc_dir)/xsd/future.xhtml)
 	$(call install-data,$(src_base)/schema-authoring-guide.xhtml,$(install_doc_dir)/xsd/schema-authoring-guide.xhtml)
@@ -35,7 +34,7 @@ $(dist-common):
 	$(call install-data,$(src_base)/schema-authoring-guide.xhtml,$(dist_prefix)/documentation/schema-authoring-guide.xhtml)
 
 $(dist): $(dist-common) $(out_base)/cxx/.dist
-$(dist-win): $(dist-common) $(out_base)/cxx/.dist
+$(dist-win): $(dist-common) $(out_base)/cxx/.dist-win
 
 # Clean.
 #
