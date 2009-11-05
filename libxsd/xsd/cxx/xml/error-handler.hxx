@@ -57,4 +57,3 @@ namespace xsd
 }
 
 #endif  // XSD_CXX_XML_ERROR_HANDLER_HXX
-

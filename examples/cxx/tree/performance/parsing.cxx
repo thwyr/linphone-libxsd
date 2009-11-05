@@ -99,7 +99,17 @@ parsing (const char* file, unsigned long iter, bool validate)
 
       // If we are validating, pre-load and cache the schema.
       //
-      parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true);
+      if (!parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true))
+      {
+        // In Xerces-C++ grammar loading failure results in just a warning.
+        // Make it a fatal error.
+        //
+        eh.handle ("test.xsd", 0, 0,
+                   xsd::cxx::tree::error_handler<char>::severity::fatal,
+                   "unable to load schema");
+      }
+
+      eh.throw_if_failed<xml_schema::parsing> ();
       conf->setParameter (XMLUni::fgXercesUseCachedGrammarInParse, true);
     }
     else
@@ -132,7 +142,14 @@ parsing (const char* file, unsigned long iter, bool validate)
       parser->setFeature (XMLUni::fgXercesSchema, true);
       parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
 
-      parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true);
+      if (!parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true))
+      {
+        eh.handle ("test.xsd", 0, 0,
+                   xsd::cxx::tree::error_handler<char>::severity::fatal,
+                   "unable to load schema");
+      }
+
+      eh.throw_if_failed<xml_schema::parsing> ();
       parser->setFeature (XMLUni::fgXercesUseCachedGrammarInParse, true);
     }
     else

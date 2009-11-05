@@ -16,7 +16,6 @@
 #include <xsd/cxx/xml/dom/bits/error-handler-proxy.hxx>
 #include <xsd/cxx/xml/sax/std-input-source.hxx>
 
-#include <xsd/cxx/tree/exceptions.hxx>
 #include <xsd/cxx/tree/error-handler.hxx>
 
 #include "library.hxx"
@@ -105,7 +104,17 @@ main (int argc, char* argv[])
 
     // Initialize the schema cache.
     //
-    parser->loadGrammar ("library.xsd", Grammar::SchemaGrammarType, true);
+    if (!parser->loadGrammar ("library.xsd", Grammar::SchemaGrammarType, true))
+    {
+      // In Xerces-C++ grammar loading failure results in just a warning.
+      // Make it a fatal error.
+      //
+      eh.handle ("library.xsd", 0, 0,
+                 tree::error_handler<char>::severity::fatal,
+                 "unable to load schema");
+    }
+
+    eh.throw_if_failed<xml_schema::parsing> ();
     conf->setParameter (XMLUni::fgXercesUseCachedGrammarInParse, true);
 
     // We will release the DOM document ourselves.
@@ -133,7 +142,14 @@ main (int argc, char* argv[])
     xml::dom::bits::error_handler_proxy<char> ehp (eh);
     parser->setErrorHandler (&ehp);
 
-    parser->loadGrammar ("library.xsd", Grammar::SchemaGrammarType, true);
+    if (!parser->loadGrammar ("library.xsd", Grammar::SchemaGrammarType, true))
+    {
+      eh.handle ("library.xsd", 0, 0,
+                 tree::error_handler<char>::severity::fatal,
+                 "unable to load schema");
+    }
+
+    eh.throw_if_failed<xml_schema::parsing> ();
     parser->setFeature (XMLUni::fgXercesUseCachedGrammarInParse, true);
 
     parser->setFeature (XMLUni::fgXercesUserAdoptsDOMDocument, true);
@@ -161,7 +177,7 @@ main (int argc, char* argv[])
       xml_schema::dom::auto_ptr<DOMDocument> doc (parser->parse (wrap));
 #endif
 
-      eh.throw_if_failed<tree::parsing<char> > ();
+      eh.throw_if_failed<xml_schema::parsing> ();
 
       // Parse DOM to the object model.
       //

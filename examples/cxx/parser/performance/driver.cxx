@@ -19,6 +19,10 @@
 #  include <xercesc/validators/common/Grammar.hpp>
 #  include <xercesc/util/PlatformUtils.hpp>
 #  include <xercesc/util/XMLUni.hpp>
+
+#  include <xsd/cxx/xml/sax/bits/error-handler-proxy.hxx>
+#  include <xsd/cxx/parser/error-handler.hxx>
+
 #endif
 
 // No-op parser implementation.
@@ -203,6 +207,9 @@ main (int argc, char* argv[])
     //
     using namespace xercesc;
 
+    namespace xml = xsd::cxx::xml;
+    namespace parser = xsd::cxx::parser;
+
     XMLPlatformUtils::Initialize ();
 
     {
@@ -229,7 +236,24 @@ main (int argc, char* argv[])
         parser->setFeature (XMLUni::fgXercesHandleMultipleImports, true);
 #endif
 
-        parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true);
+        // Initialize the schema cache. To detect schema errors we will
+        // need an error handler.
+        //
+        parser::error_handler<char> eh;
+        xml::sax::bits::error_handler_proxy<char> ehp (eh);
+        parser->setErrorHandler (&ehp);
+
+        if (!parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true))
+        {
+          // In Xerces-C++ grammar loading failure results in just a warning.
+          // Make it a fatal error.
+          //
+          eh.handle ("test.xsd", 0, 0,
+                     parser::error_handler<char>::severity::fatal,
+                     "unable to load schema");
+        }
+
+        eh.throw_if_failed ();
         parser->setFeature (XMLUni::fgXercesUseCachedGrammarInParse, true);
       }
       else

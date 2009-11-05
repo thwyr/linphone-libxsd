@@ -19,9 +19,9 @@ namespace xsd
       template <typename C>
       class error_handler: public xml::error_handler<C>
       {
+      public:
         typedef typename xml::error_handler<C>::severity severity;
 
-      public:
         error_handler ()
             : failed_ (false)
         {
