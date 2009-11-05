@@ -100,10 +100,15 @@ parser_impl ()
   parser_->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
 
   // Xerces-C++ 3.1.0 is the first version with working multi import
-  // support.
+  // support. It also allows us to disable buffering in the parser
+  // so that the date is parsed and returned as soon as it is
+  // available.
   //
 #if _XERCES_VERSION >= 30100
   parser_->setFeature (XMLUni::fgXercesHandleMultipleImports, true);
+
+  XMLSize_t lwm = 0;
+  parser_->setProperty (XMLUni::fgXercesLowWaterMark, &lwm);
 #endif
 
   parser_->setErrorHandler (&error_proxy_);
