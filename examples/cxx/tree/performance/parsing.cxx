@@ -90,6 +90,13 @@ parsing (const char* file, unsigned long iter, bool validate)
       conf->setParameter (XMLUni::fgXercesSchema, true);
       conf->setParameter (XMLUni::fgXercesSchemaFullChecking, false);
 
+      // Xerces-C++ 3.1.0 is the first version with working multi import
+      // support.
+      //
+#if _XERCES_VERSION >= 30100
+      conf->setParameter (XMLUni::fgXercesHandleMultipleImports, true);
+#endif
+
       // If we are validating, pre-load and cache the schema.
       //
       parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true);

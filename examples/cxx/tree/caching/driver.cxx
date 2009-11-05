@@ -84,11 +84,18 @@ main (int argc, char* argv[])
     //
     conf->setParameter (XMLUni::fgDOMElementContentWhitespace, false);
 
-    // Enable/Disable validation.
+    // Enable validation.
     //
     conf->setParameter (XMLUni::fgDOMValidate, true);
     conf->setParameter (XMLUni::fgXercesSchema, true);
     conf->setParameter (XMLUni::fgXercesSchemaFullChecking, false);
+
+    // Xerces-C++ 3.1.0 is the first version with working multi import
+    // support.
+    //
+#if _XERCES_VERSION >= 30100
+    conf->setParameter (XMLUni::fgXercesHandleMultipleImports, true);
+#endif
 
     // Set error handler.
     //

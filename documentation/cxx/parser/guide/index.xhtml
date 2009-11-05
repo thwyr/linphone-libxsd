@@ -3324,6 +3324,11 @@ namespace xml_schema
     // Do not initialize the Xerces-C++ runtime.
     //
     static const unsigned long dont_initialize;
+
+    // Disable handling of subsequent imports for the same namespace
+    // in Xerces-C++ 3.1.0 and later.
+    //
+    static const unsigned long no_multiple_imports;
   };
 
   class properties

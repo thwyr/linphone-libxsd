@@ -99,6 +99,13 @@ parser_impl ()
   parser_->setFeature (XMLUni::fgXercesValidationErrorAsFatal, true);
   parser_->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
 
+  // Xerces-C++ 3.1.0 is the first version with working multi import
+  // support.
+  //
+#if _XERCES_VERSION >= 30100
+  parser_->setFeature (XMLUni::fgXercesHandleMultipleImports, true);
+#endif
+
   parser_->setErrorHandler (&error_proxy_);
   parser_->setContentHandler (this);
 }

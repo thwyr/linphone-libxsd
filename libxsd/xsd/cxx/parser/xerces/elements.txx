@@ -607,7 +607,10 @@ namespace xsd
             sax->setFeature (XMLUni::fgSAX2CoreValidation, true);
             sax->setFeature (XMLUni::fgXercesSchema, true);
 
-#if _XERCES_VERSION >= 30000
+            // Xerces-C++ 3.1.0 is the first version with working multi import
+            // support.
+            //
+#if _XERCES_VERSION >= 30100
             if (!(f & flags::no_multiple_imports))
               sax->setFeature (XMLUni::fgXercesHandleMultipleImports, true);
 #endif

@@ -1,8 +1,11 @@
 Version 3.3.0
 
-  * When built with Xerces-C++ 3-series, enable handling of multiple
-    imports for the same namespace. Before, all subsequent imports for
-    a namespace were ignored which caused errors in some schemas.
+  * When the XSD compiler is built with Xerces-C++ 3.1.0 or later, enable 
+    handling of multiple imports for the same namespace. Before all 
+    subsequent imports for a namespace were ignored which caused errors
+    in some schemas. Note that if your application has XML Schema validation
+    enabled then you will also need to build it with Xerces-C++ 3.1.0 or
+    later to take advantage of this feature.
 
   * Warning id's have changed to start with a letter identifying the
     component issuing the warning. F - compiler frontend, D - compiler

@@ -68,6 +68,13 @@ parse (std::istream& is, const std::string& id, bool validate)
   conf->setParameter (XMLUni::fgXercesSchema, validate);
   conf->setParameter (XMLUni::fgXercesSchemaFullChecking, false);
 
+  // Xerces-C++ 3.1.0 is the first version with working multi import
+  // support.
+  //
+#if _XERCES_VERSION >= 30100
+  conf->setParameter (XMLUni::fgXercesHandleMultipleImports, true);
+#endif
+
   // We will release the DOM document ourselves.
   //
   conf->setParameter (XMLUni::fgXercesUserAdoptsDOMDocument, true);

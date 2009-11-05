@@ -48,7 +48,7 @@ namespace xsd
           static const unsigned long dont_initialize = 0x00000002;
 
           // Disable handling of subsequent imports for the same namespace
-          // in Xerces-C++ 3-series.
+          // in Xerces-C++ 3.1.0 and later.
           //
           static const unsigned long no_multiple_imports = 0x00000004;
 

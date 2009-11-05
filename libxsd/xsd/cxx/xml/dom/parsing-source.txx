@@ -155,8 +155,13 @@ namespace xsd
             conf->setParameter (XMLUni::fgDOMValidate, true);
             conf->setParameter (XMLUni::fgXercesSchema, true);
 
+            // Xerces-C++ 3.1.0 is the first version with working multi import
+            // support.
+            //
+#if _XERCES_VERSION >= 30100
             if (!(flags & no_muliple_imports))
               conf->setParameter (XMLUni::fgXercesHandleMultipleImports, true);
+#endif
 
             // This feature checks the schema grammar for additional
             // errors. We most likely do not need it when validating
@@ -348,8 +353,13 @@ namespace xsd
             conf->setParameter (XMLUni::fgDOMValidate, true);
             conf->setParameter (XMLUni::fgXercesSchema, true);
 
+            // Xerces-C++ 3.1.0 is the first version with working multi import
+            // support.
+            //
+#if _XERCES_VERSION >= 30100
             if (!(flags & no_muliple_imports))
               conf->setParameter (XMLUni::fgXercesHandleMultipleImports, true);
+#endif
 
             // This feature checks the schema grammar for additional
             // errors. We most likely do not need it when validating

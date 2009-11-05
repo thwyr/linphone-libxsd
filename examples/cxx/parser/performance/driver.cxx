@@ -222,6 +222,13 @@ main (int argc, char* argv[])
         parser->setFeature (XMLUni::fgXercesSchema, true);
         parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
 
+        // Xerces-C++ 3.1.0 is the first version with working multi import
+        // support.
+        //
+#if _XERCES_VERSION >= 30100
+        parser->setFeature (XMLUni::fgXercesHandleMultipleImports, true);
+#endif
+
         parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true);
         parser->setFeature (XMLUni::fgXercesUseCachedGrammarInParse, true);
       }
