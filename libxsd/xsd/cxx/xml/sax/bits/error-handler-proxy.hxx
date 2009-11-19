@@ -78,4 +78,3 @@ namespace xsd
 #include <xsd/cxx/xml/sax/bits/error-handler-proxy.txx>
 
 #endif  // XSD_CXX_XML_SAX_ERROR_HANDLER_PROXY_HXX
-

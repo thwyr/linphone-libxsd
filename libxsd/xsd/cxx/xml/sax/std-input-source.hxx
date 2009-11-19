@@ -1,4 +1,4 @@
-// file      : xsd/cxx/xml/std-sax-input-source.hxx
+// file      : xsd/cxx/xml/sax/std-input-source.hxx
 // author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : Copyright (c) 2005-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
