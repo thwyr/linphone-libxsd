@@ -3,8 +3,6 @@
 // copyright : Copyright (c) 2005-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <iostream>
-
 namespace xsd
 {
   namespace cxx
