@@ -32,7 +32,9 @@ namespace XERCES_CPP_NAMESPACE
   operator<< (xercesc::DOMElement& e, const C* s)
   {
     xsd::cxx::xml::dom::clear<char> (e);
-    e.setTextContent (xsd::cxx::xml::string (s).c_str ());
+
+    if (*s != C (0))
+      e.setTextContent (xsd::cxx::xml::string (s).c_str ());
   }
 
   template <typename C>
@@ -51,7 +53,9 @@ namespace XERCES_CPP_NAMESPACE
   operator<< (xercesc::DOMElement& e, const std::basic_string<C>& s)
   {
     xsd::cxx::xml::dom::clear<char> (e);
-    e.setTextContent (xsd::cxx::xml::string (s).c_str ());
+
+    if (!s.empty ())
+      e.setTextContent (xsd::cxx::xml::string (s).c_str ());
   }
 
   template <typename C>
@@ -131,8 +135,6 @@ namespace xsd
       void
       operator<< (xercesc::DOMElement& e, const list<T, C, ST, fund>& v)
       {
-        xml::dom::clear<char> (e);
-
         std::basic_ostringstream<C> os;
         list_stream<C> ls (os, e);
 
