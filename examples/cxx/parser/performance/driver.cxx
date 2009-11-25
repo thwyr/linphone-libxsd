@@ -255,6 +255,10 @@ main (int argc, char* argv[])
 
         eh.throw_if_failed ();
         parser->setFeature (XMLUni::fgXercesUseCachedGrammarInParse, true);
+
+#if _XERCES_VERSION >= 30000
+        parser->setFeature (XMLUni::fgXercesLoadSchema, false);
+#endif
       }
       else
       {

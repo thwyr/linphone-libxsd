@@ -115,7 +115,14 @@ main (int argc, char* argv[])
     }
 
     eh.throw_if_failed<xml_schema::parsing> ();
+
+    // Use the loaded grammar during parsing.
+    //
     conf->setParameter (XMLUni::fgXercesUseCachedGrammarInParse, true);
+
+    // Disable loading schemas via other means (e.g., schemaLocation).
+    //
+    conf->setParameter (XMLUni::fgXercesLoadSchema, false);
 
     // We will release the DOM document ourselves.
     //

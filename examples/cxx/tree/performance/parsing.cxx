@@ -111,6 +111,7 @@ parsing (const char* file, unsigned long iter, bool validate)
 
       eh.throw_if_failed<xml_schema::parsing> ();
       conf->setParameter (XMLUni::fgXercesUseCachedGrammarInParse, true);
+      conf->setParameter (XMLUni::fgXercesLoadSchema, false);
     }
     else
     {
