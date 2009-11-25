@@ -340,7 +340,7 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{8953e6cc-4e46-4d97-9704-ce8f76672843}"
+			UniqueIdentifier="{8953E6CC-4E46-4D97-9704-CE8F76672843}"
 			>
 			<File
 				RelativePath=".\driver.cxx"
