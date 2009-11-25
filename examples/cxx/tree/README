@@ -43,6 +43,11 @@ caching
   Shows how to parse several XML documents while reusing the
   underlying XML parser and caching the schemas used for validation.
 
+embedded
+  Shows how to embed the binary representation of the schema grammar
+  into an application and then use it with the C++/Tree mapping to 
+  parse and validate XML documents.
+
 performance
   Measures the performance of parsing and serialization. This example
   also shows how to structure your code to achieve the maximum

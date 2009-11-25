@@ -1,4 +1,4 @@
-This example shows how to use the the C++/Tree mapping to parse several
+This example shows how to use the C++/Tree mapping to parse several
 XML documents while reusing the underlying XML parser and caching the
 schemas used for validation.
 
@@ -22,7 +22,7 @@ driver.cxx
   ten iterations that parse the input file to a DOM document using
   the DOM parser and call one of the parsing functions that constructs
   the object model from this DOM document. On each iteration the driver
-  prints a number of book in the object model to STDERR.
+  prints a number of books in the object model to STDERR.
 
 To run the example on the sample XML instance document simply execute:
 

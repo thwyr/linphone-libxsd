@@ -1,5 +1,5 @@
-dirs := binary caching custom hello library messaging mixed multiroot \
-performance polymorphism streaming wildcard
+dirs := binary caching embedded custom hello library messaging mixed \
+multiroot performance polymorphism streaming wildcard
 
 ifeq ($(WITH_DBXML),1)
 dirs += dbxml

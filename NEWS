@@ -34,6 +34,10 @@ Version 3.3.0
     types in the XML Schema namespace using the export symbol provided
     with the --export-symbol option.
 
+  * New example, embedded, shows how to embed the binary representation of
+    the schema grammar into an application and then use it to parse and 
+    validate XML documents.
+
   * New example, custom/mixed, shows how to use type customization to parse 
     and serialize mixed content.
 
