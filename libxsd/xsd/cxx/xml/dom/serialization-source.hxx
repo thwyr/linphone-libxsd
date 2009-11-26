@@ -91,16 +91,16 @@ namespace xsd
                    xercesc::DOMErrorHandler& eh,
                    unsigned long flags);
 
-        //
-        //
+
         class ostream_format_target: public xercesc::XMLFormatTarget
         {
+          static const std::size_t buf_max = 1024;
+
         public:
           ostream_format_target (std::ostream& os)
-              : os_ (os)
+              : n_ (0), os_ (os)
           {
           }
-
 
         public:
           // I know, some of those consts are stupid. But that's what
@@ -116,14 +116,32 @@ namespace xsd
 #endif
                       xercesc::XMLFormatter* const)
           {
-            // Ignore the data if there was a stream failure and
-            // the stream is not using exceptions.
+            // Ignore the write request if there was a stream failure and the
+            // stream is not using exceptions.
             //
-            if (!(os_.bad () || os_.fail ()))
+            if (os_.fail ())
+              return;
+
+            // Flush the buffer if the block is too large or if we don't have
+            // any space left.
+            //
+            if ((size >= buf_max / 8 || n_ + size > buf_max) && n_ != 0)
             {
+              os_.write (buf_, static_cast<std::streamsize> (n_));
+              n_ = 0;
+
+              if (os_.fail ())
+                return;
+            }
+
+            if (size < buf_max / 8)
+            {
+              memcpy (buf_ + n_, reinterpret_cast<const char*> (buf), size);
+              n_ += size;
+            }
+            else
               os_.write (reinterpret_cast<const char*> (buf),
                          static_cast<std::streamsize> (size));
-            }
           }
 
 
@@ -133,13 +151,24 @@ namespace xsd
             // Ignore the flush request if there was a stream failure
             // and the stream is not using exceptions.
             //
-            if (!(os_.bad () || os_.fail ()))
+            if (!os_.fail ())
             {
+              if (n_ != 0)
+              {
+                os_.write (buf_, static_cast<std::streamsize> (n_));
+                n_ = 0;
+
+                if (os_.fail ())
+                  return;
+              }
+
               os_.flush ();
             }
           }
 
         private:
+          char buf_[buf_max];
+          size_t n_;
           std::ostream& os_;
         };
       }
