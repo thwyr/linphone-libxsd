@@ -67,6 +67,10 @@ streaming
   of the document as they become available as well as handle documents
   that are too large to fit into memory.
 
+compression
+  Shows how to compress XML documents during serialization and decompress 
+  them during parsing using the zlib library.
+
 binary/
   A collection of examples that show how to serialize the object model
   into a number of predefined and custom binary formats.

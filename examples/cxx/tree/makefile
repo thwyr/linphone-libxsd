@@ -6,10 +6,16 @@
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../build/bootstrap.make
 
 all_examples := binary caching embedded custom hello library messaging \
-mixed multiroot performance polymorphism streaming wildcard dbxml xpath
+mixed multiroot performance polymorphism streaming wildcard compression \
+dbxml xpath
+
 
 build_examples := binary caching embedded custom hello library messaging \
 mixed multiroot performance polymorphism streaming wildcard
+
+ifeq ($(xsd_with_zlib),y)
+build_examples += compression
+endif
 
 ifeq ($(xsd_with_dbxml),y)
 build_examples += dbxml

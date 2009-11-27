@@ -49,6 +49,9 @@ LDFLAGS     - Linker options
 XSD         - XSD compiler, by default path to the XSD binary
 XSDFLAGS    - XSD options
 
+WITH_ZLIB   - Set this variable to 1 if you would like to build examples
+              that depend on the zlib library
+
 WITH_ACE    - Set this variable to 1 if you would like to build examples
               that depend on the ACE library
 

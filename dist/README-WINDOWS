@@ -85,7 +85,8 @@ show a specific feature of XSD and are not included in the solutions
 above. They come with their individual solution files:
 
 examples/cxx/tree/custom           - examples of type customization
-examples/cxx/tree/custom/calendar  - depends on the Boost date_time library
+examples/cxx/tree/custom/calendar  - depends on the Boost date_time librar
+examples/cxx/tree/compression      - depends on the zlib library
 examples/cxx/tree/binary/boost     - depends on the Boost serialization library
 examples/cxx/tree/binary/cdr       - depends on the ACE library
 examples/cxx/tree/binary/xdr       - requires a third-party XDR library

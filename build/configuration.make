@@ -5,9 +5,9 @@
 
 $(call include-once,$(scf_root)/configuration-rules.make,$(dcf_root))
 
-
 # Dynamic configuration.
 #
+xsd_with_zlib :=
 xsd_with_ace :=
 xsd_with_xdr :=
 xsd_with_dbxml :=
@@ -17,8 +17,9 @@ xsd_with_boost_serialization :=
 
 $(call -include,$(dcf_root)/configuration-dynamic.make)
 
-ifdef xsd_with_ace
+ifdef xsd_with_zlib
 
+$(out_root)/%: xsd_with_zlib := $(xsd_with_zlib)
 $(out_root)/%: xsd_with_ace := $(xsd_with_ace)
 $(out_root)/%: xsd_with_xdr := $(xsd_with_xdr)
 $(out_root)/%: xsd_with_dbxml := $(xsd_with_dbxml)
