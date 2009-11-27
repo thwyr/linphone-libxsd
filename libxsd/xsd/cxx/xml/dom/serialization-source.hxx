@@ -7,6 +7,7 @@
 #define XSD_CXX_XML_DOM_SERIALIZATION_SOURCE_HXX
 
 #include <string>
+#include <cstring> // std::memcpy
 #include <ostream>
 
 #include <xercesc/dom/DOMAttr.hpp>
@@ -94,8 +95,6 @@ namespace xsd
 
         class ostream_format_target: public xercesc::XMLFormatTarget
         {
-          static const std::size_t buf_max = 1024;
-
         public:
           ostream_format_target (std::ostream& os)
               : n_ (0), os_ (os)
@@ -125,7 +124,7 @@ namespace xsd
             // Flush the buffer if the block is too large or if we don't have
             // any space left.
             //
-            if ((size >= buf_max / 8 || n_ + size > buf_max) && n_ != 0)
+            if ((size >= buf_size_ / 8 || n_ + size > buf_size_) && n_ != 0)
             {
               os_.write (buf_, static_cast<std::streamsize> (n_));
               n_ = 0;
@@ -134,9 +133,9 @@ namespace xsd
                 return;
             }
 
-            if (size < buf_max / 8)
+            if (size < buf_size_ / 8)
             {
-              memcpy (buf_ + n_, reinterpret_cast<const char*> (buf), size);
+              std::memcpy (buf_ + n_, reinterpret_cast<const char*> (buf), size);
               n_ += size;
             }
             else
@@ -167,8 +166,9 @@ namespace xsd
           }
 
         private:
-          char buf_[buf_max];
-          size_t n_;
+          static const std::size_t buf_size_ = 1024;
+          char buf_[buf_size_];
+          std::size_t n_;
           std::ostream& os_;
         };
       }
