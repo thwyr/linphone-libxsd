@@ -23,7 +23,7 @@ namespace xsd
       {
         class std_input_stream: public xercesc::BinInputStream
         {
-        public :
+        public:
           std_input_stream (std::istream& is)
               : is_ (is)
           {
@@ -78,7 +78,7 @@ namespace xsd
             // Make sure that if we failed, readBytes won't be called
             // again.
             //
-            if (!(is_.bad () || is_.fail ()))
+            if (!is_.fail ())
             {
 #if _XERCES_VERSION >= 30000
               return static_cast<XMLSize_t> (is_.gcount ());
@@ -97,14 +97,14 @@ namespace xsd
             return 0;
           }
 #endif
-        private :
+        private:
           std::istream& is_;
         };
 
 
         class std_input_source: public xercesc::InputSource
         {
-        public :
+        public:
           std_input_source (std::istream& is)
               : is_ (&is)
           {
@@ -163,7 +163,7 @@ namespace xsd
             return new std_input_stream (is);
           }
 
-        private :
+        private:
           mutable std::istream* is_;
         };
       }
