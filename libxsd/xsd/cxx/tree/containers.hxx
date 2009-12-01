@@ -833,15 +833,15 @@ namespace xsd
         {
         }
 
-        sequence_common (size_type n, const type& x)
-            : flags_ (0), container_ (0)
+        sequence_common (size_type n, const type& x, container* c)
+            : flags_ (0), container_ (c)
         {
           assign (n, x);
         }
 
         template <typename I>
-        sequence_common (const I& begin, const I& end)
-            : flags_ (0), container_ (0)
+        sequence_common (const I& begin, const I& end, container* c)
+            : flags_ (0), container_ (c)
         {
           assign (begin, end);
         }
@@ -1056,26 +1056,26 @@ namespace xsd
         //
 #ifdef _MSC_VER
         explicit
-        sequence (size_type n, const T& x = T ())
-            : sequence_common (n, x)
+        sequence (size_type n, const T& x = T (), container* c = 0)
+            : sequence_common (n, x, c)
         {
         }
 #else
         explicit
-        sequence (size_type n)
-            : sequence_common (n, T ())
+        sequence (size_type n, container* c = 0)
+            : sequence_common (n, T (), c)
         {
         }
 
-        sequence (size_type n, const T& x)
-            : sequence_common (n, x)
+        sequence (size_type n, const T& x, container* c = 0)
+            : sequence_common (n, x, c)
         {
         }
 #endif
 
         template <typename I>
-        sequence (const I& begin, const I& end)
-            : sequence_common (begin, end)
+        sequence (const I& begin, const I& end, container* c = 0)
+            : sequence_common (begin, end, c)
         {
         }
 
@@ -1315,13 +1315,15 @@ namespace xsd
         }
 
         explicit
-        sequence (typename base_sequence::size_type n, const T& x = T ())
+        sequence (typename base_sequence::size_type n,
+                  const T& x = T (),
+                  container* = 0)
             : base_sequence (n, x)
         {
         }
 
         template <typename I>
-        sequence (const I& begin, const I& end)
+        sequence (const I& begin, const I& end, container* = 0)
             : base_sequence (begin, end)
         {
         }

@@ -55,7 +55,7 @@ namespace CXX
                << flags_type << " f," << endl
                << container << "* c)" << endl
                << ": " << any_simple_type << " (s, f, c)," << endl
-               << "  " << base <<  " (s, f, c)"
+               << "  " << base <<  " (s, f, this)"
                << "{"
                << "}";
 

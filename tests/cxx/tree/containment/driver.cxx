@@ -74,4 +74,39 @@ main ()
     i.ref ("bar");
     assert (i.ref ()->get () == p);
   }
+
+  // IDREF lists
+  //
+  {
+    id i1 ("a"), i2 ("b");
+
+    auto_ptr<ids> ic (new ids);
+    ic->id ().push_back (i1);
+    ic->id ().push_back (i2);
+
+    auto_ptr<xml_schema::idrefs> r1 (new xml_schema::idrefs);
+    r1->push_back (xml_schema::idref ("a"));
+    r1->push_back (xml_schema::idref ("b"));
+
+    auto_ptr<idref_list> r2 (new idref_list);
+    r2->push_back (xml_schema::idref ("a"));
+    r2->push_back (xml_schema::idref ("b"));
+
+    auto_ptr<idrefs1> rc1 (new idrefs1);
+    auto_ptr<idrefs2> rc2 (new idrefs2);
+
+    rc1->idrefs (r1);
+    rc2->idrefs (r2);
+
+    model m;
+    m.ids (ic);
+    m.idrefs1 (rc1);
+    m.idrefs2 (rc2);
+
+    assert (m.idrefs1 ().idrefs ()[0].get () != 0);
+    assert (m.idrefs1 ().idrefs ()[1].get () != 0);
+
+    assert (m.idrefs2 ().idrefs ()[0].get () != 0);
+    assert (m.idrefs2 ().idrefs ()[1].get () != 0);
+  }
 }

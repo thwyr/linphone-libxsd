@@ -52,7 +52,8 @@ namespace CXX
           //
           os << inl
              << name << "::" << endl
-             << name << " ()"
+             << name << " ()" << endl
+             << ": " << base_type << " (0, this)"
              << "{"
              << "}";
 
@@ -66,7 +67,7 @@ namespace CXX
              << name << "::" << endl
              << name << " (" << size_type << " n, const " << item_name <<
             "& x)" << endl
-             << ": " << base_type << " (n, x)"
+             << ": " << base_type << " (n, x, this)"
              << "{"
              << "}";
 
@@ -78,7 +79,7 @@ namespace CXX
              << flags_type << " f," << endl
              << container << "* c)" << endl
              << ": " << any_simple_type << " (o, f, c)," << endl
-             << "  " << base_type << " (o, f, c)"
+             << "  " << base_type << " (o, f, this)"
              << "{"
              << "}";
         }

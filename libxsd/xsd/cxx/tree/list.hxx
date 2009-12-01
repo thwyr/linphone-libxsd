@@ -44,14 +44,16 @@ namespace xsd
         {
         }
 
-        list (typename sequence<T>::size_type n, const T& x)
-            : sequence<T> (n, x)
+        list (typename sequence<T>::size_type n,
+              const T& x,
+              container* c = 0)
+            : sequence<T> (n, x, c)
         {
         }
 
         template<typename I>
-        list (const I& b, const I& e)
-            : sequence<T> (b, e)
+        list (const I& b, const I& e, container* c = 0)
+            : sequence<T> (b, e, c)
         {
         }
 
@@ -92,14 +94,14 @@ namespace xsd
         }
 
         explicit
-        list (typename sequence<T>::size_type n, const T& x)
-            : sequence<T> (n, x)
+        list (typename sequence<T>::size_type n, const T& x, container* c = 0)
+            : sequence<T> (n, x, c)
         {
         }
 
         template<typename I>
-        list (const I& b, const I& e)
-            : sequence<T> (b, e)
+        list (const I& b, const I& e, container* c = 0)
+            : sequence<T> (b, e, c)
         {
         }
 
@@ -129,4 +131,4 @@ namespace xsd
   }
 }
 
-#endif  // XSD_CXX_TREE_LIST_HXX
+#endif // XSD_CXX_TREE_LIST_HXX

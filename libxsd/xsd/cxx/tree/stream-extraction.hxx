@@ -152,7 +152,7 @@ namespace xsd
       template <typename S>
       inline nmtokens<C, B, nmtoken>::
       nmtokens (istream<S>& s, flags f, container* c)
-          : B (s, f, c), base_type (s, f, c)
+          : B (s, f, c), base_type (s, f, this)
       {
       }
 
@@ -219,7 +219,7 @@ namespace xsd
       template <typename S>
       inline idrefs<C, B, idref>::
       idrefs (istream<S>& s, flags f, container* c)
-          : B (s, f, c), base_type (s, f, c)
+          : B (s, f, c), base_type (s, f, this)
       {
       }
 
@@ -291,7 +291,7 @@ namespace xsd
       template <typename S>
       inline entities<C, B, entity>::
       entities (istream<S>& s, flags f, container* c)
-          : B (s, f, c), base_type (s, f, c)
+          : B (s, f, c), base_type (s, f, this)
       {
       }
     }

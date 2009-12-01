@@ -24,4 +24,36 @@
     </sequence>
   </complexType>
 
+  <!-- IDREF lists -->
+
+  <complexType name="id">
+    <attribute name="id" type="ID" use="required"/>
+  </complexType>
+
+  <complexType name="ids">
+    <sequence>
+      <element name="id" type="t:id" minOccurs="0" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="idrefs1">
+    <attribute name="idrefs" type="IDREFS" use="required"/>
+  </complexType>
+
+  <simpleType name="idref-list">
+    <list itemType="IDREF"/>
+  </simpleType>
+
+  <complexType name="idrefs2">
+    <attribute name="idrefs" type="t:idref-list" use="required"/>
+  </complexType>
+
+  <complexType name="model">
+    <sequence>
+      <element name="ids" type="t:ids"/>
+      <element name="idrefs1" type="t:idrefs1"/>
+      <element name="idrefs2" type="t:idrefs2"/>
+    </sequence>
+  </complexType>
+
 </schema>

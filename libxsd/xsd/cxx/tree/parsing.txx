@@ -503,14 +503,14 @@ namespace xsd
       template <typename C, typename B, typename nmtoken>
       nmtokens<C, B, nmtoken>::
       nmtokens (const xercesc::DOMElement& e, flags f, container* c)
-          : B (e, f, c), base_type (e, f, c)
+          : B (e, f, c), base_type (e, f, this)
       {
       }
 
       template <typename C, typename B, typename nmtoken>
       nmtokens<C, B, nmtoken>::
       nmtokens (const xercesc::DOMAttr& a, flags f, container* c)
-          : B (a, f, c), base_type (a, f, c)
+          : B (a, f, c), base_type (a, f, this)
       {
       }
 
@@ -520,7 +520,7 @@ namespace xsd
                 const xercesc::DOMElement* e,
                 flags f,
                 container* c)
-          : B (s, e, f, c), base_type (s, e, f, c)
+          : B (s, e, f, c), base_type (s, e, f, this)
       {
       }
 
@@ -669,14 +669,14 @@ namespace xsd
       template <typename C, typename B, typename idref>
       idrefs<C, B, idref>::
       idrefs (const xercesc::DOMElement& e, flags f, container* c)
-          : B (e, f, c), base_type (e, f, c)
+          : B (e, f, c), base_type (e, f, this)
       {
       }
 
       template <typename C, typename B, typename idref>
       idrefs<C, B, idref>::
       idrefs (const xercesc::DOMAttr& a, flags f, container* c)
-          : B (a, f, c), base_type (a, f, c)
+          : B (a, f, c), base_type (a, f, this)
       {
       }
 
@@ -686,7 +686,7 @@ namespace xsd
               const xercesc::DOMElement* e,
               flags f,
               container* c)
-          : B (s, e, f, c), base_type (s, e, f, c)
+          : B (s, e, f, c), base_type (s, e, f, this)
       {
       }
 
@@ -890,14 +890,14 @@ namespace xsd
       template <typename C, typename B, typename entity>
       entities<C, B, entity>::
       entities (const xercesc::DOMElement& e, flags f, container* c)
-          : B (e, f, c), base_type (e, f, c)
+          : B (e, f, c), base_type (e, f, this)
       {
       }
 
       template <typename C, typename B, typename entity>
       entities<C, B, entity>::
       entities (const xercesc::DOMAttr& a, flags f, container* c)
-          : B (a, f, c), base_type (a, f, c)
+          : B (a, f, c), base_type (a, f, this)
       {
       }
 
@@ -907,7 +907,7 @@ namespace xsd
                 const xercesc::DOMElement* e,
                 flags f,
                 container* c)
-          : B (s, e, f, c), base_type (s, e, f, c)
+          : B (s, e, f, c), base_type (s, e, f, this)
       {
       }
     }

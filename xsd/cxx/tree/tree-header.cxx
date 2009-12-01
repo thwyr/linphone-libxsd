@@ -135,7 +135,7 @@ namespace CXX
           os << "template < typename " << iter_type << " >" << endl
              << name << " (const " << iter_type << "& begin, const " <<
             iter_type << "& end)" << endl
-             << ": " << base_type << " (begin, end)"
+             << ": " << base_type << " (begin, end, this)"
              << "{"
              << "}";
 

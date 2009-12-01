@@ -1014,6 +1014,7 @@ namespace xsd
          * @brief Default constructor creates no elements.
          */
         nmtokens ()
+            : base_type (0, this)
         {
         }
 
@@ -1024,7 +1025,7 @@ namespace xsd
          * @param x An exemplar element to copy.
          */
         nmtokens (typename base_type::size_type n, const nmtoken& x)
-            : base_type (n, x)
+            : base_type (n, x, this)
         {
         }
 
@@ -1037,7 +1038,7 @@ namespace xsd
          */
         template <typename I>
         nmtokens (const I& begin, const I& end)
-            : base_type (begin, end)
+            : base_type (begin, end, this)
         {
         }
 
@@ -1052,7 +1053,7 @@ namespace xsd
          * For polymorphic object models use the @c _clone function instead.
          */
         nmtokens (const nmtokens& x, flags f, container* c = 0)
-            : B (x, f, c), base_type (x, f, c)
+            : B (x, f, c), base_type (x, f, this)
         {
         }
 
@@ -2482,6 +2483,7 @@ namespace xsd
          * @brief Default constructor creates no elements.
          */
         idrefs ()
+            : base_type (0, this)
         {
         }
 
@@ -2492,7 +2494,7 @@ namespace xsd
          * @param x An exemplar element to copy.
          */
         idrefs (typename base_type::size_type n, const idref& x)
-            : base_type (n, x)
+            : base_type (n, x, this)
         {
         }
 
@@ -2505,7 +2507,7 @@ namespace xsd
          */
         template <typename I>
         idrefs (const I& begin, const I& end)
-            : base_type (begin, end)
+            : base_type (begin, end, this)
         {
         }
 
@@ -2520,7 +2522,7 @@ namespace xsd
          * For polymorphic object models use the @c _clone function instead.
          */
         idrefs (const idrefs& x, flags f = 0, container* c = 0)
-            : B (x, f, c), base_type (x, f, c)
+            : B (x, f, c), base_type (x, f, this)
         {
         }
 
@@ -3675,6 +3677,7 @@ namespace xsd
          * @brief Default constructor creates no elements.
          */
         entities ()
+            : base_type (0, this)
         {
         }
 
@@ -3685,7 +3688,7 @@ namespace xsd
          * @param x An exemplar element to copy.
          */
         entities (typename base_type::size_type n, const entity& x)
-            : base_type (n, x)
+            : base_type (n, x, this)
         {
         }
 
@@ -3698,7 +3701,7 @@ namespace xsd
          */
         template <typename I>
         entities (const I& begin, const I& end)
-            : base_type (begin, end)
+            : base_type (begin, end, this)
         {
         }
 
@@ -3713,7 +3716,7 @@ namespace xsd
          * For polymorphic object models use the @c _clone function instead.
          */
         entities (const entities& x, flags f = 0, container* c = 0)
-            : B (x, f, c), base_type (x, f, c)
+            : B (x, f, c), base_type (x, f, this)
         {
         }
 
