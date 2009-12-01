@@ -35,7 +35,7 @@ namespace CXX
 
       //
       //
-      struct List : Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -124,7 +124,7 @@ namespace CXX
       };
 
 
-      struct Union : Traversal::Union, protected virtual Context
+      struct Union: Traversal::Union, Context
       {
         Union (Context& c)
             : Context (c)
@@ -192,7 +192,7 @@ namespace CXX
       };
 
 
-      struct Enumeration : Traversal::Enumeration, protected virtual Context
+      struct Enumeration: Traversal::Enumeration, Context
       {
         Enumeration (Context& c)
             : Context (c), base_ (c)
@@ -277,7 +277,7 @@ namespace CXX
         BaseTypeName base_;
       };
 
-      struct Element : Traversal::Element, protected virtual Context
+      struct Element: Traversal::Element, Context
       {
         Element (Context& c, String const& scope_)
             : Context (c), scope (scope_)
@@ -509,7 +509,7 @@ namespace CXX
         String scope;
       };
 
-      struct Any : Traversal::Any, protected virtual Context
+      struct Any: Traversal::Any, Context
       {
         Any (Context& c, String const& scope_)
             : Context (c), scope (scope_)
@@ -567,7 +567,7 @@ namespace CXX
         String scope;
       };
 
-      struct Attribute : Traversal::Attribute, protected virtual Context
+      struct Attribute: Traversal::Attribute, Context
       {
         Attribute (Context& c, String const& scope_)
             : Context (c), scope (scope_)
@@ -663,8 +663,7 @@ namespace CXX
         String scope;
       };
 
-      struct AnyAttribute : Traversal::AnyAttribute,
-                            protected virtual Context
+      struct AnyAttribute: Traversal::AnyAttribute, Context
       {
         AnyAttribute (Context& c, String const& scope_)
             : Context (c), scope (scope_)
@@ -700,7 +699,7 @@ namespace CXX
         String scope;
       };
 
-      struct Complex : Traversal::Complex, protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c), base_ (c)
@@ -843,12 +842,12 @@ namespace CXX
 
       // Generate substitution group map entry.
       //
-      struct GlobalElement : Traversal::Element,
-                             GlobalElementBase,
-                             protected virtual Context
+      struct GlobalElement: Traversal::Element,
+                            GlobalElementBase,
+                            Context
       {
         GlobalElement (Context& c)
-            : Context (c), GlobalElementBase (c), type_name_ (c)
+            : GlobalElementBase (c), Context (c), type_name_ (c)
         {
           belongs_ >> type_name_;
         }
@@ -887,11 +886,11 @@ namespace CXX
 
       struct ElementType: Traversal::Element,
                           GlobalElementBase,
-                          protected virtual Context
+                          Context
       {
         ElementType (Context& c)
-            : Context (c),
-              GlobalElementBase (c),
+            : GlobalElementBase (c),
+              Context (c),
               element_map_ (c.options.value<CLI::generate_element_map> ())
         {
         }
@@ -937,10 +936,10 @@ namespace CXX
 
       struct ElementFunction: Traversal::Element,
                               GlobalElementBase,
-                              protected virtual Context
+                              Context
       {
         ElementFunction (Context& c)
-            : Context (c), GlobalElementBase (c)
+            : GlobalElementBase (c), Context (c)
         {
         }
 

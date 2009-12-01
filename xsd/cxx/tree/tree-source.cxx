@@ -20,7 +20,7 @@ namespace CXX
   {
     namespace
     {
-      struct List: Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -146,7 +146,7 @@ namespace CXX
       };
 
 
-      struct Union: Traversal::Union, protected virtual Context
+      struct Union: Traversal::Union, Context
       {
         Union (Context& c)
             : Context (c)
@@ -244,8 +244,7 @@ namespace CXX
       // Enumeration mapping.
       //
 
-      struct EnumeratorLiteral: Traversal::Enumerator,
-                                protected virtual Context
+      struct EnumeratorLiteral: Traversal::Enumerator, Context
       {
         EnumeratorLiteral (Context& c)
             : Context (c)
@@ -284,8 +283,7 @@ namespace CXX
 
       // Populate LiteralInfoList
       //
-      struct EnumeratorLiteralInfo: Traversal::Enumerator,
-                                    protected virtual Context
+      struct EnumeratorLiteralInfo: Traversal::Enumerator, Context
 
       {
         EnumeratorLiteralInfo (Context& c, LiteralInfoList& list)
@@ -304,7 +302,7 @@ namespace CXX
       };
 
 
-      struct Enumeration: Traversal::Enumeration, protected virtual Context
+      struct Enumeration: Traversal::Enumeration, Context
       {
         Enumeration (Context& c)
             : Context (c), enumerator_literal_ (c)
@@ -547,7 +545,7 @@ namespace CXX
 
       //
       //
-      struct Member: Traversal::Member, protected virtual Context
+      struct Member: Traversal::Member, Context
       {
         Member (Context& c, String const& scope)
             : Context (c), scope_ (scope)
@@ -626,7 +624,7 @@ namespace CXX
       };
 
 
-      struct Element: Traversal::Element, protected virtual Context
+      struct Element: Traversal::Element, Context
       {
         Element (Context& c)
             : Context (c)
@@ -833,7 +831,7 @@ namespace CXX
         }
       };
 
-      struct ElementTest : Traversal::Element, protected virtual Context
+      struct ElementTest: Traversal::Element, Context
       {
         ElementTest (Context& c)
             : Context (c)
@@ -863,7 +861,7 @@ namespace CXX
         }
       };
 
-      struct Any: Traversal::Any, protected virtual Context
+      struct Any: Traversal::Any, Context
       {
         Any (Context& c)
             : Context (c)
@@ -1000,7 +998,7 @@ namespace CXX
         }
       };
 
-      struct AnyTest : Traversal::Any, protected virtual Context
+      struct AnyTest: Traversal::Any, Context
       {
         AnyTest (Context& c)
             : Context (c)
@@ -1025,7 +1023,7 @@ namespace CXX
         }
       };
 
-      struct Attribute : Traversal::Attribute, protected virtual Context
+      struct Attribute: Traversal::Attribute, Context
       {
         Attribute (Context& c)
             : Context (c)
@@ -1080,7 +1078,7 @@ namespace CXX
         }
       };
 
-      struct AnyAttribute: Traversal::AnyAttribute, protected virtual Context
+      struct AnyAttribute: Traversal::AnyAttribute, Context
       {
         AnyAttribute (Context& c)
             : Context (c)
@@ -1173,7 +1171,7 @@ namespace CXX
       };
 
 
-      struct AttributeTest : Traversal::Attribute, protected virtual Context
+      struct AttributeTest: Traversal::Attribute, Context
       {
         AttributeTest (Context& c)
             : Context (c)
@@ -1234,10 +1232,10 @@ namespace CXX
 
       //
       //
-      struct CtorBase : Traversal::Complex,
-                        Traversal::Enumeration,
-                        Traversal::Type,
-                        protected virtual Context
+      struct CtorBase: Traversal::Complex,
+                       Traversal::Enumeration,
+                       Traversal::Type,
+                       Context
       {
         // If base_arg is empty then no base argument is
         // generated.
@@ -1272,13 +1270,13 @@ namespace CXX
         // No need to traverse AnyAttribute since it is always mapped
         // to a sequence.
         //
-        struct Args : Traversal::Complex,
-                      Traversal::Enumeration,
-                      Traversal::Type,
-                      Traversal::Any,
-                      Traversal::Element,
-                      Traversal::Attribute,
-                      protected virtual Context
+        struct Args: Traversal::Complex,
+                     Traversal::Enumeration,
+                     Traversal::Type,
+                     Traversal::Any,
+                     Traversal::Element,
+                     Traversal::Attribute,
+                     Context
         {
           Args (Context& c, String const& base_arg)
               : Context (c), base_arg_ (base_arg), first_ (true)
@@ -1363,9 +1361,9 @@ namespace CXX
       };
 
 
-      struct CtorMember : Traversal::Element,
-                          Traversal::Attribute,
-                          protected virtual Context
+      struct CtorMember: Traversal::Element,
+                         Traversal::Attribute,
+                         Context
       {
         CtorMember (Context& c)
             : Context (c)
@@ -1442,9 +1440,9 @@ namespace CXX
         }
       };
 
-      struct CtorAny : Traversal::Any,
-                       Traversal::AnyAttribute,
-                       protected virtual Context
+      struct CtorAny: Traversal::Any,
+                      Traversal::AnyAttribute,
+                      Context
       {
         CtorAny (Context& c)
             : Context (c)
@@ -1496,9 +1494,7 @@ namespace CXX
       };
 
 
-      struct CopyMember : Traversal::Member,
-                          protected virtual Context
-
+      struct CopyMember: Traversal::Member, Context
       {
         CopyMember (Context& c, String const& arg_name_)
             : Context (c), arg_name (arg_name_)
@@ -1522,10 +1518,9 @@ namespace CXX
         String arg_name;
       };
 
-      struct CopyAny : Traversal::Any,
-                       Traversal::AnyAttribute,
-                       protected virtual Context
-
+      struct CopyAny: Traversal::Any,
+                      Traversal::AnyAttribute,
+                      Context
       {
         CopyAny (Context& c, String const& arg_name_)
             : Context (c), arg_name (arg_name_)
@@ -1565,8 +1560,7 @@ namespace CXX
 
       // Element parsing c-tor initializers.
       //
-      struct ElementCtorMember : Traversal::Member,
-                                 protected virtual Context
+      struct ElementCtorMember: Traversal::Member, Context
       {
         ElementCtorMember (Context& c)
             : Context (c)
@@ -1586,9 +1580,9 @@ namespace CXX
         }
       };
 
-      struct ElementCtorAny : Traversal::Any,
-                              Traversal::AnyAttribute,
-                              protected virtual Context
+      struct ElementCtorAny: Traversal::Any,
+                             Traversal::AnyAttribute,
+                             Context
       {
         ElementCtorAny (Context& c)
             : Context (c)
@@ -1623,9 +1617,9 @@ namespace CXX
 
       // Default c-tor member initializer.
       //
-      struct DefaultCtorMemberInit : Traversal::Element,
-                                     Traversal::Attribute,
-                                     protected virtual Context
+      struct DefaultCtorMemberInit: Traversal::Element,
+                                    Traversal::Attribute,
+                                    Context
       {
         DefaultCtorMemberInit (Context& c)
             : Context (c)
@@ -1664,9 +1658,9 @@ namespace CXX
         }
       };
 
-      struct DefaultCtorAnyInit : Traversal::Any,
-                                  Traversal::AnyAttribute,
-                                  protected virtual Context
+      struct DefaultCtorAnyInit: Traversal::Any,
+                                 Traversal::AnyAttribute,
+                                 Context
       {
         DefaultCtorAnyInit (Context& c)
             : Context (c)
@@ -1708,7 +1702,7 @@ namespace CXX
                                     Traversal::Member,
                                     Traversal::Any,
                                     Traversal::AnyAttribute,
-                                    protected virtual Context
+                                    Context
       {
         // generate should initially be false.
         //
@@ -1783,9 +1777,9 @@ namespace CXX
 
       //
       //
-      struct MemberComparison : Traversal::Element,
-                                Traversal::Attribute,
-                                protected virtual Context
+      struct MemberComparison: Traversal::Element,
+                               Traversal::Attribute,
+                               Context
       {
         MemberComparison (Context& c)
             : Context (c)
@@ -1902,9 +1896,9 @@ namespace CXX
         }
       };
 
-      struct AnyComparison : Traversal::Any,
-                             Traversal::AnyAttribute,
-                             protected virtual Context
+      struct AnyComparison: Traversal::Any,
+                            Traversal::AnyAttribute,
+                            Context
       {
         AnyComparison (Context& c)
             : Context (c)
@@ -1946,7 +1940,7 @@ namespace CXX
                                Traversal::Any,
                                Traversal::Attribute,
                                Traversal::AnyAttribute,
-                               protected virtual Context
+                               Context
       {
         HasParseFunction (Context& c, Boolean& has_el, Boolean& has_at)
             : Context (c), has_el_ (has_el), has_at_ (has_at)
@@ -1999,7 +1993,7 @@ namespace CXX
 
       //
       //
-      struct FacetArray: Traversal::Complex, protected virtual Context
+      struct FacetArray: Traversal::Complex, Context
       {
         FacetArray (Context& c)
             : Context (c)
@@ -2073,7 +2067,7 @@ namespace CXX
 
       //
       //
-      struct Complex: Traversal::Complex, protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c),
@@ -3112,13 +3106,13 @@ namespace CXX
 
       // Generate element types and substitution group map entries.
       //
-      struct GlobalElement : Traversal::Element,
-                             GlobalElementBase,
-                             protected virtual Context
+      struct GlobalElement: Traversal::Element,
+                            GlobalElementBase,
+                            Context
       {
         GlobalElement (Context& c)
-            : Context (c),
-              GlobalElementBase (c),
+            : GlobalElementBase (c),
+              Context (c),
               element_type_ (c.options.value<CLI::generate_element_type> ()),
               element_map_ (c.options.value<CLI::generate_element_map> ()),
               type_name_ (c)

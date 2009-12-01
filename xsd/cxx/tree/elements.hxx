@@ -462,25 +462,25 @@ namespace CXX
 
     // Check whether this Schema type maps to a fundamental C++ type.
     //
-    struct IsFundamentalType : Traversal::Fundamental::Byte,
-                               Traversal::Fundamental::UnsignedByte,
-                               Traversal::Fundamental::Short,
-                               Traversal::Fundamental::UnsignedShort,
-                               Traversal::Fundamental::Int,
-                               Traversal::Fundamental::UnsignedInt,
-                               Traversal::Fundamental::Long,
-                               Traversal::Fundamental::UnsignedLong,
-                               Traversal::Fundamental::Integer,
-                               Traversal::Fundamental::NonPositiveInteger,
-                               Traversal::Fundamental::NonNegativeInteger,
-                               Traversal::Fundamental::PositiveInteger,
-                               Traversal::Fundamental::NegativeInteger,
+    struct IsFundamentalType: Traversal::Fundamental::Byte,
+                              Traversal::Fundamental::UnsignedByte,
+                              Traversal::Fundamental::Short,
+                              Traversal::Fundamental::UnsignedShort,
+                              Traversal::Fundamental::Int,
+                              Traversal::Fundamental::UnsignedInt,
+                              Traversal::Fundamental::Long,
+                              Traversal::Fundamental::UnsignedLong,
+                              Traversal::Fundamental::Integer,
+                              Traversal::Fundamental::NonPositiveInteger,
+                              Traversal::Fundamental::NonNegativeInteger,
+                              Traversal::Fundamental::PositiveInteger,
+                              Traversal::Fundamental::NegativeInteger,
 
-                               Traversal::Fundamental::Boolean,
+                              Traversal::Fundamental::Boolean,
 
-                               Traversal::Fundamental::Float,
-                               Traversal::Fundamental::Double,
-                               Traversal::Fundamental::Decimal
+                              Traversal::Fundamental::Float,
+                              Traversal::Fundamental::Double,
+                              Traversal::Fundamental::Decimal
 
     {
       IsFundamentalType (Boolean& r)
@@ -602,15 +602,15 @@ namespace CXX
 
     // Check whether this is a string-based type.
     //
-    struct IsStringBasedType : Traversal::Complex,
-                               Traversal::Union,
-                               Traversal::Fundamental::String,
-                               Traversal::Fundamental::NormalizedString,
-                               Traversal::Fundamental::Token,
-                               Traversal::Fundamental::Name,
-                               Traversal::Fundamental::NameToken,
-                               Traversal::Fundamental::NCName,
-                               Traversal::Fundamental::Language
+    struct IsStringBasedType: Traversal::Complex,
+                              Traversal::Union,
+                              Traversal::Fundamental::String,
+                              Traversal::Fundamental::NormalizedString,
+                              Traversal::Fundamental::Token,
+                              Traversal::Fundamental::Name,
+                              Traversal::Fundamental::NameToken,
+                              Traversal::Fundamental::NCName,
+                              Traversal::Fundamental::Language
     {
       IsStringBasedType (Boolean& r)
           : r_ (r)
@@ -684,7 +684,7 @@ namespace CXX
 
     // Check whether this is a enumeration-based type.
     //
-    struct IsEnumBasedType : Traversal::Complex
+    struct IsEnumBasedType: Traversal::Complex
     {
       IsEnumBasedType (SemanticGraph::Enumeration*& e)
           : enum_ (e)
@@ -729,7 +729,7 @@ namespace CXX
 
     //
     //
-    struct MemberTypeName : protected Context,
+    struct MemberTypeName : Context,
                             Traversal::Type,
                             Traversal::List,
                             Traversal::Union,
@@ -1307,10 +1307,10 @@ namespace CXX
 
     // Initial value should be true.
     //
-    struct IsSimpleType : Traversal::Complex,
-                          Traversal::Member,
-                          Traversal::Any,
-                          Traversal::AnyAttribute
+    struct IsSimpleType: Traversal::Complex,
+                         Traversal::Member,
+                         Traversal::Any,
+                         Traversal::AnyAttribute
     {
       IsSimpleType (Boolean& v)
           : v_ (v)
@@ -1361,7 +1361,7 @@ namespace CXX
                                 Traversal::Element,
                                 Traversal::Attribute,
                                 Traversal::Any,
-                                protected virtual Context
+                                Context
     {
       // generate should initially be false.
       //
@@ -1413,7 +1413,7 @@ namespace CXX
                         Traversal::Element,
                         Traversal::Attribute,
                         Traversal::Any,
-                        protected virtual Context
+                        Context
       {
         Traverser (Context& c, Boolean& generate);
 
@@ -1445,7 +1445,7 @@ namespace CXX
     //
     struct HasComplexNonFundNonOptArgs: Traversal::Complex,
                                         Traversal::Element,
-                                        protected virtual Context
+                                        Context
     {
       // complex and non_fund should initially be false. clash
       // should initially be true.
@@ -1474,10 +1474,10 @@ namespace CXX
     // Immediate non-optional member. Note that AnyAttribute is always
     // mapped to a sequence.
     //
-    struct FromBaseCtorArg : Traversal::Any,
-                             Traversal::Element,
-                             Traversal::Attribute,
-                             protected virtual Context
+    struct FromBaseCtorArg: Traversal::Any,
+                            Traversal::Element,
+                            Traversal::Attribute,
+                            Context
     {
       enum ArgType
       {
@@ -1505,13 +1505,13 @@ namespace CXX
     // List of all non-optional members and a simple base. Note that
     // AnyAttribute is always mapped to a sequence.
     //
-    struct CtorArgs : Traversal::Complex,
-                      Traversal::Enumeration,
-                      Traversal::Type,
-                      Traversal::Any,
-                      Traversal::Element,
-                      Traversal::Attribute,
-                      protected virtual Context
+    struct CtorArgs: Traversal::Complex,
+                     Traversal::Enumeration,
+                     Traversal::Type,
+                     Traversal::Any,
+                     Traversal::Element,
+                     Traversal::Attribute,
+                     Context
     {
       enum ArgType
       {
@@ -1678,7 +1678,7 @@ namespace CXX
                                 Traversal::Any,
                                 Traversal::Element,
                                 Traversal::Attribute,
-                                protected virtual Context
+                                Context
     {
       enum ArgType
       {
@@ -1801,8 +1801,8 @@ namespace CXX
       traverse (SemanticGraph::Type& t);
     };
 
-    struct Includes : Traversal::Imports,
-                      Traversal::Includes
+    struct Includes: Traversal::Imports,
+                     Traversal::Includes
     {
       enum Type
       {
@@ -1852,27 +1852,26 @@ namespace CXX
 
     //
     //
-    struct FundIncludes : Traversal::Fundamental::Byte,
-                          Traversal::Fundamental::UnsignedByte,
-                          Traversal::Fundamental::Short,
-                          Traversal::Fundamental::UnsignedShort,
-                          Traversal::Fundamental::Int,
-                          Traversal::Fundamental::UnsignedInt,
-                          Traversal::Fundamental::Long,
-                          Traversal::Fundamental::UnsignedLong,
-                          Traversal::Fundamental::Integer,
-                          Traversal::Fundamental::NonPositiveInteger,
-                          Traversal::Fundamental::NonNegativeInteger,
-                          Traversal::Fundamental::PositiveInteger,
-                          Traversal::Fundamental::NegativeInteger,
+    struct FundIncludes: Traversal::Fundamental::Byte,
+                         Traversal::Fundamental::UnsignedByte,
+                         Traversal::Fundamental::Short,
+                         Traversal::Fundamental::UnsignedShort,
+                         Traversal::Fundamental::Int,
+                         Traversal::Fundamental::UnsignedInt,
+                         Traversal::Fundamental::Long,
+                         Traversal::Fundamental::UnsignedLong,
+                         Traversal::Fundamental::Integer,
+                         Traversal::Fundamental::NonPositiveInteger,
+                         Traversal::Fundamental::NonNegativeInteger,
+                         Traversal::Fundamental::PositiveInteger,
+                         Traversal::Fundamental::NegativeInteger,
 
-                          Traversal::Fundamental::Boolean,
+                         Traversal::Fundamental::Boolean,
 
-                          Traversal::Fundamental::Float,
-                          Traversal::Fundamental::Double,
-                          Traversal::Fundamental::Decimal,
-                          Context
-
+                         Traversal::Fundamental::Float,
+                         Traversal::Fundamental::Double,
+                         Traversal::Fundamental::Decimal,
+                         Context
     {
       FundIncludes (Context& c, String const& prefix)
           : Context (c), prefix_ (prefix),

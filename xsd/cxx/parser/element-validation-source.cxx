@@ -24,7 +24,7 @@ namespace CXX
       struct ParticleTest: Traversal::Compositor,
                            Traversal::Element,
                            Traversal::Any,
-                           protected virtual Context
+                           Context
       {
         ParticleTest (Context& c)
             : Context (c)
@@ -143,7 +143,7 @@ namespace CXX
       struct ParticleName: Traversal::Compositor,
                            Traversal::Element,
                            Traversal::Any,
-                           protected virtual Context
+                           Context
       {
         ParticleName (Context& c)
             : Context (c)
@@ -176,7 +176,7 @@ namespace CXX
 
       // Common base for the ParticleIn{All, Choice, Sequence} treversers.
       //
-      struct ParticleInCompositor: protected Context
+      struct ParticleInCompositor: Context
       {
       protected:
         ParticleInCompositor (Context& c, SemanticGraph::Complex& type)
@@ -828,7 +828,7 @@ namespace CXX
       struct ParticleFunction: Traversal::All,
                                Traversal::Choice,
                                Traversal::Sequence,
-                               protected virtual Context
+                               Context
       {
         ParticleFunction (Context& c, SemanticGraph::Complex& type)
             : Context (c), type_ (type)
@@ -1012,7 +1012,7 @@ namespace CXX
       //
       struct CompositorPre: Traversal::All,
                             Traversal::Compositor,
-                            protected virtual Context
+                            Context
       {
         CompositorPre (Context& c, SemanticGraph::Complex& type)
             : Context (c), type_ (type)
@@ -1052,7 +1052,7 @@ namespace CXX
       //
       struct CompositorStartElement: Traversal::All,
                                      Traversal::Compositor,
-                                     protected virtual Context
+                                     Context
       {
         CompositorStartElement (Context& c, SemanticGraph::Complex& type)
             : Context (c), type_ (type),
@@ -1228,7 +1228,7 @@ namespace CXX
       //
       struct CompositorEndElement: Traversal::All,
                                    Traversal::Compositor,
-                                   protected virtual Context
+                                   Context
       {
         CompositorEndElement (Context& c, SemanticGraph::Complex& type)
             : Context (c), type_ (type)
@@ -1263,7 +1263,7 @@ namespace CXX
       //
       struct CompositorPost: Traversal::All,
                              Traversal::Compositor,
-                             protected virtual Context
+                             Context
       {
         CompositorPost (Context& c, SemanticGraph::Complex& type)
             : Context (c), type_ (type), particle_name_ (c)
@@ -1350,8 +1350,7 @@ namespace CXX
 
       //
       //
-      struct Complex : Traversal::Complex,
-                       protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c)

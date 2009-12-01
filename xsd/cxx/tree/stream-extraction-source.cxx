@@ -16,7 +16,7 @@ namespace CXX
     {
       typedef Containers::Vector<NarrowString> Streams;
 
-      struct List : Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -94,7 +94,7 @@ namespace CXX
       };
 
 
-      struct Union : Traversal::Union, protected virtual Context
+      struct Union: Traversal::Union, Context
       {
         Union (Context& c)
             : Context (c)
@@ -150,7 +150,7 @@ namespace CXX
       };
 
 
-      struct Enumeration : Traversal::Enumeration, protected virtual Context
+      struct Enumeration: Traversal::Enumeration, Context
       {
         Enumeration (Context& c)
             : Context (c), base_ (c)
@@ -222,8 +222,7 @@ namespace CXX
         BaseTypeName base_;
       };
 
-      struct CtorMember : Traversal::Member,
-                          protected virtual Context
+      struct CtorMember: Traversal::Member, Context
       {
         CtorMember (Context& c)
             : Context (c)
@@ -241,9 +240,9 @@ namespace CXX
         }
       };
 
-      struct CtorAny : Traversal::Any,
-                       Traversal::AnyAttribute,
-                       protected virtual Context
+      struct CtorAny: Traversal::Any,
+                      Traversal::AnyAttribute,
+                      Context
       {
         CtorAny (Context& c)
             : Context (c)
@@ -275,7 +274,7 @@ namespace CXX
         }
       };
 
-      struct Element : Traversal::Element, protected virtual Context
+      struct Element: Traversal::Element, Context
       {
         Element (Context& c, String const& stream_)
             : Context (c), stream (stream_)
@@ -459,7 +458,7 @@ namespace CXX
         String stream;
       };
 
-      struct Attribute : Traversal::Attribute, protected virtual Context
+      struct Attribute: Traversal::Attribute, Context
       {
         Attribute (Context& c)
             : Context (c)
@@ -526,7 +525,7 @@ namespace CXX
         }
       };
 
-      struct Complex : Traversal::Complex, protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c), base_ (c), ctor_any_ (c), ctor_member_ (c)

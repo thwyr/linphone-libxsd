@@ -19,7 +19,7 @@ namespace CXX
 
       // List mapping.
       //
-      struct List: Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -310,7 +310,7 @@ namespace CXX
 
       // Union mapping.
       //
-      struct Union: Traversal::Union, protected virtual Context
+      struct Union: Traversal::Union, Context
       {
         Union (Context& c)
             : Context (c)
@@ -543,7 +543,7 @@ namespace CXX
 
       // Enum mapping.
       //
-      struct Enumerator: Traversal::Enumerator, protected virtual Context
+      struct Enumerator: Traversal::Enumerator, Context
       {
         Enumerator (Context& c)
             : Context (c)
@@ -564,7 +564,7 @@ namespace CXX
         }
       };
 
-      struct Enumeration: Traversal::Enumeration, protected virtual Context
+      struct Enumeration: Traversal::Enumeration, Context
       {
         Enumeration (Context& c)
             : Context (c),
@@ -1050,7 +1050,7 @@ namespace CXX
 
       //
       //
-      struct MemberFunction: Traversal::Member, protected virtual Context
+      struct MemberFunction: Traversal::Member, Context
       {
         MemberFunction (Context& c)
             : Context (c)
@@ -1378,7 +1378,7 @@ namespace CXX
         }
       };
 
-      struct AnyFunction: Traversal::Any, protected virtual Context
+      struct AnyFunction: Traversal::Any, Context
       {
         AnyFunction (Context& c)
             : Context (c)
@@ -1728,7 +1728,7 @@ namespace CXX
 
       //
       //
-      struct Member: Traversal::Member, protected virtual Context
+      struct Member: Traversal::Member, Context
       {
         Member (Context& c)
             : Context (c),
@@ -1920,7 +1920,7 @@ namespace CXX
 
       struct Any: Traversal::Any,
                   Traversal::AnyAttribute,
-                  protected virtual Context
+                  Context
       {
         Any (Context& c)
             : Context (c), any_function_ (c)
@@ -2105,7 +2105,7 @@ namespace CXX
         AnyFunction any_function_;
       };
 
-      struct DataMember: Traversal::Member, protected virtual Context
+      struct DataMember: Traversal::Member, Context
       {
         DataMember (Context& c)
             : Context (c)
@@ -2166,7 +2166,7 @@ namespace CXX
 
       struct DataAny: Traversal::Any,
                       Traversal::AnyAttribute,
-                      protected virtual Context
+                      Context
       {
         DataAny (Context& c)
             : Context (c)
@@ -2206,7 +2206,7 @@ namespace CXX
       };
 
 
-      struct Complex : Traversal::Complex, protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c),
@@ -3032,12 +3032,12 @@ namespace CXX
       };
 
 
-      struct GlobalElement : Traversal::Element,
-                             GlobalElementBase,
-                             protected virtual Context
+      struct GlobalElement: Traversal::Element,
+                            GlobalElementBase,
+                            Context
       {
         GlobalElement (Context& c)
-            : Context (c), GlobalElementBase (c), type_name_ (c)
+            : GlobalElementBase (c), Context (c), type_name_ (c)
         {
           belongs_ >> type_name_;
         }

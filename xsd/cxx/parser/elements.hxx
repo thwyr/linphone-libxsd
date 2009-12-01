@@ -149,10 +149,10 @@ namespace CXX
 
     //
     //
-    struct ParserParamDecl : Traversal::Complex,
-                             Traversal::List,
-                             Traversal::Member,
-                             protected virtual Context
+    struct ParserParamDecl: Traversal::Complex,
+                            Traversal::List,
+                            Traversal::Member,
+                            Context
     {
       ParserParamDecl (Context& c, Boolean name_arg)
           : Context (c), first_ (true), name_arg_ (name_arg)
@@ -229,8 +229,8 @@ namespace CXX
       Char const* name_key_;
     };
 
-    struct Includes : Traversal::Imports,
-                      Traversal::Includes
+    struct Includes: Traversal::Imports,
+                     Traversal::Includes
     {
       enum Type
       {

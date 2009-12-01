@@ -14,8 +14,7 @@ namespace CXX
   {
     namespace
     {
-      struct Enumeration: Traversal::Enumeration,
-                          protected virtual Context
+      struct Enumeration: Traversal::Enumeration, Context
       {
         Enumeration (Context& c)
             : Context (c)
@@ -120,7 +119,7 @@ namespace CXX
 
       //
       //
-      struct List: Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -216,7 +215,7 @@ namespace CXX
 
       //
       //
-      struct Union: Traversal::Union, protected virtual Context
+      struct Union: Traversal::Union, Context
       {
         Union (Context& c)
             : Context (c)
@@ -271,8 +270,7 @@ namespace CXX
 
       //
       //
-      struct StartElement : Traversal::Element,
-                            protected virtual Context
+      struct StartElement: Traversal::Element, Context
       {
         StartElement (Context& c)
             : Context (c)
@@ -371,8 +369,7 @@ namespace CXX
 
       //
       //
-      struct EndElement : Traversal::Element,
-                          protected virtual Context
+      struct EndElement: Traversal::Element, Context
       {
         EndElement (Context& c)
             : Context (c)
@@ -445,8 +442,7 @@ namespace CXX
 
       //
       //
-      struct Attribute : Traversal::Attribute,
-                         protected virtual Context
+      struct Attribute: Traversal::Attribute, Context
       {
         Attribute (Context& c)
             : Context (c)
@@ -497,8 +493,7 @@ namespace CXX
 
       //
       //
-      struct ParserCallback: Traversal::Member,
-                             protected virtual Context
+      struct ParserCallback: Traversal::Member, Context
       {
         ParserCallback (Context& c)
             : Context (c)
@@ -528,8 +523,7 @@ namespace CXX
 
       //
       //
-      struct Complex : Traversal::Complex,
-                       protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c),
@@ -781,8 +775,7 @@ namespace CXX
 
       // Generate substitution group map entries.
       //
-      struct GlobalElement: Traversal::Element,
-                            protected virtual Context
+      struct GlobalElement: Traversal::Element, Context
       {
         GlobalElement (Context& c)
             : Context (c)

@@ -397,7 +397,7 @@ namespace CXX
 
   // Usual namespace mapping.
   //
-  struct Namespace : Traversal::Namespace
+  struct Namespace: Traversal::Namespace
   {
     struct ScopeTracker
     {
@@ -509,15 +509,15 @@ namespace CXX
 
   // Fundamental type mapping helper.
   //
-  struct Fundamental : Traversal::Fundamental::Type,
-                       Traversal::Fundamental::String,
-                       Traversal::Fundamental::NormalizedString,
-                       Traversal::Fundamental::Token,
-                       Traversal::Fundamental::Name,
-                       Traversal::Fundamental::NameToken,
-                       Traversal::Fundamental::NCName,
-                       Traversal::Fundamental::Id,
-                       Traversal::Fundamental::IdRef
+  struct Fundamental: Traversal::Fundamental::Type,
+                      Traversal::Fundamental::String,
+                      Traversal::Fundamental::NormalizedString,
+                      Traversal::Fundamental::Token,
+                      Traversal::Fundamental::Name,
+                      Traversal::Fundamental::NameToken,
+                      Traversal::Fundamental::NCName,
+                      Traversal::Fundamental::Id,
+                      Traversal::Fundamental::IdRef
   {
     virtual Void
     fundamental_type (SemanticGraph::Fundamental::Type& t) = 0;

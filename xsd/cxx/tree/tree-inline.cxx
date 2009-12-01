@@ -14,7 +14,7 @@ namespace CXX
   {
     namespace
     {
-      struct List : Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -98,7 +98,7 @@ namespace CXX
       };
 
 
-      struct Union : Traversal::Union, protected virtual Context
+      struct Union: Traversal::Union, Context
       {
         Union (Context& c)
             : Context (c)
@@ -174,7 +174,7 @@ namespace CXX
       //
       struct CtorCallSequence: Traversal::Complex,
                                Traversal::Fundamental::Type,
-                               protected virtual Context
+                               Context
       {
         CtorCallSequence (Context& c, String const& arg)
             : Context (c), arg_ (arg), base_type_name_ (c)
@@ -208,8 +208,7 @@ namespace CXX
         BaseTypeName base_type_name_;
       };
 
-      struct Enumeration : Traversal::Enumeration,
-                           protected virtual Context
+      struct Enumeration: Traversal::Enumeration, Context
       {
         Enumeration (Context& c)
             : Context (c), member_ (c)
@@ -420,7 +419,7 @@ namespace CXX
         MemberTypeName member_;
       };
 
-      struct Member: Traversal::Member, protected virtual Context
+      struct Member: Traversal::Member, Context
       {
         Member (Context& c, String const& scope)
             : Context (c), scope_ (scope)
@@ -629,7 +628,7 @@ namespace CXX
 
       struct Any: Traversal::Any,
                   Traversal::AnyAttribute,
-                  protected virtual Context
+                  Context
       {
         Any (Context& c, String const& scope)
             : Context (c), scope_ (scope)
@@ -831,7 +830,7 @@ namespace CXX
         String scope_;
       };
 
-      struct Complex : Traversal::Complex, protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c)
@@ -891,12 +890,12 @@ namespace CXX
       };
 
 
-      struct GlobalElement : Traversal::Element,
-                             GlobalElementBase,
-                             protected virtual Context
+      struct GlobalElement: Traversal::Element,
+                            GlobalElementBase,
+                            Context
       {
         GlobalElement (Context& c)
-            : Context (c), GlobalElementBase (c)
+            : GlobalElementBase (c), Context (c)
         {
         }
 

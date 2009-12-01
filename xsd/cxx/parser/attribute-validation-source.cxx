@@ -16,7 +16,7 @@ namespace CXX
     {
       struct Test: Traversal::Attribute,
                    Traversal::AnyAttribute,
-                   protected virtual Context
+                   Context
       {
         Test (Context& c)
             : Context (c)
@@ -86,8 +86,7 @@ namespace CXX
 
       //
       //
-      struct PhaseOne : Traversal::Attribute,
-                        protected virtual Context
+      struct PhaseOne: Traversal::Attribute, Context
       {
         PhaseOne (Context& c)
             : Context (c), test_ (c)
@@ -143,8 +142,7 @@ namespace CXX
 
       //
       //
-      struct PhaseTwo : Traversal::AnyAttribute,
-                        protected virtual Context
+      struct PhaseTwo: Traversal::AnyAttribute, Context
       {
         PhaseTwo (Context& c)
             : Context (c), test_ (c)
@@ -172,8 +170,7 @@ namespace CXX
 
       //
       //
-      struct AttributeStateInit: Traversal::Attribute,
-                                 protected virtual Context
+      struct AttributeStateInit: Traversal::Attribute, Context
       {
         AttributeStateInit (Context& c)
             : Context (c)
@@ -191,8 +188,7 @@ namespace CXX
 
       //
       //
-      struct AttributeStateCheck: Traversal::Attribute,
-                                  protected virtual Context
+      struct AttributeStateCheck: Traversal::Attribute, Context
       {
         AttributeStateCheck (Context& c)
             : Context (c)
@@ -215,8 +211,7 @@ namespace CXX
 
       //
       //
-      struct Complex : Traversal::Complex,
-                       protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c),
@@ -407,4 +402,3 @@ namespace CXX
     }
   }
 }
-

@@ -14,8 +14,7 @@ namespace CXX
   {
     namespace
     {
-      struct Enumeration: Traversal::Enumeration,
-                          protected virtual Context
+      struct Enumeration: Traversal::Enumeration, Context
       {
         Enumeration (Context& c)
             : Context (c)
@@ -65,7 +64,7 @@ namespace CXX
 
       //
       //
-      struct List: Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -167,7 +166,7 @@ namespace CXX
         }
       };
 
-      struct Union: Traversal::Union, protected virtual Context
+      struct Union: Traversal::Union, Context
       {
         Union (Context& c)
             : Context (c)
@@ -216,8 +215,7 @@ namespace CXX
 
       //
       //
-      struct ParserCallback: Traversal::Member,
-                             protected virtual Context
+      struct ParserCallback: Traversal::Member, Context
       {
         ParserCallback (Context& c)
             : Context (c)
@@ -246,8 +244,7 @@ namespace CXX
 
       //
       //
-      struct ParserModifier: Traversal::Member,
-                             protected virtual Context
+      struct ParserModifier: Traversal::Member, Context
       {
         ParserModifier (Context& c)
             : Context (c)
@@ -277,8 +274,7 @@ namespace CXX
 
       //
       //
-      struct ParserMember: Traversal::Member,
-                           protected virtual Context
+      struct ParserMember: Traversal::Member, Context
       {
         ParserMember (Context& c)
             : Context (c)
@@ -311,7 +307,7 @@ namespace CXX
       struct Particle: Traversal::All,
                        Traversal::Choice,
                        Traversal::Sequence,
-                       protected virtual Context
+                       Context
       {
         Particle (Context& c)
             : Context (c)
@@ -389,8 +385,7 @@ namespace CXX
 
       //
       //
-      struct AttributeValidationState: Traversal::Attribute,
-                                       protected virtual Context
+      struct AttributeValidationState: Traversal::Attribute, Context
       {
         AttributeValidationState (Context& c)
             : Context (c)
@@ -409,8 +404,7 @@ namespace CXX
 
       //
       //
-      struct Complex : Traversal::Complex,
-                       protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c),
@@ -1130,11 +1124,10 @@ namespace CXX
         Boolean nmtoken_;
       };
 
-      struct FundNamespace : Namespace,
-                             protected virtual Context
+      struct FundNamespace: Namespace, Context
       {
         FundNamespace (Context& c)
-            : Context (c), Namespace (c)
+            : Namespace (c), Context (c)
         {
         }
 

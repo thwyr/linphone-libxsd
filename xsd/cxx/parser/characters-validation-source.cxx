@@ -16,8 +16,7 @@ namespace CXX
     {
       //
       //
-      struct Complex : Traversal::Complex,
-                       protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c)

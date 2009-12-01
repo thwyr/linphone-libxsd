@@ -14,7 +14,7 @@ namespace CXX
   {
     namespace
     {
-      struct List: Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -60,7 +60,7 @@ namespace CXX
       };
 
 
-      struct Union: Traversal::Union, protected virtual Context
+      struct Union: Traversal::Union, Context
       {
         Union (Context& c)
             : Context (c)
@@ -105,7 +105,7 @@ namespace CXX
       };
 
 
-      struct Enumeration: Traversal::Enumeration, protected virtual Context
+      struct Enumeration: Traversal::Enumeration, Context
       {
         Enumeration (Context& c)
             : Context (c)
@@ -149,7 +149,7 @@ namespace CXX
         }
       };
 
-      struct Complex : Traversal::Complex, protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c)
@@ -204,10 +204,10 @@ namespace CXX
 
       struct ElementType: Traversal::Element,
                           GlobalElementBase,
-                          protected virtual Context
+                          Context
       {
         ElementType (Context& c)
-            : Context (c), GlobalElementBase (c)
+            : GlobalElementBase (c), Context (c)
         {
         }
 
@@ -229,10 +229,10 @@ namespace CXX
 
       struct ElementFunction: Traversal::Element,
                               GlobalElementBase,
-                              protected virtual Context
+                              Context
       {
         ElementFunction (Context& c)
-            : Context (c), GlobalElementBase (c)
+            : GlobalElementBase (c), Context (c)
         {
         }
 

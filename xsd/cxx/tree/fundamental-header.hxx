@@ -72,11 +72,11 @@ namespace CXX
 
                                   Traversal::Fundamental::Entity,
                                   Traversal::Fundamental::Entities,
-                                  protected virtual Context
+                                  Context
     {
       FundamentalNamespace (Context& c)
-          : Context (c),
-            DocumentedNamespace (c),
+          : DocumentedNamespace (c),
+            Context (c),
             export_ (c.options.value<CLI::export_xml_schema> () && type_exp)
       {
         *this >> names_ >> *this;

@@ -14,12 +14,12 @@ namespace CXX
   {
     namespace
     {
-      struct ElementFunction : Traversal::Element,
-                               GlobalElementBase,
-                               protected virtual Context
+      struct ElementFunction: Traversal::Element,
+                              GlobalElementBase,
+                              Context
       {
         ElementFunction (Context& c)
-            : Context (c), GlobalElementBase (c)
+            : GlobalElementBase (c), Context (c)
         {
         }
 

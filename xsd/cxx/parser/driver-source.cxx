@@ -504,10 +504,10 @@ namespace CXX
         Traversal::Belongs belongs_;
       };
 
-      struct ArgList : Traversal::Complex,
-                       Traversal::List,
-                       Traversal::Member,
-                       Context
+      struct ArgList: Traversal::Complex,
+                      Traversal::List,
+                      Traversal::Member,
+                      Context
       {
         ArgList (Context& c, TypeInstanceMap& map)
             : Context (c), map_ (map), first_ (true)

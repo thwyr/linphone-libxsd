@@ -16,10 +16,10 @@ namespace CXX
     {
       struct ElementFunction: Traversal::Element,
                               GlobalElementBase,
-                              protected virtual Context
+                              Context
       {
         ElementFunction (Context& c)
-            : Context (c), GlobalElementBase (c)
+            : GlobalElementBase (c), Context (c)
         {
         }
 

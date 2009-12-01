@@ -81,15 +81,14 @@ namespace CXX
 
       //
       //
-      struct Any : Traversal::Any, protected virtual ValidationContext
+      struct Any: Traversal::Any, ValidationContext
       {
         Any (ValidationContext& c)
             : ValidationContext (c)
         {
         }
 
-        struct Element: Traversal::Element,
-                        protected virtual ValidationContext
+        struct Element: Traversal::Element, ValidationContext
         {
           Element (ValidationContext& c, SemanticGraph::Any& any)
               : ValidationContext (c),
@@ -250,11 +249,11 @@ namespace CXX
 
       //
       //
-      struct Traverser : Traversal::Schema,
-                         Traversal::Complex,
-                         Traversal::Type,
-                         Traversal::Element,
-                         protected virtual ValidationContext
+      struct Traverser: Traversal::Schema,
+                        Traversal::Complex,
+                        Traversal::Type,
+                        Traversal::Element,
+                        ValidationContext
       {
         Traverser (ValidationContext& c)
             : ValidationContext (c),
@@ -390,11 +389,11 @@ namespace CXX
       };
 
 
-      struct AnonymousType : Traversal::Schema,
-                             Traversal::Complex,
-                             Traversal::Element,
-                             Traversal::Attribute,
-                             protected virtual ValidationContext
+      struct AnonymousType: Traversal::Schema,
+                            Traversal::Complex,
+                            Traversal::Element,
+                            Traversal::Attribute,
+                            ValidationContext
       {
         AnonymousType (ValidationContext& c)
             : ValidationContext (c),

@@ -16,7 +16,7 @@ namespace CXX
     {
       //
       //
-      struct List: Traversal::List, protected virtual Context
+      struct List: Traversal::List, Context
       {
         List (Context& c)
             : Context (c)
@@ -68,8 +68,7 @@ namespace CXX
 
       //
       //
-      struct ParserModifier: Traversal::Member,
-                             protected virtual Context
+      struct ParserModifier: Traversal::Member, Context
       {
         ParserModifier (Context& c)
             : Context (c)
@@ -111,8 +110,7 @@ namespace CXX
 
       //
       //
-      struct ParserMemberSet: Traversal::Member,
-                              protected virtual Context
+      struct ParserMemberSet: Traversal::Member, Context
       {
         ParserMemberSet (Context& c)
             : Context (c)
@@ -133,8 +131,7 @@ namespace CXX
 
       //
       //
-      struct ParserMemberInit: Traversal::Member,
-                               protected virtual Context
+      struct ParserMemberInit: Traversal::Member, Context
       {
         ParserMemberInit (Context& c)
             : Context (c), first_ (true)
@@ -174,7 +171,7 @@ namespace CXX
 
       struct ParserBaseSet: Traversal::Complex,
                             Traversal::List,
-                            protected virtual Context
+                            Context
       {
         ParserBaseSet (Context& c)
             : Context (c), member_ (c)
@@ -208,8 +205,7 @@ namespace CXX
         Traversal::Names names_;
       };
 
-      struct Particle: Traversal::All,
-                       protected virtual Context
+      struct Particle: Traversal::All, Context
       {
         Particle (Context& c)
             : Context (c)
@@ -232,8 +228,7 @@ namespace CXX
 
       //
       //
-      struct Complex: Traversal::Complex,
-                      protected virtual Context
+      struct Complex: Traversal::Complex, Context
       {
         Complex (Context& c)
             : Context (c),
