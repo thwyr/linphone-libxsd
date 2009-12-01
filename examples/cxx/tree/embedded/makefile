@@ -45,7 +45,8 @@ $(gen): $(out_root)/xsd/xsd
 
 genf += $(xsd:.xsd=-schema.hxx) $(xsd:.xsd=-schema.cxx)
 
-.PRECIOUS: $(out_base)/%-schema.hxx $(out_base)/%-schema.cxx 
+.PRECIOUS: $(out_base)/%-schema.hxx $(out_base)/%-schema.cxx
+$(out_base)/%: xsdbin := $(xsdbin)
 $(out_base)/%-schema.hxx $(out_base)/%-schema.cxx: $(src_base)/%.xsd $(xsdbin)
 	$(call message,xsdbin $<,$(xsdbin) --output-dir $(out_base) $<)
 
