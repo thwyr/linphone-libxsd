@@ -249,6 +249,10 @@ namespace CXX
           // Enumerator name regex.
           //
           {
+            // By default map an empty enumerator to the 'empty' word.
+            //
+            enumerator_regex.push_back ("/^$/empty/");
+
             compile_regex (options.value<CLI::enumerator_regex> (),
                            enumerator_regex,
                            "enumerator");

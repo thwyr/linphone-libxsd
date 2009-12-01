@@ -48,6 +48,9 @@ Version 3.3.0
     can process parts of the document as they become available as well as 
     handle documents that are too large to fit into memory.
 
+  * Empty XML Schema enumeration values are now mapped to the 'empty' C++ 
+    enumerator name instead of 'cxx'.
+
 Version 3.2.0
 
   * New option, --disable-warning, disables printing of a warning with
