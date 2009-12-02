@@ -3317,7 +3317,7 @@ namespace CXX
             Type& r (e.substitutes ().root ());
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
+               << "const ::xsd::cxx::tree::element_factory_initializer< 0, " <<
               char_type << ", ";
 
             belongs (e, belongs_);

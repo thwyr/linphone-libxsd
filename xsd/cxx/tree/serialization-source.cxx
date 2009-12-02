@@ -862,13 +862,13 @@ namespace CXX
             String const& name (ename (e));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
+               << "const ::xsd::cxx::tree::element_serializer_initializer< 0, " <<
               char_type << ", ";
 
             belongs (e, belongs_);
 
             os << " >" << endl
-               << "_xsd_" << name << "_element_name_init (" << endl
+               << "_xsd_" << name << "_element_serializer_init (" << endl
                << L << strlit (r.name ()) << "," << endl
                << L << strlit (r.namespace_ ().name ()) << "," << endl
                << L << strlit (e.name ()) << "," << endl

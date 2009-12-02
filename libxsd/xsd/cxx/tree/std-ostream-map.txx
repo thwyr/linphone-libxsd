@@ -219,6 +219,13 @@ namespace xsd
 
       template <typename C>
       void std_ostream_map<C>::
+      unregister_type (const type_id& tid)
+      {
+        type_map_.erase (&tid);
+      }
+
+      template <typename C>
+      void std_ostream_map<C>::
       insert (std::ostream& os, const type& x)
       {
         if (inserter i = find (typeid (x)))
@@ -273,6 +280,13 @@ namespace xsd
       {
         std_ostream_map_instance<id, C> ().register_type (
           typeid (T), &inserter_impl<T>);
+      }
+
+      template<unsigned long id, typename C, typename T>
+      std_ostream_initializer<id, C, T>::
+      ~std_ostream_initializer ()
+      {
+        std_ostream_map_instance<id, C> ().unregister_type (typeid (T));
       }
     }
   }

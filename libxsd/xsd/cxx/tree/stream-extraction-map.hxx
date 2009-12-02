@@ -35,6 +35,9 @@ namespace xsd
                        extractor,
                        bool override = true);
 
+        void
+        unregister_type (const qualified_name& name);
+
         std::auto_ptr<type>
         extract (istream<S>&, flags, container*);
 
@@ -87,6 +90,11 @@ namespace xsd
       struct stream_extraction_initializer
       {
         stream_extraction_initializer (const C* name, const C* ns);
+        ~stream_extraction_initializer ();
+
+      private:
+        const C* name_;
+        const C* ns_;
       };
     }
   }

@@ -56,8 +56,16 @@ namespace xsd
         template<typename C>
         inheritance_map_entry<C>::
         inheritance_map_entry (const C* derived, const C* base)
+            : derived_ (derived)
         {
           inheritance_map_instance<C> ().insert (derived, base);
+        }
+
+        template<typename C>
+        inheritance_map_entry<C>::
+        ~inheritance_map_entry ()
+        {
+          inheritance_map_instance<C> ().erase (derived_);
         }
       }
     }

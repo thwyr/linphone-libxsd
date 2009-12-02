@@ -234,11 +234,34 @@ namespace xsd
 
       template <typename C>
       void type_factory_map<C>::
+      unregister_type (const qualified_name& name)
+      {
+        type_map_.erase (name);
+      }
+
+      template <typename C>
+      void type_factory_map<C>::
       register_element (const qualified_name& root,
                         const qualified_name& subst,
                         factory f)
       {
         element_map_[root][subst] = f;
+      }
+
+      template <typename C>
+      void type_factory_map<C>::
+      unregister_element (const qualified_name& root,
+                          const qualified_name& subst)
+      {
+        typename element_map::iterator i (element_map_.find (root));
+
+        if (i != element_map_.end ())
+        {
+          i->second.erase (subst);
+
+          if (i->second.empty ())
+            element_map_.erase (i);
+        }
       }
 
       template <typename C>
@@ -416,6 +439,7 @@ namespace xsd
       template<unsigned long id, typename C, typename T>
       type_factory_initializer<id, C, T>::
       type_factory_initializer (const C* name, const C* ns)
+          : name_ (name), ns_ (ns)
       {
         type_factory_map_instance<id, C> ().register_type (
           xml::qualified_name<C> (name, ns), &factory_impl<T>);
@@ -423,13 +447,34 @@ namespace xsd
 
       template<unsigned long id, typename C, typename T>
       type_factory_initializer<id, C, T>::
-      type_factory_initializer (const C* root_name, const C* root_ns,
+      ~type_factory_initializer ()
+      {
+        type_factory_map_instance<id, C> ().unregister_type (
+          xml::qualified_name<C> (name_, ns_));
+      }
+
+      //
+      //
+      template<unsigned long id, typename C, typename T>
+      element_factory_initializer<id, C, T>::
+      element_factory_initializer (const C* root_name, const C* root_ns,
                                 const C* subst_name, const C* subst_ns)
+          : root_name_ (root_name), root_ns_ (root_ns),
+            subst_name_ (subst_name), subst_ns_ (subst_ns)
       {
         type_factory_map_instance<id, C> ().register_element (
           xml::qualified_name<C> (root_name, root_ns),
           xml::qualified_name<C> (subst_name, subst_ns),
           &factory_impl<T>);
+      }
+
+      template<unsigned long id, typename C, typename T>
+      element_factory_initializer<id, C, T>::
+      ~element_factory_initializer ()
+      {
+        type_factory_map_instance<id, C> ().unregister_element (
+          xml::qualified_name<C> (root_name_, root_ns_),
+          xml::qualified_name<C> (subst_name_, subst_ns_));
       }
     }
   }

@@ -38,9 +38,16 @@ namespace xsd
                        bool override = true);
 
         void
+        unregister_type (const qualified_name& name);
+
+        void
         register_element (const qualified_name& root,
                           const qualified_name& subst,
                           factory);
+
+        void
+        unregister_element (const qualified_name& root,
+                            const qualified_name& subst);
 
         std::auto_ptr<type>
         create (const C* name, // element name
@@ -133,14 +140,29 @@ namespace xsd
       template<unsigned long id, typename C, typename T>
       struct type_factory_initializer
       {
-        // Register type.
-        //
         type_factory_initializer (const C* name, const C* ns);
+        ~type_factory_initializer ();
 
-        // Register element.
-        //
-        type_factory_initializer (const C* root_name, const C* root_ns,
-                                  const C* subst_name, const C* subst_ns);
+      private:
+        const C* name_;
+        const C* ns_;
+      };
+
+      //
+      //
+      template<unsigned long id, typename C, typename T>
+      struct element_factory_initializer
+      {
+        element_factory_initializer (const C* root_name, const C* root_ns,
+                                     const C* subst_name, const C* subst_ns);
+
+        ~element_factory_initializer ();
+
+      private:
+        const C* root_name_;
+        const C* root_ns_;
+        const C* subst_name_;
+        const C* subst_ns_;
       };
     }
   }

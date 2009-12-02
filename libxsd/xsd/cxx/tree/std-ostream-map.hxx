@@ -31,6 +31,9 @@ namespace xsd
         register_type (const type_id&, inserter, bool override = true);
 
         void
+        unregister_type (const type_id&);
+
+        void
         insert (std::ostream&, const type&);
 
       public:
@@ -100,6 +103,7 @@ namespace xsd
       struct std_ostream_initializer
       {
         std_ostream_initializer ();
+        ~std_ostream_initializer ();
       };
     }
   }

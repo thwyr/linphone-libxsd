@@ -256,6 +256,13 @@ namespace xsd
 
       template <typename S, typename C>
       void stream_insertion_map<S, C>::
+      unregister_type (const type_id& tid)
+      {
+        type_map_.erase (&tid);
+      }
+
+      template <typename S, typename C>
+      void stream_insertion_map<S, C>::
       insert (ostream<S>& s, const type& x)
       {
         if (const type_info* ti = find (typeid (x)))
@@ -319,6 +326,14 @@ namespace xsd
           typeid (T),
           xml::qualified_name<C> (name, ns),
           &inserter_impl<S, T>);
+      }
+
+      template<unsigned long id, typename S, typename C, typename T>
+      stream_insertion_initializer<id, S, C, T>::
+      ~stream_insertion_initializer (const C* name, const C* ns)
+      {
+        stream_insertion_map_instance<id, S, C> ().unregister_type (
+          typeid (T));
       }
     }
   }

@@ -29,6 +29,9 @@ namespace xsd
         void
         register_type (const type_id&, comparator, bool override = true);
 
+        void
+        unregister_type (const type_id&);
+
         bool
         compare (const type&, const type&);
 
@@ -99,6 +102,7 @@ namespace xsd
       struct comparison_initializer
       {
         comparison_initializer ();
+        ~comparison_initializer ();
       };
     }
   }

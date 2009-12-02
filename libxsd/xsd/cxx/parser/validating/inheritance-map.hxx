@@ -39,6 +39,12 @@ namespace xsd
             map_[derived] = base;
           }
 
+          void
+          erase (const C* derived)
+          {
+            map_.erase (derived);
+          }
+
           bool
           check (const C* derived, const ro_string<C>& base) const;
 
@@ -80,6 +86,10 @@ namespace xsd
         struct inheritance_map_entry
         {
           inheritance_map_entry (const C* derived, const C* base);
+          ~inheritance_map_entry ();
+
+        private:
+          const C* derived_;
         };
       }
     }
@@ -89,4 +99,3 @@ namespace xsd
 #include <xsd/cxx/parser/validating/inheritance-map.txx>
 
 #endif  // XSD_CXX_PARSER_VALIDATING_INHERITANCE_MAP_HXX
-

@@ -37,6 +37,9 @@ namespace xsd
                        bool override = true);
 
         void
+        unregister_type (const type_id&);
+
+        void
         insert (ostream<S>&, const type&);
 
       public:
@@ -140,6 +143,7 @@ namespace xsd
       struct stream_insertion_initializer
       {
         stream_insertion_initializer (const C* name, const C* ns);
+        ~stream_insertion_initializer ();
       };
     }
   }

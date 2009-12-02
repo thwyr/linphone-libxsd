@@ -219,6 +219,13 @@ namespace xsd
       }
 
       template <typename C>
+      void comparison_map<C>::
+      unregister_type (const type_id& tid)
+      {
+        type_map_.erase (&tid);
+      }
+
+      template <typename C>
       bool comparison_map<C>::
       compare (const type& x, const type& y)
       {
@@ -281,6 +288,13 @@ namespace xsd
       {
         comparison_map_instance<id, C> ().register_type (
           typeid (T), &comparator_impl<T>);
+      }
+
+      template<unsigned long id, typename C, typename T>
+      comparison_initializer<id, C, T>::
+      ~comparison_initializer ()
+      {
+        comparison_map_instance<id, C> ().unregister_type (typeid (T));
       }
     }
   }
