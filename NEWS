@@ -7,6 +7,9 @@ Version 3.3.0
     enabled then you will also need to build it with Xerces-C++ 3.1.0 or
     later to take advantage of this feature.
 
+  * Automatic mapping for the urn-style XML namespaces. The last component
+    in the urn name is used to derive the C++ namespace name.
+
   * Warning id's have changed to start with a letter identifying the
     component issuing the warning. F - compiler frontend, D - compiler
     driver, P - C++/Parser mapping, T - C++/Tree mapping.
