@@ -330,7 +330,7 @@ namespace xsd
 
       template<unsigned long id, typename S, typename C, typename T>
       stream_insertion_initializer<id, S, C, T>::
-      ~stream_insertion_initializer (const C* name, const C* ns)
+      ~stream_insertion_initializer ()
       {
         stream_insertion_map_instance<id, S, C> ().unregister_type (
           typeid (T));
