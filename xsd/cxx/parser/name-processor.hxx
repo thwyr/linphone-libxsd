@@ -6,10 +6,9 @@
 #ifndef CXX_PARSER_NAME_PROCESSOR_HXX
 #define CXX_PARSER_NAME_PROCESSOR_HXX
 
-#include <cult/types.hxx>
-
 #include <xsd-frontend/semantic-graph.hxx>
 
+#include <cxx/elements.hxx>
 #include <cxx/parser/cli.hxx>
 
 namespace CXX
@@ -26,7 +25,8 @@ namespace CXX
       Void
       process (CLI::Options const& ops,
                XSDFrontend::SemanticGraph::Schema&,
-               XSDFrontend::SemanticGraph::Path const& file);
+               XSDFrontend::SemanticGraph::Path const& file,
+               StringLiteralMap const& map);
     };
   }
 }

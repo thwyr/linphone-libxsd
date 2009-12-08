@@ -117,6 +117,7 @@ namespace CXX
                CLI::Options const& ops,
                Counts const& counts_,
                Boolean generate_xml_schema,
+               StringLiteralMap const*,
                Regex const* fwd_expr,
                Regex const* hxx_expr,
                Regex const* ixx_expr);

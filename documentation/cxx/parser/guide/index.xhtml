@@ -280,7 +280,7 @@
     <tr>
       <th>5</th><td><a href="#5">Mapping Configuration</a>
         <table class="toc">
-          <tr><th>5.1</th><td><a href="#5.1">Character Type</a></td></tr>
+          <tr><th>5.1</th><td><a href="#5.1">Character Type and Encoding</a></td></tr>
           <tr><th>5.2</th><td><a href="#5.2">Underlying XML Parser</a></td></tr>
 	  <tr><th>5.3</th><td><a href="#5.3">XML Schema Validation</a></td></tr>
 	  <tr><th>5.4</th><td><a href="#5.4">Support for Polymorphism</a></td></tr>
@@ -1615,8 +1615,8 @@ namespace http://www.example.com/xmlns/my
      following map files. The string-based XML Schema types are
      mapped to either <code>std::string</code> or
      <code>std::wstring</code> depending on the character type
-     selected (see <a href="#5.1"> Section 5.1, "Character Type"</a> for
-     more information).</p>
+     selected (see <a href="#5.1"> Section 5.1, "Character Type and
+     Encoding"</a> for more information).</p>
 
   <pre class="type-map">
 namespace http://www.w3.org/2001/XMLSchema
@@ -1909,7 +1909,7 @@ age:    28
      Compiler Command Line Manual</a>.
   </p>
 
-  <h2><a name="5.1">5.1 Character Type</a></h2>
+  <h2><a name="5.1">5.1 Character Type and Encoding</a></h2>
 
   <p>The C++/Parser mapping has built-in support for two character types:
     <code>char</code> and <code>wchar_t</code>. You can select the
@@ -1921,15 +1921,24 @@ age:    28
 
   <p>Another aspect of the mapping that depends on the character type
      is character encoding. For the <code>char</code> character type
-     the encoding is UTF-8. For the <code>wchar_t</code> character type
-     the encoding is automatically selected between UTF-16 and
-     UTF-32/UCS-4 depending on the size of the <code>wchar_t</code> type.
-     On some platforms (for example, Windows with Visual C++ and AIX with IBM XL
-     C++) <code>wchar_t</code> is 2 bytes long. For these platforms the
-     encoding is UTF-16. On other platforms <code>wchar_t</code> is 4 bytes
-     long and UTF-32/UCS-4 is used.
-   </p>
+     the default encoding is UTF-8. Other supported encodings are
+     ISO-8859-1, Xerces-C++ Local Code Page (LPC), as well as
+     custom encodings. You can select which encoding should be used
+     in the object model with the <code>--char-encoding</code> command
+     line option.</p>
 
+  <p>For the <code>wchar_t</code> character type the encoding is
+     automatically selected between UTF-16 and UTF-32/UCS-4 depending
+     on the size of the <code>wchar_t</code> type. On some platforms
+     (for example, Windows with Visual C++ and AIX with IBM XL C++)
+     <code>wchar_t</code> is 2 bytes long. For these platforms the
+     encoding is UTF-16. On other platforms <code>wchar_t</code> is 4 bytes
+     long and UTF-32/UCS-4 is used.</p>
+
+  <p>Note also that the character encoding that is used in the object model
+     is independent of the encodings used in input and output XML. In fact,
+     all three (object mode, input XML, and output XML) can have different
+     encodings.</p>
 
   <h2><a name="5.2">5.2 Underlying XML Parser</a></h2>
 
@@ -3306,7 +3315,7 @@ namespace xml_schema
      <code>document</code> type has the following interface. Note that
      if the character type is <code>wchar_t</code>, then the string type
      in the interface becomes <code>std::wstring</code>
-     (see <a href="#5.1">Section 5.1, "Character Type"</a>).</p>
+     (see <a href="#5.1">Section 5.1, "Character Type and Encoding"</a>).</p>
 
   <pre class="c++">
 namespace xml_schema
@@ -3601,7 +3610,7 @@ namespace xml_schema
      <code>document</code> type has the following interface. Note that
      if the character type is <code>wchar_t</code>, then the string type
      in the interface becomes <code>std::wstring</code>
-     (see <a href="#5.1">Section 5.1, "Character Type"</a>).</p>
+     (see <a href="#5.1">Section 5.1, "Character Type and Encoding"</a>).</p>
 
   <pre class="c++">
 namespace xml_schema
@@ -3886,7 +3895,8 @@ main (int argc, char* argv[])
      character type is <code>wchar_t</code>, then the string type
      and output stream type in the definition become
      <code>std::wstring</code> and <code>std::wostream</code>,
-     respectively (see <a href="#5.1">Section 5.1, "Character Type"</a>).</p>
+     respectively (see <a href="#5.1">Section 5.1, "Character Type
+     and Encoding"</a>).</p>
 
   <pre class="c++">
 namespace xml_schema
@@ -3998,7 +4008,7 @@ main (int argc, char* argv[])
      listing presents the definition of the <code>error_handler</code>
      interface. Note that if the character type is <code>wchar_t</code>,
      then the string type in the interface becomes <code>std::wstring</code>
-     (see <a href="#5.1">Section 5.1, "Character Type"</a>).</p>
+     (see <a href="#5.1">Section 5.1, "Character Type and Encoding"</a>).</p>
 
   <pre class="c++">
 namespace xml_schema

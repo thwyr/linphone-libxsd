@@ -226,7 +226,7 @@
     <tr>
       <th>3</th><td><a href="#3">Overall Mapping Configuration</a>
         <table class="toc">
-          <tr><th>3.1</th><td><a href="#3.1">Character Type</a></td></tr>
+          <tr><th>3.1</th><td><a href="#3.1">Character Type and Encoding</a></td></tr>
           <tr><th>3.2</th><td><a href="#3.2">Support for Polymorphism </a></td></tr>
           <tr><th>3.3</th><td><a href="#3.3">Namespace Mapping</a></td></tr>
           <tr><th>3.4</th><td><a href="#3.4">Thread Safety</a></td></tr>
@@ -1148,7 +1148,7 @@ $ doxygen hello.doxygen
      Compiler Command Line Manual</a>.
   </p>
 
-  <h2><a name="3.1">3.1 Character Type</a></h2>
+  <h2><a name="3.1">3.1 Character Type and Encoding</a></h2>
 
   <p>The C++/Tree mapping has built-in support for two character types:
     <code>char</code> and <code>wchar_t</code>. You can select the
@@ -1160,13 +1160,24 @@ $ doxygen hello.doxygen
 
   <p>Another aspect of the mapping that depends on the character type
      is character encoding. For the <code>char</code> character type
-     the encoding is UTF-8. For the <code>wchar_t</code> character type
-     the encoding is automatically selected between UTF-16 and
-     UTF-32/UCS-4 depending on the size of the <code>wchar_t</code> type.
-     On some platforms (for example, Windows with Visual C++ and AIX with IBM XL
-     C++) <code>wchar_t</code> is 2 bytes long. For these platforms the
+     the default encoding is UTF-8. Other supported encodings are
+     ISO-8859-1, Xerces-C++ Local Code Page (LPC), as well as
+     custom encodings. You can select which encoding should be used
+     in the object model with the <code>--char-encoding</code> command
+     line option.</p>
+
+  <p>For the <code>wchar_t</code> character type the encoding is
+     automatically selected between UTF-16 and UTF-32/UCS-4 depending
+     on the size of the <code>wchar_t</code> type. On some platforms
+     (for example, Windows with Visual C++ and AIX with IBM XL C++)
+     <code>wchar_t</code> is 2 bytes long. For these platforms the
      encoding is UTF-16. On other platforms <code>wchar_t</code> is 4 bytes
      long and UTF-32/UCS-4 is used.</p>
+
+  <p>Note also that the character encoding that is used in the object model
+     is independent of the encodings used in input and output XML. In fact,
+     all three (object mode, input XML, and output XML) can have different
+     encodings.</p>
 
   <h2><a name="3.2">3.2 Support for Polymorphism</a></h2>
 

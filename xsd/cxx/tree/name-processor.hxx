@@ -6,11 +6,7 @@
 #ifndef CXX_TREE_NAME_PROCESSOR_HXX
 #define CXX_TREE_NAME_PROCESSOR_HXX
 
-#include <cult/types.hxx>
-
-#include <xsd-frontend/semantic-graph.hxx>
-
-#include <cxx/tree/cli.hxx>
+#include <cxx/tree/elements.hxx>
 
 namespace CXX
 {
@@ -26,7 +22,8 @@ namespace CXX
       Boolean
       process (CLI::Options const&,
                XSDFrontend::SemanticGraph::Schema&,
-               XSDFrontend::SemanticGraph::Path const& file);
+               XSDFrontend::SemanticGraph::Path const& file,
+               StringLiteralMap const&);
     };
   }
 }

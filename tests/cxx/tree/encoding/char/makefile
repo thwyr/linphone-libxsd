@@ -5,7 +5,7 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../../../build/bootstrap.make
 
-tests := lcp utf-8
+tests := lcp utf-8 iso-8859-1
 
 default   := $(out_base)/
 test      := $(out_base)/.test

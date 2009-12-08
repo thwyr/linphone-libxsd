@@ -3,7 +3,7 @@
 // copyright : Copyright (c) 2006-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-// Test local code page encoding (XSD_USE_LCP defined).
+// Test local code page encoding (--char-encoding lcp).
 // The test just makes sure it still compiles and works.
 //
 

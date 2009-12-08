@@ -8,7 +8,9 @@
 #include <backend-elements/regex.hxx>
 
 #include <cctype>    // std::toupper
+#include <memory>
 #include <sstream>
+#include <fstream>
 #include <iostream>
 
 using std::wcerr;
@@ -111,7 +113,9 @@ namespace CXX
   Context::
   Context (std::wostream& o,
            SemanticGraph::Schema& root,
+           StringLiteralMap const* string_literal_map_,
            NarrowString const& char_type__,
+           NarrowString const& char_encoding__,
            Boolean include_with_brackets__,
            NarrowString const& include_prefix__,
            NarrowString const& esymbol,
@@ -125,8 +129,10 @@ namespace CXX
       : os (o),
         schema_root (root),
         char_type (char_type_),
+        char_encoding (char_encoding_),
         L (L_),
         string_type (string_type_),
+        string_literal_map (string_literal_map_),
         include_with_brackets (include_with_brackets_),
         include_prefix (include_prefix_),
         type_exp (type_exp_),
@@ -135,6 +141,7 @@ namespace CXX
         ns_mapping_cache (ns_mapping_cache_),
         xs_ns_ (0),
         char_type_ (char_type__),
+        char_encoding_ (char_encoding__),
         L_ (char_type == L"wchar_t" ? L"L" : L""),
         include_with_brackets_ (include_with_brackets__),
         include_prefix_ (include_prefix__),
@@ -177,7 +184,7 @@ namespace CXX
       xs_ns_ = dynamic_cast<SemanticGraph::Namespace*> (n);
     }
 
-    //
+    // String type.
     //
     if (char_type == L"char")
       string_type_ = L"::std::string";
@@ -185,6 +192,16 @@ namespace CXX
       string_type_ = L"::std::wstring";
     else
       string_type_ = L"::std::basic_string< " + char_type + L" >";
+
+    // Default encoding.
+    //
+    if (!char_encoding)
+    {
+      if (char_type == L"char")
+        char_encoding = L"utf8";
+      else
+        char_encoding = L"auto";
+    }
 
     // Default mapping.
     //
@@ -615,6 +632,121 @@ namespace CXX
     return r;
   }
 
+  String
+  strlit_ascii (String const& str)
+  {
+    String r;
+    Size n (str.size ());
+
+    // In most common cases we will have that many chars.
+    //
+    r.reserve (n + 2);
+
+    r += '"';
+
+    Boolean escape (false);
+
+    for (Size i (0); i < n; ++i)
+    {
+      UnsignedLong u (Context::unicode_char (str, i)); // May advance i.
+
+      // [128 - ]     - unrepresentable
+      // 127          - \x7F
+      // [32  - 126]  - as is
+      // [0   - 31]   - \X or \xXX
+      //
+
+      if (u < 32 || u == 127)
+      {
+        switch (u)
+        {
+        case L'\n':
+          {
+            r += L"\\n";
+            break;
+          }
+        case L'\t':
+          {
+            r += L"\\t";
+            break;
+          }
+        case L'\v':
+          {
+            r += L"\\v";
+            break;
+          }
+        case L'\b':
+          {
+            r += L"\\b";
+            break;
+          }
+        case L'\r':
+          {
+            r += L"\\r";
+            break;
+          }
+        case L'\f':
+          {
+            r += L"\\f";
+            break;
+          }
+        case L'\a':
+          {
+            r += L"\\a";
+            break;
+          }
+        default:
+          {
+            r += charlit (u);
+            escape = true;
+            break;
+          }
+        }
+      }
+      else if (u < 127)
+      {
+        if (escape)
+        {
+          // Close and open the string so there are no clashes.
+          //
+          r += '"';
+          r += '"';
+
+          escape = false;
+        }
+
+        switch (u)
+        {
+        case L'"':
+          {
+            r += L"\\\"";
+            break;
+          }
+        case L'\\':
+          {
+            r += L"\\\\";
+            break;
+          }
+        default:
+          {
+            r += static_cast<WideChar> (u);
+            break;
+          }
+        }
+      }
+      else
+      {
+        // Unrepresentable character.
+        //
+        throw UnrepresentableCharacter (str, i + 1);
+      }
+    }
+
+    r += '"';
+
+    return r;
+  }
+
   const UnsignedLong utf8_first_char_mask[5] =
   {
     0x00, 0x00, 0xC0, 0xE0, 0xF0
@@ -770,6 +902,126 @@ namespace CXX
   }
 
   String
+  strlit_iso8859_1 (String const& str)
+  {
+    String r;
+    Size n (str.size ());
+
+    // In most common cases we will have that many chars.
+    //
+    r.reserve (n + 2);
+
+    r += '"';
+
+    Boolean escape (false);
+
+    for (Size i (0); i < n; ++i)
+    {
+      UnsignedLong u (Context::unicode_char (str, i)); // May advance i.
+
+      // [256 -    ]  - unrepresentable
+      // [127 - 255]  - \xXX
+      // [32  - 126]  - as is
+      // [0   - 31]   - \X or \xXX
+      //
+
+      if (u < 32)
+      {
+        switch (u)
+        {
+        case L'\n':
+          {
+            r += L"\\n";
+            break;
+          }
+        case L'\t':
+          {
+            r += L"\\t";
+            break;
+          }
+        case L'\v':
+          {
+            r += L"\\v";
+            break;
+          }
+        case L'\b':
+          {
+            r += L"\\b";
+            break;
+          }
+        case L'\r':
+          {
+            r += L"\\r";
+            break;
+          }
+        case L'\f':
+          {
+            r += L"\\f";
+            break;
+          }
+        case L'\a':
+          {
+            r += L"\\a";
+            break;
+          }
+        default:
+          {
+            r += charlit (u);
+            escape = true;
+            break;
+          }
+        }
+      }
+      else if (u < 127)
+      {
+        if (escape)
+        {
+          // Close and open the string so there are no clashes.
+          //
+          r += '"';
+          r += '"';
+
+          escape = false;
+        }
+
+        switch (u)
+        {
+        case L'"':
+          {
+            r += L"\\\"";
+            break;
+          }
+        case L'\\':
+          {
+            r += L"\\\\";
+            break;
+          }
+        default:
+          {
+            r += static_cast<WideChar> (u);
+            break;
+          }
+        }
+      }
+      else if (u < 256)
+      {
+        r += charlit (u);
+        escape = true;
+      }
+      else
+      {
+        // Unrepresentable character.
+        //
+        throw UnrepresentableCharacter (str, i + 1);
+      }
+    }
+
+    r += '"';
+
+    return r;
+  }
+
+  String
   strlit_utf32 (String const& str)
   {
     String r;
@@ -886,8 +1138,27 @@ namespace CXX
   String Context::
   strlit (String const& str)
   {
+    // First see if we have a custom mapping.
+    //
+    assert (string_literal_map != 0);
+    StringLiteralMap::ConstIterator i (string_literal_map->find (str));
+
+    if (i != string_literal_map->end ())
+      return i->second;
+
     if (char_type == L"char")
-      return strlit_utf8 (str);
+    {
+      if (char_encoding == L"utf8")
+        return strlit_utf8 (str);
+      else if (char_encoding == L"iso8859-1")
+        return strlit_iso8859_1 (str);
+      else
+      {
+        // For LCP, custom, and other unknown encodings, use ASCII.
+        //
+        return strlit_ascii (str);
+      }
+    }
     else
       return strlit_utf32 (str);
   }

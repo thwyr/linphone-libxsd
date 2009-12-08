@@ -38,6 +38,7 @@ namespace CXX
                        generate_xml_schema,
                        0,
                        0,
+                       0,
                        0),
               disabled_warnings_ (disabled_warnings),
               disabled_warnings_all_ (false),

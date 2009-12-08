@@ -39,6 +39,7 @@ namespace CXX
       Context (std::wostream&,
                SemanticGraph::Schema&,
                CLI::Options const&,
+               StringLiteralMap const*,
                Regex const* hxx_expr,
                Regex const* ixx_expr,
                Regex const* hxx_impl_expr);

@@ -18,6 +18,7 @@
 
 #include <xsd.hxx>
 
+#include <cxx/literal-map.hxx>
 #include <cxx/parser/cli.hxx>
 
 namespace CXX
@@ -41,6 +42,7 @@ namespace CXX
       generate (CLI::Options const& options,
                 XSDFrontend::SemanticGraph::Schema&,
                 XSDFrontend::SemanticGraph::Path const& file,
+                StringLiteralMap const&,
                 Boolean gen_driver,
                 const WarningSet& disabled_warnings,
                 FileList& file_list,

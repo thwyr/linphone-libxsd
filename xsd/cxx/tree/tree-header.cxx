@@ -3539,6 +3539,13 @@ namespace CXX
     {
       if (ctx.generate_xml_schema)
       {
+        if (ctx.char_type == L"char" && ctx.char_encoding != L"custom")
+        {
+          ctx.os << "#include <xsd/cxx/xml/char-" << ctx.char_encoding <<
+            ".hxx>" << endl
+                 << endl;
+        }
+
         ctx.os << "#include <xsd/cxx/tree/exceptions.hxx>" << endl
                << "#include <xsd/cxx/tree/elements.hxx>" << endl
                << "#include <xsd/cxx/tree/types.hxx>" << endl
@@ -3670,6 +3677,13 @@ namespace CXX
         ctx.os << "#include <memory>    // std::auto_ptr" << endl
                << "#include <algorithm> // std::binary_search" << endl
                << endl;
+
+        if (ctx.char_type == L"char" && ctx.char_encoding != L"custom")
+        {
+          ctx.os << "#include <xsd/cxx/xml/char-" << ctx.char_encoding <<
+            ".hxx>" << endl
+                 << endl;
+        }
 
         ctx.os << "#include <xsd/cxx/tree/exceptions.hxx>" << endl
                << "#include <xsd/cxx/tree/elements.hxx>" << endl

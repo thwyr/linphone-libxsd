@@ -1324,6 +1324,13 @@ namespace CXX
       }
       else
       {
+        if (ctx.char_type == L"char" &&
+            ctx.xml_parser == L"xerces" &&
+            ctx.char_encoding != L"custom")
+        {
+          ctx.os << "#include <xsd/cxx/xml/char-" << ctx.char_encoding << ".hxx>" << endl;
+        }
+
         ctx.os << "#include <xsd/cxx/xml/error-handler.hxx>" << endl
                << "#include <xsd/cxx/parser/exceptions.hxx>" << endl
                << "#include <xsd/cxx/parser/elements.hxx>" << endl

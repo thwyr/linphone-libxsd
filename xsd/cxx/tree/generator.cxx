@@ -116,6 +116,7 @@ namespace CXX
     namespace CLI
     {
       extern Key char_type                = "char-type";
+      extern Key char_encoding            = "char-encoding";
       extern Key output_dir               = "output-dir";
       extern Key generate_polymorphic     = "generate-polymorphic";
       extern Key generate_serialization   = "generate-serialization";
@@ -220,11 +221,18 @@ namespace CXX
       << " values are 'char' (default) and 'wchar_t'."
       << endl;
 
+    e << "--char-encoding <enc>" << endl
+      << " Specify the character encoding that should be used\n"
+      << " in the object model. Valid values for the 'char'\n"
+      << " character type are 'utf8' (default), 'iso8859-1',\n"
+      << " 'lcp', and 'custom'. For the 'wchar_t' character\n"
+      << " type the only valid value is 'auto'."
+      << endl;
+
     e << "--output-dir <dir>" << endl
       << " Write generated files to <dir> instead of current\n"
       << " directory."
       << endl;
-
 
     e << "--generate-polymorphic" << endl
       << " Generate polymorphism-aware code. Specify this\n"
@@ -670,6 +678,11 @@ namespace CXX
       << " separate the file name from the part number."
       << endl;
 
+    e << "--custom-literals <file>" << endl
+      << " Load custom XML string to C++ literal mappings\n"
+      << " from <file>."
+      << endl;
+
     e << "--export-symbol <symbol>" << endl
       << " Export symbol for Win32 DLL export/import control."
       << endl;
@@ -803,6 +816,7 @@ namespace CXX
   generate (Tree::CLI::Options const& ops,
             Schema& schema,
             Path const& file_path,
+            StringLiteralMap const& string_literal_map,
             const WarningSet& disabled_warnings,
             FileList& file_list,
             AutoUnlinks& unlinks)
@@ -860,7 +874,7 @@ namespace CXX
       //
       {
         NameProcessor proc;
-        if (!proc.process (ops, schema, file_path))
+        if (!proc.process (ops, schema, file_path, string_literal_map))
           throw Failed ();
       }
 
@@ -1179,8 +1193,15 @@ namespace CXX
       //
       if (forward)
       {
-        Context ctx (fwd, schema, ops, counts, generate_xml_schema,
-                     &fwd_expr, &hxx_expr, &ixx_expr);
+        Context ctx (fwd,
+                     schema,
+                     ops,
+                     counts,
+                     generate_xml_schema,
+                     &string_literal_map,
+                     &fwd_expr,
+                     &hxx_expr,
+                     &ixx_expr);
 
         Indentation::Clip<Indentation::SLOC, WideChar> fwd_sloc (fwd);
 
@@ -1287,8 +1308,15 @@ namespace CXX
       // HXX
       //
       {
-        Context ctx (hxx, schema, ops, counts, generate_xml_schema,
-                     &fwd_expr, &hxx_expr, &ixx_expr);
+        Context ctx (hxx,
+                     schema,
+                     ops,
+                     counts,
+                     generate_xml_schema,
+                     &string_literal_map,
+                     &fwd_expr,
+                     &hxx_expr,
+                     &ixx_expr);
 
         Indentation::Clip<Indentation::SLOC, WideChar> hxx_sloc (hxx);
 
@@ -1434,8 +1462,15 @@ namespace CXX
       //
       if (inline_)
       {
-        Context ctx (ixx, schema, ops, counts, generate_xml_schema,
-                     &fwd_expr, &hxx_expr, &ixx_expr);
+        Context ctx (ixx,
+                     schema,
+                     ops,
+                     counts,
+                     generate_xml_schema,
+                     &string_literal_map,
+                     &fwd_expr,
+                     &hxx_expr,
+                     &ixx_expr);
 
         Indentation::Clip<Indentation::SLOC, WideChar> ixx_sloc (ixx);
 
@@ -1560,8 +1595,15 @@ namespace CXX
 
           WideOutputFileStream& os (*cxx[part]);
 
-          Context ctx (os, schema, ops, counts, generate_xml_schema,
-                       &fwd_expr, &hxx_expr, &ixx_expr);
+          Context ctx (os,
+                       schema,
+                       ops,
+                       counts,
+                       generate_xml_schema,
+                       &string_literal_map,
+                       &fwd_expr,
+                       &hxx_expr,
+                       &ixx_expr);
 
           Indentation::Clip<Indentation::SLOC, WideChar> cxx_sloc (os);
 
@@ -1643,6 +1685,17 @@ namespace CXX
       }
 
       return sloc;
+    }
+    catch (UnrepresentableCharacter const& e)
+    {
+      wcerr << "error: character at position " << e.position () << " "
+            << "in string '" << e.string () << "' is unrepresentable in "
+            << "the target encoding" << endl;
+
+      wcerr << "info: use the --custom-literals option to provide custom "
+            << "string literals mapping" << endl;
+
+      throw Failed ();
     }
     catch (NoNamespaceMapping const& e)
     {

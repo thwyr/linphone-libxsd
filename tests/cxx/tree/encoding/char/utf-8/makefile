@@ -1,4 +1,4 @@
-# file      : tests/cxx/tree/encoding/char/lcp/makefile
+# file      : tests/cxx/tree/encoding/char/utf-8/makefile
 # author    : Boris Kolpackov <boris@codesynthesis.com>
 # copyright : Copyright (c) 2006-2009 Code Synthesis Tools CC
 # license   : GNU GPL v2 + exceptions; see accompanying LICENSE file

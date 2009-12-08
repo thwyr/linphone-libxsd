@@ -24,6 +24,7 @@ namespace CXX
       typedef Char const Key[];
 
       extern Key char_type;
+      extern Key char_encoding;
       extern Key output_dir;
       extern Key generate_polymorphic;
       extern Key generate_serialization;
@@ -119,6 +120,7 @@ namespace CXX
       typedef Cult::CLI::Options<
 
         char_type,                NarrowString,
+        char_encoding,            NarrowString,
         output_dir,               NarrowString,
         generate_polymorphic,     Boolean,
         generate_serialization,   Boolean,

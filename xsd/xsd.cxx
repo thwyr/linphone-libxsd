@@ -34,6 +34,8 @@
 #include <iostream>
 #include <boost/filesystem/fstream.hpp>
 
+#include <xercesc/util/PlatformUtils.hpp>
+
 #include <xsd.hxx>
 #include <usage.hxx>
 
@@ -79,6 +81,7 @@ namespace CLI
   extern Key location_map          = "location-map";
   extern Key location_regex        = "location-regex";
   extern Key location_regex_trace  = "location-regex-trace";
+  extern Key custom_literals       = "custom-literals";
   extern Key file_per_type         = "file-per-type";
   extern Key type_file_regex       = "type-file-regex";
   extern Key type_file_regex_trace = "type-file-regex-trace";
@@ -101,6 +104,7 @@ namespace CLI
     location_map,          NarrowStrings,
     location_regex,        NarrowStrings,
     location_regex_trace,  Boolean,
+    custom_literals,       NarrowString,
     file_per_type,         Boolean,
     type_file_regex,       NarrowStrings,
     type_file_regex_trace, Boolean,
@@ -188,10 +192,26 @@ private:
   Boolean trace_;
 };
 
+//
+//
+struct XercesInitializer
+{
+  XercesInitializer ()
+  {
+    xercesc::XMLPlatformUtils::Initialize ();
+  }
+
+  ~XercesInitializer ()
+  {
+    xercesc::XMLPlatformUtils::Terminate ();
+  }
+};
+
 // Expand the \n escape sequence.
 //
 Void
 expand_nl (NarrowString& s);
+
 
 Int
 main (Int argc, Char* argv[])
@@ -557,6 +577,22 @@ main (Int argc, Char* argv[])
       common_ops.value<CLI::anonymous_regex> (),
       common_ops.value<CLI::anonymous_regex_trace> ());
 
+    // Load custom string literals, if any.
+    //
+    CXX::StringLiteralMap string_literal_map;
+
+    if (NarrowString file = common_ops.value<CLI::custom_literals> ())
+    {
+      XercesInitializer xerces_init;
+
+      if (!CXX::read_literal_map (file, string_literal_map))
+      {
+        // Diagnostics has already been issued.
+        //
+        return 1;
+      }
+    }
+
     if (!fpt)
     {
       // File-per-schema compilation mode.
@@ -703,7 +739,13 @@ main (Int argc, Char* argv[])
           try
           {
             sloc += CXX::Tree::Generator::generate (
-              *tree_ops, *schema, tu, disabled_w, file_list, unlinks);
+              *tree_ops,
+              *schema,
+              tu,
+              string_literal_map,
+              disabled_w,
+              file_list,
+              unlinks);
           }
           catch (CXX::Tree::Generator::Failed const&)
           {
@@ -717,7 +759,14 @@ main (Int argc, Char* argv[])
           try
           {
             sloc += CXX::Parser::Generator::generate (
-              *parser_ops, *schema, tu, true, disabled_w, file_list, unlinks);
+              *parser_ops,
+              *schema,
+              tu,
+              string_literal_map,
+              true,
+              disabled_w,
+              file_list,
+              unlinks);
           }
           catch (CXX::Parser::Generator::Failed const&)
           {
@@ -837,7 +886,13 @@ main (Int argc, Char* argv[])
           try
           {
             sloc += CXX::Tree::Generator::generate (
-              *tree_ops, s, path, disabled_w, file_list, unlinks);
+              *tree_ops,
+              s,
+              path,
+              string_literal_map,
+              disabled_w,
+              file_list,
+              unlinks);
           }
           catch (CXX::Tree::Generator::Failed const&)
           {
@@ -853,7 +908,14 @@ main (Int argc, Char* argv[])
             // Only generate driver for the first schema.
             //
             sloc += CXX::Parser::Generator::generate (
-              *parser_ops, s, path, i == b, disabled_w, file_list, unlinks);
+              *parser_ops,
+              s,
+              path,
+              string_literal_map,
+              i == b,
+              disabled_w,
+              file_list,
+              unlinks);
           }
           catch (CXX::Parser::Generator::Failed const&)
           {

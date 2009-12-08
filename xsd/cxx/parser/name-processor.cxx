@@ -3,7 +3,6 @@
 // copyright : Copyright (c) 2006-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <cxx/elements.hxx>
 #include <cxx/parser/name-processor.hxx>
 
 #include <xsd-frontend/semantic-graph.hxx>
@@ -35,10 +34,13 @@ namespace CXX
       public:
         Context (CLI::Options const& ops,
                  SemanticGraph::Schema& root,
-                 SemanticGraph::Path const& file)
+                 SemanticGraph::Path const& file,
+                 StringLiteralMap const* map)
             : CXX::Context (std::wcerr,
                             root,
+                            map,
                             ops.value<CLI::char_type> (),
+                            ops.value<CLI::char_encoding> (),
                             ops.value<CLI::include_with_brackets> (),
                             ops.value<CLI::include_prefix> (),
                             ops.value<CLI::export_symbol> (),
@@ -1101,9 +1103,10 @@ namespace CXX
       Void
       process_impl (CLI::Options const& ops,
                     SemanticGraph::Schema& tu,
-                    SemanticGraph::Path const& file)
+                    SemanticGraph::Path const& file,
+                    StringLiteralMap const& map)
       {
-        Context ctx (ops, tu, file);
+        Context ctx (ops, tu, file, &map);
 
         if (tu.names_begin ()->named ().name () ==
             L"http://www.w3.org/2001/XMLSchema")
@@ -1196,9 +1199,10 @@ namespace CXX
     Void NameProcessor::
     process (CLI::Options const& ops,
              SemanticGraph::Schema& tu,
-             SemanticGraph::Path const& file)
+             SemanticGraph::Path const& file,
+             StringLiteralMap const& map)
     {
-      process_impl (ops, tu, file);
+      process_impl (ops, tu, file, map);
     }
   }
 }

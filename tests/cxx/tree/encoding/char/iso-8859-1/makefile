@@ -1,4 +1,4 @@
-# file      : tests/cxx/tree/encoding/char/lcp/makefile
+# file      : tests/cxx/tree/encoding/char/iso-8859-1/makefile
 # author    : Boris Kolpackov <boris@codesynthesis.com>
 # copyright : Copyright (c) 2006-2009 Code Synthesis Tools CC
 # license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
@@ -34,7 +34,8 @@ genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options := --generate-serialization --char-encoding lcp
+$(gen): xsd_options := --char-encoding iso8859-1 --generate-serialization \
+--generate-doxygen 
 $(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep))

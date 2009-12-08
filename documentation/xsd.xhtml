@@ -125,6 +125,21 @@
       instead of the default <code><b>char</b></code>. Valid values
       are <code><b>char</b></code> and <code><b>wchar_t</b></code>.</dd>
 
+    <dt><code><b>--char-encoding</b> <i>enc</i></code></dt>
+    <dd>Specify the character encoding that should be used in the object
+      model. Valid values for the <code><b>char</b></code> character type
+      are <code><b>utf8</b></code> (default), <code><b>iso8859-1</b></code>,
+      <code><b>lcp</b></code> (Xerces-C++ local code page), and
+      <code><b>custom</b></code>. If you pass <code><b>custom</b></code> as
+      the value then you will need to include the transcoder implementation
+      header for your encoding at the beginning of the generated header
+      files (see the <code><b>--hxx-prologue</b></code> option).
+
+      <p>For the <code><b>wchar_t</b></code> character type the only valid
+      value is <code><b>auto</b></code> and the encoding is automatically
+      selected between UTF-16 and UTF-32/UCS-4, depending on the
+      <code><b>wchar_t</b></code> type size.</p></dd>
+
     <dt><code><b>--output-dir</b> <i>dir</i></code></dt>
     <dd>Write generated files to <code><i>dir</i></code> instead of
       the current directory.</dd>
@@ -391,6 +406,18 @@
     <dt><code><b>--epilogue-file</b> <i>file</i></code></dt>
     <dd>Insert the content of the <code><i>file</i></code> at the end of each
       generated file for which there is no file-specific epilogue file.
+    </dd>
+
+    <dt><code><b>--custom-literals</b> <i>file</i></code></dt>
+    <dd>Load custom XML string to C++ literal mappings from
+        <code><i>file</i></code>. This mechanism can be useful if you
+        are using a custom character encoding and some of the strings
+        in your schemas, for example element/attribute names or enumeration
+        values, contain non-ASCII characters. In this case you will need
+        to provide a custom mapping to C++ literals for such
+        strings. The format of this file is specified in the
+        <code><b>custom-literals.xsd</b></code> XML Schema file that
+        can be found in the documentation directory.
     </dd>
 
     <dt><code><b>--export-symbol</b> <i>symbol</i></code></dt>

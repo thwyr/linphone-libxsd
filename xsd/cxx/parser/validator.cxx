@@ -27,7 +27,7 @@ namespace CXX
                            CLI::Options const& options,
                            const WarningSet& disabled_warnings,
                            Boolean& valid_)
-            : Context (std::wcerr, root, options, 0, 0, 0),
+            : Context (std::wcerr, root, options, 0, 0, 0, 0),
               disabled_warnings_ (disabled_warnings),
               disabled_warnings_all_ (false),
               valid (valid_),
@@ -584,7 +584,20 @@ namespace CXX
       if (options.value<CLI::xml_parser> () == "expat" &&
           options.value<CLI::char_type> () == "wchar_t")
       {
-        wcerr << "error: using expat with wchar_t is not yet supported"
+        wcerr << "error: using expat with wchar_t is not supported"
+              << endl;
+
+        return false;
+      }
+
+      //
+      //
+      if (options.value<CLI::xml_parser> () == "expat" &&
+          !options.value<CLI::char_encoding> ().empty () &&
+          options.value<CLI::char_encoding> () != "utf8")
+      {
+        wcerr << "error: using expat with character encoding other than "
+              << "utf8 is not supported"
               << endl;
 
         return false;

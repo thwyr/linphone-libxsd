@@ -127,6 +127,34 @@ Valid values are
 and
 .BR wchar_t .
 .
+.IP "\fB\--char-encoding \fIenc\fR"
+Specify the character encoding that should be used in the object model.
+Valid values for the
+.B char
+character type are
+.B utf8
+(default),
+.BR iso8859-1 , lcp
+(Xerces-C++ local code page),
+and
+.BR custom .
+If you pass
+.B custom
+as the value then you will need to include the transcoder implementation
+header for your encoding at the beginning of the generated header files
+(see the
+.B --hxx-prologue
+option).
+
+For the
+.B wchar_t
+character type the only valid value is
+.B auto
+and the encoding is automatically selected between UTF-16 and UTF-32/UCS-4,
+depending on the
+.B wchar_t
+type size.
+.
 .IP "\fB\--output-dir \fIdir\fR"
 Write generated files to
 .I dir
@@ -449,6 +477,17 @@ Insert
 in places where DLL export/import control statements (
 .BR __declspec(dllexport/dllimport) )
 are necessary.
+
+.IP "\fB\--custom-literals \fIfile\fR"
+Load custom XML string to C++ literal mappings from
+.IR file .
+This mechanism can be useful if you are using a custom character encoding
+and some of the strings in your schemas, for example element/attribute
+names or enumeration values, contain non-ASCII characters. In this case
+you will need to provide a custom mapping to C++ literals for such
+strings. The format of this file is specified in the
+.B custom-literals.xsd
+XML Schema file that can be found in the documentation directory.
 
 .IP "\fB\--export-xml-schema\fR"
 Export/import types in the XML Schema namespace using the export

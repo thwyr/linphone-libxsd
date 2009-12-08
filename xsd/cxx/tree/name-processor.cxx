@@ -4,7 +4,6 @@
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
 #include <cxx/tree/name-processor.hxx>
-#include <cxx/tree/elements.hxx>
 
 #include <backend-elements/regex.hxx>
 
@@ -43,12 +42,14 @@ namespace CXX
                  Counts const& counts,
                  Boolean generate_xml_schema,
                  SemanticGraph::Schema& root,
-                 SemanticGraph::Path const& file)
+                 SemanticGraph::Path const& file,
+                 StringLiteralMap const& map)
             : Tree::Context (std::wcerr,
                              root,
                              options,
                              counts,
                              generate_xml_schema,
+                             &map,
                              0,
                              0,
                              0),
@@ -1970,12 +1971,13 @@ namespace CXX
       Boolean
       process_impl (CLI::Options const& ops,
                     SemanticGraph::Schema& tu,
-                    SemanticGraph::Path const& file)
+                    SemanticGraph::Path const& file,
+                    StringLiteralMap const& map)
       {
         try
         {
           Counts counts;
-          Context ctx (ops, counts, false, tu, file);
+          Context ctx (ops, counts, false, tu, file, map);
 
           if (tu.names_begin ()->named ().name () ==
               L"http://www.w3.org/2001/XMLSchema")
@@ -2096,9 +2098,10 @@ namespace CXX
     Boolean NameProcessor::
     process (CLI::Options const& ops,
              SemanticGraph::Schema& tu,
-             SemanticGraph::Path const& file)
+             SemanticGraph::Path const& file,
+             StringLiteralMap const& map)
     {
-      return process_impl (ops, tu, file);
+      return process_impl (ops, tu, file, map);
     }
   }
 }

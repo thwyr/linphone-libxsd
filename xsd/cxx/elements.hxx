@@ -6,6 +6,8 @@
 #ifndef CXX_ELEMENTS_HXX
 #define CXX_ELEMENTS_HXX
 
+#include <ostream>
+
 #include <cult/types.hxx>
 #include <cult/containers/set.hxx>
 #include <cult/containers/map.hxx>
@@ -17,8 +19,7 @@
 #include <xsd-frontend/traversal.hxx>
 
 #include <elements.hxx>
-
-#include <ostream>
+#include <cxx/literal-map.hxx>
 
 namespace CXX
 {
@@ -35,6 +36,30 @@ namespace CXX
 
   // Exceptions.
   //
+
+  struct UnrepresentableCharacter
+  {
+    UnrepresentableCharacter (String const& str, Size pos)
+        : str_ (str), pos_ (pos)
+    {
+    }
+
+    String const&
+    string () const
+    {
+      return str_;
+    }
+
+    Size
+    position () const
+    {
+      return pos_;
+    }
+
+  private:
+    String str_;
+    Size pos_;
+  };
 
   struct NoNamespaceMapping
   {
@@ -106,7 +131,6 @@ namespace CXX
     String reason_;
   };
 
-
   //
   //
   class Context
@@ -124,7 +148,9 @@ namespace CXX
   public:
     Context (std::wostream& o,
              SemanticGraph::Schema& root,
+             StringLiteralMap const* custom_literals_map,
              NarrowString const& char_type__,
+             NarrowString const& char_encoding__,
              Boolean include_with_brackets__,
              NarrowString const& include_prefix__,
              NarrowString const& esymbol,
@@ -141,8 +167,10 @@ namespace CXX
         : os (c.os),
           schema_root (c.schema_root),
           char_type (c.char_type),
+          char_encoding (c.char_encoding),
           L (c.L),
           string_type (c.string_type),
+          string_literal_map (c.string_literal_map),
           include_with_brackets (c.include_with_brackets),
           include_prefix (c.include_prefix),
           type_exp (c.type_exp),
@@ -166,8 +194,10 @@ namespace CXX
         : os (o),
           schema_root (c.schema_root),
           char_type (c.char_type),
+          char_encoding (c.char_encoding),
           L (c.L),
           string_type (c.string_type),
+          string_literal_map (c.string_literal_map),
           include_with_brackets (c.include_with_brackets),
           include_prefix (c.include_prefix),
           type_exp (c.type_exp),
@@ -309,8 +339,10 @@ namespace CXX
     SemanticGraph::Schema& schema_root;
 
     String& char_type;
+    String& char_encoding;
     String& L;                  // string literal prefix
     String& string_type;
+    StringLiteralMap const* string_literal_map;
 
     Boolean& include_with_brackets;
     String& include_prefix;
@@ -326,6 +358,7 @@ namespace CXX
     SemanticGraph::Namespace* xs_ns_;
 
     String char_type_;
+    String char_encoding_;
     String L_;
     String string_type_;
 

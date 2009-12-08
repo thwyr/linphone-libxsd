@@ -126,9 +126,9 @@ namespace CXX
   {
     namespace CLI
     {
-      extern Key char_type;
       extern Key type_map                 = "type-map";
       extern Key char_type                = "char-type";
+      extern Key char_encoding            = "char-encoding";
       extern Key output_dir               = "output-dir";
       extern Key xml_parser               = "xml-parser";
       extern Key generate_inline          = "generate-inline";
@@ -204,6 +204,14 @@ namespace CXX
     e << "--char-type <type>" << endl
       << " Use <type> as the base character type. Valid\n"
       << " values are 'char' (default) and 'wchar_t'."
+      << endl;
+
+    e << "--char-encoding <enc>" << endl
+      << " Specify the character encoding that should be used\n"
+      << " in the object model. Valid values for the 'char'\n"
+      << " character type are 'utf8' (default), 'iso8859-1',\n"
+      << " 'lcp', and 'custom'. For the 'wchar_t' character\n"
+      << " type the only valid value is 'auto'."
       << endl;
 
     e << "--output-dir <dir>" << endl
@@ -471,6 +479,11 @@ namespace CXX
 
     // Misc.
     //
+    e << "--custom-literals <file>" << endl
+      << " Load custom XML string to C++ literal mappings\n"
+      << " from <file>."
+      << endl;
+
     e << "--export-symbol <symbol>" << endl
       << " Export symbol for Win32 DLL export/import control."
       << endl;
@@ -600,6 +613,7 @@ namespace CXX
   generate (Parser::CLI::Options const& ops,
             Schema& schema,
             Path const& file_path,
+            StringLiteralMap const& string_literal_map,
             Boolean gen_driver,
             const WarningSet& disabled_warnings,
             FileList& file_list,
@@ -648,7 +662,7 @@ namespace CXX
       //
       {
         NameProcessor proc;
-        proc.process (ops, schema, file_path);
+        proc.process (ops, schema, file_path, string_literal_map);
       }
 
       Boolean validation ((ops.value<CLI::xml_parser> () == "expat" ||
@@ -701,7 +715,7 @@ namespace CXX
 
         String xns;
         {
-          Context ctx (std::wcerr, schema, ops, 0, 0, 0);
+          Context ctx (std::wcerr, schema, ops, 0, 0, 0, 0);
           xns = ctx.xs_ns_name ();
         }
 
@@ -1144,7 +1158,13 @@ namespace CXX
       // HXX
       //
       {
-        Context ctx (hxx, schema, ops, &hxx_expr, &ixx_expr, &hxx_impl_expr);
+        Context ctx (hxx,
+                     schema,
+                     ops,
+                     &string_literal_map,
+                     &hxx_expr,
+                     &ixx_expr,
+                     &hxx_impl_expr);
 
         Indentation::Clip<Indentation::SLOC, WideChar> hxx_sloc (hxx);
 
@@ -1231,7 +1251,13 @@ namespace CXX
       //
       if (inline_)
       {
-        Context ctx (ixx, schema, ops, &hxx_expr, &ixx_expr, &hxx_impl_expr);
+        Context ctx (ixx,
+                     schema,
+                     ops,
+                     &string_literal_map,
+                     &hxx_expr,
+                     &ixx_expr,
+                     &hxx_impl_expr);
 
         Indentation::Clip<Indentation::SLOC, WideChar> ixx_sloc (ixx);
 
@@ -1287,7 +1313,13 @@ namespace CXX
       //
       if (source)
       {
-        Context ctx (cxx, schema, ops, &hxx_expr, &ixx_expr, &hxx_impl_expr);
+        Context ctx (cxx,
+                     schema,
+                     ops,
+                     &string_literal_map,
+                     &hxx_expr,
+                     &ixx_expr,
+                     &hxx_impl_expr);
 
         Indentation::Clip<Indentation::SLOC, WideChar> cxx_sloc (cxx);
 
@@ -1351,8 +1383,13 @@ namespace CXX
       //
       if (impl)
       {
-        Context ctx (hxx_impl, schema, ops,
-                     &hxx_expr, &ixx_expr, &hxx_impl_expr);
+        Context ctx (hxx_impl,
+                     schema,
+                     ops,
+                     &string_literal_map,
+                     &hxx_expr,
+                     &ixx_expr,
+                     &hxx_impl_expr);
 
         String guard (guard_expr.merge (guard_prefix + hxx_impl_name));
         guard = ctx.escape (guard); // Make it a C++ id.
@@ -1380,8 +1417,13 @@ namespace CXX
       //
       if (impl)
       {
-        Context ctx (cxx_impl, schema, ops,
-                     &hxx_expr, &ixx_expr, &hxx_impl_expr);
+        Context ctx (cxx_impl,
+                     schema,
+                     ops,
+                     &string_literal_map,
+                     &hxx_expr,
+                     &ixx_expr,
+                     &hxx_impl_expr);
 
         // Set auto-indentation.
         //
@@ -1397,8 +1439,13 @@ namespace CXX
       //
       if (driver)
       {
-        Context ctx (cxx_driver, schema, ops,
-                     &hxx_expr, &ixx_expr, &hxx_impl_expr);
+        Context ctx (cxx_driver,
+                     schema,
+                     ops,
+                     &string_literal_map,
+                     &hxx_expr,
+                     &ixx_expr,
+                     &hxx_impl_expr);
 
         // Set auto-indentation.
         //
@@ -1411,6 +1458,17 @@ namespace CXX
       }
 
       return sloc;
+    }
+    catch (UnrepresentableCharacter const& e)
+    {
+      wcerr << "error: character at position " << e.position () << " "
+            << "in string '" << e.string () << "' is unrepresentable in "
+            << "the target encoding" << endl;
+
+      wcerr << "info: use the --custom-literals option to provide custom "
+            << "string literals mapping" << endl;
+
+      throw Failed ();
     }
     catch (NoNamespaceMapping const& e)
     {

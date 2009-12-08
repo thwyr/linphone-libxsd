@@ -7,7 +7,8 @@ include $(dir $(lastword $(MAKEFILE_LIST)))../build/bootstrap.make
 
 cxx_tun := xsd.cxx
 
-cxx_tun += cxx/elements.cxx
+cxx_tun += cxx/elements.cxx                            \
+           cxx/literal-map.cxx
 
 cxx_tun += cxx/parser/elements.cxx                     \
            cxx/parser/validator.cxx                    \
@@ -88,17 +89,22 @@ $(call import,\
   $(scf_root)/import/libxsd-frontend/stub.make,\
   l: xsd_fe.l,cpp-options: xsd_fe.l.cpp-options)
 
+$(call import,\
+  $(scf_root)/import/libxerces-c/stub.make,\
+  l: xerces_c.l,cpp-options: xerces_c.l.cpp-options)
+
 # Build.
 #
 $(xsd): $(cxx_obj) $(xsd_fe.l) $(be.l) $(cult.l) $(fs.l) $(re.l) $(xerces_c.l)
 
 $(cxx_obj) $(cxx_od): cpp_options := -I$(src_base)
-$(cxx_obj) $(cxx_od):     \
-  $(xsd_fe.l.cpp-options) \
-  $(be.l.cpp-options)     \
-  $(cult.l.cpp-options)   \
-  $(fs.l.cpp-options)     \
-  $(re.l.cpp-options)
+$(cxx_obj) $(cxx_od):      \
+  $(xsd_fe.l.cpp-options)  \
+  $(be.l.cpp-options)      \
+  $(cult.l.cpp-options)    \
+  $(fs.l.cpp-options)      \
+  $(re.l.cpp-options)      \
+  $(xerces_c.l.cpp-options)
 
 $(call include-dep,$(cxx_od))
 

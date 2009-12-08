@@ -1,5 +1,14 @@
 Version 3.3.0
 
+  * New option, --char-encoding, allows to specify the character encoding
+    that should be used in the object model. Valid values for the 'char'
+    character type are 'utf8' (default), 'iso8859-1' (new), 'lcp' (Xerces-C++
+    local code page), and 'custom' (allows to support custom encodings). Note
+    that if you use a non-default character encoding and include some libxsd
+    headers (e.g., xsd/cxx/xml/string.hxx) directly, then you will need to
+    fist include the correct xsd/cxx/xml/char-<enc>.hxx header, where <enc>
+    is iso8859-1, lcp, etc. This mechanism replaces the XSD_USE_LCP macro.
+
   * When the XSD compiler is built with Xerces-C++ 3.1.0 or later, enable 
     handling of multiple imports for the same namespace. Before all 
     subsequent imports for a namespace were ignored which caused errors
