@@ -430,14 +430,13 @@ namespace CXX
 
         if (import_maps || export_maps)
         {
-          ctx.os << "#ifdef _MSC_VER" << endl
-                 << endl
-                 << "namespace xsd"
+          ctx.os << "namespace xsd"
                  << "{"
                  << "namespace cxx"
                  << "{"
                  << "namespace tree"
-                 << "{";
+                 << "{"
+                 << "#ifdef _MSC_VER" << endl;
 
           if (export_maps)
             ctx.os << "template struct __declspec (dllexport) " <<
@@ -447,11 +446,14 @@ namespace CXX
             ctx.os << "template struct __declspec (dllimport) " <<
               "std_ostream_plate< 0, " << ctx.char_type << " >;";
 
-          ctx.os << "}" // tree
-                 << "}" // cxx
-                 << "}" // xsd
-                 << "#endif // _MSC_VER" << endl
-                 << endl;
+          ctx.os << "#elif defined(__GNUC__) && __GNUC__ >= 4" << endl
+                 << "template struct __attribute__ ((visibility(\"default\"))) " <<
+            "std_ostream_plate< 0, " << ctx.char_type << " >;";
+
+          ctx.os << "#endif" << endl
+                 << "}"  // tree
+                 << "}"  // cxx
+                 << "}"; // xsd
         }
 
         ctx.os << "namespace _xsd"
