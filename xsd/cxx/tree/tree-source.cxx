@@ -3,16 +3,13 @@
 // copyright : Copyright (c) 2005-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <cxx/tree/tree-source.hxx>
+#include <cult/containers/list.hxx>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
 
-#include <cult/containers/list.hxx>
-
-#include <iostream>
-
-using std::wcerr;
+#include <cxx/tree/tree-source.hxx>
+#include <cxx/tree/default-value.hxx>
 
 namespace CXX
 {
@@ -548,7 +545,7 @@ namespace CXX
       struct Member: Traversal::Member, Context
       {
         Member (Context& c, String const& scope)
-            : Context (c), scope_ (scope)
+            : Context (c), scope_ (scope), init_value_ (c)
         {
         }
 
@@ -573,46 +570,48 @@ namespace CXX
 
             if (simple)
             {
-              Boolean fund (false);
+              Boolean lit (false);
               {
-                IsFundamentalType test (fund);
+                IsLiteralValue test (lit);
                 test.dispatch (t);
               }
 
-              String type (etype (m));
-              String q_type (scope_ + L"::" + type);
-
-              if (fund)
+              if (!lit)
               {
-                String ftype;
+                Boolean simple_init (true);
                 {
-                  std::wostringstream o;
-                  MemberTypeName test (*this, o);
+                  IsSimpleInit test (simple_init);
                   test.dispatch (t);
-                  ftype = o.str ();
                 }
 
-                os << "const " << q_type << " " << scope_ << "::" <<
-                  edefault_value_member (m) << " (" << endl
-                   << "::xsd::cxx::tree::traits< " << ftype << ", " <<
-                  char_type;
+                String const& member (edefault_value_member (m));
 
-                if (t.is_a<SemanticGraph::Fundamental::Double> ())
-                  os << ", ::xsd::cxx::tree::schema_type::double_";
-                else if (t.is_a<SemanticGraph::Fundamental::Decimal> ())
-                  os << ", ::xsd::cxx::tree::schema_type::decimal";
+                String init_func;
+                if (!simple_init)
+                {
+                  init_func = escape (L"_xsd_" + scope_ + member + L"_init");
 
-                os << " >::create (" << endl
-                   << string_type << " (" << L << strlit (m.value ()) <<
-                  "), 0, 0, 0));"
-                   << endl;
-              }
-              else
-              {
-                os << "const " << q_type << " " << scope_ << "::" <<
-                  edefault_value_member (m) << " (" << endl
-                   << string_type << " (" << L << strlit (m.value ()) <<
-                  "), 0, 0, 0);"
+                  os << "static " << scope_ << "::" << etype (m) << endl
+                     << init_func << " ()"
+                     << "{"
+                     << scope_ << "::" << etype (m) << " r;"
+                     << endl;
+
+                  init_value_.dispatch (t, m.value ());
+
+                  os << "return r;"
+                     << "};";
+                }
+
+                os << "const " << scope_ << "::" << etype (m) << " " <<
+                  scope_ << "::" << member << " (" << endl;
+
+                if (simple_init)
+                  init_value_.dispatch (t, m.value ());
+                else
+                  os << init_func << " ()";
+
+                os << ");"
                    << endl;
               }
             }
@@ -621,6 +620,7 @@ namespace CXX
 
       private:
         String scope_;
+        InitValue init_value_;
       };
 
 

@@ -3,10 +3,11 @@
 // copyright : Copyright (c) 2005-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <cxx/tree/tree-inline.hxx>
-
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
+
+#include <cxx/tree/tree-inline.hxx>
+#include <cxx/tree/default-value.hxx>
 
 namespace CXX
 {
@@ -422,7 +423,7 @@ namespace CXX
       struct Member: Traversal::Member, Context
       {
         Member (Context& c, String const& scope)
-            : Context (c), scope_ (scope)
+            : Context (c), scope_ (scope), lit_value_ (c)
         {
         }
 
@@ -611,19 +612,32 @@ namespace CXX
 
             if (simple)
             {
-              os << inl
-                 << "const " << scope_ << "::" << etype (m) << "& " <<
-                scope_ << "::" << endl
+              String lit (lit_value_.dispatch (m.type (), m.value ()));
+
+              os << inl;
+
+              if (lit)
+                os << scope_ << "::" << etype (m) << " ";
+              else
+                os << "const " << scope_ << "::" << etype (m) << "& ";
+
+              os << scope_ << "::" << endl
                  << edefault_value (m) << " ()"
-                 << "{"
-                 << "return " << edefault_value_member (m) << ";"
-                 << "}";
+                 << "{";
+
+              if (lit)
+                os << "return " << etype (m) << " (" << lit << ");";
+              else
+                os << "return " << edefault_value_member (m) << ";";
+
+              os << "}";
             }
           }
         }
 
       private:
         String scope_;
+        LiteralValue lit_value_;
       };
 
       struct Any: Traversal::Any,

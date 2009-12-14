@@ -1,4 +1,4 @@
-// file      : tests/cxx/tree/default/driver.cxx
+// file      : tests/cxx/tree/default/general/driver.cxx
 // author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : Copyright (c) 2006-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
@@ -27,15 +27,6 @@ main (int argc, char* argv[])
   {
     auto_ptr<type> r (root (argv[1], xml_schema::flags::dont_validate));
 
-    cout << *r << endl
-         << "default x: " << derived::x_default_value () << endl
-         << "default y: " << derived::y_default_value () << endl
-	 << "fixed p: " << derived::p_default_value () << endl
-	 << "fixed q1: " << derived::q1_default_value () << endl
-	 << "fixed q2: " << derived::q2_default_value () << endl;
-
-    // Serialize.
-    //
     xml_schema::namespace_infomap map;
     map["t"].name = "test";
     root (cout, *r, map);

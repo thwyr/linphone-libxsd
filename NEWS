@@ -60,6 +60,12 @@ Version 3.3.0
     can process parts of the document as they become available as well as 
     handle documents that are too large to fit into memory.
 
+  * New default/fixed value initialization code. Now the default/fixed values
+    are parsed by the XSD compiler at compile time instead of the standard
+    parsing code at runtime. This will allow compiling schemas that use the
+    default/fixed values without support for XML parsing (--suppress-parsing
+    option).
+
   * Empty XML Schema enumeration values are now mapped to the 'empty' C++ 
     enumerator name instead of 'cxx'.
 

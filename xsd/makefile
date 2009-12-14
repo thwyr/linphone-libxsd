@@ -31,6 +31,7 @@ cxx_tun += cxx/tree/elements.cxx                      \
            cxx/tree/validator.cxx                     \
            cxx/tree/counter.cxx                       \
            cxx/tree/name-processor.cxx                \
+	   cxx/tree/default-value.cxx                 \
            cxx/tree/generator.cxx                     \
            cxx/tree/tree-forward.cxx                  \
            cxx/tree/tree-header.cxx                   \

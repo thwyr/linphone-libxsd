@@ -14,23 +14,14 @@
       <extension base="t:base">
         <attribute name="y" type="int" default="-20"/>
         <attribute name="p" type="string" fixed="bar"/>
-	<attribute name="q2" type="int" fixed="2" use="required"/>
+        <attribute name="q2" type="int" fixed="2" use="required"/>
       </extension>
     </complexContent>
-  </complexType>
-
-  <complexType name="qname">
-    <sequence>
-      <!--element name="a" type="QName" default="a"/-->
-    </sequence>
-    <attribute name="x" type="QName" default="x"/>
-    <attribute name="y" type="QName" fixed="y" use="required"/>
   </complexType>
 
   <complexType name="type">
     <sequence>
       <element name="derived" type="t:derived"/>
-      <element name="qname" type="t:qname"/>
     </sequence>
   </complexType>
 

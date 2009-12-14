@@ -3,11 +3,12 @@
 // copyright : Copyright (c) 2005-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <cxx/tree/tree-header.hxx>
-#include <cxx/tree/fundamental-header.hxx>
-
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
+
+#include <cxx/tree/tree-header.hxx>
+#include <cxx/tree/default-value.hxx>
+#include <cxx/tree/fundamental-header.hxx>
 
 namespace CXX
 {
@@ -1358,20 +1359,35 @@ namespace CXX
 
             if (simple)
             {
+              Boolean lit (false);
+              {
+                IsLiteralValue test (lit);
+                test.dispatch (m.type ());
+              }
+
               if (doxygen)
               {
                 os << "/**" << endl
                    << " * @brief Return the default value for the " <<
                   kind << "." << endl
-                   << " *" << endl
-                   << " * @return A read-only (constant) reference to the "
-                   << kind << "'s" << endl
-                   << " * default value." << endl
-                   << " */" << endl;
+                   << " *" << endl;
+
+                if (lit)
+                  os << " * @return The " << kind << "'s default value." << endl;
+                else
+                  os << " * @return A read-only (constant) reference to the "
+                     << kind << "'s" << endl
+                     << " * default value." << endl;
+
+                os << " */" << endl;
               }
 
-              os << "static const " << etype (m) << "&" << endl
-                 << edefault_value (m) << " ();"
+              if (lit)
+                os << "static " << etype (m) << endl;
+              else
+                os << "static const " << etype (m) << "&" << endl;
+
+              os << edefault_value (m) << " ();"
                  << endl;
             }
           }
@@ -2157,8 +2173,17 @@ namespace CXX
 
             if (simple)
             {
-              os << "static const " << etype (m) << " " <<
-                edefault_value_member (m) << ";";
+              Boolean lit (false);
+              {
+                IsLiteralValue test (lit);
+                test.dispatch (m.type ());
+              }
+
+              if (!lit)
+              {
+                os << "static const " << etype (m) << " " <<
+                  edefault_value_member (m) << ";";
+              }
             }
           }
         }
@@ -3675,6 +3700,7 @@ namespace CXX
         Boolean inline_ (ctx.options.value<CLI::generate_inline> ());
 
         ctx.os << "#include <memory>    // std::auto_ptr" << endl
+               << "#include <limits>    // std::numeric_limits" << endl
                << "#include <algorithm> // std::binary_search" << endl
                << endl;
 

@@ -6,9 +6,6 @@ q1: 1
 y: -20
 p: bar
 q2: 2
-qname: 
-x: x
-y: y
 default x: foo
 default y: -20
 fixed p: bar
@@ -20,7 +17,5 @@ fixed q2: 2
   <derived q1="1" q2="2">
     <a>a</a>
   </derived>
-
-  <qname x="x" y="y"/>
 
 </t:root>

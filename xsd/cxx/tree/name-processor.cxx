@@ -3,16 +3,17 @@
 // copyright : Copyright (c) 2006-2009 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <cxx/tree/name-processor.hxx>
-
-#include <backend-elements/regex.hxx>
+#include <sstream>
+#include <iostream>
 
 #include <cult/containers/set.hxx>
 #include <cult/containers/map.hxx>
 #include <cult/containers/vector.hxx>
 
-#include <sstream>
-#include <iostream>
+#include <backend-elements/regex.hxx>
+
+#include <cxx/tree/default-value.hxx>
+#include <cxx/tree/name-processor.hxx>
 
 namespace CXX
 {
@@ -817,9 +818,18 @@ namespace CXX
 
               m.context ().set ( "default-value", find_name (an, name_set_));
 
-              m.context ().set (
-                "default-value-member",
-                find_name (b + L"_default_value_", name_set_));
+              Boolean lit (false);
+              {
+                IsLiteralValue test (lit);
+                test.dispatch (m.type ());
+              }
+
+              if (!lit)
+              {
+                m.context ().set (
+                  "default-value-member",
+                  find_name (b + L"_default_value_", name_set_));
+              }
             }
           }
         }
