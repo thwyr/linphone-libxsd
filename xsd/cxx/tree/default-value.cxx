@@ -577,7 +577,7 @@ namespace CXX
     // Date/time.
     //
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::Date&)
+    traverse (SemanticGraph::Fundamental::Date& t)
     {
       // date := [-]CCYY[N]*-MM-DD[Z|(+|-)HH:MM]
       //
@@ -597,13 +597,13 @@ namespace CXX
       strip_zeros (month);
       strip_zeros (day);
 
-      os << year << ", " << month << ", " << day;
-
+      os << fq_name (t) << " (" << year << ", " << month << ", " << day;
       time_zone (b + 2);
+      os << ")";
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::DateTime&)
+    traverse (SemanticGraph::Fundamental::DateTime& t)
     {
       // date_time := [-]CCYY[N]*-MM-DDTHH:MM:SS[.S+][Z|(+|-)HH:MM]
       //
@@ -645,10 +645,11 @@ namespace CXX
       strip_zeros (seconds);
       make_float (seconds);
 
-      os << year << ", " << month << ", " << day << ", "
+      os << fq_name (t) << " ("
+         << year << ", " << month << ", " << day << ", "
          << hours << ", " << minutes << ", " << seconds;
-
       time_zone (e);
+      os << ")";
     }
 
     namespace
@@ -670,13 +671,15 @@ namespace CXX
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::Duration&)
+    traverse (SemanticGraph::Fundamental::Duration& t)
     {
       // duration := [-]P[nY][nM][nD][TnHnMn[.n+]S]
       //
       collapse (value_);
 
       Size b (1), e, n (value_.size ());
+
+      os << fq_name (t) << " (";
 
       if (value_[0] == '-')
       {
@@ -766,10 +769,12 @@ namespace CXX
       }
       else
         os << "0.0";
+
+      os << ")";
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::Day&)
+    traverse (SemanticGraph::Fundamental::Day& t)
     {
       // gday := ---DD[Z|(+|-)HH:MM]
       //
@@ -778,13 +783,13 @@ namespace CXX
       String day (value_, 3, 2);
       strip_zeros (day);
 
-      os << day;
-
+      os << fq_name (t) << " (" << day;
       time_zone (5);
+      os << ")";
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::Month&)
+    traverse (SemanticGraph::Fundamental::Month& t)
     {
       // gmonth := --MM[Z|(+|-)HH:MM]
       //
@@ -793,13 +798,13 @@ namespace CXX
       String month (value_, 2, 2);
       strip_zeros (month);
 
-      os << month;
-
+      os << fq_name (t) << " (" << month;
       time_zone (4);
+      os << ")";
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::MonthDay&)
+    traverse (SemanticGraph::Fundamental::MonthDay& t)
     {
       // gmonth_day := --MM-DD[Z|(+|-)HH:MM]
       //
@@ -811,13 +816,13 @@ namespace CXX
       strip_zeros (month);
       strip_zeros (day);
 
-      os << month << ", " << day;
-
+      os << fq_name (t) << " (" << month << ", " << day;
       time_zone (7);
+      os << ")";
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::Year&)
+    traverse (SemanticGraph::Fundamental::Year& t)
     {
       // gyear := [-]CCYY[N]*[Z|(+|-)HH:MM]
       //
@@ -835,13 +840,13 @@ namespace CXX
       String year (value_, 0, pos);
       strip_zeros (year);
 
-      os << year;
-
+      os << fq_name (t) << " (" << year;
       time_zone (pos);
+      os << ")";
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::YearMonth&)
+    traverse (SemanticGraph::Fundamental::YearMonth& t)
     {
       // gyear_month := [-]CCYY[N]*-MM[Z|(+|-)HH:MM]
       //
@@ -855,13 +860,13 @@ namespace CXX
       strip_zeros (year);
       strip_zeros (month);
 
-      os << year << ", " << month;
-
+      os << fq_name (t) << " (" << year << ", " << month;
       time_zone (pos + 3);
+      os << ")";
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::Time&)
+    traverse (SemanticGraph::Fundamental::Time& t)
     {
       // time := HH:MM:SS[.S+][Z|(+|-)HH:MM]
       //
@@ -886,9 +891,9 @@ namespace CXX
       strip_zeros (seconds);
       make_float (seconds);
 
-      os << hours << ", " << minutes << ", " << seconds;
-
+      os << fq_name (t) << " (" << hours << ", " << minutes << ", " << seconds;
       time_zone (e);
+      os << ")";
     }
 
     Void InitValue::

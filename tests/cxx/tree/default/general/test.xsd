@@ -77,6 +77,10 @@
 
   <!-- date/time types -->
 
+  <simpleType name="date-derived">
+    <restriction base="date"/>
+  </simpleType>
+
   <complexType name="date-test">
     <attribute default="2009-03-31" name="a" type="date"/>
     <attribute default="2009-03-31Z" name="b" type="date"/>
@@ -84,7 +88,7 @@
     <attribute default="2009-03-31-00:00" name="d" type="date"/>
     <attribute default="2009-03-31+12:30" name="e" type="date"/>
     <attribute default="2009-03-31-12:30" name="f" type="date"/>
-    <attribute default="2002009-03-31-12:30" name="g" type="date"/>
+    <attribute default="2002009-03-31-12:30" name="g" type="t:date-derived"/>
   </complexType>
 
   <complexType name="time-test">
