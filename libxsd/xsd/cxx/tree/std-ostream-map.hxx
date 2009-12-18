@@ -23,7 +23,7 @@ namespace xsd
       struct std_ostream_map
       {
         typedef std::type_info type_id;
-        typedef void (*inserter) (std::ostream&, const type&);
+        typedef void (*inserter) (std::basic_ostream<C>&, const type&);
 
         std_ostream_map ();
 
@@ -34,7 +34,7 @@ namespace xsd
         unregister_type (const type_id&);
 
         void
-        insert (std::ostream&, const type&);
+        insert (std::basic_ostream<C>&, const type&);
 
       public:
         inserter
@@ -95,9 +95,9 @@ namespace xsd
 
       //
       //
-      template<typename T>
+      template<typename C, typename T>
       void
-      inserter_impl (std::ostream&, const type&);
+      inserter_impl (std::basic_ostream<C>&, const type&);
 
       template<unsigned long id, typename C, typename T>
       struct std_ostream_initializer
