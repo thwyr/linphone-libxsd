@@ -425,13 +425,20 @@ namespace xsd
           {
             if (map_.get () != 0)
             {
-              // Propagate our IDs to the new container.
+              // Propagate our IDs to the new root.
               //
-              for (map::iterator i (map_->begin ()), e (map_->end ());
-                   i != e; ++i)
+              container* r (c->_root ());
+
+              if (r == 0)
+                r = c;
+
+              if (r->map_.get () != 0)
               {
-                c->_register_id (*i->first, i->second);
+                r->map_->insert (map_->begin (), map_->end ());
+                map_.reset ();
               }
+              else
+                r->map_ = map_;
             }
 
             container_ = c;
@@ -585,15 +592,12 @@ namespace xsd
         void
         _register_id (const identity& id, type* t)
         {
+          // We should be the root.
+          //
+          assert (container_ == 0);
+
           if (map_.get () == 0)
             map_.reset (new map);
-
-          // First register on our container. If there are any duplications,
-          // they will be detected by this call and we don't need to clean
-          // the map.
-          //
-          if (container_ != 0)
-	    container_->_register_id (id, t);
 
           if (!map_->insert (
                 std::pair<const identity*, type*> (&id, t)).second)
@@ -616,22 +620,12 @@ namespace xsd
         void
         _unregister_id (const identity& id)
         {
-          if (map_.get ())
-          {
-            map::iterator it (map_->find (&id));
+          // We should be the root.
+          //
+          assert (container_ == 0);
 
-            if (it != map_->end ())
-            {
-              map_->erase (it);
-
-              if (container_ != 0)
-	        container_->_unregister_id (id);
-
-              return;
-            }
-          }
-
-          throw not_registered ();
+          if (map_.get () == 0 || map_->erase (&id) == 0)
+            throw not_registered ();
         }
 
         type*

@@ -185,32 +185,20 @@ namespace xsd
       void id<C, B>::
       register_id ()
       {
-        container* c (this->_container ());
+        container* r (this->_root ());
 
-        if (c != 0 && !this->empty ())
-        {
-          //std::cerr << "registering " << c
-          //          << " as '" << *this
-          //          << "' on " << c << std::endl;
-
-          c->_register_id (identity_, c);
-        }
+        if (r != 0 && !this->empty ())
+          r->_register_id (identity_, this->_container ());
       }
 
       template <typename C, typename B>
       void id<C, B>::
       unregister_id ()
       {
-        container* c (this->_container ());
+        container* r (this->_root ());
 
-        if (c != 0 && !this->empty ())
-        {
-          //std::cerr << "un-registering " << c
-          //          << " as '" << *this
-          //          << "' on " << c << std::endl;
-
-          c->_unregister_id (identity_);
-        }
+        if (r != 0 && !this->empty ())
+          r->_unregister_id (identity_);
       }
 
 
