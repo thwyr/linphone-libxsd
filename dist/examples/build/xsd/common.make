@@ -1,6 +1,6 @@
 # file      : examples/build/xsd/common.make
 # author    : Boris Kolpackov <boris@codesynthesis.com>
-# copyright : Copyright (c) 2006 Code Synthesis Tools CC
+# copyright : Copyright (c) 2006-2010 Code Synthesis Tools CC
 # license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
 XSD := $(shell if test -x $(root)/../bin/xsd; \
