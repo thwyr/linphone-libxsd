@@ -28,10 +28,10 @@
     <sequence>
       <element name="a" type="string"/>
     </sequence>
-    <!-- @@ fixed="foo" -->
-    <attribute name="text" type="string" use="required" />
-    <!-- @@ fixed="red" -->
+    <attribute name="text" type="string" use="required"/>
     <attribute name="color" type="t:color-enum" use="required"/>
+    <attribute name="ftext" type="string" fixed="foo"/>
+    <attribute name="dcolor" type="t:color-enum" default="red"/>
   </complexType>
 
   <!-- Test that we do not perform type/element name conflict resolution
