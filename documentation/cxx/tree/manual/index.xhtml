@@ -1511,8 +1511,9 @@ public:
 };
   </pre>
 
-  <p>If the <code>assume_ownership</code> argument to the constructor
-     is <code>true</code>, the instance assumes ownership of the
+  <p>The last overloaded constructor reuses an existing data buffer instead
+     of making a copy. If the <code>assume_ownership</code> argument is
+     <code>true</code>, the instance assumes ownership of the
      memory block pointed to by the <code>data</code> argument and will
      eventually release it by calling <code>operator delete</code>. The
      <code>capacity</code> and <code>size</code> modifier functions return

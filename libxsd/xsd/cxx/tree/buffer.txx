@@ -60,20 +60,10 @@ namespace xsd
         if (size > capacity)
           throw bounds<C> ();
 
-        if (own)
-        {
-          data_ = reinterpret_cast<char*> (data);
-          size_ = size;
-          capacity_ = capacity;
-        }
-        else
-        {
-          this->capacity (capacity);
-          size_ = size;
-
-          if (size_)
-            std::memcpy (data_, data, size_);
-        }
+        data_ = reinterpret_cast<char*> (data);
+        size_ = size;
+        capacity_ = capacity;
+        free_ = own;
       }
 
       template <typename C>
@@ -111,14 +101,17 @@ namespace xsd
         char* tmp_data (data_);
         size_t tmp_size (size_);
         size_t tmp_capacity (capacity_);
+        bool tmp_free (free_);
 
         data_ = other.data_;
         size_ = other.size_;
         capacity_ = other.capacity_;
+        free_ = other.free_;
 
         other.data_ = tmp_data;
         other.size_ = tmp_size;
         other.capacity_ = tmp_capacity;
+        other.free_ = tmp_free;
       }
 
       template <typename C>
@@ -139,11 +132,12 @@ namespace xsd
           if (copy && size_ > 0)
             std::memcpy (data, data_, size_);
 
-          if (data_)
+          if (free_ && data_)
             operator delete (data_);
 
           data_ = data;
           capacity_ = capacity;
+          free_ = true;
 
           return true;
         }

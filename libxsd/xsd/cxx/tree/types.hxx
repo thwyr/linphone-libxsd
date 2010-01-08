@@ -3098,13 +3098,13 @@ namespace xsd
         base64_binary (const void* data, size_t size, size_t capacity);
 
         /**
-         * @brief Assume ownership of the specified %buffer.
+         * @brief Reuse an existing %buffer.
          *
          * If the @a assume_ownership argument is true, the %buffer will
          * assume ownership of @a data and will release the memory
          * by calling @c operator @c delete().
          *
-         * @param data A %buffer to assume ownership of.
+         * @param data A %buffer to reuse.
          * @param size A %buffer size in bytes.
          * @param capacity A %buffer capacity in bytes.
          * @param assume_ownership A boolean value indication whether to
@@ -3294,13 +3294,13 @@ namespace xsd
         hex_binary (const void* data, size_t size, size_t capacity);
 
         /**
-         * @brief Assume ownership of the specified %buffer.
+         * @brief Reuse an existing %buffer..
          *
          * If the @a assume_ownership argument is true, the %buffer will
          * assume ownership of @a data and will release the memory
          * by calling @c operator @c delete().
          *
-         * @param data A %buffer to assume ownership of.
+         * @param data A %buffer to reuse.
          * @param size A %buffer size in bytes.
          * @param capacity A %buffer capacity in bytes.
          * @param assume_ownership A boolean value indication whether to
