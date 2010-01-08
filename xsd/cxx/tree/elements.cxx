@@ -471,25 +471,6 @@ namespace CXX
       return false;
     }
 
-    Boolean Context::
-    is_qname (SemanticGraph::Type& t)
-    {
-      using SemanticGraph::Complex;
-      using SemanticGraph::Fundamental::QName;
-
-      if (t.is_a<QName> ())
-        return true;
-
-      if (Complex* c = dynamic_cast<Complex*> (&t))
-      {
-        if (c->inherits_p () && ultimate_base (*c).is_a<QName> ())
-          return true;
-      }
-
-      return false;
-    }
-
-
     Void Context::
     write_annotation (SemanticGraph::Annotation& a)
     {
@@ -658,7 +639,7 @@ namespace CXX
     Void GenerateDefaultCtor::
     traverse (SemanticGraph::Attribute& a)
     {
-      if (min (a) == 1 && !(a.fixed () && !is_qname (a.type ())))
+      if (min (a) == 1 && !a.fixed ())
         generate_ = true;
     }
 
@@ -713,7 +694,7 @@ namespace CXX
     Void GenerateFromBaseCtor::Traverser::
     traverse (SemanticGraph::Attribute& a)
     {
-      if (min (a) == 1 && !(a.fixed () && !is_qname (a.type ())))
+      if (min (a) == 1 && !a.fixed ())
         generate_ = true;
     }
 
@@ -857,7 +838,7 @@ namespace CXX
       // default or required fixed values here. Instead we are
       // going to default-initialize them.
       //
-      if (min (a) == 1 && !(a.fixed () && !is_qname (a.type ())))
+      if (min (a) == 1 && !a.fixed ())
       {
         String const& name (ename (a));
 
@@ -993,7 +974,7 @@ namespace CXX
       // default or required fixed values here. Instead we are
       // going to default-initialize them.
       //
-      if (min (a) == 1 && !(a.fixed () && !is_qname (a.type ())))
+      if (min (a) == 1 && !a.fixed ())
       {
         os << comma () << "const " << etype (a) << "&";
 
@@ -1085,7 +1066,7 @@ namespace CXX
       // default or required fixed values here. Instead we are
       // going to default-initialize them.
       //
-      if (min (a) == 1 && !(a.fixed () && !is_qname (a.type ())))
+      if (min (a) == 1 && !a.fixed ())
       {
         os << comma () << "const " << etype (a) << "&";
 

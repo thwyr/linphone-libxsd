@@ -583,9 +583,7 @@ namespace CXX
           os << "// " << comment (a.name ()) << endl
              << "//" << endl;
 
-          Boolean def (a.default_ () && !is_qname (a.type ()));
-
-          if (a.optional () && !def)
+          if (a.optional () && !a.default_ ())
           {
             os << "if (i." << aname << " ())"
                << "{"

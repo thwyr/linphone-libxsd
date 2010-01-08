@@ -150,12 +150,6 @@ namespace CXX
       renamed_type (SemanticGraph::Type const&, String& name) const;
 
     public:
-      // Return true if this type is-a QName.
-      //
-      Boolean
-      is_qname (SemanticGraph::Type&);
-
-    public:
       // Performs a number of processing steps, including forcing a new
       // line after 80 characters as well as "commentizing" the text by
       // adding '* ' after each newline.

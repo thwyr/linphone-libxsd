@@ -674,8 +674,7 @@ namespace CXX
           String const& b (m.context ().get<String> ("name"));
 
           Boolean def_attr (m.default_ () &&
-                            m.is_a<SemanticGraph::Attribute> () &&
-                            !Tree::Context::is_qname (m.type ()));
+                            m.is_a<SemanticGraph::Attribute> ());
 
           // Accessors/modifiers. Note that we postpone inserting the
           // names into the name_set to avoid over-escaping.
@@ -799,7 +798,7 @@ namespace CXX
 
           // Default value.
           //
-          if (m.default_ () && !Tree::Context::is_qname (m.type ()))
+          if (m.default_ ())
           {
             Boolean simple (true);
 

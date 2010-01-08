@@ -557,7 +557,7 @@ namespace CXX
 
           // default_value
           //
-          if (m.default_ () && !is_qname (m.type ()))
+          if (m.default_ ())
           {
             SemanticGraph::Type& t (m.type ());
             Boolean simple (true);
@@ -1190,31 +1190,8 @@ namespace CXX
 
             if (a.default_ ())
             {
-              Boolean fund (false);
-              {
-                IsFundamentalType traverser (fund);
-                traverser.dispatch (a.type ());
-              }
-
-              String const& tr (etraits (a)); // traits type name
-
-              if (fund || !is_qname (a.type ()))
-              {
-                os << "this->" << member << ".set (" <<
-                  edefault_value (a) << " ());";
-              }
-              else
-              {
-                // Parse the default value in the context of the element.
-                //
-                os << "::std::auto_ptr< " << etype (a) << " > r (" << endl
-                   << tr << "::create (" << endl
-                   << string_type << " (" << L << strlit (a.value ()) <<
-                  ")," << endl
-                   << "&p.element (), f, this));"
-                   << endl
-                   << "this->" << member << ".set (r);";
-              }
+              os << "this->" << member << ".set (" <<
+                edefault_value (a) << " ());";
             }
             else
               os << "throw ::xsd::cxx::tree::expected_attribute< " <<
@@ -1330,7 +1307,7 @@ namespace CXX
             // Note that we are not including attributes with default
             // or required fixed values here.
             //
-            if (min (a) == 1 && !(a.fixed () && !is_qname (a.type ())))
+            if (min (a) == 1 && !a.fixed ())
             {
               // one
               //
@@ -1407,7 +1384,7 @@ namespace CXX
         {
           String const& member (emember (a));
 
-          Boolean def (a.default_ () && !is_qname (a.type ()));
+          Boolean def (a.default_ ());
 
           if (min (a) == 0 && !def)
           {
@@ -1643,7 +1620,7 @@ namespace CXX
         {
           String const& member (emember (a));
 
-          if (a.default_ () && !is_qname (a.type ()))
+          if (a.default_ ())
           {
             // This is an attribute with default or fixed value. We are
             // going to initialize it to its default value.

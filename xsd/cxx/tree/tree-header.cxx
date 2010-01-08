@@ -1076,8 +1076,7 @@ namespace CXX
           }
 
           Boolean def_attr (m.default_ () &&
-                            m.is_a<SemanticGraph::Attribute> () &&
-                            !is_qname (m.type ()));
+                            m.is_a<SemanticGraph::Attribute> ());
 
           if (max (m) != 1)
           {
@@ -1347,7 +1346,7 @@ namespace CXX
 
           // default_value
           //
-          if (m.default_ () && !is_qname (m.type ()))
+          if (m.default_ ())
           {
             Boolean simple (true);
 
@@ -1763,7 +1762,7 @@ namespace CXX
           String const& type (etype (m));
           Boolean el (m.is_a<SemanticGraph::Element> ());
 
-          Boolean def_attr (m.default_ () && !el && !is_qname (m.type ()));
+          Boolean def_attr (m.default_ () && !el);
 
           if (doxygen)
           {
@@ -2136,8 +2135,7 @@ namespace CXX
           String const& member (emember (m));
 
           Boolean def_attr (m.default_ () &&
-                            m.is_a<SemanticGraph::Attribute> () &&
-                            !is_qname (m.type ()));
+                            m.is_a<SemanticGraph::Attribute> ());
 
           if (max (m) != 1)
           {
@@ -2161,7 +2159,7 @@ namespace CXX
 
           // default_value
           //
-          if (m.default_ () && !is_qname (m.type ()))
+          if (m.default_ ())
           {
             Boolean simple (true);
 

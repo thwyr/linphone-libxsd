@@ -514,8 +514,36 @@ namespace CXX
     // Qualified name.
     //
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::QName&)
+    traverse (SemanticGraph::Fundamental::QName& t)
     {
+      Size p (value_.rfind ('#'));
+
+      if (p != String::npos)
+      {
+        String ns (value_, 0, p);
+        String qname (value_, p + 1, String::npos);
+
+        collapse (ns);
+        collapse (qname);
+
+        p = qname.find (':');
+
+        String name;
+        if (p != String::npos)
+          name.assign (qname, p + 1, String::npos);
+        else
+          name = qname;
+
+        os << fq_name (t) << " (" << strlit (ns) << ", " <<
+          strlit (name) << ")";
+      }
+      else
+      {
+        // Unqualified name.
+        //
+        collapse (value_);
+        os << fq_name (t) << " (" << strlit (value_) << ")";
+      }
     }
 
     // ID/IDREF.

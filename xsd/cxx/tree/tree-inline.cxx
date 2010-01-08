@@ -444,8 +444,7 @@ namespace CXX
           }
 
           Boolean def_attr (m.default_ () &&
-                            m.is_a<SemanticGraph::Attribute> () &&
-                            !is_qname (m.type ()));
+                            m.is_a<SemanticGraph::Attribute> ());
 
           if (max (m) != 1)
           {
@@ -600,7 +599,7 @@ namespace CXX
 
           // default_value
           //
-          if (m.default_ () && !is_qname (m.type ()))
+          if (m.default_ ())
           {
             Boolean simple (true);
 
