@@ -124,24 +124,41 @@ namespace CXX
       Traversal::Inherits inherits_;
     };
 
-    // Some initialization (e.g., list) need a function body.
+    // Some initialization (e.g., list) need a function body while others
+    // (e.g., *binary) require extra data.
     //
-    struct IsSimpleInit: Traversal::List,
-                         Traversal::Complex,
+    struct InitKind: Traversal::List,
+                     Traversal::Complex,
 
-                         Traversal::Fundamental::NameTokens,
-                         Traversal::Fundamental::IdRefs,
-                         Traversal::Fundamental::Entities
+                     Traversal::Fundamental::Base64Binary,
+                     Traversal::Fundamental::HexBinary,
+
+                     Traversal::Fundamental::NameTokens,
+                     Traversal::Fundamental::IdRefs,
+                     Traversal::Fundamental::Entities
     {
-      // Should be true initially.
+      enum Kind
+      {
+        simple,
+        data,
+        function
+      };
+
+      // Should be simple initially.
       //
-      IsSimpleInit (Boolean& r);
+      InitKind (Kind& r);
 
       virtual Void
       traverse (SemanticGraph::List&);
 
       virtual Void
       traverse (SemanticGraph::Complex&);
+
+      virtual Void
+      traverse (SemanticGraph::Fundamental::Base64Binary&);
+
+      virtual Void
+      traverse (SemanticGraph::Fundamental::HexBinary&);
 
       virtual Void
       traverse (SemanticGraph::Fundamental::NameTokens&);
@@ -153,7 +170,7 @@ namespace CXX
       traverse (SemanticGraph::Fundamental::Entities&);
 
     private:
-      Boolean& r_;
+      Kind& r_;
       Traversal::Inherits inherits_;
     };
 
@@ -199,6 +216,13 @@ namespace CXX
                       Context
     {
       InitValue (Context&);
+
+      Void
+      data (String const& data)
+      {
+        data_ = data;
+        dispatch_count_ = 0;
+      }
 
       Void
       dispatch (SemanticGraph::Node& type, String const& value);
@@ -318,6 +342,8 @@ namespace CXX
 
     private:
       String value_;
+      String data_;
+      Size dispatch_count_;
       MemberTypeName type_name_;
       LiteralValue literal_value_;
     };

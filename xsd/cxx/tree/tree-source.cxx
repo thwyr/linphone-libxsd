@@ -578,38 +578,68 @@ namespace CXX
 
               if (!lit)
               {
-                Boolean simple_init (true);
+                InitKind::Kind kind (InitKind::simple);
                 {
-                  IsSimpleInit test (simple_init);
+                  InitKind test (kind);
                   test.dispatch (t);
                 }
 
                 String const& member (edefault_value_member (m));
 
-                String init_func;
-                if (!simple_init)
+                String init_name;
+
+                switch (kind)
                 {
-                  init_func = escape (L"_xsd_" + scope_ + member + L"_init");
+                case InitKind::data:
+                  {
+                    init_name = escape (L"_xsd_" + scope_ + member + L"data");
+                    init_value_.data (init_name);
+                    init_value_.dispatch (t, m.value ());
+                    break;
+                  }
+                case InitKind::function:
+                  {
+                    init_name = escape (L"_xsd_" + scope_ + member + L"init");
 
-                  os << "static " << scope_ << "::" << etype (m) << endl
-                     << init_func << " ()"
-                     << "{"
-                     << scope_ << "::" << etype (m) << " r;"
-                     << endl;
+                    os << "static " << scope_ << "::" << etype (m) << endl
+                       << init_name << " ()"
+                       << "{"
+                       << scope_ << "::" << etype (m) << " r;"
+                       << endl;
 
-                  init_value_.dispatch (t, m.value ());
+                    init_value_.dispatch (t, m.value ());
 
-                  os << "return r;"
-                     << "};";
+                    os << "return r;"
+                       << "};";
+                    break;
+                  }
+                case InitKind::simple:
+                  break;
                 }
 
                 os << "const " << scope_ << "::" << etype (m) << " " <<
                   scope_ << "::" << member << " (" << endl;
 
-                if (simple_init)
-                  init_value_.dispatch (t, m.value ());
-                else
-                  os << init_func << " ()";
+                switch (kind)
+                {
+                case InitKind::data:
+                  {
+                    // Second dispatch.
+                    //
+                    init_value_.dispatch (t, m.value ());
+                    break;
+                  }
+                case InitKind::function:
+                  {
+                    os << init_name << " ()";
+                    break;
+                  }
+                case InitKind::simple:
+                  {
+                    init_value_.dispatch (t, m.value ());
+                    break;
+                  }
+                }
 
                 os << ");"
                    << endl;

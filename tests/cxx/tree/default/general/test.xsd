@@ -219,6 +219,12 @@
       <xs:attribute name="qname1" type="xs:QName" default="foo"/>
       <xs:attribute name="qname2" type="xs:QName" default="t:bar"/>
 
+      <xs:attribute name="base64_bin1" type="xs:base64Binary" default=""/>
+      <xs:attribute name="base64_bin2" type="xs:base64Binary" default="YmFzZTY0IGJpbmFyeQ=="/>
+
+      <xs:attribute name="hex_bin1" type="xs:hexBinary" default=""/>
+      <xs:attribute name="hex_bin2" type="xs:hexBinary" default="6865782052696E617279"/>
+
       <!-- fixed -->
 
       <xs:attribute name="fix1" type="xs:int" fixed="123"/>

@@ -5,6 +5,8 @@
 
 #include <cxx/tree/default-value.hxx>
 
+using std::hex;
+
 namespace CXX
 {
   namespace Tree
@@ -333,44 +335,56 @@ namespace CXX
     }
 
     //
-    // InitValue
+    // InitKind
     //
 
-    IsSimpleInit::
-    IsSimpleInit (Boolean& r)
+    InitKind::
+    InitKind (Kind& r)
         : r_ (r)
     {
       *this >> inherits_ >> *this;
     }
 
-    Void IsSimpleInit::
+    Void InitKind::
     traverse (SemanticGraph::List&)
     {
-      r_ = false;
+      r_ = function;
     }
 
-    Void IsSimpleInit::
+    Void InitKind::
     traverse (SemanticGraph::Complex& c)
     {
       inherits (c);
     }
 
-    Void IsSimpleInit::
+    Void InitKind::
+    traverse (SemanticGraph::Fundamental::Base64Binary&)
+    {
+      r_ = data;
+    }
+
+    Void InitKind::
+    traverse (SemanticGraph::Fundamental::HexBinary&)
+    {
+      r_ = data;
+    }
+
+    Void InitKind::
     traverse (SemanticGraph::Fundamental::NameTokens&)
     {
-      r_ = false;
+      r_ = function;
     }
 
-    Void IsSimpleInit::
+    Void InitKind::
     traverse (SemanticGraph::Fundamental::IdRefs&)
     {
-      r_ = false;
+      r_ = function;
     }
 
-    Void IsSimpleInit::
+    Void InitKind::
     traverse (SemanticGraph::Fundamental::Entities&)
     {
-      r_ = false;
+      r_ = function;
     }
 
     //
@@ -581,26 +595,263 @@ namespace CXX
 
     // Binary.
     //
-    Void InitValue::
-    traverse (SemanticGraph::Fundamental::Base64Binary&)
+    static unsigned char
+    base64_decode (unsigned char c)
     {
-      collapse (value_);
+      unsigned char r = 0xFF;
 
-      if (value_)
-        os << "#error base64Binary default values are not yet supported"
-           << endl;
+      if (c >= 'A' && c <= 'Z')
+        r = static_cast<unsigned char> (c - 'A');
+      else if (c >= 'a' && c <= 'z')
+        r = static_cast<unsigned char> (c - 'a' + 26);
+      else if (c >= '0' && c <= '9')
+        r = static_cast<unsigned char> (c - '0' + 52);
+      else if (c == '+')
+        r = 62;
+      else if (c == '/')
+        r = 63;
+
+      return r;
     }
 
     Void InitValue::
-    traverse (SemanticGraph::Fundamental::HexBinary&)
+    traverse (SemanticGraph::Fundamental::Base64Binary& t)
     {
       collapse (value_);
 
-      if (value_)
-        os << "#error hexBinary default values are not yet supported"
-           << endl;
+      if (dispatch_count_++ == 0)
+      {
+        if (value_)
+        {
+          os << "unsigned char " << data_ << "[] = {";
+
+          // Decode.
+          //
+          Size size (value_.size ());
+
+          // Remove all whitespaces.
+          //
+          {
+            Size j (0);
+            Boolean subs (false);
+
+            for (Size i (0); i < size; ++i)
+            {
+              WideChar c (value_[i]);
+
+              if (c == 0x20 || c == 0x0A || c == 0x0D || c == 0x09)
+                subs = true;
+              else
+              {
+                if (subs)
+                  subs = false;
+
+                value_[j++] = c;
+              }
+            }
+
+            size = j;
+            value_.resize (size, '\0');
+          }
+
+          // Our length should be a multiple of four.
+          //
+          Size quad_count (size / 4);
+
+          // Source and destination indexes.
+          //
+          Size si (0), di (0);
+
+          // Process all quads except the last one.
+          //
+          unsigned short v;
+          unsigned char b1, b2, b3, b4;
+
+          WideChar prev_fill (os.fill ('0'));
+
+          for (Size q (0); q < quad_count - 1; ++q)
+          {
+            b1 = base64_decode (value_[si++]);
+            b2 = base64_decode (value_[si++]);
+            b3 = base64_decode (value_[si++]);
+            b4 = base64_decode (value_[si++]);
+
+            if (q != 0)
+              os << ", ";
+
+            if (di % 9 == 0)
+              os << endl;
+
+            v = static_cast<unsigned char> ((b1 << 2) | (b2 >> 4));
+            os.width (2);
+            os << "0x" << hex << v;
+
+            v = static_cast<unsigned char> ((b2 << 4) | (b3 >> 2));
+            os.width (2);
+            os << ", 0x" << hex << v;
+
+            v = static_cast<unsigned char> ((b3 << 6) | b4);
+            os.width (2);
+            os << ", 0x" << hex << v;
+
+            di += 3;
+          }
+
+          // Process the last quad. The first two octets are always there.
+          //
+          b1 = base64_decode (value_[si++]);
+          b2 = base64_decode (value_[si++]);
+
+          WideChar e3 (value_[si++]), e4 (value_[si++]);
+
+          if (quad_count != 1)
+            os << ", ";
+
+          if (di % 9 == 0)
+            os << endl;
+
+          if (e4 == '=')
+          {
+            if (e3 == '=')
+            {
+              // Two pads. Last 4 bits in b2 should be zero.
+              //
+              v = static_cast<unsigned char> ((b1 << 2) | (b2 >> 4));
+              os << "0x" << hex << v;
+              di++;
+            }
+            else
+            {
+              // One pad. Last 2 bits in b3 should be zero.
+              //
+              b3 = base64_decode (e3);
+
+              v = static_cast<unsigned char> ((b1 << 2) | (b2 >> 4));
+              os.width (2);
+              os << "0x" << hex << v;
+
+              v = static_cast<unsigned char> ((b2 << 4) | (b3 >> 2));
+              os.width (2);
+              os << ", 0x" << hex << v;
+
+              di += 2;
+            }
+          }
+          else
+          {
+            // No pads.
+            //
+            b3 = base64_decode (e3);
+            b4 = base64_decode (e4);
+
+            v = static_cast<unsigned char> ((b1 << 2) | (b2 >> 4));
+            os.width (2);
+            os << "0x" << hex << v;
+
+            v = static_cast<unsigned char> ((b2 << 4) | (b3 >> 2));
+            os.width (2);
+            os << ", 0x" << hex << v;
+
+            v = static_cast<unsigned char> ((b3 << 6) | b4);
+            os.width (2);
+            os << ", 0x" << hex << v;
+
+            di += 3;
+          }
+
+          os.fill (prev_fill);
+
+          os << "};";
+        }
+      }
+      else
+      {
+        os << fq_name (t) << " (";
+
+        if (value_)
+          os << data_ << "," << endl
+             << "sizeof (" << data_ << ")," << endl
+             << "sizeof (" << data_ << ")," << endl
+             << "false";
+        else
+          os << "0";
+
+
+        os << ")";
+      }
     }
 
+    static unsigned char
+    hex_decode (unsigned char c)
+    {
+      unsigned char r = 0xFF;
+
+      if (c >= '0' && c <= '9')
+        r = static_cast<unsigned char> (c - '0');
+      else if (c >= 'A' && c <= 'F')
+        r = static_cast<unsigned char> (10 + (c - 'A'));
+      else if (c >= 'a' && c <= 'f')
+        r = static_cast<unsigned char> (10 + (c - 'a'));
+
+      return r;
+    }
+
+    Void InitValue::
+    traverse (SemanticGraph::Fundamental::HexBinary& t)
+    {
+      collapse (value_);
+
+      if (dispatch_count_++ == 0)
+      {
+        if (value_)
+        {
+          os << "unsigned char " << data_ << "[] = {";
+
+          // Decode.
+          //
+          Size n (value_.size () / 2);
+          WideChar prev_fill (os.fill ('0'));
+
+          for (Size i (0); i < n; ++i)
+          {
+            unsigned char h (hex_decode (value_[2 * i]));
+            unsigned char l (hex_decode (value_[2 * i + 1]));
+
+            if (h == 0xFF || l == 0xFF)
+              break;
+
+            if (i != 0)
+              os << ", ";
+
+            if (i % 9 == 0)
+              os << endl;
+
+            unsigned short v = static_cast<unsigned char> ((h << 4) | l);
+            os.width (2);
+            os << "0x" << hex << v;
+          }
+
+          os.fill (prev_fill);
+
+          os << "};";
+        }
+      }
+      else
+      {
+        os << fq_name (t) << " (";
+
+        if (value_)
+          os << data_ << "," << endl
+             << "sizeof (" << data_ << ")," << endl
+             << "sizeof (" << data_ << ")," << endl
+             << "false";
+        else
+          os << "0";
+
+
+        os << ")";
+      }
+    }
 
     // Date/time.
     //
