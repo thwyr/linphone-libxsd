@@ -847,7 +847,7 @@ namespace CXX
       Counts counts;
       {
         Counter counter;
-        counts = counter.count (ops, schema);
+        counts = counter.count (ops, schema, file_path);
 
         /*
         wcerr << "global type count: " << counts.global_types << endl;
@@ -1195,6 +1195,7 @@ namespace CXX
       {
         Context ctx (fwd,
                      schema,
+                     file_path,
                      ops,
                      counts,
                      generate_xml_schema,
@@ -1310,6 +1311,7 @@ namespace CXX
       {
         Context ctx (hxx,
                      schema,
+                     file_path,
                      ops,
                      counts,
                      generate_xml_schema,
@@ -1464,6 +1466,7 @@ namespace CXX
       {
         Context ctx (ixx,
                      schema,
+                     file_path,
                      ops,
                      counts,
                      generate_xml_schema,
@@ -1597,6 +1600,7 @@ namespace CXX
 
           Context ctx (os,
                        schema,
+                       file_path,
                        ops,
                        counts,
                        generate_xml_schema,

@@ -19,7 +19,9 @@ namespace CXX
       Counter (); // Dummy ctor, helps with long symbols on HP-UX.
 
       Counts
-      count (CLI::Options const& options, SemanticGraph::Schema&);
+      count (CLI::Options const&,
+             SemanticGraph::Schema&,
+             SemanticGraph::Path const&);
     };
   }
 }

@@ -114,6 +114,7 @@ namespace CXX
     public:
       Context (std::wostream& o,
                SemanticGraph::Schema& root,
+               SemanticGraph::Path const& path,
                CLI::Options const& ops,
                Counts const& counts_,
                Boolean generate_xml_schema,

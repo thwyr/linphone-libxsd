@@ -26,6 +26,7 @@ namespace CXX
       {
       public:
         ValidationContext (SemanticGraph::Schema& root,
+                           SemanticGraph::Path const& path,
                            CLI::Options const& options,
                            const WarningSet& disabled_warnings,
                            Counts const& counts,
@@ -33,6 +34,7 @@ namespace CXX
                            Boolean& valid_)
             : Context (std::wcerr,
                        root,
+                       path,
                        options,
                        counts,
                        generate_xml_schema,
@@ -528,13 +530,13 @@ namespace CXX
     Boolean Validator::
     validate (CLI::Options const& options,
               SemanticGraph::Schema& schema,
-              SemanticGraph::Path const&,
+              SemanticGraph::Path const& path,
               const WarningSet& disabled_warnings,
               Counts const& counts)
     {
       Boolean valid (true);
       ValidationContext ctx (
-        schema, options, disabled_warnings, counts, false, valid);
+        schema, path, options, disabled_warnings, counts, false, valid);
 
       //
       //

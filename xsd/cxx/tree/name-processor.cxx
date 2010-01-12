@@ -43,10 +43,11 @@ namespace CXX
                  Counts const& counts,
                  Boolean generate_xml_schema,
                  SemanticGraph::Schema& root,
-                 SemanticGraph::Path const& file,
+                 SemanticGraph::Path const& path,
                  StringLiteralMap const& map)
             : Tree::Context (std::wcerr,
                              root,
+                             path,
                              options,
                              counts,
                              generate_xml_schema,
@@ -54,8 +55,6 @@ namespace CXX
                              0,
                              0,
                              0),
-              schema_path_ (file),
-              schema_path (schema_path_),
               global_type_names (global_type_names_),
               global_element_names (global_element_names_),
               type_regex (type_regex_),
@@ -270,7 +269,6 @@ namespace CXX
       protected:
         Context (Context& c)
             : Tree::Context (c),
-              schema_path (c.schema_path),
               global_type_names (c.global_type_names),
               global_element_names (c.global_element_names),
               type_regex (c.type_regex),
@@ -518,8 +516,6 @@ namespace CXX
         }
 
       private:
-        SemanticGraph::Path const schema_path_;
-
         Cult::Containers::Map<String, NameSet> global_type_names_;
         Cult::Containers::Map<String, NameSet> global_element_names_;
 
@@ -538,8 +534,6 @@ namespace CXX
         RegexVector element_type_regex_;
 
       public:
-        SemanticGraph::Path const& schema_path;
-
         Cult::Containers::Map<String, NameSet>& global_type_names;
         Cult::Containers::Map<String, NameSet>& global_element_names;
 

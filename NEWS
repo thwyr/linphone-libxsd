@@ -23,6 +23,10 @@ Version 3.3.0
     component issuing the warning. F - compiler frontend, D - compiler
     driver, P - C++/Parser mapping, T - C++/Tree mapping.
 
+  * Strings used to match regular expression supplied with the
+    --namespace-regex and --anonymous-regex options now include the file 
+    component for the schema being compiled.
+
  C++/Tree
 
   * New option, --generate-element-type, triggers generation of types

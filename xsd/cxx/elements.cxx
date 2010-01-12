@@ -113,6 +113,7 @@ namespace CXX
   Context::
   Context (std::wostream& o,
            SemanticGraph::Schema& root,
+           SemanticGraph::Path const& path,
            StringLiteralMap const* string_literal_map_,
            NarrowString const& char_type__,
            NarrowString const& char_encoding__,
@@ -128,6 +129,7 @@ namespace CXX
            Containers::Vector<NarrowString> const& reserved_name)
       : os (o),
         schema_root (root),
+        schema_path (schema_path_),
         char_type (char_type_),
         char_encoding (char_encoding_),
         L (L_),
@@ -139,6 +141,7 @@ namespace CXX
         inst_exp (inst_exp_),
         inl (inl_),
         ns_mapping_cache (ns_mapping_cache_),
+        schema_path_ (path),
         xs_ns_ (0),
         char_type_ (char_type__),
         char_encoding_ (char_encoding__),
@@ -307,6 +310,8 @@ namespace CXX
         if (s.names_begin () != s.names_end ())
           path = u.path ();
       }
+      else
+        path = schema_path;
 
       String pair;
 

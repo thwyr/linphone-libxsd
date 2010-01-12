@@ -41,6 +41,7 @@ namespace CXX
     Context::
     Context (std::wostream& o,
              SemanticGraph::Schema& root,
+             SemanticGraph::Path const& path,
              CLI::Options const& ops,
              StringLiteralMap const* map,
              Regex const* he,
@@ -48,6 +49,7 @@ namespace CXX
              Regex const* hie)
         : CXX::Context (o,
                         root,
+                        path,
                         map,
                         ops.value<CLI::char_type> (),
                         ops.value<CLI::char_encoding> (),

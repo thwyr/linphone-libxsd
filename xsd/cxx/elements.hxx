@@ -148,6 +148,7 @@ namespace CXX
   public:
     Context (std::wostream& o,
              SemanticGraph::Schema& root,
+             SemanticGraph::Path const& path,
              StringLiteralMap const* custom_literals_map,
              NarrowString const& char_type__,
              NarrowString const& char_encoding__,
@@ -166,6 +167,7 @@ namespace CXX
     Context (Context& c)
         : os (c.os),
           schema_root (c.schema_root),
+          schema_path (c.schema_path),
           char_type (c.char_type),
           char_encoding (c.char_encoding),
           L (c.L),
@@ -193,6 +195,7 @@ namespace CXX
     Context (Context& c, std::wostream& o)
         : os (o),
           schema_root (c.schema_root),
+          schema_path (c.schema_path),
           char_type (c.char_type),
           char_encoding (c.char_encoding),
           L (c.L),
@@ -337,6 +340,7 @@ namespace CXX
     std::wostream& os;
 
     SemanticGraph::Schema& schema_root;
+    SemanticGraph::Path const& schema_path;
 
     String& char_type;
     String& char_encoding;
@@ -355,6 +359,8 @@ namespace CXX
     MappingCache& ns_mapping_cache;
 
   private:
+    SemanticGraph::Path const schema_path_;
+
     SemanticGraph::Namespace* xs_ns_;
 
     String char_type_;

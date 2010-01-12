@@ -715,7 +715,7 @@ namespace CXX
 
         String xns;
         {
-          Context ctx (std::wcerr, schema, ops, 0, 0, 0, 0);
+          Context ctx (std::wcerr, schema, file_path, ops, 0, 0, 0, 0);
           xns = ctx.xs_ns_name ();
         }
 
@@ -1160,6 +1160,7 @@ namespace CXX
       {
         Context ctx (hxx,
                      schema,
+                     file_path,
                      ops,
                      &string_literal_map,
                      &hxx_expr,
@@ -1253,6 +1254,7 @@ namespace CXX
       {
         Context ctx (ixx,
                      schema,
+                     file_path,
                      ops,
                      &string_literal_map,
                      &hxx_expr,
@@ -1315,6 +1317,7 @@ namespace CXX
       {
         Context ctx (cxx,
                      schema,
+                     file_path,
                      ops,
                      &string_literal_map,
                      &hxx_expr,
@@ -1385,6 +1388,7 @@ namespace CXX
       {
         Context ctx (hxx_impl,
                      schema,
+                     file_path,
                      ops,
                      &string_literal_map,
                      &hxx_expr,
@@ -1419,6 +1423,7 @@ namespace CXX
       {
         Context ctx (cxx_impl,
                      schema,
+                     file_path,
                      ops,
                      &string_literal_map,
                      &hxx_expr,
@@ -1441,6 +1446,7 @@ namespace CXX
       {
         Context ctx (cxx_driver,
                      schema,
+                     file_path,
                      ops,
                      &string_literal_map,
                      &hxx_expr,

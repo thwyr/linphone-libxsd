@@ -34,10 +34,11 @@ namespace CXX
       public:
         Context (CLI::Options const& ops,
                  SemanticGraph::Schema& root,
-                 SemanticGraph::Path const& file,
+                 SemanticGraph::Path const& path,
                  StringLiteralMap const* map)
             : CXX::Context (std::wcerr,
                             root,
+                            path,
                             map,
                             ops.value<CLI::char_type> (),
                             ops.value<CLI::char_encoding> (),
@@ -51,11 +52,8 @@ namespace CXX
                             ops.value<CLI::include_regex_trace> (),
                             ops.value<CLI::generate_inline> (),
                             ops.value<CLI::reserved_name> ()),
-              schema_path_ (file),
               skel_suffix_ (ops.value<CLI::skel_type_suffix> ()),
               impl_suffix_ (ops.value<CLI::impl_type_suffix> ()),
-              schema (root),
-              schema_path (schema_path_),
               impl (ops.value<CLI::generate_noop_impl> () ||
                     ops.value<CLI::generate_print_impl> () ||
                     ops.value<CLI::generate_test_driver> ()),
@@ -69,8 +67,6 @@ namespace CXX
       protected:
         Context (Context& c)
             : CXX::Context (c),
-              schema (c.schema),
-              schema_path (c.schema_path),
               impl (c.impl),
               skel_suffix (c.skel_suffix),
               impl_suffix (c.impl_suffix),
@@ -98,15 +94,12 @@ namespace CXX
         }
 
       private:
-        SemanticGraph::Path const schema_path_;
         String const skel_suffix_;
         String const impl_suffix_;
 
         Cult::Containers::Map<String, NameSet> global_type_names_;
 
       public:
-        SemanticGraph::Schema& schema;
-        SemanticGraph::Path const& schema_path;
         Boolean const impl;
         String const& skel_suffix;
         String const& impl_suffix;

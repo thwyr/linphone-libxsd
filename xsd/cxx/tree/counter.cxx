@@ -236,10 +236,12 @@ namespace CXX
     }
 
     Counts Counter::
-    count (CLI::Options const& options, SemanticGraph::Schema& tu)
+    count (CLI::Options const& options,
+           SemanticGraph::Schema& tu,
+           SemanticGraph::Path const& path)
     {
       Counts counts;
-      Context ctx (std::wcerr, tu, options, counts, false, 0, 0, 0, 0);
+      Context ctx (std::wcerr, tu, path, options, counts, false, 0, 0, 0, 0);
 
       Traversal::Schema schema;
       Traversal::Sources sources;
