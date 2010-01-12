@@ -5,6 +5,7 @@
 
 #if _XERCES_VERSION >= 30000
 #  include <xercesc/dom/DOMLSParser.hpp>
+#  include <xercesc/dom/DOMLSException.hpp>
 #else
 #  include <xercesc/dom/DOMBuilder.hpp>
 #endif
@@ -259,7 +260,15 @@ namespace xsd
           xercesc::Wrapper4InputSource wrap (&is, false);
 
 #if _XERCES_VERSION >= 30000
-          auto_ptr<DOMDocument> doc (parser->parse (&wrap));
+          auto_ptr<DOMDocument> doc;
+
+          try
+          {
+            doc.reset (parser->parse (&wrap));
+          }
+          catch (const xercesc::DOMLSException&)
+          {
+          }
 #else
           auto_ptr<DOMDocument> doc (parser->parse (wrap));
 #endif
@@ -454,8 +463,21 @@ namespace xsd
 
 #endif // _XERCES_VERSION >= 30000
 
+
+#if _XERCES_VERSION >= 30000
+          auto_ptr<DOMDocument> doc;
+
+          try
+          {
+            doc.reset (parser->parseURI (string (uri).c_str ()));
+          }
+          catch (const xercesc::DOMLSException&)
+          {
+          }
+#else
           auto_ptr<DOMDocument> doc (
             parser->parseURI (string (uri).c_str ()));
+#endif
 
           if (ehp.failed ())
             doc.reset ();
