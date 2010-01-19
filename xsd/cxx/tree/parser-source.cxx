@@ -295,18 +295,16 @@ namespace CXX
           //
 
           Boolean fund (false);
-
           {
             IsFundamentalType test (fund);
             test.dispatch (t);
           }
 
           // Check if we need to handle xsi:type and substitution groups.
-          // If this element's type is anonymous or mapped to a fundamental
-          // C++ type then we don't need to do anything.
+          // If this element's type is anonymous then we don't need to do
+          // anything.
           //
-          Boolean poly (!fund && polymorphic &&
-                        !t.context ().count ("anonymous"));
+          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           // const DOMDocument&
           //

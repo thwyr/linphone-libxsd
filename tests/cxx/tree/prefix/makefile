@@ -35,7 +35,7 @@ gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
 $(gen): xsd_options := --generate-serialization --generate-polymorphic \
---root-element root
+--polymorphic-type foo\\\#base --root-element root
 $(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep))

@@ -402,7 +402,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="xsd people.xsd"
-						CommandLine="xsd cxx-tree --generate-inline --generate-forward --generate-polymorphic --generate-intellisense --custom-type &quot;person=person_impl&lt;person_base&gt;/person_base&quot; --custom-type &quot;superman=superman_impl&lt;superman_base&gt;/superman_base&quot; --custom-type &quot;batman=batman_impl&lt;batman_base&gt;/batman_base&quot; --fwd-prologue &quot;#include \&quot;people-custom-fwd.hxx\&quot;&quot; --hxx-prologue &quot;#include \&quot;people-custom.hxx\&quot;&quot; people.xsd"
+						CommandLine="xsd cxx-tree --generate-inline --generate-forward --generate-polymorphic --polymorphic-type person --generate-intellisense --custom-type &quot;person=person_impl&lt;person_base&gt;/person_base&quot; --custom-type &quot;superman=superman_impl&lt;superman_base&gt;/superman_base&quot; --custom-type &quot;batman=batman_impl&lt;batman_base&gt;/batman_base&quot; --fwd-prologue &quot;#include \&quot;people-custom-fwd.hxx\&quot;&quot; --hxx-prologue &quot;#include \&quot;people-custom.hxx\&quot;&quot; people.xsd"
 						Outputs="people-fwd.hxx,people.hxx;people.ixx;people.cxx"
 					/>
 				</FileConfiguration>
@@ -412,7 +412,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="xsd people.xsd"
-						CommandLine="xsd cxx-tree --generate-inline --generate-forward --generate-polymorphic --generate-intellisense --custom-type &quot;person=person_impl&lt;person_base&gt;/person_base&quot; --custom-type &quot;superman=superman_impl&lt;superman_base&gt;/superman_base&quot; --custom-type &quot;batman=batman_impl&lt;batman_base&gt;/batman_base&quot; --fwd-prologue &quot;#include \&quot;people-custom-fwd.hxx\&quot;&quot; --hxx-prologue &quot;#include \&quot;people-custom.hxx\&quot;&quot; people.xsd"
+						CommandLine="xsd cxx-tree --generate-inline --generate-forward --generate-polymorphic --polymorphic-type person --generate-intellisense --custom-type &quot;person=person_impl&lt;person_base&gt;/person_base&quot; --custom-type &quot;superman=superman_impl&lt;superman_base&gt;/superman_base&quot; --custom-type &quot;batman=batman_impl&lt;batman_base&gt;/batman_base&quot; --fwd-prologue &quot;#include \&quot;people-custom-fwd.hxx\&quot;&quot; --hxx-prologue &quot;#include \&quot;people-custom.hxx\&quot;&quot; people.xsd"
 						Outputs="people-fwd.hxx,people.hxx;people.ixx;people.cxx"
 					/>
 				</FileConfiguration>
@@ -422,7 +422,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="xsd people.xsd"
-						CommandLine="xsd cxx-tree --generate-inline --generate-forward --generate-polymorphic --generate-intellisense --custom-type &quot;person=person_impl&lt;person_base&gt;/person_base&quot; --custom-type &quot;superman=superman_impl&lt;superman_base&gt;/superman_base&quot; --custom-type &quot;batman=batman_impl&lt;batman_base&gt;/batman_base&quot; --fwd-prologue &quot;#include \&quot;people-custom-fwd.hxx\&quot;&quot; --hxx-prologue &quot;#include \&quot;people-custom.hxx\&quot;&quot; people.xsd"
+						CommandLine="xsd cxx-tree --generate-inline --generate-forward --generate-polymorphic --polymorphic-type person --generate-intellisense --custom-type &quot;person=person_impl&lt;person_base&gt;/person_base&quot; --custom-type &quot;superman=superman_impl&lt;superman_base&gt;/superman_base&quot; --custom-type &quot;batman=batman_impl&lt;batman_base&gt;/batman_base&quot; --fwd-prologue &quot;#include \&quot;people-custom-fwd.hxx\&quot;&quot; --hxx-prologue &quot;#include \&quot;people-custom.hxx\&quot;&quot; people.xsd"
 						Outputs="people-fwd.hxx,people.hxx;people.ixx;people.cxx"
 					/>
 				</FileConfiguration>
@@ -432,7 +432,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="xsd people.xsd"
-						CommandLine="xsd cxx-tree --generate-inline --generate-forward --generate-polymorphic --generate-intellisense --custom-type &quot;person=person_impl&lt;person_base&gt;/person_base&quot; --custom-type &quot;superman=superman_impl&lt;superman_base&gt;/superman_base&quot; --custom-type &quot;batman=batman_impl&lt;batman_base&gt;/batman_base&quot; --fwd-prologue &quot;#include \&quot;people-custom-fwd.hxx\&quot;&quot; --hxx-prologue &quot;#include \&quot;people-custom.hxx\&quot;&quot; people.xsd"
+						CommandLine="xsd cxx-tree --generate-inline --generate-forward --generate-polymorphic --polymorphic-type person --generate-intellisense --custom-type &quot;person=person_impl&lt;person_base&gt;/person_base&quot; --custom-type &quot;superman=superman_impl&lt;superman_base&gt;/superman_base&quot; --custom-type &quot;batman=batman_impl&lt;batman_base&gt;/batman_base&quot; --fwd-prologue &quot;#include \&quot;people-custom-fwd.hxx\&quot;&quot; --hxx-prologue &quot;#include \&quot;people-custom.hxx\&quot;&quot; people.xsd"
 						Outputs="people-fwd.hxx,people.hxx;people.ixx;people.cxx"
 					/>
 				</FileConfiguration>

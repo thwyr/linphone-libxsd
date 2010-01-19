@@ -93,7 +93,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && !l.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (l) && !anonymous_p (l))
           {
             // Note that we are using the original type name.
             //
@@ -173,7 +173,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && !u.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (u) && !anonymous_p (u))
           {
             // Note that we are using the original type name.
             //
@@ -255,7 +255,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && !e.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (e) && !anonymous_p (e))
           {
             // Note that we are using the original type name.
             //
@@ -295,21 +295,13 @@ namespace CXX
           String type (scope + L"::" + etype (e));
 
           // Check if we need to handle xsi:type and substitution groups.
-          // If this element's type is anonymous or mapped to a fundamental
-          // C++ type then we don't need to do anything. Note that if the
-          // type is anonymous then it can't be derived from which makes it
-          // impossible to substitute or dynamically-type with xsi:type.
+          // If this element's type is anonymous then we don't need to do
+          // anything. Note that if the type is anonymous then it can't be
+          // derived from which makes it impossible to substitute or
+          // dynamically-type with xsi:type.
           //
           SemanticGraph::Type& t (e.type ());
-          Boolean poly (polymorphic && !t.context ().count ("anonymous"));
-
-          if (poly)
-          {
-            Boolean fund (false);
-            IsFundamentalType traverser (fund);
-            traverser.dispatch (t);
-            poly = !fund;
-          }
+          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           os << "// " << comment (e.name ()) << endl
              << "//" << endl;
@@ -815,7 +807,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && !c.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (c) && !anonymous_p (c))
           {
             // Note that we are using the original type name.
             //
@@ -958,18 +950,13 @@ namespace CXX
           // confused if the name is 'type'. (see tests/schema/anonymous)
           //
 
-          Boolean fund (false);
-          {
-            IsFundamentalType t (fund);
-            t.dispatch (type);
-          }
-
           // Check if we need to handle xsi:type and substitution groups.
-          // If this element's type is anonymous or mapped to a fundamental
-          // C++ type then we don't need to do anything.
+          // If this element's type is anonymous then we don't need to do
+          // anything.
           //
-          Boolean poly (!fund && polymorphic &&
-                        !type.context ().count ("anonymous"));
+          Boolean poly (polymorphic &&
+                        polymorphic_p (type) &&
+                        !anonymous_p (type));
 
           // To std::ostream.
           //

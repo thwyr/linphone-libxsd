@@ -85,6 +85,7 @@ namespace CXX
           generate_xml_schema (generate_xml_schema_),
           doxygen (doxygen_),
           polymorphic (ops.value<CLI::generate_polymorphic> ()),
+          polymorphic_all (ops.value<CLI::polymorphic_type_all> ()),
           fwd_expr (fe),
           hxx_expr (he),
           ixx_expr (ie),
@@ -322,6 +323,7 @@ namespace CXX
           generate_xml_schema (c.generate_xml_schema),
           doxygen (c.doxygen),
           polymorphic (c.polymorphic),
+          polymorphic_all (c.polymorphic_all),
           fwd_expr (c.fwd_expr),
           hxx_expr (c.hxx_expr),
           ixx_expr (c.ixx_expr),
@@ -361,6 +363,7 @@ namespace CXX
           generate_xml_schema (c.generate_xml_schema),
           doxygen (c.doxygen),
           polymorphic (c.polymorphic),
+          polymorphic_all (c.polymorphic_all),
           fwd_expr (c.fwd_expr),
           hxx_expr (c.hxx_expr),
           ixx_expr (c.ixx_expr),
@@ -595,6 +598,20 @@ namespace CXX
       }
     }
 
+    Boolean Context::
+    polymorphic_p (SemanticGraph::Type& t)
+    {
+      if (polymorphic_all)
+      {
+        Boolean fund (false);
+        IsFundamentalType test (fund);
+        test.dispatch (t);
+        return !fund;
+      }
+      else
+        return t.context ().get<Boolean> ("polymorphic");
+    }
+
     // GenerateDefautCtor
     //
     GenerateDefaultCtor::
@@ -710,15 +727,15 @@ namespace CXX
 
     // HasComplexNonOptArgs
     //
-    HasComplexNonFundNonOptArgs::
-    HasComplexNonFundNonOptArgs (Context& c,
-                                 Boolean base,
-                                 Boolean& complex,
-                                 Boolean& non_fund,
-                                 Boolean& clash)
+    HasComplexPolyNonOptArgs::
+    HasComplexPolyNonOptArgs (Context& c,
+                              Boolean base,
+                              Boolean& complex,
+                              Boolean& poly,
+                              Boolean& clash)
         : Context (c),
           complex_ (complex),
-          non_fund_ (non_fund),
+          poly_ (poly),
           clash_ (clash)
     {
       if (base)
@@ -727,7 +744,7 @@ namespace CXX
       *this >> names_ >> *this;
     }
 
-    Void HasComplexNonFundNonOptArgs::
+    Void HasComplexPolyNonOptArgs::
     traverse (SemanticGraph::Complex& c)
     {
       // No optimizations: need to check every arg for clashes.
@@ -736,28 +753,25 @@ namespace CXX
       names (c, names_);
     }
 
-    Void HasComplexNonFundNonOptArgs::
+    Void HasComplexPolyNonOptArgs::
     traverse (SemanticGraph::Element& e)
     {
       if (!skip (e) && min (e) == 1 && max (e) == 1)
       {
-        Boolean fund (false);
-        IsFundamentalType t (fund);
+        Boolean poly (polymorphic && polymorphic_p (e.type ()));
+
+        Boolean simple (true);
+        IsSimpleType t (simple);
         t.dispatch (e.type ());
 
-        if (!fund)
-        {
-          non_fund_ = true;
+        if (poly)
+          poly_ = true;
 
-          Boolean simple (true);
-          IsSimpleType t (simple);
-          t.dispatch (e.type ());
+        if (!simple)
+          complex_ = true;
 
-          if (!simple)
-            complex_ = true;
-          else
-            clash_ = false;
-        }
+        if (poly && simple)
+          clash_ = false;
       }
     }
 
@@ -811,12 +825,9 @@ namespace CXX
             auto_ptr = !simple;
             break;
           }
-        case arg_non_fund_auto_ptr:
+        case arg_poly_auto_ptr:
           {
-            Boolean fund (false);
-            IsFundamentalType t (fund);
-            t.dispatch (e.type ());
-            auto_ptr = !fund;
+            auto_ptr = polymorphic && polymorphic_p (e.type ());
             break;
           }
         case arg_type:
@@ -947,12 +958,9 @@ namespace CXX
             auto_ptr = !simple;
             break;
           }
-        case arg_non_fund_auto_ptr:
+        case arg_poly_auto_ptr:
           {
-            Boolean fund (false);
-            IsFundamentalType t (fund);
-            t.dispatch (e.type ());
-            auto_ptr = !fund;
+            auto_ptr = polymorphic && polymorphic_p (e.type ());
             break;
           }
         case arg_type:
@@ -1039,12 +1047,9 @@ namespace CXX
             auto_ptr = !simple;
             break;
           }
-        case arg_non_fund_auto_ptr:
+        case arg_poly_auto_ptr:
           {
-            Boolean fund (false);
-            IsFundamentalType t (fund);
-            t.dispatch (e.type ());
-            auto_ptr = !fund;
+            auto_ptr = polymorphic && polymorphic_p (e.type ());
             break;
           }
         case arg_type:

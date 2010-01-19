@@ -10,6 +10,7 @@
 #include <cxx/tree/counter.hxx>
 #include <cxx/tree/validator.hxx>
 #include <cxx/tree/name-processor.hxx>
+#include <cxx/tree/polymorphism-processor.hxx>
 
 #include <cxx/tree/tree-forward.hxx>
 #include <cxx/tree/tree-header.hxx>
@@ -119,6 +120,8 @@ namespace CXX
       extern Key char_encoding            = "char-encoding";
       extern Key output_dir               = "output-dir";
       extern Key generate_polymorphic     = "generate-polymorphic";
+      extern Key polymorphic_type         = "polymorphic-type";
+      extern Key polymorphic_type_all     = "polymorphic-type-all";
       extern Key generate_serialization   = "generate-serialization";
       extern Key generate_inline          = "generate-inline";
       extern Key generate_ostream         = "generate-ostream";
@@ -237,6 +240,16 @@ namespace CXX
     e << "--generate-polymorphic" << endl
       << " Generate polymorphism-aware code. Specify this\n"
       << " option if you use substitution groups or xsi:type."
+      << endl;
+
+    e << "--polymorphic-type <type>" << endl
+      << " Indicate that <type> is a root of a polymorphic\n"
+      << " type hierarchy."
+      << endl;
+
+    e << "--polymorphic-type-all" << endl
+      << " Indicate that all types should be treated as\n"
+      << " polymorphic."
       << endl;
 
     e << "--generate-serialization" << endl
@@ -875,6 +888,16 @@ namespace CXX
       {
         NameProcessor proc;
         if (!proc.process (ops, schema, file_path, string_literal_map))
+          throw Failed ();
+      }
+
+      // Process polymorphic types.
+      //
+      if (ops.value<CLI::generate_polymorphic> () &&
+          !ops.value<CLI::polymorphic_type_all> ())
+      {
+        PolymorphismProcessor proc;
+        if (!proc.process (ops, schema, file_path, disabled_warnings))
           throw Failed ();
       }
 

@@ -3470,6 +3470,63 @@ f (root&amp; r)
 }
   </pre>
 
+  <p>The mapping can often automatically determine which types are
+     polymorphic based on the substitution group declarations. However,
+     if your XML vocabulary is not using substitution groups or if
+     substitution groups are defined in a separate schema, then you will
+     need to use the <code>--polymorphic-type</code> option to specify
+     which types are polymorphic. When using this option you only need
+     to specify the root of a polymorphic type hierarchy and the mapping
+     will assume that all the derived types are also polymorphic.
+     Also note that you need to specify this option when compiling every
+     schema file that references the polymorphic type. Consider the following
+     two schemas as an example:</p>
+
+  <pre class="xml">
+&lt;!-- base.xsd -->
+&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  &lt;xs:complexType name="base">
+    &lt;xs:sequence>
+      &lt;xs:element name="b" type="xs:int"/>
+    &lt;/xs:sequence>
+  &lt;/xs:complexType>
+
+  &lt;!-- substitution group root -->
+  &lt;xs:element name="base" type="base"/>
+
+&lt;/xs:schema>
+  </pre>
+
+  <pre class="xml">
+&lt;!-- derived.xsd -->
+&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  &lt;include schemaLocation="base.xsd"/>
+
+  &lt;xs:complexType name="derived">
+    &lt;xs:complexContent>
+      &lt;xs:extension base="base">
+        &lt;xs:sequence>
+          &lt;xs:element name="d" type="xs:string"/>
+        &lt;/xs:sequence>
+      &lt;/xs:extension>
+    &lt;/xs:complexContent>
+  &lt;/xs:complexType>
+
+  &lt;xs:element name="derived" type="derived" substitutionGroup="base"/>
+
+&lt;/xs:schema>
+  </pre>
+
+  <p>In this example we need to specify "<code>--polymorphic-type base</code>"
+     when compiling both schemas because the substitution group is declared
+     in a schema other than the one defining type <code>base</code>.</p>
+
+  <p>You can also indicate that all types should be treated as polymorphic
+     with the <code>--polymorphic-type-all</code>. However, this may result
+     in slower generated code with a greater footprint.</p>
+
 
   <!-- Mapping for any and anyAttribute -->
 

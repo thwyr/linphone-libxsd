@@ -35,7 +35,8 @@ gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
 $(gen): xsd_options := --generate-default-ctor --generate-from-base-ctor \
---generate-doxygen --generate-polymorphic --generate-comparison
+--generate-doxygen --generate-polymorphic --polymorphic-type-all \
+--generate-comparison
 $(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep))

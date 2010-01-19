@@ -46,6 +46,16 @@ Version 3.3.0
     example and Section 2.9.2, "Element Map" in the C++/Tree Mapping
     User Manual.
 
+  * Prior to this version when the --generate-polymorphic option is 
+    specified the compiler treats all types as potentially polymorphic.
+    Now by default only type hierarchies used in substitution groups and 
+    those explicitly declared polymorphic with the new --polymorphic-type
+    option are treated as polymorphic. This results in smaller and faster
+    generated code. If you would like to continue using the old behavior,
+    you will need to specify --polymorphic-type-all. For more information
+    on this change see Section 2.11, "Mapping for xsi:type and Substitution
+    Groups" in the C++/Tree Mapping User Manual.
+
   * New option, --export-xml-schema, causes the compiler to export/import
     types in the XML Schema namespace using the export symbol provided
     with the --export-symbol option.

@@ -52,7 +52,7 @@ namespace CXX
 
           // Register with ostream map.
           //
-          if (polymorphic && !l.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (l) && !anonymous_p (l))
           {
             // Note that we are using the original type name.
             //
@@ -107,7 +107,7 @@ namespace CXX
 
           // Register with ostream map.
           //
-          if (polymorphic && !u.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (u) && !anonymous_p (u))
           {
             // Note that we are using the original type name.
             //
@@ -185,7 +185,7 @@ namespace CXX
 
           // Register with ostream map.
           //
-          if (polymorphic && !e.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (e) && !anonymous_p (e))
           {
             // Note that we are using the original type name.
             //
@@ -220,21 +220,13 @@ namespace CXX
           String const& aname (eaname (e));
 
           // Check if we need to handle xsi:type and substitution groups.
-          // If this element's type is anonymous or mapped to a fundamental
-          // C++ type then we don't need to do anything. Note that if the
-          // type is anonymous then it can't be derived from which makes it
-          // impossible to substitute or dynamically-type with xsi:type.
+          // If this element's type is anonymous then we don't need to do
+          // anything. Note that if the type is anonymous then it can't be
+          // derived from which makes it impossible to substitute or
+          // dynamically-type with xsi:type.
           //
           SemanticGraph::Type& t (e.type ());
-          Boolean poly (polymorphic && !t.context ().count ("anonymous"));
-
-          if (poly)
-          {
-            Boolean fund (false);
-            IsFundamentalType traverser (fund);
-            traverser.dispatch (t);
-            poly = !fund;
-          }
+          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           // aCC cannot handle an inline call to std_ostream_map_instance.
           //
@@ -388,7 +380,7 @@ namespace CXX
 
           // Register with ostream map.
           //
-          if (polymorphic && !c.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (c) && !anonymous_p (c))
           {
             // Note that we are using the original type name.
             //

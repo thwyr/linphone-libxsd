@@ -6,6 +6,7 @@ include $(root)/build/xsd/tree-rules.make
 
 override XSDFLAGS += --generate-inline --generate-forward \
 --generate-polymorphic \
+--polymorphic-type person \
 --custom-type "person=person_impl<person_base>/person_base" \
 --custom-type "superman=superman_impl<superman_base>/superman_base" \
 --custom-type "batman=batman_impl<batman_base>/batman_base" \

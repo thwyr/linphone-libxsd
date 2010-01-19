@@ -657,7 +657,25 @@
   <dl class="options">
     <dt><code><b>--generate-polymorphic</b></code></dt>
     <dd>Generate polymorphism-aware code. Specify this option if you use
-        substitution groups or <code><b>xsi:type</b></code>.</dd>
+        substitution groups or <code><b>xsi:type</b></code>. Use the
+        <code><b>--polymorphic-type</b></code> or
+        <code><b>--polymorphic-type-all</b></code> option to specify
+        which type hierarchies are polymorphic.</dd>
+
+    <dt><code><b>--polymorphic-type</b></code> <i>type</i></dt>
+    <dd>Indicate that <code><i>type</i></code> is a root of a polymorphic
+        type hierarchy. The compiler can often automatically determine
+        which types are polymorphic based on the substitution group
+        declarations. However, you may need to use this option if you are
+        not using substitution groups or if substitution groups are defined
+        in another schema. You need to specify this option when compiling
+        every schema file that references <code><i>type</i></code>. The
+        <code><i>type</i></code> argument is an XML Schema type name that
+        can be optionally qualified with a namespace in the
+        <code><i>namespace</i><b>#</b><i>name</i></code> form.</dd>
+
+    <dt><code><b>--polymorphic-type-all</b></code></dt>
+    <dd>Indicate that all types should be treated as polymorphic.</dd>
 
     <dt><code><b>--generate-serialization</b></code></dt>
     <dd>Generate serialization functions. Serialization functions

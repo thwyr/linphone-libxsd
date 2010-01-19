@@ -672,6 +672,9 @@ namespace CXX
       }
 
       return valid;
+
+      // T005 is used in polymorphism-processor.cxx.
+      //
     }
   }
 }

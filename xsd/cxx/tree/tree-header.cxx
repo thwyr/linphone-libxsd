@@ -2389,13 +2389,13 @@ namespace CXX
           }
 
           Boolean has_complex_non_op_args (false);
-          Boolean has_non_fund_non_op_args (false);
-          Boolean complex_non_fund_args_clash (true);
+          Boolean has_poly_non_op_args (false);
+          Boolean complex_poly_args_clash (true);
           {
-            HasComplexNonFundNonOptArgs t (*this, true,
-                                           has_complex_non_op_args,
-                                           has_non_fund_non_op_args,
-                                           complex_non_fund_args_clash);
+            HasComplexPolyNonOptArgs t (*this, true,
+                                        has_complex_non_op_args,
+                                        has_poly_non_op_args,
+                                        complex_poly_args_clash);
             t.traverse (c);
           }
 
@@ -2450,13 +2450,13 @@ namespace CXX
             if (generate)
             {
               Boolean has_complex_non_op_args (false);
-              Boolean has_non_fund_non_op_args (false);
-              Boolean complex_non_fund_args_clash (true);
+              Boolean has_poly_non_op_args (false);
+              Boolean complex_poly_args_clash (true);
               {
-                HasComplexNonFundNonOptArgs t (*this, false,
-                                               has_complex_non_op_args,
-                                               has_non_fund_non_op_args,
-                                               complex_non_fund_args_clash);
+                HasComplexPolyNonOptArgs t (*this, false,
+                                            has_complex_non_op_args,
+                                            has_poly_non_op_args,
+                                            complex_poly_args_clash);
                 t.traverse (c);
               }
 
@@ -2517,10 +2517,10 @@ namespace CXX
               }
 
               // If we are generating polymorphic code then we also need to
-              // provide auto_ptr version for every non-fundamental type.
+              // provide auto_ptr version for every polymorphic type.
               //
               if (polymorphic &&
-                  has_non_fund_non_op_args && !complex_non_fund_args_clash)
+                  has_poly_non_op_args && !complex_poly_args_clash)
               {
                 if (doxygen)
                 {
@@ -2542,7 +2542,7 @@ namespace CXX
                 os << "&";
                 {
                   FromBaseCtorArg args (
-                    *this, FromBaseCtorArg::arg_non_fund_auto_ptr, false);
+                    *this, FromBaseCtorArg::arg_poly_auto_ptr, false);
                   Traversal::Names args_names (args);
                   names (c, args_names);
                 }
@@ -2605,10 +2605,10 @@ namespace CXX
             }
 
             // If we are generating polymorphic code then we also need to
-            // provide auto_ptr version for every non-fundamental type.
+            // provide auto_ptr version for every polymorphic type.
             //
             if (polymorphic &&
-                has_non_fund_non_op_args && !complex_non_fund_args_clash)
+                has_poly_non_op_args && !complex_poly_args_clash)
             {
               if (doxygen)
               {
@@ -2626,7 +2626,7 @@ namespace CXX
               os << name << " (";
               {
                 CtorArgsWithoutBase ctor_args (
-                  *this, CtorArgsWithoutBase::arg_non_fund_auto_ptr, false, true);
+                  *this, CtorArgsWithoutBase::arg_poly_auto_ptr, false, true);
                 ctor_args.dispatch (c);
               }
               os << ");"
@@ -2763,10 +2763,9 @@ namespace CXX
           }
 
           // If we are generating polymorphic code then we also need to
-          // provide auto_ptr version for every non-fundamental type.
+          // provide auto_ptr version for every polymorphic type.
           //
-          if (polymorphic &&
-              has_non_fund_non_op_args && !complex_non_fund_args_clash)
+          if (polymorphic && has_poly_non_op_args && !complex_poly_args_clash)
           {
             if (doxygen)
             {
@@ -2786,7 +2785,7 @@ namespace CXX
             os << name << " (";
 
             {
-              CtorArgs ctor_args (*this, CtorArgs::arg_non_fund_auto_ptr);
+              CtorArgs ctor_args (*this, CtorArgs::arg_poly_auto_ptr);
               ctor_args.dispatch (c);
             }
 
@@ -3341,11 +3340,9 @@ namespace CXX
           // If the element value is a complex type (has elements,
           // attributes, or wildcards) then also generate the auto_ptr
           // version. If we are generating polymorphic code then we
-          // also need to provide auto_ptr version for simple, non-
-          // fundamental values.
+          // also need to provide auto_ptr version for simple types.
           //
-          //
-          if (!simple || (polymorphic && !fund))
+          if (!simple || (polymorphic && polymorphic_p (t)))
           {
             if (doxygen)
             {

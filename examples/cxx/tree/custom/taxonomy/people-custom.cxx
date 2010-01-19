@@ -21,13 +21,6 @@ namespace people
 
   template <typename base>
   person_impl<base>::
-  person_impl (std::auto_ptr<xml_schema::string>& name)
-      : base (name)
-  {
-  }
-
-  template <typename base>
-  person_impl<base>::
   person_impl (const xercesc::DOMElement& e,
                xml_schema::flags f,
                xml_schema::container* c)
@@ -68,13 +61,6 @@ namespace people
   template <typename base>
   superman_impl<base>::
   superman_impl (const xml_schema::string& name, bool can_fly)
-      : base (name, can_fly)
-  {
-  }
-
-  template <typename base>
-  superman_impl<base>::
-  superman_impl (std::auto_ptr<xml_schema::string>& name, bool can_fly)
       : base (name, can_fly)
   {
   }
@@ -126,15 +112,6 @@ namespace people
   template <typename base>
   batman_impl<base>::
   batman_impl (const xml_schema::string& name,
-               bool can_fly,
-               unsigned int wing_span)
-      : base (name, can_fly, wing_span)
-  {
-  }
-
-  template <typename base>
-  batman_impl<base>::
-  batman_impl (std::auto_ptr<xml_schema::string>& name,
                bool can_fly,
                unsigned int wing_span)
       : base (name, can_fly, wing_span)

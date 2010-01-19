@@ -158,6 +158,18 @@ namespace CXX
       Void
       write_annotation (SemanticGraph::Annotation&);
 
+      //
+      //
+    public:
+      Boolean
+      polymorphic_p (SemanticGraph::Type&);
+
+      Boolean
+      anonymous_p (SemanticGraph::Type const& t)
+      {
+        return t.context ().count ("anonymous");
+      }
+
       // Escaped names.
       //
     public:
@@ -400,6 +412,7 @@ namespace CXX
       Boolean& generate_xml_schema;
       Boolean& doxygen;
       Boolean polymorphic;
+      Boolean polymorphic_all;
 
       Regex const* fwd_expr;
       Regex const* hxx_expr;
@@ -1437,20 +1450,20 @@ namespace CXX
     };
 
     // Test whether the type has any non-optional element of complex
-    // (has attributes/elements) and non-fundamental types.
+    // (has attributes/elements) and polymorpjic types.
     //
-    struct HasComplexNonFundNonOptArgs: Traversal::Complex,
-                                        Traversal::Element,
-                                        Context
+    struct HasComplexPolyNonOptArgs: Traversal::Complex,
+                                     Traversal::Element,
+                                     Context
     {
-      // complex and non_fund should initially be false. clash
+      // complex and poly should initially be false. clash
       // should initially be true.
       //
-      HasComplexNonFundNonOptArgs (Context& c,
-                                   Boolean including_base,
-                                   Boolean& complex,
-                                   Boolean& non_fund,
-                                   Boolean& clash);
+      HasComplexPolyNonOptArgs (Context& c,
+                                Boolean including_base,
+                                Boolean& complex,
+                                Boolean& poly,
+                                Boolean& clash);
 
       virtual Void
       traverse (SemanticGraph::Complex&);
@@ -1460,7 +1473,7 @@ namespace CXX
 
     private:
       Boolean& complex_;
-      Boolean& non_fund_;
+      Boolean& poly_;
       Boolean& clash_;
 
       Traversal::Inherits inherits_;
@@ -1479,7 +1492,7 @@ namespace CXX
       {
         arg_type,
         arg_complex_auto_ptr,
-        arg_non_fund_auto_ptr
+        arg_poly_auto_ptr
       };
 
       FromBaseCtorArg (Context& c, ArgType, Boolean arg);
@@ -1513,7 +1526,7 @@ namespace CXX
       {
         arg_type,
         arg_complex_auto_ptr,
-        arg_non_fund_auto_ptr
+        arg_poly_auto_ptr
       };
 
       // The second version outputs the argument name and stores
@@ -1680,7 +1693,7 @@ namespace CXX
       {
         arg_type,
         arg_complex_auto_ptr,
-        arg_non_fund_auto_ptr
+        arg_poly_auto_ptr
       };
 
       CtorArgsWithoutBase (Context& c, ArgType, Boolean arg, Boolean first);

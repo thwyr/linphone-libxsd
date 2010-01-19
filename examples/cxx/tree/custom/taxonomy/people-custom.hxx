@@ -23,7 +23,6 @@ namespace people
   {
   public:
     person_impl (const xml_schema::string& name);
-    person_impl (std::auto_ptr<xml_schema::string>& name);
 
     person_impl (const xercesc::DOMElement&,
                  xml_schema::flags = 0,
@@ -50,7 +49,6 @@ namespace people
   {
   public:
     superman_impl (const xml_schema::string& name, bool can_fly);
-    superman_impl (std::auto_ptr<xml_schema::string>& name, bool can_fly);
 
     superman_impl (const xercesc::DOMElement&,
                    xml_schema::flags = 0,
@@ -77,10 +75,6 @@ namespace people
   {
   public:
     batman_impl (const xml_schema::string& name,
-                 bool can_fly,
-                 unsigned int wing_span);
-
-    batman_impl (std::auto_ptr<xml_schema::string>& name,
                  bool can_fly,
                  unsigned int wing_span);
 

@@ -105,7 +105,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && !l.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (l) && !anonymous_p (l))
           {
             // Note that we are using the original type name.
             //
@@ -212,7 +212,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && !u.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (u) && !anonymous_p (u))
           {
             // Note that we are using the original type name.
             //
@@ -504,7 +504,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && !e.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (e) && !anonymous_p (e))
           {
             // Note that we are using the original type name.
             //
@@ -672,14 +672,7 @@ namespace CXX
           String tr (etraits (e)); // traits type name
           String type (etype (e));
 
-          // Check if we need to handle xsi:type and substitution groups.
-          // If this element's type is anonymous or mapped to a fundamental
-          // C++ type then we don't need to do anything. Note that if the
-          // type is anonymous then it can't be derived from which makes it
-          // impossible to substitute or dynamically-type with xsi:type.
-          //
           SemanticGraph::Type& t (e.type ());
-
 
           Boolean fund (false);
           {
@@ -687,8 +680,13 @@ namespace CXX
             traverser.dispatch (t);
           }
 
-          Boolean poly (
-            !fund && polymorphic && !t.context ().count ("anonymous"));
+          // Check if we need to handle xsi:type and substitution groups.
+          // If this element's type is anonymous then we don't need to do
+          // anything. Note that if the type is anonymous then it can't be
+          // derived from which makes it impossible to substitute or
+          // dynamically-type with xsi:type.
+          //
+          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           os << "// " << comment (e.name ()) << endl
              << "//" << endl;
@@ -1802,21 +1800,13 @@ namespace CXX
           String const& aname (eaname (e));
 
           // Check if we need to handle xsi:type and substitution groups.
-          // If this element's type is anonymous or mapped to a fundamental
-          // C++ type then we don't need to do anything. Note that if the
-          // type is anonymous then it can't be derived from which makes it
-          // impossible to substitute or dynamically-type with xsi:type.
+          // If this element's type is anonymous then we don't need to do
+          // anything. Note that if the type is anonymous then it can't be
+          // derived from which makes it impossible to substitute or
+          // dynamically-type with xsi:type.
           //
           SemanticGraph::Type& t (e.type ());
-          Boolean poly (polymorphic && !t.context ().count ("anonymous"));
-
-          if (poly)
-          {
-            Boolean fund (false);
-            IsFundamentalType traverser (fund);
-            traverser.dispatch (t);
-            poly = !fund;
-          }
+          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           if (!poly)
           {
@@ -2221,13 +2211,13 @@ namespace CXX
           }
 
           Boolean has_complex_non_op_args (false);
-          Boolean has_non_fund_non_op_args (false);
-          Boolean complex_non_fund_args_clash (true);
+          Boolean has_poly_non_op_args (false);
+          Boolean complex_poly_args_clash (true);
           {
-            HasComplexNonFundNonOptArgs t (*this, true,
-                                           has_complex_non_op_args,
-                                           has_non_fund_non_op_args,
-                                           complex_non_fund_args_clash);
+            HasComplexPolyNonOptArgs t (*this, true,
+                                        has_complex_non_op_args,
+                                        has_poly_non_op_args,
+                                        complex_poly_args_clash);
             t.traverse (c);
           }
 
@@ -2277,13 +2267,13 @@ namespace CXX
             if (generate)
             {
               Boolean has_complex_non_op_args (false);
-              Boolean has_non_fund_non_op_args (false);
-              Boolean complex_non_fund_args_clash (true);
+              Boolean has_poly_non_op_args (false);
+              Boolean complex_poly_args_clash (true);
               {
-                HasComplexNonFundNonOptArgs t (*this, false,
-                                               has_complex_non_op_args,
-                                               has_non_fund_non_op_args,
-                                               complex_non_fund_args_clash);
+                HasComplexPolyNonOptArgs t (*this, false,
+                                            has_complex_non_op_args,
+                                            has_poly_non_op_args,
+                                            complex_poly_args_clash);
                 t.traverse (c);
               }
 
@@ -2352,11 +2342,10 @@ namespace CXX
               }
 
               // If we are generating polymorphic code then we also need to
-              // provide auto_ptr version for every non-fundamental type.
+              // provide auto_ptr version for every polymorphic type.
               //
-              if (has_non_fund_non_op_args &&
-                  !complex_non_fund_args_clash &&
-                  polymorphic)
+              if (polymorphic &&
+                  has_poly_non_op_args && !complex_poly_args_clash)
               {
                 os << name << "::" << endl
                    << name << " (const ";
@@ -2364,7 +2353,7 @@ namespace CXX
                 os << "& " << base_arg;
                 {
                   FromBaseCtorArg args (
-                    *this, FromBaseCtorArg::arg_non_fund_auto_ptr, true);
+                    *this, FromBaseCtorArg::arg_poly_auto_ptr, true);
                   Traversal::Names args_names (args);
                   names (c, args_names);
                 }
@@ -2465,17 +2454,16 @@ namespace CXX
             }
 
             // If we are generating polymorphic code then we also need to
-            // provide auto_ptr version for every non-fundamental type.
+            // provide auto_ptr version for every polymorphic type.
             //
-            if (has_non_fund_non_op_args &&
-                !complex_non_fund_args_clash &&
-                polymorphic)
+            if (polymorphic &&
+                has_poly_non_op_args && !complex_poly_args_clash)
             {
               os << name << "::" << endl
                  << name << " (";
               {
                 CtorArgsWithoutBase ctor_args (
-                  *this, CtorArgsWithoutBase::arg_non_fund_auto_ptr, true, true);
+                  *this, CtorArgsWithoutBase::arg_poly_auto_ptr, true, true);
                 ctor_args.dispatch (c);
               }
               os << ")" << endl
@@ -2716,11 +2704,10 @@ namespace CXX
           }
 
           // If we are generating polymorphic code then we also need to
-          // provide auto_ptr version for every non-fundamental type.
+          // provide auto_ptr version for every polymorphic type.
           //
-          if (has_non_fund_non_op_args &&
-              !complex_non_fund_args_clash &&
-              polymorphic)
+          if (polymorphic &&
+              has_poly_non_op_args && !complex_poly_args_clash)
           {
             os << name << "::" << endl
                << name << " (";
@@ -2729,7 +2716,7 @@ namespace CXX
 
             {
               CtorArgs ctor_args (
-                *this, CtorArgs::arg_non_fund_auto_ptr, base_arg);
+                *this, CtorArgs::arg_poly_auto_ptr, base_arg);
               ctor_args.dispatch (c);
             }
 
@@ -3001,7 +2988,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && !c.context ().count ("anonymous"))
+          if (polymorphic && polymorphic_p (c) && !anonymous_p (c))
           {
             // Note that we are using the original type name.
             //
@@ -3201,7 +3188,7 @@ namespace CXX
 
             // c-tor (auto_ptr<value>)
             //
-            if (!simple || (polymorphic && !fund))
+            if (!simple || (polymorphic && polymorphic_p (t)))
             {
               os << name << "::" << endl
                  << name << " (::std::auto_ptr< " << type << " > p)" << endl

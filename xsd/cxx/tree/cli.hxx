@@ -27,6 +27,8 @@ namespace CXX
       extern Key char_encoding;
       extern Key output_dir;
       extern Key generate_polymorphic;
+      extern Key polymorphic_type;
+      extern Key polymorphic_type_all;
       extern Key generate_serialization;
       extern Key generate_inline;
       extern Key generate_ostream;
@@ -123,6 +125,8 @@ namespace CXX
         char_encoding,            NarrowString,
         output_dir,               NarrowString,
         generate_polymorphic,     Boolean,
+        polymorphic_type,         Cult::Containers::Vector<NarrowString>,
+        polymorphic_type_all,     Boolean,
         generate_serialization,   Boolean,
         generate_inline,          Boolean,
         generate_ostream,         Boolean,
