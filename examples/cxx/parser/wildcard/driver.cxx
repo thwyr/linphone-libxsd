@@ -31,7 +31,7 @@ public:
   virtual void
   post_binary ()
   {
-    std::auto_ptr<xml_schema::buffer> buf (post_base64_binary ());
+    auto_ptr<xml_schema::buffer> buf (post_base64_binary ());
 
     cerr << "size:   " << buf->size () << endl
          << endl;
@@ -181,7 +181,7 @@ public:
   }
 
 private:
-  std::size_t depth_;
+  size_t depth_;
   xml_schema::parser_base* cur_;
 
   // Parsers for the unsigned int, string and binary types.

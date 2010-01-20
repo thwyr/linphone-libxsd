@@ -42,7 +42,7 @@ parsing (const char* file, unsigned long iter, bool validate)
     ifs.exceptions (ios_base::failbit);
     ifs.open (file, ios::in | ios::ate);
 
-    std::size_t size (ifs.tellg ());
+    size_t size (ifs.tellg ());
     ifs.seekg (0, ios::beg);
 
     char* buf = new char[size];

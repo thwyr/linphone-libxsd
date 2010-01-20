@@ -58,7 +58,7 @@ serialization (const char* file, unsigned long iter)
                  xml_schema::flags::dont_pretty_print |
                  xml_schema::flags::no_xml_declaration);
 
-    std::size_t size (ft.getLen ());
+    size_t size (ft.getLen ());
     cerr << "  document size:  " << size << " bytes" << endl
          << "  iterations:     " << iter << endl;
 
