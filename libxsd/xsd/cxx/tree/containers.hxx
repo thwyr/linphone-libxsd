@@ -1338,7 +1338,8 @@ namespace xsd
         {
           ptr& p (*position.base ());
           p->_container (0);
-          r.reset (static_cast<T*> (p.release ()));
+          std::auto_ptr<T> tmp (static_cast<T*> (p.release ()));
+          r = tmp;
 
           if (erase)
             return iterator (v_.erase (position.base ()));

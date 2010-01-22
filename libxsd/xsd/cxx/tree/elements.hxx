@@ -440,7 +440,8 @@ namespace xsd
               if (m.get () != 0)
               {
                 m->insert (map_->begin (), map_->end ());
-                map_.reset ();
+                std::auto_ptr<map> tmp (0);
+                map_ = tmp;
               }
               else
                 m = map_;
@@ -465,7 +466,10 @@ namespace xsd
                   // Part of our subtree.
                   //
                   if (m.get () == 0)
-                    m.reset (new map);
+                  {
+                    std::auto_ptr<map> tmp (new map);
+                    m = tmp;
+                  }
 
                   m->insert (*i);
                   sr->map_->erase (i++);
@@ -631,7 +635,10 @@ namespace xsd
           assert (container_ == 0);
 
           if (map_.get () == 0)
-            map_.reset (new map);
+          {
+            std::auto_ptr<map> tmp (new map);
+            map_ = tmp;
+          }
 
           if (!map_->insert (
                 std::pair<const identity*, type*> (&id, t)).second)
