@@ -1332,13 +1332,38 @@ namespace CXX
                      << " * @param p A new value to use." << endl
                      << " *" << endl
                      << " * This function will try to use the passed value " <<
-                    "directly instead" << endl
-                     << " * of making a copy." << endl
+                    "directly" << endl
+                     << " * instead of making a copy." << endl
                      << " */" << endl;
                 }
 
                 os << "void" << endl
                    << mname << " (::std::auto_ptr< " << type << " > p);"
+                   << endl;
+
+              }
+
+              // auto_ptr<type>
+              // detach_name ();
+              //
+              if (detach && !fund)
+              {
+                if (doxygen)
+                {
+                  os << "/**" << endl
+                     << " * @brief Detach the " << kind << " value from " <<
+                    "the object model." << endl
+                     << " *" << endl
+                     << " * @return A pointer to the " << kind << " value." << endl
+                     << " *" << endl
+                     << " * Note that this function leaves the required " <<
+                    kind << " in " << endl
+                     << " * the original object model uninitialized." << endl
+                     << " */" << endl;
+                }
+
+                os << "::std::auto_ptr< " << type << " >" << endl
+                   << edname (m) << " ();"
                    << endl;
               }
             }
@@ -3244,6 +3269,29 @@ namespace CXX
 
             os << "void" << endl
                << mname << " (::std::auto_ptr< " << type << " > p);"
+               << endl;
+          }
+
+          // auto_ptr<type>
+          // detach_name ();
+          //
+          if (detach && !fund)
+          {
+            if (doxygen)
+            {
+              os << "/**" << endl
+                 << " * @brief Detach the element value from " <<
+                "the object." << endl
+                 << " *" << endl
+                 << " * @return A pointer to the element value." << endl
+                 << " *" << endl
+                 << " * Note that this function leaves the element " <<
+                "object uninitialized." << endl
+                 << " */" << endl;
+            }
+
+            os << "::std::auto_ptr< " << type << " >" << endl
+               << edname (e) << " ();"
                << endl;
           }
 

@@ -13,6 +13,7 @@ compilation   \
 complex       \
 containment   \
 default       \
+detach        \
 encoding      \
 enumeration   \
 float         \

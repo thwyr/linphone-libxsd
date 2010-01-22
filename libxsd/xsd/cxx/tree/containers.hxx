@@ -6,7 +6,6 @@
 #ifndef XSD_CXX_TREE_CONTAINERS_HXX
 #define XSD_CXX_TREE_CONTAINERS_HXX
 
-
 #include <cstddef>   // std::ptrdiff_t
 #include <string>
 #include <vector>
@@ -167,6 +166,15 @@ namespace xsd
         present () const
         {
           return x_ != 0;
+        }
+
+        std::auto_ptr<T>
+        detach ()
+        {
+          T* x (x_);
+          x->_container (0);
+          x_ = 0;
+          return std::auto_ptr<T> (x);
         }
 
       protected:
@@ -331,6 +339,15 @@ namespace xsd
 
         void
         reset ();
+
+        std::auto_ptr<T>
+        detach ()
+        {
+          T* x (x_);
+          x->_container (0);
+          x_ = 0;
+          return std::auto_ptr<T> (x);
+        }
 
       private:
         void
@@ -809,9 +826,23 @@ namespace xsd
           }
 
           type*
+          operator-> () const
+          {
+            return x_;
+          }
+
+          type*
           get () const
           {
             return x_;
+          }
+
+          type*
+          release ()
+          {
+            type* x (x_);
+            x_ = 0;
+            return x;
           }
 
         private:
@@ -1247,6 +1278,19 @@ namespace xsd
           v_.pop_back ();
         }
 
+        std::auto_ptr<T>
+        detach_back (bool pop = true)
+        {
+          ptr& p (v_.back ());
+          p->_container (0);
+          T* x (static_cast<T*> (p.release ()));
+
+          if (pop)
+            v_.pop_back ();
+
+          return std::auto_ptr<T> (x);
+        }
+
         iterator
         insert (iterator position, const T& x)
         {
@@ -1287,6 +1331,19 @@ namespace xsd
         erase (iterator begin, iterator end)
         {
           return iterator (v_.erase (begin.base (), end.base ()));
+        }
+
+        iterator
+        detach (iterator position, std::auto_ptr<T>& r, bool erase = true)
+        {
+          ptr& p (*position.base ());
+          p->_container (0);
+          r.reset (static_cast<T*> (p.release ()));
+
+          if (erase)
+            return iterator (v_.erase (position.base ()));
+          else
+            return ++position;
         }
 
         // Note that the container object of the two sequences being

@@ -31,9 +31,6 @@ namespace CXX
       //
       typedef Cult::Containers::Set<String> NameSet;
 
-
-
-
       class Context: public Tree::Context
       {
       public:
@@ -57,6 +54,7 @@ namespace CXX
                              0),
               global_type_names (global_type_names_),
               global_element_names (global_element_names_),
+              detach (options.value<CLI::generate_detach> ()),
               type_regex (type_regex_),
               accessor_regex (accessor_regex_),
               one_accessor_regex (one_accessor_regex_),
@@ -189,6 +187,7 @@ namespace CXX
               //
               modifier_regex.push_back ("/([^,]+),([^,]+)/set\\u$1\\u$2/");
               modifier_regex.push_back ("/([^,]+)/set\\u$1/");
+              modifier_regex.push_back ("/detach,([^,]+)/detach\\u$1/");
             }
 
             compile_regex (options.value<CLI::modifier_regex> (),
@@ -271,6 +270,7 @@ namespace CXX
             : Tree::Context (c),
               global_type_names (c.global_type_names),
               global_element_names (c.global_element_names),
+              detach (c.detach),
               type_regex (c.type_regex),
               accessor_regex (c.accessor_regex),
               one_accessor_regex (c.one_accessor_regex),
@@ -537,6 +537,8 @@ namespace CXX
         Cult::Containers::Map<String, NameSet>& global_type_names;
         Cult::Containers::Map<String, NameSet>& global_element_names;
 
+        Boolean detach;
+
         RegexVector& type_regex;
         RegexVector& accessor_regex;
         RegexVector& one_accessor_regex;
@@ -670,8 +672,8 @@ namespace CXX
           Boolean def_attr (m.default_ () &&
                             m.is_a<SemanticGraph::Attribute> ());
 
-          // Accessors/modifiers. Note that we postpone inserting the
-          // names into the name_set to avoid over-escaping.
+          // Accessors/modifiers. Note that we postpone inserting
+          // the names into the name_set to avoid over-escaping.
           //
           String an, mn;
 
@@ -741,6 +743,19 @@ namespace CXX
           if (mn != b && mn != an)
             name_set_.insert (mn);
 
+          // Detach.
+          //
+          if (detach && max == 1 && (min == 1 || def_attr))
+          {
+            String dn (find_name (
+                         escape (process_regex (L"detach," + s,
+                                                one_modifier_regex,
+                                                modifier_regex,
+                                                L"one modifier")),
+                         name_set_));
+
+            m.context ().set ("dname", dn);
+          }
 
           // Types.
           //
@@ -1281,21 +1296,21 @@ namespace CXX
                   escape (process_regex (L"value,traits", type_regex, L"type")),
                   set));
 
-              String an = Context::find_name (
+              String an (Context::find_name (
                 escape (process_regex ("value",
                                        one_accessor_regex,
                                        accessor_regex,
                                        L"one accessor")),
                 set,
-                false);
+                false));
 
-              String mn = Context::find_name (
+              String mn (Context::find_name (
                 escape (process_regex ("value",
                                        one_modifier_regex,
                                        modifier_regex,
                                        L"one modifier")),
                 set,
-                false);
+                false));
 
               ec.set ("aname", an);
               ec.set ("mname", mn);
@@ -1304,6 +1319,20 @@ namespace CXX
 
               if (an != mn)
                 set.insert (mn);
+
+              // Detach.
+              //
+              if (detach)
+              {
+                String dn (Context::find_name (
+                             escape (process_regex (L"detach,value",
+                                                    one_modifier_regex,
+                                                    modifier_regex,
+                                                    L"one modifier")),
+                             set));
+
+                ec.set ("dname", dn);
+              }
 
               // Assign name() and namespace_() names.
               //

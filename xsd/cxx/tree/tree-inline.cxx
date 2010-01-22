@@ -593,6 +593,18 @@ namespace CXX
                    << "{"
                    << "this->" << member << ".set (x);"
                    << "}";
+
+              // auto_ptr<type>
+              // detach_name ();
+              //
+              if (detach && !fund)
+                os << inl
+                   << "::std::auto_ptr< " << q_type << " > " <<
+                  scope_ << "::" << endl
+                   << edname (m) << " ()"
+                   << "{"
+                   << "return this->" << member << ".detach ();"
+                   << "}";
             }
           }
 
@@ -979,6 +991,18 @@ namespace CXX
                << "return this->" << member << ".set (p);"
                << "}";
           }
+
+          // auto_ptr<type>
+          // detach_name ();
+          //
+          if (detach && !fund)
+            os << inl
+               << "::std::auto_ptr< " << name << "::" << type << " > " <<
+              name << "::" << endl
+               << edname (e) << " ()"
+               << "{"
+               << "return this->" << member << ".detach ();"
+               << "}";
         }
       };
     }

@@ -800,6 +800,13 @@ not initialized and accessing them results in undefined behavior.
 Generate constructors that expect an instance of a base type followed by all
 required members.
 
+.IP "\fB\--generate-detach\fR"
+Generate detach functions for required elements and attributes (detach
+functions for optional and sequence cardinalities are provided by the
+respective containers). These functions, for example, allow you to move
+sub-trees in the object model either within the same tree or between
+different trees.
+
 .IP "\fB\--generate-wildcard\fR"
 Generate accessors and modifiers as well as parsing and serialization code
 for XML Schema wildcards

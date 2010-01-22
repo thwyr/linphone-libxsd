@@ -36,6 +36,7 @@ namespace CXX
       extern Key generate_comparison;
       extern Key generate_default_ctor;
       extern Key generate_from_base_ctor;
+      extern Key generate_detach;
       extern Key generate_wildcard;
       extern Key generate_insertion;
       extern Key generate_extraction;
@@ -134,6 +135,7 @@ namespace CXX
         generate_comparison,      Boolean,
         generate_default_ctor,    Boolean,
         generate_from_base_ctor,  Boolean,
+        generate_detach,          Boolean,
         generate_wildcard,        Boolean,
         generate_insertion,       Cult::Containers::Vector<NarrowString>,
         generate_extraction,      Cult::Containers::Vector<NarrowString>,

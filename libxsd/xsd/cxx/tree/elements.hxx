@@ -419,30 +419,64 @@ namespace xsd
         virtual void
         _container (container* c)
         {
-          assert (container_ == 0);
+          container* dr (0);
 
           if (c != 0)
           {
-            if (map_.get () != 0)
+            dr = c->_root ();
+
+            if (dr == 0)
+              dr = c;
+          }
+
+          std::auto_ptr<map>& m (dr ? dr->map_ : map_);
+
+          if (container_ == 0)
+          {
+            if (c != 0 && map_.get () != 0)
             {
-              // Propagate our IDs to the new root.
+              // Transfer our IDs to the new root.
               //
-              container* r (c->_root ());
-
-              if (r == 0)
-                r = c;
-
-              if (r->map_.get () != 0)
+              if (m.get () != 0)
               {
-                r->map_->insert (map_->begin (), map_->end ());
+                m->insert (map_->begin (), map_->end ());
                 map_.reset ();
               }
               else
-                r->map_ = map_;
+                m = map_;
             }
-
-            container_ = c;
           }
+          else
+          {
+            container* sr (_root ());
+
+            if (sr->map_.get () != 0)
+            {
+              // Transfer IDs that belong to this subtree.
+              //
+              for (map::iterator i (sr->map_->begin ()), e (sr->map_->end ());
+                   i != e;)
+              {
+                type* x (i->second);
+                for (; x != this && x != sr; x = x->_container ()) ;
+
+                if (x != sr)
+                {
+                  // Part of our subtree.
+                  //
+                  if (m.get () == 0)
+                    m.reset (new map);
+
+                  m->insert (*i);
+                  sr->map_->erase (i++);
+                }
+                else
+                  ++i;
+              }
+            }
+          }
+
+          container_ = c;
         }
 
         /**

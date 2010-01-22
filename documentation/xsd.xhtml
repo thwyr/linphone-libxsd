@@ -711,6 +711,13 @@
     <dd>Generate constructors that expect an instance of a base type
         followed by all required members.</dd>
 
+    <dt><code><b>--generate-detach</b></code></dt>
+    <dd>Generate detach functions for required elements and attributes
+        (detach functions for optional and sequence cardinalities are
+        provided by the respective containers). These functions, for
+        example, allow you to move sub-trees in the object model either
+        within the same tree or between different trees.</dd>
+
     <dt><code><b>--generate-wildcard</b></code></dt>
     <dd>Generate accessors and modifiers as well as parsing and serialization
         code for XML Schema wildcards (<code><b>any</b></code> and

@@ -213,6 +213,14 @@ namespace CXX
         return a.context ().get<String> ("mname");
       }
 
+      // Detach name.
+      //
+      static String const&
+      edname (SemanticGraph::Member const& m)
+      {
+        return m.context ().get<String> ("dname");
+      }
+
       //
       //
       static String const&
@@ -413,6 +421,7 @@ namespace CXX
       Boolean& doxygen;
       Boolean polymorphic;
       Boolean polymorphic_all;
+      Boolean detach;
 
       Regex const* fwd_expr;
       Regex const* hxx_expr;

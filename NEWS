@@ -56,6 +56,15 @@ Version 3.3.0
     on this change see Section 2.11, "Mapping for xsi:type and Substitution
     Groups" in the C++/Tree Mapping User Manual.
 
+  * New option, --generate-detach, triggers generation of detach functions
+    for required elements and attributes. For optional and sequence 
+    cardinalities the detach functions are now provided by the respective 
+    containers even without this option. These functions, for example, 
+    allow one to move sub-trees in the object model either within the 
+    same tree or between different trees without copying. For more 
+    information refer to Section 2.8 "Mapping for Local Elements and 
+    Attributes" in the C++/Tree Mapping User Manual.
+
   * New option, --export-xml-schema, causes the compiler to export/import
     types in the XML Schema namespace using the export symbol provided
     with the --export-symbol option.
