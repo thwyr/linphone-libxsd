@@ -1,4 +1,4 @@
-// file      : tests/cxx/tree/test-template/driver.cxx
+// file      : tests/cxx/tree/containment/driver.cxx
 // author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : Copyright (c) 2006-2010 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
@@ -7,6 +7,7 @@
 //
 
 #include <memory> // std::auto_ptr
+#include <cassert>
 
 #include "test.hxx"
 
