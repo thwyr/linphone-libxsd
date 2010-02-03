@@ -71,6 +71,14 @@ main (int argc, char* argv[])
       return 1;
     }
 
+    // Lock the grammar pool. This is necessary if we plan to use the
+    // same grammar pool in multiple threads (this way we can reuse the
+    // same grammar in multiple parsers). Locking the pool disallows any
+    // modifications to the pool, such as an attempt by one of the threads
+    // to cache additional schemas.
+    //
+    gp->lockPool ();
+
     // Get an implementation of the Load-Store (LS) interface.
     //
     const XMLCh ls_id [] = {chLatin_L, chLatin_S, chNull};
