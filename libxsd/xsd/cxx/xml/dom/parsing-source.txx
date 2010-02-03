@@ -199,6 +199,16 @@ namespace xsd
               const_cast<void*> (v));
           }
 
+          // If external schema location was specified, disable loading
+          // schemas via the schema location attributes in the document.
+          //
+#if _XERCES_VERSION >= 30100
+          if (!prop.schema_location ().empty () ||
+              !prop.no_namespace_schema_location ().empty ())
+          {
+            conf->setParameter (XMLUni::fgXercesLoadSchema, false);
+          }
+#endif
           // Set error handler.
           //
           bits::error_handler_proxy<C> ehp (eh);
@@ -405,6 +415,16 @@ namespace xsd
               const_cast<void*> (v));
           }
 
+          // If external schema location was specified, disable loading
+          // schemas via the schema location attributes in the document.
+          //
+#if _XERCES_VERSION >= 30100
+          if (!prop.schema_location ().empty () ||
+              !prop.no_namespace_schema_location ().empty ())
+          {
+            conf->setParameter (XMLUni::fgXercesLoadSchema, false);
+          }
+#endif
           // Set error handler.
           //
           bits::error_handler_proxy<C> ehp (eh);
