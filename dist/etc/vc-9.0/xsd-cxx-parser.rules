@@ -80,6 +80,34 @@
 					</Values>
 				</EnumProperty>
 				<EnumProperty
+					Name="CharEncoding"
+					DisplayName="Char Encoding"
+					PropertyPageName="Code Generation"
+					Description="Character encoding to be used bu the generated code."
+					>
+					<Values>
+						<EnumValue
+							Value="0"
+							DisplayName="UTF-8 (char)/UTF-16 (wchar_t)"
+						/>
+						<EnumValue
+							Value="1"
+							Switch="--char-encoding iso8859-1"
+							DisplayName="ISO-8859-1"
+						/>
+						<EnumValue
+							Value="2"
+							Switch="--char-encoding lcp"
+							DisplayName="Xerces-C++ local code page"
+						/>
+						<EnumValue
+							Value="3"
+							Switch="--char-encoding custom"
+							DisplayName="Custom encoding"
+						/>
+					</Values>
+				</EnumProperty>
+				<EnumProperty
 					Name="XMLParser"
 					DisplayName="Underlying XML Parser"
 					PropertyPageName="Code Generation"
