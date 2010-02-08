@@ -204,13 +204,13 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::AnyType& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::AnySimpleType& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         // Boolean.
@@ -218,7 +218,7 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::Boolean& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         // Integral types.
@@ -226,79 +226,79 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::Byte& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::UnsignedByte& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Short& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::UnsignedShort& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Int& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::UnsignedInt& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Long& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::UnsignedLong& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Integer& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::NonPositiveInteger& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::NonNegativeInteger& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::PositiveInteger& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::NegativeInteger& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         // Floats.
@@ -306,19 +306,19 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::Float& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Double& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Decimal& t)
         {
-          check (t, false);
+          check (t, true);
         }
 
         // Strings.
@@ -326,49 +326,49 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::String& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::NormalizedString& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Token& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::NameToken& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::NameTokens& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Name& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::NCName& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Language& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
 
@@ -377,7 +377,7 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::QName& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
 
@@ -386,19 +386,19 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::Id& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::IdRef& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::IdRefs& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         // URI.
@@ -406,7 +406,7 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::AnyURI& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         // Binary.
@@ -414,13 +414,13 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::Base64Binary& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::HexBinary& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
 
@@ -429,55 +429,55 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::Date& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::DateTime& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Duration& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Day& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Month& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::MonthDay& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Year& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::YearMonth& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Time& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         // Entity.
@@ -485,13 +485,13 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Fundamental::Entity& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
         virtual Void
         traverse (SemanticGraph::Fundamental::Entities& t)
         {
-          check (t, true);
+          check (t, false);
         }
 
       private:
