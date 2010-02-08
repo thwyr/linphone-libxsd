@@ -982,9 +982,15 @@ namespace xsd
         /**
          * @brief Default constructor.
          */
-        simple_type ()
-        {
-        }
+        simple_type ();
+
+        /**
+         * @brief Create an instance from a string.
+         *
+         * @param s A string to initialize the instance with.
+         */
+        template <typename C>
+        simple_type (const C* s);
 
       public:
         /**
@@ -1478,6 +1484,7 @@ namespace xsd
   }
 }
 
+#include <xsd/cxx/tree/elements.ixx>
 #include <xsd/cxx/tree/elements.txx>
 
 #endif  // XSD_CXX_TREE_ELEMENTS_HXX

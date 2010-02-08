@@ -463,8 +463,9 @@ namespace CXX
     // anySimpleType.
     //
     Void InitValue::
-    traverse (SemanticGraph::AnySimpleType&)
+    traverse (SemanticGraph::AnySimpleType& t)
     {
+      os << fq_name (t) << " (" << strlit (value_) << ")";
     }
 
     // Strings.
