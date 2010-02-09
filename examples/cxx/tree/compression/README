@@ -1,5 +1,5 @@
-This example shows how to compress XML documents during serialization 
-and decompress them during parsing. The example uses the compression 
+This example shows how to compress an XML document during serialization 
+and decompress it during parsing. The example uses the compression 
 functionality provided by the zlib library[1] which needs to be installed
 in order to build and run this example. It should also be fairly straight-
 forward to modify the code in this example to use other compression 
