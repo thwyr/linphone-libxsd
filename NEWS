@@ -3,21 +3,22 @@ Version 3.3.0
   * New option, --char-encoding, allows to specify the character encoding
     that should be used in the generated code. Valid values for the 'char'
     character type are 'utf8' (default), 'iso8859-1' (new), 'lcp' (Xerces-C++
-    local code page), and 'custom' (allows to support custom encodings). Note
-    that if you use a non-default character encoding and include some libxsd
-    headers (e.g., xsd/cxx/xml/string.hxx) directly, then you will need to
-    fist include the correct xsd/cxx/xml/char-<enc>.hxx header, where <enc>
-    is iso8859-1, lcp, etc. This mechanism replaces the XSD_USE_LCP macro.
+    local code page), and 'custom' (provides support for custom encodings). 
+    Note that if you use a non-default character encoding and include some 
+    libxsd headers (e.g., xsd/cxx/xml/string.hxx) directly, then you will 
+    need to fist include the correct xsd/cxx/xml/char-<enc>.hxx header, 
+    where <enc> is iso8859-1, lcp, etc. This mechanism replaces the 
+    XSD_USE_LCP macro.
 
     For the wchar_t character type the only valid value for this option is 
     'auto' and the encoding is automatically selected between UTF-16 and 
     UTF-32, depending on the wchar_t type size.
 
-  * When the XSD compiler is built with Xerces-C++ 3.1.0 or later, enable 
-    handling of multiple imports for the same namespace. Before all 
-    subsequent imports for a namespace were ignored which caused errors
+  * When the XSD compiler is built with Xerces-C++ 3.1.0 or later, the
+    handling  of multiple imports for the same namespace is enabled. Before,
+    all subsequent imports for a namespace were ignored which caused errors
     in some schemas. Note that if your application has XML Schema validation
-    enabled then you will also need to build it with Xerces-C++ 3.1.0 or
+    enabled, then you will also need to build it with Xerces-C++ 3.1.0 or
     later to take advantage of this feature.
 
   * Automatic mapping for the urn-style XML namespaces. The last component
@@ -27,46 +28,46 @@ Version 3.3.0
     component issuing the warning. F - compiler frontend, D - compiler
     driver, P - C++/Parser mapping, T - C++/Tree mapping.
 
-  * Strings used to match regular expression supplied with the
+  * Strings used to match regular expressions supplied with the
     --namespace-regex and --anonymous-regex options now include the file 
     component for the schema being compiled.
 
  C++/Tree
 
-  * New option, --generate-element-type, triggers generation of types
+  * New option, --generate-element-type, triggers the generation of types
     instead of parsing/serialization functions for root elements. This
     is primarily useful to distinguish object models with the same root
-    type but with different root elements. For more information refer
+    type but with different root elements. For more information, refer
     to the messaging example and Section 2.9.1, "Element Types" in the
-    C++/Tree Mapping User Manual. To support customization of the 
+    C++/Tree Mapping User Manual. To support the customization of the 
     element type naming the --element-type-regex option has been added.
     See the NAMING CONVENTION section in the compiler command line manual
     (man pages) for details.
 
-  * New option, --generate-element-map, triggers generation of a root
+  * New option, --generate-element-map, triggers the generation of a root
     element map. The element map allows uniform parsing and serialization
     of multiple root elements. This option can only be used together with
-    --generate-element-type. For more information refer to the messaging
+    --generate-element-type. For more information, refer to the messaging
     example and Section 2.9.2, "Element Map" in the C++/Tree Mapping
     User Manual.
 
-  * Prior to this version when the --generate-polymorphic option is 
+  * Prior to this version, if the --generate-polymorphic option is 
     specified the compiler treats all types as potentially polymorphic.
     Now by default only type hierarchies used in substitution groups and 
     those explicitly declared polymorphic with the new --polymorphic-type
     option are treated as polymorphic. This results in smaller and faster
     generated code. If you would like to continue using the old behavior,
-    you will need to specify --polymorphic-type-all. For more information
+    you will need to specify --polymorphic-type-all. For more information,
     on this change see Section 2.11, "Mapping for xsi:type and Substitution
     Groups" in the C++/Tree Mapping User Manual.
 
-  * New option, --generate-detach, triggers generation of detach functions
-    for required elements and attributes. For optional and sequence 
-    cardinalities the detach functions are now provided by the respective 
-    containers even without this option. These functions, for example, 
-    allow one to move sub-trees in the object model either within the 
-    same tree or between different trees without copying. For more 
-    information refer to Section 2.8 "Mapping for Local Elements and 
+  * New option, --generate-detach, triggers the generation of detach 
+    functions for required elements and attributes. For optional and 
+    sequence cardinalities the detach functions are now provided by the 
+    respective containers even without this option. These functions, for 
+    example, allow one to move sub-trees in the object model either within
+    the same tree or between different trees without copying. For more 
+    information, refer to Section 2.8 "Mapping for Local Elements and 
     Attributes" in the C++/Tree Mapping User Manual.
 
   * New option, --export-xml-schema, causes the compiler to export/import
@@ -83,7 +84,7 @@ Version 3.3.0
   * New example, custom/mixed, shows how to use type customization to parse 
     and serialize mixed content.
 
-  * The streaming example has been extended to shows how to perform stream-
+  * The streaming example has been extended to show how to perform stream-
     oriented, partially in-memory XML processing using the C++/Tree mapping.
     With the partially in-memory parsing and serialization only a part of
     the object model is in memory at any given time. With this approach one
@@ -92,9 +93,9 @@ Version 3.3.0
 
   * New default/fixed value initialization code. Now the default/fixed values
     are parsed by the XSD compiler at compile time instead of the standard
-    parsing code at runtime. This will allow compiling schemas that use the
-    default/fixed values without support for XML parsing (--suppress-parsing
-    option).
+    parsing code at runtime. This will allow the compilation of schemas that 
+    use the default/fixed values without support for XML parsing 
+    (--suppress-parsing option).
 
   * Empty XML Schema enumeration values are now mapped to the 'empty' C++ 
     enumerator name instead of 'cxx'.
