@@ -77,6 +77,9 @@ Version 3.3.0
     the schema grammar into an application and then use it to parse and 
     validate XML documents.
 
+  * New example, compression, shows how to compress an XML document during 
+    serialization and decompress it during parsing using the zlib library.
+
   * New example, custom/mixed, shows how to use type customization to parse 
     and serialize mixed content.
 
