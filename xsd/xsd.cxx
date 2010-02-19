@@ -1207,9 +1207,6 @@ translate (WideString const& file,
            WideString const& name,
            WideString const& xpath)
 {
-  if (regex_.empty ())
-    return name;
-
   WideString s (file + L' ' + ns + L' ' + xpath);
 
   if (trace_)
