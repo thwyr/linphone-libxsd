@@ -27,7 +27,7 @@ Version 3.3.0
   * New option, --schema-file-regex, in combination with the existing
     --type-file-regex, can be used to place the generated files into 
     subdirectories or to resolve file name conflicts in the file-per-
-    type mode (--file-per-type). 
+    type mode (--file-per-type).
 
   * Warning id's have changed to start with a letter identifying the
     component issuing the warning. F - compiler frontend, D - compiler
