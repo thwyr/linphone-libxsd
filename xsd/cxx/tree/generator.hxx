@@ -37,6 +37,7 @@ namespace CXX
       generate (CLI::Options const& options,
                 XSDFrontend::SemanticGraph::Schema&,
                 XSDFrontend::SemanticGraph::Path const& file,
+                Boolean file_per_type,
                 StringLiteralMap const&,
                 const WarningSet& disabled_warnings,
                 FileList& file_list,

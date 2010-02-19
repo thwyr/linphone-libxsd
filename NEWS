@@ -24,6 +24,11 @@ Version 3.3.0
   * Automatic mapping for the urn-style XML namespaces. The last component
     in the urn name is used to derive the C++ namespace name.
 
+  * New option, --schema-file-regex, in combination with the existing
+    --type-file-regex, can be used to place the generated files into 
+    subdirectories or to resolve file name conflicts in the file-per-
+    type mode (--file-per-type). 
+
   * Warning id's have changed to start with a letter identifying the
     component issuing the warning. F - compiler frontend, D - compiler
     driver, P - C++/Parser mapping, T - C++/Tree mapping.
