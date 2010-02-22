@@ -116,8 +116,8 @@ namespace CXX
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_type_factory_init (" << endl
-                 << L << strlit (l.name ()) << "," << endl
-                 << L << strlit (xml_ns_name (l)) << ");"
+                 << strlit (l.name ()) << "," << endl
+                 << strlit (xml_ns_name (l)) << ");"
                  << endl;
 
             if (options.value<CLI::generate_comparison> ())
@@ -223,8 +223,8 @@ namespace CXX
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_type_factory_init (" << endl
-                 << L << strlit (u.name ()) << "," << endl
-                 << L << strlit (xml_ns_name (u)) << ");"
+                 << strlit (u.name ()) << "," << endl
+                 << strlit (xml_ns_name (u)) << ");"
                  << endl;
 
             if (options.value<CLI::generate_comparison> ())
@@ -251,7 +251,7 @@ namespace CXX
         virtual Void
         traverse (Type& e)
         {
-          os << L << strlit (e.name ());
+          os << strlit (e.name ());
         }
       };
 
@@ -515,8 +515,8 @@ namespace CXX
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_type_factory_init (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << L << strlit (xml_ns_name (e)) << ");"
+                 << strlit (e.name ()) << "," << endl
+                 << strlit (xml_ns_name (e)) << ");"
                  << endl;
 
             if (options.value<CLI::generate_comparison> ())
@@ -703,12 +703,10 @@ namespace CXX
                << endl
                << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "tfm.create (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << (
-                 e.qualified ()
-                 ? strlit (e.namespace_ ().name ())
-                 : String ("\"\"")) <<
-              "," << endl
+               << strlit (e.name ()) << "," << endl
+               << (e.qualified ()
+                   ? strlit (e.namespace_ ().name ())
+                   : L + String ("\"\"")) << "," << endl
                << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl
                << (e.global () ? "true" : "false") << ", " <<
               (e.qualified () ? "true" : "false") << ", " <<
@@ -721,14 +719,13 @@ namespace CXX
           {
             if (e.qualified () && e.namespace_ ().name ())
             {
-              os << "if (n.name () == " << L << strlit (e.name ()) << " && " <<
-                "n.namespace_ () == " << L <<
-                strlit (e.namespace_ ().name ()) << ")"
+              os << "if (n.name () == " << strlit (e.name ()) << " && " <<
+                "n.namespace_ () == " << strlit (e.namespace_ ().name ()) << ")"
                  << "{";
             }
             else
             {
-              os << "if (n.name () == " << L << strlit (e.name ()) << " && " <<
+              os << "if (n.name () == " << strlit (e.name ()) << " && " <<
                 "n.namespace_ ().empty ())"
                  << "{";
             }
@@ -880,10 +877,10 @@ namespace CXX
                << "{"
                << "throw ::xsd::cxx::tree::expected_element< " <<
               char_type << " > (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << (e.qualified ()
-                        ? strlit (e.namespace_ ().name ())
-                        : String ("\"\"")) << ");"
+               << strlit (e.name ()) << "," << endl
+               << (e.qualified ()
+                   ? strlit (e.namespace_ ().name ())
+                   : L + String ("\"\"")) << ");"
                << "}";
           }
         }
@@ -927,7 +924,7 @@ namespace CXX
                 // the consensus.
                 //
                 os << "(!n.namespace_ ().empty () && " <<
-                  "n.namespace_ () != " << L << strlit (ns) << ")";
+                  "n.namespace_ () != " << strlit (ns) << ")";
               }
               else
                 os << "!n.namespace_ ().empty ()";
@@ -938,11 +935,11 @@ namespace CXX
             }
             else if (*i == L"##targetNamespace")
             {
-              os << "n.namespace_ () == " << L << strlit (ns);
+              os << "n.namespace_ () == " << strlit (ns);
             }
             else
             {
-              os << "n.namespace_ () == " << L << strlit (*i);
+              os << "n.namespace_ () == " << strlit (*i);
             }
 
             if (++i != e)
@@ -1045,7 +1042,7 @@ namespace CXX
                << "throw ::xsd::cxx::tree::expected_element< " <<
               char_type << " > (" << endl
                << L << "\"*\"," << endl
-               << L << strlit (*a.namespace_begin ()) << ");"
+               << strlit (*a.namespace_begin ()) << ");"
                << "}";
           }
         }
@@ -1067,14 +1064,13 @@ namespace CXX
 
           if (a.qualified () && a.namespace_ ().name ())
           {
-            os << "if (n.name () == " << L << strlit (a.name ()) << " && " <<
-              "n.namespace_ () == " << L <<
-              strlit (a.namespace_ ().name ()) << ")"
+            os << "if (n.name () == " << strlit (a.name ()) << " && " <<
+              "n.namespace_ () == " << strlit (a.namespace_ ().name ()) << ")"
                << "{";
           }
           else
           {
-            os << "if (n.name () == " << L << strlit (a.name ()) << " && " <<
+            os << "if (n.name () == " << strlit (a.name ()) << " && " <<
               "n.namespace_ ().empty ())"
                << "{";
           }
@@ -1152,7 +1148,7 @@ namespace CXX
                 // the consensus.
                 //
                 os << "(!n.namespace_ ().empty () &&" << endl
-                   << "n.namespace_ () != " << L << strlit (ns) << " &&" <<endl
+                   << "n.namespace_ () != " << strlit (ns) << " &&" <<endl
                    << "n.namespace_ () != " <<
                   "::xsd::cxx::xml::bits::xmlns_namespace< " << char_type <<
                   " > () &&" << endl
@@ -1175,11 +1171,11 @@ namespace CXX
             }
             else if (*i == L"##targetNamespace")
             {
-              os << "n.namespace_ () == " << L << strlit (ns);
+              os << "n.namespace_ () == " << strlit (ns);
             }
             else
             {
-              os << "n.namespace_ () == " << L << strlit (*i);
+              os << "n.namespace_ () == " << strlit (*i);
             }
 
             if (++i != e)
@@ -1224,10 +1220,10 @@ namespace CXX
             else
               os << "throw ::xsd::cxx::tree::expected_attribute< " <<
                 char_type << " > (" << endl
-                 << L << strlit (a.name ()) << "," << endl
-                 << L <<(a.qualified ()
-                         ? strlit (a.namespace_ ().name ())
-                         : String ("\"\"")) << ");";
+                 << strlit (a.name ()) << "," << endl
+                 << (a.qualified ()
+                     ? strlit (a.namespace_ ().name ())
+                     : L + String ("\"\"")) << ");";
 
             os << "}";
           }
@@ -2999,8 +2995,8 @@ namespace CXX
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_type_factory_init (" << endl
-                 << L << strlit (c.name ()) << "," << endl
-                 << L << strlit (xml_ns_name (c)) << ");"
+                 << strlit (c.name ()) << "," << endl
+                 << strlit (xml_ns_name (c)) << ");"
                  << endl;
 
             if (options.value<CLI::generate_comparison> ())
@@ -3276,11 +3272,10 @@ namespace CXX
                << "}";
 
             os << "const " << string_type << " " << name << "::" << endl
-               << name_member << " (" << L << strlit (e.name ()) << ");"
+               << name_member << " (" << strlit (e.name ()) << ");"
                << endl
                << "const " << string_type << " " << name << "::" << endl
-               << ns_member << " (" << L <<
-              strlit (e.namespace_ ().name ()) << ");"
+               << ns_member << " (" << strlit (e.namespace_ ().name ()) << ");"
                << endl;
 
             // d-tor
@@ -3318,10 +3313,10 @@ namespace CXX
 
             os << " >" << endl
                << "_xsd_" << name << "_element_factory_init (" << endl
-               << L << strlit (r.name ()) << "," << endl
-               << L << strlit (r.namespace_ ().name ()) << "," << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (e.namespace_ ().name ()) << ");"
+               << strlit (r.name ()) << "," << endl
+               << strlit (r.namespace_ ().name ()) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (e.namespace_ ().name ()) << ");"
                << endl
                << endl;
           }

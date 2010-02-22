@@ -87,7 +87,7 @@ namespace CXX
       {
         if (default_type (t, "bool"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -101,7 +101,7 @@ namespace CXX
       {
         if (default_type (t, "signed char"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") <<
             " << static_cast<short> (" << arg_ << ") << std::endl;";
         }
         else
@@ -113,7 +113,7 @@ namespace CXX
       {
         if (default_type (t, "unsigned char"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") <<
             " << static_cast<unsigned short> (" << arg_ << ") << std::endl;";
         }
         else
@@ -125,7 +125,7 @@ namespace CXX
       {
         if (default_type (t, "short"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -137,7 +137,7 @@ namespace CXX
       {
         if (default_type (t, "unsigned short"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -149,7 +149,7 @@ namespace CXX
       {
         if (default_type (t, "int"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -161,7 +161,7 @@ namespace CXX
       {
         if (default_type (t, "unsigned int"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -173,7 +173,7 @@ namespace CXX
       {
         if (default_type (t, "long long"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -185,7 +185,7 @@ namespace CXX
       {
         if (default_type (t, "unsigned long long"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -197,7 +197,7 @@ namespace CXX
       {
         if (default_type (t, "long long"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -209,7 +209,7 @@ namespace CXX
       {
         if (default_type (t, "long long"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -221,7 +221,7 @@ namespace CXX
       {
         if (default_type (t, "long long"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -233,7 +233,7 @@ namespace CXX
       {
         if (default_type (t, "unsigned long long"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -245,7 +245,7 @@ namespace CXX
       {
         if (default_type (t, "unsigned long long"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -259,7 +259,7 @@ namespace CXX
       {
         if (default_type (t, "float"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -271,7 +271,7 @@ namespace CXX
       {
         if (default_type (t, "double"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -283,7 +283,7 @@ namespace CXX
       {
         if (default_type (t, "double"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -375,7 +375,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::qname"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << ";"
+          os << cout_inst << " << " << strlit (tag_ + L": ") << ";"
              << endl
              << "if (" << arg_ << ".prefix ().empty ())" << endl
              << cout_inst << " << " << arg_ << ".name ();"
@@ -410,7 +410,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::date"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << endl
+          os << cout_inst << " << " << strlit (tag_ + L": ") << endl
              << " << " << arg_ << ".year () << '-'" << endl
              << " << " << arg_ << ".month () << '-'" << endl
              << " << " << arg_ << ".day ();";
@@ -426,7 +426,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::date_time"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << endl
+          os << cout_inst << " << " << strlit (tag_ + L": ") << endl
              << " << " << arg_ << ".year () << '-'" << endl
              << " << " << arg_ << ".month () << '-'" << endl
              << " << " << arg_ << ".day () << 'T'" << endl
@@ -445,7 +445,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::duration"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << ";"
+          os << cout_inst << " << " << strlit (tag_ + L": ") << ";"
              << endl
              << "if (" << arg_ << ".negative ())" << endl
              << cout_inst << " << '-';"
@@ -468,7 +468,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::gday"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ---") <<
+          os << cout_inst << " << " << strlit (tag_ + L": ---") <<
             " << " << arg_ << ".day ();";
 
           gen_time_zone ();
@@ -482,7 +482,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::gmonth"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": --") <<
+          os << cout_inst << " << " << strlit (tag_ + L": --") <<
             " << " << arg_ << ".month ();";
 
           gen_time_zone ();
@@ -496,7 +496,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::gmonth_day"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": --") << endl
+          os << cout_inst << " << " << strlit (tag_ + L": --") << endl
              << " << " << arg_ << ".month () << '-'" << endl
              << " << " << arg_ << ".day ();";
 
@@ -511,7 +511,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::gyear"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << ".year ();";
 
           gen_time_zone ();
@@ -525,7 +525,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::gyear_month"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << endl
+          os << cout_inst << " << " << strlit (tag_ + L": ") << endl
              << " << " << arg_ << ".year () << '-'" << endl
              << " << " << arg_ << ".month ();";
 
@@ -540,7 +540,7 @@ namespace CXX
       {
         if (default_type (t, xs_ns_name () + L"::time"))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << endl
+          os << cout_inst << " << " << strlit (tag_ + L": ") << endl
              << " << " << arg_ << ".hours () << ':'" << endl
              << " << " << arg_ << ".minutes () << ':'" << endl
              << " << " << arg_ << ".seconds ();";
@@ -571,7 +571,7 @@ namespace CXX
         if ((char_type == L"char" && default_type (t, "::std::string")) ||
             (char_type == L"wchar_t" && default_type (t, "::std::wstring")))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << " <<
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << " <<
             arg_ << " << std::endl;";
         }
         else
@@ -585,7 +585,7 @@ namespace CXX
 
         if (default_type (t, type))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << ";"
+          os << cout_inst << " << " << strlit (tag_ + L": ") << ";"
              << endl;
 
           os << "for (" << type << "::const_iterator i (" << arg_ <<
@@ -609,7 +609,7 @@ namespace CXX
 
         if (default_type (t, type))
         {
-          os << cout_inst << " << " << L << strlit (tag_ + L": ") << " << "
+          os << cout_inst << " << " << strlit (tag_ + L": ") << " << "
              << arg_ << "->size () << " << L << "\" bytes\" << std::endl;";
         }
         else

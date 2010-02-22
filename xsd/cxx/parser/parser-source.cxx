@@ -68,7 +68,7 @@ namespace CXX
             os << "const " << char_type << "* " << name << "::" << endl
                << "_static_type ()"
                << "{"
-               << "return " << L << strlit (id) << ";"
+               << "return " << strlit (id) << ";"
                << "}";
 
             os << "const " << char_type << "* " << name << "::" << endl
@@ -201,7 +201,7 @@ namespace CXX
             os << "const " << char_type << "* " << name << "::" << endl
                << "_static_type ()"
                << "{"
-               << "return " << L << strlit (id) << ";"
+               << "return " << strlit (id) << ";"
                << "}";
 
             os << "const " << char_type << "* " << name << "::" << endl
@@ -256,7 +256,7 @@ namespace CXX
             os << "const " << char_type << "* " << name << "::" << endl
                << "_static_type ()"
                << "{"
-               << "return " << L << strlit (id) << ";"
+               << "return " << strlit (id) << ";"
                << "}";
 
             os << "const " << char_type << "* " << name << "::" << endl
@@ -294,12 +294,12 @@ namespace CXX
 
           if (e.qualified () && e.namespace_ ().name ())
           {
-            os << "n == " << L << strlit (e.name ()) << " && " <<
-              "ns == " << L << strlit (e.namespace_ ().name ());
+            os << "n == " << strlit (e.name ()) << " && " <<
+              "ns == " << strlit (e.namespace_ ().name ());
           }
           else
           {
-            os << "n == " << L << strlit (e.name ()) << " && ns.empty ()";
+            os << "n == " << strlit (e.name ()) << " && ns.empty ()";
           }
 
           // Only a globally-defined element can be a subst-group root.
@@ -309,8 +309,8 @@ namespace CXX
             os << ") ||" << endl
                << "::xsd::cxx::parser::substitution_map_instance< " <<
               char_type << " > ().check (" << endl
-               << "ns, n, " << L << strlit (e.namespace_ ().name ()) <<
-              ", " << L << strlit (e.name ()) << ", t)";
+               << "ns, n, " << strlit (e.namespace_ ().name ()) <<
+              ", " << strlit (e.name ()) << ", t)";
           }
 
           os << ")"
@@ -394,12 +394,12 @@ namespace CXX
 
           if (e.qualified () && e.namespace_ ().name ())
           {
-            os << "n == " << L << strlit (e.name ()) << " && " <<
-              "ns == " << L << strlit (e.namespace_ ().name ());
+            os << "n == " << strlit (e.name ()) << " && " <<
+              "ns == " << strlit (e.namespace_ ().name ());
           }
           else
           {
-            os << "n == " << L << strlit (e.name ()) << " && ns.empty ()";
+            os << "n == " << strlit (e.name ()) << " && ns.empty ()";
           }
 
           // Only a globally-defined element can be a subst-group root.
@@ -409,8 +409,8 @@ namespace CXX
             os << ") ||" << endl
                << "::xsd::cxx::parser::substitution_map_instance< " <<
               char_type << " > ().check (" << endl
-               << "ns, n, " << L << strlit (e.namespace_ ().name ()) <<
-              ", " << L << strlit (e.name ()) << ")";
+               << "ns, n, " << strlit (e.namespace_ ().name ()) <<
+              ", " << strlit (e.name ()) << ")";
           }
 
           os << ")"
@@ -457,13 +457,13 @@ namespace CXX
 
           if (a.qualified () && a.namespace_ ().name ())
           {
-            os << "if (n == " << L << strlit (a.name ()) << " && " <<
-              "ns == " << L << strlit (a.namespace_ ().name ()) << ")"
+            os << "if (n == " << strlit (a.name ()) << " && " <<
+              "ns == " << strlit (a.namespace_ ().name ()) << ")"
                << "{";
           }
           else
           {
-            os << "if (n == " << L << strlit (a.name ()) << " && ns.empty ())"
+            os << "if (n == " << strlit (a.name ()) << " && ns.empty ())"
                << "{";
           }
 
@@ -570,7 +570,7 @@ namespace CXX
             os << "const " << char_type << "* " << name << "::" << endl
                << "_static_type ()"
                << "{"
-               << "return " << L << strlit (id) << ";"
+               << "return " << strlit (id) << ";"
                << "}";
 
             os << "const " << char_type << "* " << name << "::" << endl
@@ -798,10 +798,10 @@ namespace CXX
                << "const ::xsd::cxx::parser::substitution_map_entry< " <<
               char_type << " >" << endl
                << "_xsd_" << name << "_substitution_map_entry_ (" << endl
-               << L << strlit (e.namespace_ ().name ()) << "," << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (r.namespace_ ().name ()) << "," << endl
-               << L << strlit (r.name ()) << "," << endl
+               << strlit (e.namespace_ ().name ()) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (r.namespace_ ().name ()) << "," << endl
+               << strlit (r.name ()) << "," << endl
                << fq_name (type) << "::_static_type ());"
                << endl;
           }

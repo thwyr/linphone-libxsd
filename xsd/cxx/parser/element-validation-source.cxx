@@ -43,11 +43,11 @@ namespace CXX
           {
             String const& ns (e.namespace_ ().name ());
 
-            os << "n == " << L << strlit (name) << " &&" << endl
-               << "ns == " << L << strlit (ns);
+            os << "n == " << strlit (name) << " &&" << endl
+               << "ns == " << strlit (ns);
           }
           else
-            os << "n == " << L << strlit (name) << " && ns.empty ()";
+            os << "n == " << strlit (name) << " && ns.empty ()";
 
 
           // Only a globally-defined element can be a subst-group root.
@@ -57,8 +57,8 @@ namespace CXX
             os << ") ||" << endl
                << "::xsd::cxx::parser::substitution_map_instance< " <<
               char_type << " > ().check (" << endl
-               << "ns, n, " << L << strlit (e.namespace_ ().name ()) <<
-              ", " << L << strlit (name) << ", t)";
+               << "ns, n, " << strlit (e.namespace_ ().name ()) <<
+              ", " << strlit (name) << ", t)";
           }
         }
 
@@ -86,7 +86,7 @@ namespace CXX
                 // This is not what the spec says but that seems to be
                 // the consensus.
                 //
-                os << "(!ns.empty () && ns != " << L << strlit (ns) << ")";
+                os << "(!ns.empty () && ns != " << strlit (ns) << ")";
               }
               else
                 os << "!ns.empty ()";
@@ -97,11 +97,11 @@ namespace CXX
             }
             else if (*i == L"##targetNamespace")
             {
-              os << "ns == " << L << strlit (ns);
+              os << "ns == " << strlit (ns);
             }
             else
             {
-              os << "ns == " << L << strlit (*i);
+              os << "ns == " << strlit (*i);
             }
 
             if (++i != e)
@@ -154,14 +154,14 @@ namespace CXX
         traverse (SemanticGraph::Element& e)
         {
           String ns (e.qualified () ? e.namespace_ ().name () : String ());
-          os << L << strlit (ns) << ", " << L << strlit (e.name ());
+          os << strlit (ns) << ", " << strlit (e.name ());
         }
 
         virtual Void
         traverse (SemanticGraph::Any& a)
         {
           String const& ns (*a.namespace_begin ());
-          os << L << strlit (ns) << ", " << L << "\"*\"";
+          os << strlit (ns) << ", " << L << "\"*\"";
         }
 
         virtual Void
@@ -882,8 +882,8 @@ namespace CXX
 
             os << "if (count[" << state << "UL] == 0)" << endl
                << "this->_expected_element (" << endl
-               << L << strlit (ns) << ", " <<
-              L << strlit (e.name ()) << ");"
+               << strlit (ns) << ", " <<
+              strlit (e.name ()) << ");"
                << endl;
           }
 

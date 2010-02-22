@@ -187,7 +187,7 @@ namespace CXX
              << "{";
 
           if (options.value<CLI::generate_print_impl> ())
-            os << cout_inst << " << " << L << strlit (u.name () + L": ") <<
+            os << cout_inst << " << " << strlit (u.name () + L": ") <<
               " << s << std::endl;";
           else
             os << "// TODO" << endl

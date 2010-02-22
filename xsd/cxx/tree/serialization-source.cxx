@@ -103,8 +103,8 @@ namespace CXX
                << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
               char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_type_serializer_init (" << endl
-               << L << strlit (l.name ()) << "," << endl
-               << L << strlit (xml_ns_name (l)) << ");"
+               << strlit (l.name ()) << "," << endl
+               << strlit (xml_ns_name (l)) << ");"
                << endl
                << endl;
           }
@@ -183,8 +183,8 @@ namespace CXX
                << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
               char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_type_serializer_init (" << endl
-               << L << strlit (u.name ()) << "," << endl
-               << L << strlit (xml_ns_name (u)) << ");"
+               << strlit (u.name ()) << "," << endl
+               << strlit (xml_ns_name (u)) << ");"
                << endl
                << endl;
           }
@@ -265,8 +265,8 @@ namespace CXX
                << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
               char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_type_serializer_init (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (xml_ns_name (e)) << ");"
+               << strlit (e.name ()) << "," << endl
+               << strlit (xml_ns_name (e)) << ");"
                << endl
                << endl;
           }
@@ -334,16 +334,16 @@ namespace CXX
                  << "{"
                  << xerces_ns << "::DOMElement& s (" << endl
                  << "::xsd::cxx::xml::dom::create_element (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << (ns ? L + strlit (ns) + L",\n" : L"")
+                 << strlit (e.name ()) << "," << endl
+                 << (ns ? strlit (ns) + L",\n" : L"")
                  << "e));"
                  << endl
                  << "s << *b;"
                  << "}"
                  << "else" << endl
                  << "tsm.serialize (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << L << strlit (ns) << "," << endl
+                 << strlit (e.name ()) << "," << endl
+                 << strlit (ns) << "," << endl
                  << (e.global () ? "true" : "false") << ", " <<
                 (e.qualified () ? "true" : "false") << ", e, *b);";
             }
@@ -351,8 +351,8 @@ namespace CXX
             {
               os << xerces_ns << "::DOMElement& s (" << endl
                  << "::xsd::cxx::xml::dom::create_element (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << (ns ? L + strlit (ns) + L",\n" : L"")
+                 << strlit (e.name ()) << "," << endl
+                 << (ns ? strlit (ns) + L",\n" : L"")
                  << "e));"
                  << endl;
 
@@ -392,16 +392,16 @@ namespace CXX
                  << "{"
                  << xerces_ns << "::DOMElement& s (" << endl
                  << "::xsd::cxx::xml::dom::create_element (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << (ns ? L + strlit (ns) + L",\n" : L"")
+                 << strlit (e.name ()) << "," << endl
+                 << (ns ? strlit (ns) + L",\n" : L"")
                  << "e));"
                  << endl
                  << "s << x;"
                  << "}"
                  << "else" << endl
                  << "tsm.serialize (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << L << strlit (ns) << "," << endl
+                 << strlit (e.name ()) << "," << endl
+                 << strlit (ns) << "," << endl
                  << (e.global () ? "true" : "false") << ", " <<
                 (e.qualified () ? "true" : "false") << ", e, x);";
             }
@@ -409,8 +409,8 @@ namespace CXX
             {
               os << xerces_ns << "::DOMElement& s (" << endl
                  << "::xsd::cxx::xml::dom::create_element (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << (ns ? L + strlit (ns) + L",\n" : L"")
+                 << strlit (e.name ()) << "," << endl
+                 << (ns ? strlit (ns) + L",\n" : L"")
                  << "e));"
                  << endl;
 
@@ -447,16 +447,16 @@ namespace CXX
                  << "{"
                  << xerces_ns << "::DOMElement& s (" << endl
                  << "::xsd::cxx::xml::dom::create_element (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << (ns ? L + strlit (ns) + L",\n" : L"")
+                 << strlit (e.name ()) << "," << endl
+                 << (ns ? strlit (ns) + L",\n" : L"")
                  << "e));"
                  << endl
                  << "s << x;"
                  << "}"
                  << "else" << endl
                  << "tsm.serialize (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << L << strlit (ns) << "," << endl
+                 << strlit (e.name ()) << "," << endl
+                 << strlit (ns) << "," << endl
                  << (e.global () ? "true" : "false") << ", " <<
                 (e.qualified () ? "true" : "false") << ", e, x);";
             }
@@ -465,8 +465,8 @@ namespace CXX
               os << "{"
                  << xerces_ns << "::DOMElement& s (" << endl
                  << "::xsd::cxx::xml::dom::create_element (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << (ns ? L + strlit (ns) + L",\n" : L"")
+                 << strlit (e.name ()) << "," << endl
+                 << (ns ? strlit (ns) + L",\n" : L"")
                  << "e));"
                  << endl;
 
@@ -581,8 +581,8 @@ namespace CXX
                << "{"
                << xerces_ns << "::DOMAttr& a (" << endl
                << "::xsd::cxx::xml::dom::create_attribute (" << endl
-               << L << strlit (a.name ()) << "," << endl
-               << (ns ? L + strlit (ns) + L",\n" : L"")
+               << strlit (a.name ()) << "," << endl
+               << (ns ? strlit (ns) + L",\n" : L"")
                << "e));"
                << endl;
 
@@ -621,8 +621,8 @@ namespace CXX
             os << "{"
                << xerces_ns << "::DOMAttr& a (" << endl
                << "::xsd::cxx::xml::dom::create_attribute (" << endl
-               << L << strlit (a.name ()) << "," << endl
-               << (ns ? L + strlit (ns) + L",\n" : L"")
+               << strlit (a.name ()) << "," << endl
+               << (ns ? strlit (ns) + L",\n" : L"")
                << "e));"
                << endl;
 
@@ -817,8 +817,8 @@ namespace CXX
                << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
               char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_type_serializer_init (" << endl
-               << L << strlit (c.name ()) << "," << endl
-               << L << strlit (xml_ns_name (c)) << ");"
+               << strlit (c.name ()) << "," << endl
+               << strlit (xml_ns_name (c)) << ");"
                << endl
                << endl;
           }
@@ -859,10 +859,10 @@ namespace CXX
 
             os << " >" << endl
                << "_xsd_" << name << "_element_serializer_init (" << endl
-               << L << strlit (r.name ()) << "," << endl
-               << L << strlit (r.namespace_ ().name ()) << "," << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (e.namespace_ ().name ()) << ");"
+               << strlit (r.name ()) << "," << endl
+               << strlit (r.namespace_ ().name ()) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (e.namespace_ ().name ()) << ");"
                << endl
                << endl;
           }
@@ -1101,8 +1101,8 @@ namespace CXX
                << "{";
           }
 
-          os << "if (n.name () == " << L << strlit (e.name ()) << " &&" << endl
-             << "n.namespace_ () == " << L << strlit (ns) << ")"
+          os << "if (n.name () == " << strlit (e.name ()) << " &&" << endl
+             << "n.namespace_ () == " << strlit (ns) << ")"
              << "{";
 
           switch (schema_type (type))
@@ -1131,8 +1131,8 @@ namespace CXX
             char_type << " > (" << endl
              << "n.name ()," << endl
              << "n.namespace_ ()," << endl
-             << L << strlit (e.name ()) << "," << endl
-             << L << strlit (ns) << ");"
+             << strlit (e.name ()) << "," << endl
+             << strlit (ns) << ");"
              << "}";
 
           if (poly)
@@ -1149,8 +1149,8 @@ namespace CXX
               char_type << " > ());"
                << endl
                << "tsm.serialize (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (e.namespace_().name ()) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (e.namespace_().name ()) << "," << endl
                << "e, n, s);"
                << "}";
           }
@@ -1180,8 +1180,8 @@ namespace CXX
               "::DOMDocument > r (" << endl
                << "::xsd::cxx::xml::dom::serialize< " <<
               char_type << " > (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (ns) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (ns) << "," << endl
                << "m, f));"
                << "d = r;"
                << "}"
@@ -1195,8 +1195,8 @@ namespace CXX
                << dom_auto_ptr << "< " << xerces_ns <<
               "::DOMDocument > r (" << endl
                << "tsm.serialize (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (e.namespace_().name ()) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (e.namespace_().name ()) << "," << endl
                << "m, s, f));"
                << "d = r;"
                << "}";
@@ -1207,8 +1207,8 @@ namespace CXX
               "::DOMDocument > d (" << endl
                << "::xsd::cxx::xml::dom::serialize< " <<
               char_type << " > (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (ns) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (ns) << "," << endl
                << "m, f));"
                << endl;
           }

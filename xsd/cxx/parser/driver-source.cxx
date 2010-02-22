@@ -718,12 +718,12 @@ namespace CXX
       if (root->namespace_().name ())
         os << ctx.xs_ns_name () << "::document doc_p (" << endl
            << root_p << "," << endl
-           << L << ctx.strlit (root->namespace_().name ()) << "," << endl
-           << L << ctx.strlit (root->name ()) << ");"
+           << ctx.strlit (root->namespace_().name ()) << "," << endl
+           << ctx.strlit (root->name ()) << ");"
            << endl;
       else
         os << ctx.xs_ns_name () << "::document doc_p (" << root_p << ", " <<
-          L << ctx.strlit (root->name ()) << ");"
+          ctx.strlit (root->name ()) << ");"
            << endl;
 
       os << root_p << ".pre ();"

@@ -1034,9 +1034,9 @@ namespace CXX
 
     // In most common cases we will have that many chars.
     //
-    r.reserve (n + 2);
+    r.reserve (n + 3);
 
-    r += '"';
+    r += L"L\"";
 
     Boolean escape (false);
 
@@ -1103,9 +1103,7 @@ namespace CXX
         {
           // Close and open the string so there are no clashes.
           //
-          r += '"';
-          r += '"';
-
+          r += L"\"L\"";
           escape = false;
         }
 

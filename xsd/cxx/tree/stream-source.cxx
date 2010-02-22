@@ -249,7 +249,7 @@ namespace CXX
               "e (i." << aname << " ().end ());" << endl
                << "b != e; ++b)"
                << "{"
-               << "o << ::std::endl << " << L << strlit (e.name () + L": ");
+               << "o << ::std::endl << " << strlit (e.name () + L": ");
 
             if (!poly)
               os << " << *b;";
@@ -266,7 +266,7 @@ namespace CXX
 
             os << "if (i." << aname << " ())"
                << "{"
-               << "o << ::std::endl << " << L << strlit (e.name () + L": ");
+               << "o << ::std::endl << " << strlit (e.name () + L": ");
 
             if (!poly)
               os << " << *i." << aname << " ();";
@@ -280,7 +280,7 @@ namespace CXX
           {
             // one
             //
-            os << "o << ::std::endl << " << L << strlit (e.name () + L": ");
+            os << "o << ::std::endl << " << strlit (e.name () + L": ");
 
             if (!poly)
               os << " << i." << aname << " ();";
@@ -313,13 +313,13 @@ namespace CXX
           {
             os << "if (i." << aname << " ())"
                << "{"
-               << "o << ::std::endl << " << L << strlit (a.name () + L": ") <<
+               << "o << ::std::endl << " << strlit (a.name () + L": ") <<
               " << *i." << aname << " ();"
                << "}";
           }
           else
           {
-            os << "o << ::std::endl << " << L << strlit (a.name () + L": ") <<
+            os << "o << ::std::endl << " << strlit (a.name () + L": ") <<
               " << i." << aname << " ();";
           }
         }

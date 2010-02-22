@@ -342,8 +342,8 @@ namespace CXX
                << endl
                << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "tfm.create (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (e.namespace_().name ()) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (e.namespace_().name ()) << "," << endl
                << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl
                << "true, true, e, n, f, 0));"
                << endl
@@ -361,8 +361,8 @@ namespace CXX
           }
           else
           {
-            os << "if (n.name () == " << L << strlit (e.name ()) << " &&" << endl
-               << "n.namespace_ () == " << L << strlit (e.namespace_().name ()) << ")"
+            os << "if (n.name () == " << strlit (e.name ()) << " &&" << endl
+               << "n.namespace_ () == " << strlit (e.namespace_().name ()) << ")"
                << "{";
 
             if (fund)
@@ -395,8 +395,8 @@ namespace CXX
             char_type << " > (" << endl
              << "n.name ()," << endl
              << "n.namespace_ ()," << endl
-             << L << strlit (e.name ()) << "," << endl
-             << L << strlit (e.namespace_().name ()) << ");"
+             << strlit (e.name ()) << "," << endl
+             << strlit (e.namespace_().name ()) << ");"
              << "}";
 
 
@@ -440,8 +440,8 @@ namespace CXX
                << endl
                << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "tfm.create (" << endl
-               << L << strlit (e.name ()) << "," << endl
-               << L << strlit (e.namespace_().name ()) << "," << endl
+               << strlit (e.name ()) << "," << endl
+               << strlit (e.namespace_().name ()) << "," << endl
                << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl
                << "true, true, e, n, f, 0));"
                << endl
@@ -450,8 +450,8 @@ namespace CXX
           }
           else
           {
-            os << "if (n.name () == " << L << strlit (e.name ()) << " &&" << endl
-               << "n.namespace_ () == " << L << strlit (e.namespace_().name ()) << ")"
+            os << "if (n.name () == " << strlit (e.name ()) << " &&" << endl
+               << "n.namespace_ () == " << strlit (e.namespace_().name ()) << ")"
                << "{";
 
             if (fund)
@@ -498,8 +498,8 @@ namespace CXX
             char_type << " > (" << endl
              << "n.name ()," << endl
              << "n.namespace_ ()," << endl
-             << L << strlit (e.name ()) << "," << endl
-             << L << strlit (e.namespace_().name ()) << ");"
+             << strlit (e.name ()) << "," << endl
+             << strlit (e.namespace_().name ()) << ");"
              << "}";
         }
 

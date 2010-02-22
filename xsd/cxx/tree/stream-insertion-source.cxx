@@ -72,8 +72,8 @@ namespace CXX
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_stream_insertion_init_" <<
                 n++ << " (" << endl
-                 << L << strlit (l.name ()) << "," << endl
-                 << L << strlit (xml_ns_name (l)) << ");"
+                 << strlit (l.name ()) << "," << endl
+                 << strlit (xml_ns_name (l)) << ");"
                  << endl;
             }
           }
@@ -140,8 +140,8 @@ namespace CXX
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_stream_insertion_init_" <<
                 n++ << " (" << endl
-                 << L << strlit (u.name ()) << "," << endl
-                 << L << strlit (xml_ns_name (u)) << ");"
+                 << strlit (u.name ()) << "," << endl
+                 << strlit (xml_ns_name (u)) << ");"
                  << endl;
             }
           }
@@ -199,8 +199,8 @@ namespace CXX
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_stream_insertion_init_" <<
                 n++ << " (" << endl
-                 << L << strlit (e.name ()) << "," << endl
-                 << L << strlit (xml_ns_name (e)) << ");"
+                 << strlit (e.name ()) << "," << endl
+                 << strlit (xml_ns_name (e)) << ");"
                  << endl;
             }
           }
@@ -420,8 +420,8 @@ namespace CXX
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_stream_insertion_init_" <<
                 n++ << " (" << endl
-                 << L << strlit (c.name ()) << "," << endl
-                 << L << strlit (xml_ns_name (c)) << ");"
+                 << strlit (c.name ()) << "," << endl
+                 << strlit (xml_ns_name (c)) << ");"
                  << endl;
             }
           }

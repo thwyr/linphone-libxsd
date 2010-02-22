@@ -451,7 +451,7 @@ namespace CXX
     Void InitValue::
     traverse (SemanticGraph::Union&)
     {
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
@@ -465,7 +465,7 @@ namespace CXX
     Void InitValue::
     traverse (SemanticGraph::AnySimpleType& t)
     {
-      os << fq_name (t) << " (" << L << strlit (value_) << ")";
+      os << fq_name (t) << " (" << strlit (value_) << ")";
     }
 
     // Strings.
@@ -473,28 +473,28 @@ namespace CXX
     Void InitValue::
     traverse (SemanticGraph::Fundamental::String&)
     {
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
     traverse (SemanticGraph::Fundamental::NormalizedString&)
     {
       normalize (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
     traverse (SemanticGraph::Fundamental::Token&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
     traverse (SemanticGraph::Fundamental::NameToken&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
@@ -509,21 +509,21 @@ namespace CXX
     traverse (SemanticGraph::Fundamental::Name&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
     traverse (SemanticGraph::Fundamental::NCName&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
     traverse (SemanticGraph::Fundamental::Language&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     // Qualified name.
@@ -549,15 +549,15 @@ namespace CXX
         else
           name = qname;
 
-        os << fq_name (t) << " (" << L << strlit (ns) << ", " <<
-          L << strlit (name) << ")";
+        os << fq_name (t) << " (" << strlit (ns) << ", " <<
+          strlit (name) << ")";
       }
       else
       {
         // Unqualified name.
         //
         collapse (value_);
-        os << fq_name (t) << " (" << L << strlit (value_) << ")";
+        os << fq_name (t) << " (" << strlit (value_) << ")";
       }
     }
 
@@ -567,14 +567,14 @@ namespace CXX
     traverse (SemanticGraph::Fundamental::Id&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
     traverse (SemanticGraph::Fundamental::IdRef&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
@@ -591,7 +591,7 @@ namespace CXX
     traverse (SemanticGraph::Fundamental::AnyURI&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     // Binary.
@@ -1215,7 +1215,7 @@ namespace CXX
     traverse (SemanticGraph::Fundamental::Entity&)
     {
       collapse (value_);
-      os << L << strlit (value_);
+      os << strlit (value_);
     }
 
     Void InitValue::
@@ -1242,7 +1242,7 @@ namespace CXX
 
         os << "{";
         type_name_.dispatch (t);
-        os << " tmp (" << L << strlit (v) << ");"
+        os << " tmp (" << strlit (v) << ");"
            << "r.push_back (tmp);"
            << "}";
 

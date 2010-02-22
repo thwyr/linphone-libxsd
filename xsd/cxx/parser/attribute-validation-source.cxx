@@ -32,11 +32,11 @@ namespace CXX
           {
             String const& ns (a.namespace_ ().name ());
 
-            os << "n == " << L << strlit (name) << " &&" << endl
-               << "ns == " << L << strlit (ns);
+            os << "n == " << strlit (name) << " &&" << endl
+               << "ns == " << strlit (ns);
           }
           else
-            os << "n == " << L << strlit (name) << " && ns.empty ()";
+            os << "n == " << strlit (name) << " && ns.empty ()";
         }
 
         virtual Void
@@ -60,7 +60,7 @@ namespace CXX
                 // This is not what the spec says but that seems to be
                 // the consensus.
                 //
-                os << "(!ns.empty () && ns != " << L << strlit (ns) << ")";
+                os << "(!ns.empty () && ns != " << strlit (ns) << ")";
               }
               else
                 os << "!ns.empty ()";
@@ -71,11 +71,11 @@ namespace CXX
             }
             else if (*i == L"##targetNamespace")
             {
-              os << "ns == " << L << strlit (ns);
+              os << "ns == " << strlit (ns);
             }
             else
             {
-              os << "ns == " << L << strlit (*i);
+              os << "ns == " << strlit (*i);
             }
 
             if (++i != e)
@@ -204,7 +204,7 @@ namespace CXX
 
             os << "if (!as." << ename (a) << ")" << endl
                << "this->_expected_attribute (" << endl
-               << L << strlit (ns) << ", " << L << strlit (a.name ()) << ");";
+               << strlit (ns) << ", " << strlit (a.name ()) << ");";
           }
         }
       };
