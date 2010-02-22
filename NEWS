@@ -37,6 +37,11 @@ Version 3.3.0
     --namespace-regex and --anonymous-regex options now include the file 
     component for the schema being compiled.
 
+  * The XSD_NO_EXPORT macro can be used to omit code generated with the
+    --export/import-maps and, for C++/Tree, --generate-xml-schema options
+    during C++ compilation. This may be useful if you would like to use 
+    the same generated code across multiple platforms.
+
  C++/Tree
 
   * New option, --generate-element-type, triggers the generation of types

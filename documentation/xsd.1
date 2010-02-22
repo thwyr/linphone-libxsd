@@ -467,13 +467,6 @@ Insert the content of the
 at the end of each generated file for which there is no file-specific
 epilogue file.
 
-.IP "\fB\--export-symbol \fIsymbol\fR"
-Insert
-.I symbol
-in places where DLL export/import control statements (
-.BR __declspec(dllexport/dllimport) )
-are necessary.
-
 .IP "\fB\--custom-literals \fIfile\fR"
 Load custom XML string to C++ literal mappings from
 .IR file .
@@ -485,11 +478,22 @@ strings. The format of this file is specified in the
 .B custom-literals.xsd
 XML Schema file that can be found in the documentation directory.
 
+.IP "\fB\--export-symbol \fIsymbol\fR"
+Insert
+.I symbol
+in places where DLL export/import control statements (
+.BR __declspec(dllexport/dllimport) )
+are necessary.
+
 .IP "\fB\--export-xml-schema\fR"
 Export/import types in the XML Schema namespace using the export
 symbol provided with the
 .B --export-symbol
-option.
+option. The
+.B XSD_NO_EXPORT
+macro can be used to omit this code during C++ compilation, which may be
+useful if you would like to use the same generated code across multiple
+platforms.
 
 .IP "\fB\--export-maps\fR"
 Export polymorphism support maps from a Win32 DLL into which this generated
@@ -501,6 +505,11 @@ the generated code for all other DLLs should be compiled with
 .BR --import-maps .
 This option is only valid together with
 .BR --generate-polymorphic.
+The
+.B XSD_NO_EXPORT
+macro can be used to omit this code during C++ compilation, which may be
+useful if you would like to use the same generated code across multiple
+platforms.
 
 .IP "\fB\--import-maps\fR"
 Import polymorphism support maps to a Win32 DLL or executable into which
@@ -508,6 +517,11 @@ this generated code is linked. See the
 .B --export-maps
 option documentation for details. This option is only valid together with
 .BR --generate-polymorphic.
+The
+.B XSD_NO_EXPORT
+macro can be used to omit this code during C++ compilation, which may be
+useful if you would like to use the same generated code across multiple
+platforms.
 
 .IP "\fB\--disable-warning \fIwarn\fR"
 Disable printing warning with id

@@ -6,6 +6,8 @@
 #ifndef CXX_TREE_FUNDAMENTAL_HEADER_HXX
 #define CXX_TREE_FUNDAMENTAL_HEADER_HXX
 
+#include <cult/containers/set.hxx>
+
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
 
@@ -80,19 +82,81 @@ namespace CXX
             export_ (c.options.value<CLI::export_xml_schema> () && type_exp)
       {
         *this >> names_ >> *this;
+
+        if (export_)
+          xs_ns_ = ns_name (xs_ns ());
       }
 
       Void
-      gen_typedef (String const& type, String const& name)
+      gen_typedef (String const& name,
+                   String const& type,
+                   String const& arg1 = L"",
+                   String const& arg2 = L"",
+                   String const& arg3 = L"")
       {
-        os << "typedef " << type << " " << name << ";";
+        os << "typedef " << type;
+
+        // Use unqualified arguments since we are in the same
+        // namespace.
+        //
+        if (arg1)
+        {
+          os << arg1;
+
+          if (arg2)
+          {
+            os << ", " << arg2;
+
+            if (arg3)
+              os << ", " << arg3;
+          }
+
+          os << " >";
+        }
+
+        os << " " << name << ";";
 
         if (export_ && type.find (L'<') != String::npos)
-          os << "template class " << type_exp << type << ";";
+        {
+          String s (type);
+
+          // Use qualified arguments.
+          //
+          if (arg1)
+          {
+            s += xs_ns_;
+            s += L"::";
+            s += arg1;
+
+            if (arg2)
+            {
+              s += L", ";
+              s += xs_ns_;
+              s += L"::";
+              s += arg2;
+
+              if (arg3)
+              {
+                s += L", ";
+                s += xs_ns_;
+                s += L"::";
+                s += arg3;
+              }
+            }
+
+            s += " >";
+          }
+
+          exports_.insert (s);
+        }
       }
 
       String
-      built_in_type (SemanticGraph::Type& t, String const& type)
+      built_in_type (SemanticGraph::Type& t,
+                     String const& type,
+                     String const& arg1 = L"",
+                     String const& arg2 = L"",
+                     String const& arg3 = L"")
       {
         String custom;
 
@@ -111,7 +175,7 @@ namespace CXX
 
           if (new_name)
           {
-            gen_typedef (type, new_name);
+            gen_typedef (new_name, type, arg1, arg2, arg3);
 
             if (doxygen)
               os << endl;
@@ -144,7 +208,7 @@ namespace CXX
                << " * built-in type." << endl
                << " */" << endl;
 
-          gen_typedef (type, name);
+          gen_typedef (name, type, arg1, arg2, arg3);
 
           if (doxygen)
             os << endl;
@@ -171,15 +235,15 @@ namespace CXX
       traverse (SemanticGraph::AnySimpleType& t)
       {
         simple_type_ = built_in_type (
-          t, L"::xsd::cxx::tree::simple_type< " + type_ + L" >");
+          t, L"::xsd::cxx::tree::simple_type< ", type_);
 
         if (doxygen)
           os << "/**" << endl
              << " * @brief Alias for the anyType type." << endl
              << " */" << endl;
 
-        gen_typedef ("::xsd::cxx::tree::type",
-                     xs_ns ().context().get<String> ("container"));
+        gen_typedef (xs_ns ().context().get<String> ("container"),
+                     "::xsd::cxx::tree::type");
 
         os << endl;
 
@@ -358,9 +422,7 @@ namespace CXX
           os << endl;
 
         string_ = built_in_type (
-          t,
-          L"::xsd::cxx::tree::string< " + char_type + L", " +
-          simple_type_ + L" >");
+          t, L"::xsd::cxx::tree::string< " + char_type + L", ", simple_type_);
       }
 
       virtual Void
@@ -368,26 +430,22 @@ namespace CXX
       {
         norm_string_ = built_in_type (
           t,
-          L"::xsd::cxx::tree::normalized_string< " + char_type +
-          L", " + string_ + L" >");
+          L"::xsd::cxx::tree::normalized_string< " + char_type + L", ",
+          string_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::Token& t)
       {
         token_ = built_in_type (
-          t,
-          L"::xsd::cxx::tree::token< " + char_type + L", " +
-          norm_string_ + L" >");
+          t, L"::xsd::cxx::tree::token< " + char_type + L", ", norm_string_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::NameToken& t)
       {
         nmtoken_ = built_in_type (
-          t,
-          L"::xsd::cxx::tree::nmtoken< " + char_type + L", " +
-          token_ + L" >");
+          t, L"::xsd::cxx::tree::nmtoken< " + char_type + L", ", token_);
       }
 
       virtual Void
@@ -395,33 +453,30 @@ namespace CXX
       {
         built_in_type (
           t,
-          L"::xsd::cxx::tree::nmtokens< " + char_type +
-          L", " + simple_type_ + L", " + nmtoken_ + L" >");
+          L"::xsd::cxx::tree::nmtokens< " + char_type + L", ",
+          simple_type_,
+          nmtoken_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::Name& t)
       {
         name_ = built_in_type (
-          t,
-          L"::xsd::cxx::tree::name< " + char_type + L", " + token_ + L" >");
+          t, L"::xsd::cxx::tree::name< " + char_type + L", ", token_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::NCName& t)
       {
         ncname_ = built_in_type (
-          t,
-          L"::xsd::cxx::tree::ncname< " + char_type + L", " + name_ + L" >");
+          t, L"::xsd::cxx::tree::ncname< " + char_type + L", ", name_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::Language& t)
       {
         built_in_type (
-          t,
-          L"::xsd::cxx::tree::language< " + char_type + L", " +
-          token_ + L" >");
+          t, L"::xsd::cxx::tree::language< " + char_type + L", ", token_);
 
         os << endl;
       }
@@ -438,17 +493,14 @@ namespace CXX
           os << endl;
 
         built_in_type (
-          t,
-          L"::xsd::cxx::tree::id< " + char_type + L", " + ncname_ + L" >");
+          t, L"::xsd::cxx::tree::id< " + char_type + L", ", ncname_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::IdRef& t)
       {
         idref_ = built_in_type (
-          t,
-          L"::xsd::cxx::tree::idref< " + type_ + L", " + char_type + L", " +
-          ncname_ + L" >");
+          t, L"::xsd::cxx::tree::idref< " + char_type + L", ", ncname_, type_);
       }
 
       virtual Void
@@ -456,8 +508,9 @@ namespace CXX
       {
         built_in_type (
           t,
-          L"::xsd::cxx::tree::idrefs< " + char_type +
-          L", " + simple_type_ + L", " + idref_ + L" >");
+          L"::xsd::cxx::tree::idrefs< " + char_type + L", ",
+          simple_type_,
+          idref_);
 
         os << endl;
       }
@@ -475,9 +528,7 @@ namespace CXX
           os << endl;
 
         uri_ = built_in_type (
-          t,
-          L"::xsd::cxx::tree::uri< " + char_type + L", " +
-          simple_type_ + L" >");
+          t, L"::xsd::cxx::tree::uri< " + char_type + L", ", simple_type_);
 
         os << endl;
       }
@@ -495,8 +546,10 @@ namespace CXX
 
         built_in_type (
           t,
-          L"::xsd::cxx::tree::qname< " + char_type +
-          L", " + simple_type_ + L", " + uri_ + L", " + ncname_ + L" >");
+          L"::xsd::cxx::tree::qname< " + char_type + L", ",
+          simple_type_,
+          uri_,
+          ncname_);
 
         os << endl;
       }
@@ -515,16 +568,16 @@ namespace CXX
              << " * @brief Binary buffer type." << endl
              << " */" << endl;
 
-        gen_typedef (L"::xsd::cxx::tree::buffer< " + char_type + L" >",
-                     xs_ns ().context().get<String> ("buffer"));
+        gen_typedef (xs_ns ().context().get<String> ("buffer"),
+                     L"::xsd::cxx::tree::buffer< " + char_type + L" >");
 
         if (doxygen)
           os << endl;
 
         built_in_type (
           t,
-          L"::xsd::cxx::tree::base64_binary< " + char_type +
-          L", " + simple_type_ + L" >");
+          L"::xsd::cxx::tree::base64_binary< " + char_type + L", ",
+          simple_type_);
       }
 
       virtual Void
@@ -532,8 +585,8 @@ namespace CXX
       {
         built_in_type (
           t,
-          L"::xsd::cxx::tree::hex_binary< " + char_type +
-          L", " + simple_type_ + L" >");
+          L"::xsd::cxx::tree::hex_binary< " + char_type + L", ",
+          simple_type_);
 
         os << endl;
       }
@@ -553,16 +606,14 @@ namespace CXX
              << " * @brief Time zone type." << endl
              << " */" << endl;
 
-        gen_typedef ("::xsd::cxx::tree::time_zone",
-                     xs_ns ().context().get<String> ("time-zone"));
+        gen_typedef (xs_ns ().context().get<String> ("time-zone"),
+                     "::xsd::cxx::tree::time_zone");
 
         if (doxygen)
           os << endl;
 
         built_in_type (
-          t,
-          L"::xsd::cxx::tree::date< " + char_type + L", " +
-          simple_type_ + L" >");
+          t, L"::xsd::cxx::tree::date< " + char_type + L", ", simple_type_);
       }
 
       virtual Void
@@ -570,8 +621,8 @@ namespace CXX
       {
         built_in_type (
           t,
-          L"::xsd::cxx::tree::date_time< " + char_type + L", " +
-          simple_type_ + L" >");
+          L"::xsd::cxx::tree::date_time< " + char_type + L", ",
+          simple_type_);
       }
 
       virtual Void
@@ -579,26 +630,22 @@ namespace CXX
       {
         built_in_type (
           t,
-          L"::xsd::cxx::tree::duration< " + char_type + L", " +
-          simple_type_ + L" >");
+          L"::xsd::cxx::tree::duration< " + char_type + L", ",
+          simple_type_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::Day& t)
       {
         built_in_type (
-          t,
-          L"::xsd::cxx::tree::gday< " + char_type + L", " +
-          simple_type_ + L" >");
+          t, L"::xsd::cxx::tree::gday< " + char_type + L", ", simple_type_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::Month& t)
       {
         built_in_type (
-          t,
-          L"::xsd::cxx::tree::gmonth< " + char_type + L", " +
-          simple_type_ + L" >");
+          t, L"::xsd::cxx::tree::gmonth< " + char_type + L", ", simple_type_);
       }
 
       virtual Void
@@ -606,17 +653,15 @@ namespace CXX
       {
         built_in_type (
           t,
-          L"::xsd::cxx::tree::gmonth_day< " + char_type + L", " +
-          simple_type_ + L" >");
+          L"::xsd::cxx::tree::gmonth_day< " + char_type + L", ",
+          simple_type_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::Year& t)
       {
         built_in_type (
-          t,
-          L"::xsd::cxx::tree::gyear< " + char_type + L", " +
-          simple_type_ + L" >");
+          t, L"::xsd::cxx::tree::gyear< " + char_type + L", ", simple_type_);
       }
 
       virtual Void
@@ -624,17 +669,15 @@ namespace CXX
       {
         built_in_type (
           t,
-          L"::xsd::cxx::tree::gyear_month< " + char_type + L", " +
-          simple_type_ + L" >");
+          L"::xsd::cxx::tree::gyear_month< " + char_type + L", ",
+          simple_type_);
       }
 
       virtual Void
       traverse (SemanticGraph::Fundamental::Time& t)
       {
         built_in_type (
-          t,
-          L"::xsd::cxx::tree::time< " + char_type + L", " +
-          simple_type_ + L" >");
+          t, L"::xsd::cxx::tree::time< " + char_type + L", ", simple_type_);
 
         os << endl;
       }
@@ -651,9 +694,7 @@ namespace CXX
           os << endl;
 
         entity_ = built_in_type (
-          t,
-          L"::xsd::cxx::tree::entity< " + char_type + L", " +
-          ncname_ + L" >");
+          t, L"::xsd::cxx::tree::entity< " + char_type + L", ", ncname_);
       }
 
       virtual Void
@@ -661,8 +702,9 @@ namespace CXX
       {
         built_in_type (
           t,
-          L"::xsd::cxx::tree::entities< " + char_type +
-          L", " + simple_type_ + L", " + entity_ + L" >");
+          L"::xsd::cxx::tree::entities< " + char_type + L", ",
+          simple_type_,
+          entity_);
 
         os << endl;
       }
@@ -686,9 +728,11 @@ namespace CXX
             os << "// Base class for element types." << endl
                << "//" << endl;
 
-          gen_typedef (L"::xsd::cxx::tree::element_type < " +
-                       char_type + L", " + type_ + L" >",
-                       c.get<String> ("element-type"));
+          gen_typedef (
+            c.get<String> ("element-type"),
+            L"::xsd::cxx::tree::element_type< " + char_type + L", ",
+            type_);
+
           os << endl;
         }
 
@@ -702,9 +746,11 @@ namespace CXX
             os << "// Root element map." << endl
                << "//" << endl;
 
-          gen_typedef (L"::xsd::cxx::tree::element_map < " +
-                       char_type + L", " + type_ + L" >",
-                       c.get<String> ("element-map"));
+          gen_typedef (
+            c.get<String> ("element-map"),
+            L"::xsd::cxx::tree::element_map< " + char_type + L", ",
+            type_);
+
           os << endl;
         }
 
@@ -720,8 +766,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::xml::dom::namespace_info < " + char_type + L" >",
-            c.get<String> ("namespace-info"));
+            c.get<String> ("namespace-info"),
+            L"::xsd::cxx::xml::dom::namespace_info< " + char_type + L" >");
 
             if (doxygen)
               os << endl
@@ -729,9 +775,9 @@ namespace CXX
                  << " * @brief Namespace serialization information map." << endl
                  << " */" << endl;
 
-            gen_typedef (L"::xsd::cxx::xml::dom::namespace_infomap < " +
-                         char_type + L" >",
-                         c.get<String> ("namespace-infomap"));
+            gen_typedef (c.get<String> ("namespace-infomap"),
+                         L"::xsd::cxx::xml::dom::namespace_infomap< " +
+                         char_type + L" >");
 
             if (doxygen)
               os << endl
@@ -740,8 +786,8 @@ namespace CXX
                  << " */" << endl;
 
             gen_typedef (
-              L"::xsd::cxx::tree::list_stream < " + char_type + L" >",
-              c.get<String> ("list-stream"));
+              c.get<String> ("list-stream"),
+              L"::xsd::cxx::tree::list_stream< " + char_type + L" >");
 
           if (doxygen)
             os << endl
@@ -749,8 +795,8 @@ namespace CXX
                << " * @brief Serialization wrapper for the %double type." << endl
                << " */" << endl;
 
-          gen_typedef (L"::xsd::cxx::tree::as_double < " + double_ + L" >",
-                       c.get<String> ("as-double"));
+          gen_typedef (c.get<String> ("as-double"),
+                       L"::xsd::cxx::tree::as_double< ", double_);
 
           if (doxygen)
             os << endl
@@ -758,8 +804,8 @@ namespace CXX
                << " * @brief Serialization wrapper for the %decimal type." << endl
                << " */" << endl;
 
-          gen_typedef (L"::xsd::cxx::tree::as_decimal < " + decimal_ + L" >",
-                       c.get<String> ("as-decimal"));
+          gen_typedef (c.get<String> ("as-decimal"),
+                       L"::xsd::cxx::tree::as_decimal< ", decimal_);
 
           if (doxygen)
             os << endl
@@ -767,7 +813,7 @@ namespace CXX
                << " * @brief Simple type facet." << endl
                << " */" << endl;
 
-          gen_typedef ("::xsd::cxx::tree::facet", c.get<String> ("facet"));
+          gen_typedef (c.get<String> ("facet"), "::xsd::cxx::tree::facet");
 
           os << endl;
         }
@@ -812,7 +858,7 @@ namespace CXX
              << " * @brief Parsing and serialization flags." << endl
              << " */" << endl;
 
-        gen_typedef ("::xsd::cxx::tree::flags", c.get<String> ("flags"));
+        gen_typedef (c.get<String> ("flags"), "::xsd::cxx::tree::flags");
 
         if (doxygen)
           os << endl
@@ -820,8 +866,8 @@ namespace CXX
              << " * @brief Parsing properties." << endl
              << " */" << endl;
 
-        gen_typedef (L"::xsd::cxx::tree::properties< " + char_type + L" >",
-                     c.get<String> ("properties"));
+        gen_typedef (c.get<String> ("properties"),
+                     L"::xsd::cxx::tree::properties< " + char_type + L" >");
         os << endl;
 
 
@@ -836,8 +882,8 @@ namespace CXX
              << " * @brief Root of the C++/Tree %exception hierarchy." << endl
              << " */" << endl;
 
-        gen_typedef (L"::xsd::cxx::tree::exception< " + char_type + L" >",
-                     c.get<String> ("exception"));
+        gen_typedef (c.get<String> ("exception"),
+                     L"::xsd::cxx::tree::exception< " + char_type + L" >");
 
         if (doxygen)
           os << endl
@@ -847,8 +893,8 @@ namespace CXX
              << " * the capacity argument." << endl
              << " */" << endl;
 
-        gen_typedef (L"::xsd::cxx::tree::bounds< " + char_type + L" >",
-                     c.get<String> ("bounds"));
+        gen_typedef (c.get<String> ("bounds"),
+                     L"::xsd::cxx::tree::bounds< " + char_type + L" >");
 
         if (doxygen)
           os << endl
@@ -858,8 +904,8 @@ namespace CXX
              << " * was encountered in the object model." << endl
              << " */" << endl;
 
-        gen_typedef (L"::xsd::cxx::tree::duplicate_id< " + char_type + L" >",
-                     c.get<String> ("duplicate-id"));
+        gen_typedef (c.get<String> ("duplicate-id"),
+                     L"::xsd::cxx::tree::duplicate_id< " + char_type + L" >");
 
         if (parsing)
         {
@@ -869,8 +915,8 @@ namespace CXX
                << " * @brief Exception indicating a parsing failure." << endl
                << " */" << endl;
 
-          gen_typedef (L"::xsd::cxx::tree::parsing< " + char_type + L" >",
-                       c.get<String> ("parsing"));
+          gen_typedef (c.get<String> ("parsing"),
+                       L"::xsd::cxx::tree::parsing< " + char_type + L" >");
 
           if (doxygen)
             os << endl
@@ -881,8 +927,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::tree::expected_element< " + char_type + L" >",
-            c.get<String> ("expected-element"));
+            c.get<String> ("expected-element"),
+            L"::xsd::cxx::tree::expected_element< " + char_type + L" >");
         }
 
         if (parsing || serialization)
@@ -896,8 +942,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::tree::unexpected_element< " + char_type + L" >",
-            c.get<String> ("unexpected-element"));
+            c.get<String> ("unexpected-element"),
+            L"::xsd::cxx::tree::unexpected_element< " + char_type + L" >");
         }
 
         if (parsing)
@@ -911,8 +957,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::tree::expected_attribute< " + char_type + L" >",
-            c.get<String> ("expected-attribute"));
+            c.get<String> ("expected-attribute"),
+            L"::xsd::cxx::tree::expected_attribute< " + char_type + L" >");
 
           if (doxygen)
             os << endl
@@ -923,8 +969,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::tree::unexpected_enumerator< " + char_type + L" >",
-            c.get<String> ("unexpected-enumerator"));
+            c.get<String> ("unexpected-enumerator"),
+            L"::xsd::cxx::tree::unexpected_enumerator< " + char_type + L" >");
 
           if (doxygen)
             os << endl
@@ -935,8 +981,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::tree::expected_text_content< " + char_type + L" >",
-            c.get<String> ("expected-text-content"));
+            c.get<String> ("expected-text-content"),
+            L"::xsd::cxx::tree::expected_text_content< " + char_type + L" >");
 
           if (doxygen)
             os << endl
@@ -947,8 +993,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::tree::no_prefix_mapping< " + char_type + L" >",
-            c.get<String> ("no-prefix-mapping"));
+            c.get<String> ("no-prefix-mapping"),
+            L"::xsd::cxx::tree::no_prefix_mapping< " + char_type + L" >");
         }
 
         if (options.value<CLI::generate_polymorphic> ())
@@ -964,8 +1010,8 @@ namespace CXX
                  << " */" << endl;
 
             gen_typedef (
-              L"::xsd::cxx::tree::no_type_info< " + char_type + L" >",
-              c.get<String> ("no-type-info"));
+              c.get<String> ("no-type-info"),
+              L"::xsd::cxx::tree::no_type_info< " + char_type + L" >");
           }
 
           if (parsing)
@@ -979,8 +1025,8 @@ namespace CXX
                  << " */" << endl;
 
             gen_typedef (
-              L"::xsd::cxx::tree::not_derived< " + char_type + L" >",
-              c.get<String> ("not-derived"));
+              c.get<String> ("not-derived"),
+              L"::xsd::cxx::tree::not_derived< " + char_type + L" >");
           }
         }
 
@@ -995,8 +1041,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::tree::no_element_info< " + char_type + L" >",
-            c.get<String> ("no-element-info"));
+            c.get<String> ("no-element-info"),
+            L"::xsd::cxx::tree::no_element_info< " + char_type + L" >");
         }
 
         if (serialization)
@@ -1009,8 +1055,8 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::tree::serialization< " + char_type + L" >",
-            c.get<String> ("serialization"));
+            c.get<String> ("serialization"),
+            L"::xsd::cxx::tree::serialization< " + char_type + L" >");
         }
 
         os << endl;
@@ -1028,8 +1074,8 @@ namespace CXX
                << " * @brief Error severity." << endl
                << " */" << endl;
 
-          gen_typedef ("::xsd::cxx::tree::severity",
-                       c.get<String> ("severity"));
+          gen_typedef (c.get<String> ("severity"),
+                       "::xsd::cxx::tree::severity");
 
           if (doxygen)
             os << endl
@@ -1037,8 +1083,8 @@ namespace CXX
                << " * @brief Error condition." << endl
                << " */" << endl;
 
-          gen_typedef (L"::xsd::cxx::tree::error< " + char_type + L" >",
-                       c.get<String> ("error"));
+          gen_typedef (c.get<String> ("error"),
+                       L"::xsd::cxx::tree::error< " + char_type + L" >");
 
           if (doxygen)
             os << endl
@@ -1046,8 +1092,8 @@ namespace CXX
                << " * @brief List of %error conditions." << endl
                << " */" << endl;
 
-          gen_typedef (L"::xsd::cxx::tree::diagnostics< " + char_type + L" >",
-                       c.get<String> ("diagnostics"));
+          gen_typedef (c.get<String> ("diagnostics"),
+                       L"::xsd::cxx::tree::diagnostics< " + char_type + L" >");
           os << endl;
         }
 
@@ -1062,8 +1108,8 @@ namespace CXX
                << "//" << endl;
 
           gen_typedef (
-            L"::xsd::cxx::xml::error_handler< " + char_type + L" >",
-            c.get<String> ("error-handler"));
+            c.get<String> ("error-handler"),
+            L"::xsd::cxx::xml::error_handler< " + char_type + L" >");
 
           os << endl;
         }
@@ -1145,7 +1191,7 @@ namespace CXX
           }
 
           os << "static" << endl
-             << "const ::xsd::cxx::tree::element_map_init < " <<
+             << "const ::xsd::cxx::tree::element_map_init< " <<
             char_type << ", " << type_ << " >" << endl
              << "_xsd_element_map_init;";
 
@@ -1158,10 +1204,79 @@ namespace CXX
         }
 
         Namespace::post (n);
+
+        // Generate exports.
+        //
+        if (export_)
+        {
+          StringSet ns_set;
+
+          for (StringSet::ConstIterator i (exports_.begin ());
+               i != exports_.end (); ++i)
+          {
+            String const& e (*i);
+
+            // 12 is to skip ::xsd::cxx::
+            //
+            ns_set.insert (String (e, 12, e.rfind (':', e.find ('<')) - 13));
+          }
+
+          os << "#ifndef XSD_NO_EXPORT" << endl
+             << endl
+             << "namespace xsd"
+             << "{"
+             << "namespace cxx"
+             << "{";
+
+          for (StringSet::ConstIterator i (ns_set.begin ());
+               i != ns_set.end (); ++i)
+          {
+            String const& ns (*i);
+            String prefix (L"::xsd::cxx::" + ns);
+
+            Size n (1);
+            for (Size b (0), e (ns.find (':')); ; n++)
+            {
+              os << "namespace " << String (ns, b, e)
+                 << "{";
+
+              if (e == String::npos)
+                break;
+
+              b = e + 2;
+              e = ns.find (':', b);
+            }
+
+            for (StringSet::ConstIterator i (exports_.begin ());
+                 i != exports_.end (); ++i)
+            {
+              String const& e (*i);
+              String ens (e, 12, e.rfind (':', e.find ('<')) - 13);
+
+              if (ns == ens)
+              {
+                String type (e, e.rfind (':', e.find ('<')) + 1);
+                os << "template class " << type_exp << type << ";";
+              }
+            }
+
+            while (n--)
+              os << "}";
+          }
+
+          os << "}"  // cxx
+             << "}"  // xsd
+             << "#endif // XSD_NO_EXPORT" << endl
+             << endl;
+        }
       }
 
     private:
+      typedef Cult::Containers::Set<String> StringSet;
+
       Boolean export_;
+      StringSet exports_;
+      String xs_ns_;
 
       Traversal::Names names_;
 

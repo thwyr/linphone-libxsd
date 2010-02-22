@@ -426,6 +426,9 @@
     <dt><code><b>--export-xml-schema</b></code></dt>
     <dd>Export/import types in the XML Schema namespace using the export
         symbol provided with the <code><b>--export-symbol</b></code> option.
+        The <code><b>XSD_NO_EXPORT</b></code> macro can be used to omit
+        this code during C++ compilation, which may be useful if you
+        would like to use the same generated code across multiple platforms.
     </dd>
 
     <dt><code><b>--export-maps</b></code></dt>
@@ -438,6 +441,9 @@
         DLLs should be compiled with <code><b>--import-maps</b></code>.
         This option is only valid together with
         <code><b>--generate-polymorphic</b></code>.
+        The <code><b>XSD_NO_EXPORT</b></code> macro can be used to omit
+        this code during C++ compilation, which may be useful if you
+        would like to use the same generated code across multiple platforms.
     </dd>
 
     <dt><code><b>--import-maps</b></code></dt>
@@ -445,6 +451,9 @@
         which this generated code is linked. See the <code><b>--export-maps</b></code>
         option documentation for details. This options is only valid together
         with <code><b>--generate-polymorphic</b></code>.
+        The <code><b>XSD_NO_EXPORT</b></code> macro can be used to omit
+        this code during C++ compilation, which may be useful if you
+        would like to use the same generated code across multiple platforms.
     </dd>
 
     <dt><code><b>--disable-warning</b> <i>warn</i></code></dt>

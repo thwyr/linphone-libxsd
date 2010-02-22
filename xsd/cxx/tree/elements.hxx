@@ -1048,9 +1048,9 @@ namespace CXX
           SemanticGraph::Nameable& ncname (
             xs_ns ().find ("NCName").first->named ());
 
-          os << "::xsd::cxx::tree::idref< " <<
-            type_name (t.argumented ().type ()) << ", " <<
-            char_type << ", " << fq_name (ncname) << " >";
+          os << "::xsd::cxx::tree::idref< " << char_type << ", " <<
+            fq_name (ncname) << ", "  <<
+            type_name (t.argumented ().type ()) << " >";
         }
       }
 
@@ -1070,8 +1070,8 @@ namespace CXX
 
           os << "::xsd::cxx::tree::idrefs< " << char_type << ", " <<
             any_simple_type << ", ::xsd::cxx::tree::idref< " <<
-            type_name (t.argumented ().type ()) << ", " << char_type <<
-            ", " << fq_name (ncname) << " > >";
+            char_type << ", " << fq_name (ncname) << ", " <<
+            type_name (t.argumented ().type ()) << " > >";
         }
       }
 

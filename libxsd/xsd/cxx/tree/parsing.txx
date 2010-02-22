@@ -638,22 +638,22 @@ namespace xsd
 
       // idref
       //
-      template <typename T, typename C, typename B>
-      idref<T, C, B>::
+      template <typename C, typename B, typename T>
+      idref<C, B, T>::
       idref (const xercesc::DOMElement& e, flags f, container* c)
           : base_type (e, f, c), identity_ (*this)
       {
       }
 
-      template <typename T, typename C, typename B>
-      idref<T, C, B>::
+      template <typename C, typename B, typename T>
+      idref<C, B, T>::
       idref (const xercesc::DOMAttr& a, flags f, container* c)
           : base_type (a, f , c), identity_ (*this)
       {
       }
 
-      template <typename T, typename C, typename B>
-      idref<T, C, B>::
+      template <typename C, typename B, typename T>
+      idref<C, B, T>::
       idref (const std::basic_string<C>& s,
              const xercesc::DOMElement* e,
              flags f,
@@ -661,7 +661,6 @@ namespace xsd
           : base_type (s, e, f, c), identity_ (*this)
       {
       }
-
 
 
       // idrefs

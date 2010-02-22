@@ -31,7 +31,7 @@ template class xsd::cxx::tree::language< char, xml_schema::token >;
 // ID/IDREF.
 //
 template class xsd::cxx::tree::id< char, xml_schema::ncname >;
-template class xsd::cxx::tree::idref< xml_schema::type, char, xml_schema::ncname >;
+template class xsd::cxx::tree::idref< char, xml_schema::ncname, xml_schema::type >;
 template class xsd::cxx::tree::idrefs< char, xml_schema::simple_type, xml_schema::idref >;
 
 // URI.

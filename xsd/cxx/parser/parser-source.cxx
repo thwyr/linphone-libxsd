@@ -827,7 +827,9 @@ namespace CXX
 
         if (import_maps || export_maps)
         {
-          ctx.os << "namespace xsd"
+          ctx.os << "#ifndef XSD_NO_EXPORT" << endl
+                 << endl
+                 << "namespace xsd"
                  << "{"
                  << "namespace cxx"
                  << "{"
@@ -859,10 +861,20 @@ namespace CXX
             ctx.os << "template struct __attribute__ ((visibility(\"default\"))) " <<
               "inheritance_map_init< " << ctx.char_type << " >;";
 
+          ctx.os << "#elif defined(XSD_MAP_VISIBILITY)" << endl
+                 << "template struct XSD_MAP_VISIBILITY " <<
+            "substitution_map_init< " << ctx.char_type << " >;";
+
+          if (ctx.validation)
+            ctx.os << "template struct XSD_MAP_VISIBILITY " <<
+              "inheritance_map_init< " << ctx.char_type << " >;";
+
           ctx.os << "#endif" << endl
                  << "}"  // parser
                  << "}"  // cxx
-                 << "}"; // xsd
+                 << "}"  // xsd
+                 << "#endif // XSD_NO_EXPORT" << endl
+                 << endl;
         }
 
         ctx.os << "static" << endl
