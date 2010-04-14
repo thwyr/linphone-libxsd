@@ -2428,7 +2428,7 @@ namespace CXX
           //
           if (options.value<CLI::generate_default_ctor> ())
           {
-            // c-tor (ultimate-base all-non-optional-members) will become
+            // c-tor (ultimate-base, all-non-optional-members) will become
             // default c-tor if our inheritance hierarchy has no required
             // members and no simple base. We can also collide with
             // c-tor (all-non-optional-members) if we have no required
@@ -2462,9 +2462,13 @@ namespace CXX
           //
           if (options.value<CLI::generate_from_base_ctor> ())
           {
-            // c-tor (ultimate-base, all-non-optional-members) will become
-            // c-tor (base, all-non-optional-members) unless our immediate
-            // base's hierarchy has some non-optional members.
+            // c-tor (base, all-non-optional-members) will be equivalent to
+            // c-tor (ultimate-base, all-non-optional-members) unless our
+            // immediate base's hierarchy has some non-optional members.
+            // We also need to generate this c-tor when one of the types
+            // in our inheritance hierarchy was customized since the
+            // customized version may not necessarily be convertible to
+            // the base without loss of information.
             //
             Boolean generate (false);
             {

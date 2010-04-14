@@ -678,7 +678,9 @@ namespace CXX
     //
     GenerateFromBaseCtor::
     GenerateFromBaseCtor (Context& c, Boolean& generate)
-        : traverser_ (c, generate)
+        : generate_ (generate),
+          custom_ (false),
+          traverser_ (c, generate, custom_)
     {
       inherits_ >> traverser_;
     }
@@ -687,14 +689,35 @@ namespace CXX
     traverse (SemanticGraph::Complex& c)
     {
       inherits (c, inherits_);
+
+      if (!generate_ && custom_)
+      {
+        // We have a customized type in the hierarchy. In this case we
+        // want to generate the c-tor unless base and ultimate-base are
+        // the same (see CtorArgs).
+        //
+        SemanticGraph::Type& b (c.inherits ().base ());
+        generate_ = b.is_a<SemanticGraph::Complex> () &&
+          !b.is_a<SemanticGraph::Enumeration> ();
+      }
     }
 
     GenerateFromBaseCtor::Traverser::
-    Traverser (Context& c, Boolean& generate)
-        : Context (c), generate_ (generate)
+    Traverser (Context& c, Boolean& generate, Boolean& custom)
+        : Context (c), generate_ (generate), custom_ (custom)
     {
       *this >> inherits_ >> *this;
       *this >> names_ >> *this;
+    }
+
+    Void GenerateFromBaseCtor::Traverser::
+    traverse (SemanticGraph::Type& t)
+    {
+      if (!custom_)
+      {
+        String tmp;
+        custom_ = custom_type (t, tmp);
+      }
     }
 
     Void GenerateFromBaseCtor::Traverser::
@@ -704,6 +727,9 @@ namespace CXX
 
       if (!generate_)
         inherits (c, inherits_);
+
+      if (!generate_)
+        traverse (static_cast<SemanticGraph::Type&> (c));
     }
 
     Void GenerateFromBaseCtor::Traverser::

@@ -1424,16 +1424,23 @@ namespace CXX
       traverse (SemanticGraph::Complex& c);
 
     private:
+      Boolean& generate_;
+      Boolean custom_;
+
       // Note that we are not interested in anyAttribute since it is always
       // mapped to a sequence.
       //
-      struct Traverser: Traversal::Complex,
+      struct Traverser: Traversal::Type,
+                        Traversal::Complex,
                         Traversal::Element,
                         Traversal::Attribute,
                         Traversal::Any,
                         Context
       {
-        Traverser (Context& c, Boolean& generate);
+        Traverser (Context& c, Boolean& generate, Boolean& custom);
+
+        virtual Void
+        traverse (SemanticGraph::Type&);
 
         virtual Void
         traverse (SemanticGraph::Complex&);
@@ -1449,6 +1456,7 @@ namespace CXX
 
       private:
         Boolean& generate_;
+        Boolean& custom_;
 
       private:
         Traversal::Inherits inherits_;
