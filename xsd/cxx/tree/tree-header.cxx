@@ -2665,7 +2665,9 @@ namespace CXX
 
           if (string_based)
           {
-            if (enum_base != 0)
+            // We might not have the value type if this enum is customized.
+            //
+            if (enum_base != 0 && enum_base->context ().count ("value"))
             {
               // c-tor (enum-value, all-non-optional-members)
               //

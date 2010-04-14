@@ -1067,6 +1067,12 @@ namespace CXX
         {
           SemanticGraph::Context& cc (c.context ());
 
+          // We leave this set around to allow other mappings to use
+          // this information.
+          //
+          cc.set ("cxx-tree-name-processor-stem-set", NameSet ());
+          cc.set ("cxx-tree-name-processor-member-set", NameSet ());
+
           // Use processed name.
           //
           String name (cc.get<String> ("name"));
@@ -1077,12 +1083,6 @@ namespace CXX
           //
           if (renamed_type (c, name) && !name)
             return;
-
-          // We leave this set around to allow other mappings to use
-          // this information.
-          //
-          cc.set ("cxx-tree-name-processor-stem-set", NameSet ());
-          cc.set ("cxx-tree-name-processor-member-set", NameSet ());
 
           NameSet& stem_set (
             cc.get<NameSet> ("cxx-tree-name-processor-stem-set"));
@@ -1102,7 +1102,8 @@ namespace CXX
             //
             SemanticGraph::Type& base (c.inherits ().base ());
 
-            if (base.is_a<SemanticGraph::Complex> ())
+            if (base.is_a<SemanticGraph::Complex> () &&
+                !base.is_a<SemanticGraph::Enumeration> ())
             {
               if (!base.context ().count (
                     "cxx-tree-name-processor-member-set"))
