@@ -253,7 +253,7 @@ namespace CXX
                << " * @name Serialization functions for the %" <<
 	       comment (e.name ()) << " document root." << endl;
 
-            if (e.annotated ())
+            if (e.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (e.annotation ());

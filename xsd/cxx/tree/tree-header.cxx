@@ -49,7 +49,7 @@ namespace CXX
               "sequence (e.g.," << endl
                << " * std::vector)." << endl;
 
-            if (l.annotated ())
+            if (l.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (l.annotation ());
@@ -338,7 +338,7 @@ namespace CXX
                << " *" << endl
                << " * The mapping represents unions as strings." << endl;
 
-            if (u.annotated ())
+            if (u.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (u.annotation ());
@@ -554,7 +554,7 @@ namespace CXX
         virtual Void
         traverse (Type& e)
         {
-          if (doxygen && e.annotated ())
+          if (doxygen && e.annotated_p ())
           {
             os << "/**" << endl;
             write_annotation (e.annotation ());
@@ -638,7 +638,7 @@ namespace CXX
               comment (e.name ()) << endl
                << " * schema type." << endl;
 
-            if (e.annotated ())
+            if (e.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (e.annotation ());
@@ -1814,7 +1814,7 @@ namespace CXX
               os << "required " << (el ? "element." : "attribute.") << endl;
             }
 
-            if (m.annotated ())
+            if (m.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (m.annotation ());
@@ -1978,7 +1978,7 @@ namespace CXX
                << " * @brief Accessor and modifier functions for the " <<
               "any wildcard." << endl;
 
-            if (a.annotated ())
+            if (a.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (a.annotation ());
@@ -2083,7 +2083,7 @@ namespace CXX
               "anyAttribute" << endl
                << " * wildcard." << endl;
 
-            if (a.annotated ())
+            if (a.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (a.annotation ());
@@ -2319,7 +2319,7 @@ namespace CXX
                << " * @brief Class corresponding to the %" <<
 	       comment (c.name ()) << " schema type." << endl;
 
-            if (c.annotated ())
+            if (c.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (c.annotation ());
@@ -3122,7 +3122,7 @@ namespace CXX
                << " * @brief Class corresponding to the %" <<
               comment (e.name ()) << " root element." << endl;
 
-            if (e.annotated ())
+            if (e.annotated_p ())
             {
               os << " *" << endl;
               write_annotation (e.annotation ());
