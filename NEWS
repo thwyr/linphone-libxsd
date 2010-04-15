@@ -110,6 +110,10 @@ Version 3.3.0
   * Empty XML Schema enumeration values are now mapped to the 'empty' C++ 
     enumerator name instead of 'cxx'.
 
+  * XML Schema union types with members that are enumeration types are 
+    automatically converted to equivalent enumeration types with a union 
+    of all the member's enumerators.
+
 Version 3.2.0
 
   * New option, --disable-warning, disables printing of a warning with
