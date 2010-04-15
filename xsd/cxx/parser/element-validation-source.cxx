@@ -36,10 +36,10 @@ namespace CXX
         {
           String const& name (e.name ());
 
-          if (polymorphic && e.global ())
+          if (polymorphic && e.global_p ())
             os << "(";
 
-          if (e.qualified () && e.namespace_ ().name ())
+          if (e.qualified_p () && e.namespace_ ().name ())
           {
             String const& ns (e.namespace_ ().name ());
 
@@ -52,7 +52,7 @@ namespace CXX
 
           // Only a globally-defined element can be a subst-group root.
           //
-          if (polymorphic && e.global ())
+          if (polymorphic && e.global_p ())
           {
             os << ") ||" << endl
                << "::xsd::cxx::parser::substitution_map_instance< " <<
@@ -153,7 +153,7 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Element& e)
         {
-          String ns (e.qualified () ? e.namespace_ ().name () : String ());
+          String ns (e.qualified_p () ? e.namespace_ ().name () : String ());
           os << strlit (ns) << ", " << strlit (e.name ());
         }
 
@@ -877,7 +877,7 @@ namespace CXX
               continue;
 
             Element& e (dynamic_cast<Element&> (ci->particle ()));
-            String ns (e.qualified () ? e.namespace_ ().name () : String ());
+            String ns (e.qualified_p () ? e.namespace_ ().name () : String ());
             UnsignedLong state (e.context ().get<UnsignedLong> ("state"));
 
             os << "if (count[" << state << "UL] == 0)" << endl

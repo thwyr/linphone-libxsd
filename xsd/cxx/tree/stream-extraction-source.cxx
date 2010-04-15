@@ -476,7 +476,7 @@ namespace CXX
             traverser.dispatch (a.type ());
           }
 
-          if (a.optional () && !a.default_ ())
+          if (a.optional_p () && !a.default_p ())
           {
             os << "{"
                << "bool p;"

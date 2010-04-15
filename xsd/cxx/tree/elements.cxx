@@ -661,7 +661,7 @@ namespace CXX
     Void GenerateDefaultCtor::
     traverse (SemanticGraph::Attribute& a)
     {
-      if (min (a) == 1 && !a.fixed ())
+      if (min (a) == 1 && !a.fixed_p ())
         generate_ = true;
     }
 
@@ -742,7 +742,7 @@ namespace CXX
     Void GenerateFromBaseCtor::Traverser::
     traverse (SemanticGraph::Attribute& a)
     {
-      if (min (a) == 1 && !a.fixed ())
+      if (min (a) == 1 && !a.fixed_p ())
         generate_ = true;
     }
 
@@ -880,7 +880,7 @@ namespace CXX
       // default or required fixed values here. Instead we are
       // going to default-initialize them.
       //
-      if (min (a) == 1 && !a.fixed ())
+      if (min (a) == 1 && !a.fixed_p ())
       {
         String const& name (ename (a));
 
@@ -1013,7 +1013,7 @@ namespace CXX
       // default or required fixed values here. Instead we are
       // going to default-initialize them.
       //
-      if (min (a) == 1 && !a.fixed ())
+      if (min (a) == 1 && !a.fixed_p ())
       {
         os << comma () << "const " << etype (a) << "&";
 
@@ -1102,7 +1102,7 @@ namespace CXX
       // default or required fixed values here. Instead we are
       // going to default-initialize them.
       //
-      if (min (a) == 1 && !a.fixed ())
+      if (min (a) == 1 && !a.fixed_p ())
       {
         os << comma () << "const " << etype (a) << "&";
 

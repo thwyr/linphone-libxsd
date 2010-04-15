@@ -291,7 +291,7 @@ namespace CXX
             return;
 
           String const& aname (eaname (e));
-          String ns (e.qualified () ? e.namespace_ ().name () : "");
+          String ns (e.qualified_p () ? e.namespace_ ().name () : "");
           String type (scope + L"::" + etype (e));
 
           // Check if we need to handle xsi:type and substitution groups.
@@ -344,8 +344,8 @@ namespace CXX
                  << "tsm.serialize (" << endl
                  << strlit (e.name ()) << "," << endl
                  << strlit (ns) << "," << endl
-                 << (e.global () ? "true" : "false") << ", " <<
-                (e.qualified () ? "true" : "false") << ", e, *b);";
+                 << (e.global_p () ? "true" : "false") << ", " <<
+                (e.qualified_p () ? "true" : "false") << ", e, *b);";
             }
             else
             {
@@ -402,8 +402,8 @@ namespace CXX
                  << "tsm.serialize (" << endl
                  << strlit (e.name ()) << "," << endl
                  << strlit (ns) << "," << endl
-                 << (e.global () ? "true" : "false") << ", " <<
-                (e.qualified () ? "true" : "false") << ", e, x);";
+                 << (e.global_p () ? "true" : "false") << ", " <<
+                (e.qualified_p () ? "true" : "false") << ", e, x);";
             }
             else
             {
@@ -457,8 +457,8 @@ namespace CXX
                  << "tsm.serialize (" << endl
                  << strlit (e.name ()) << "," << endl
                  << strlit (ns) << "," << endl
-                 << (e.global () ? "true" : "false") << ", " <<
-                (e.qualified () ? "true" : "false") << ", e, x);";
+                 << (e.global_p () ? "true" : "false") << ", " <<
+                (e.qualified_p () ? "true" : "false") << ", e, x);";
             }
             else
             {
@@ -570,12 +570,12 @@ namespace CXX
         traverse (Type& a)
         {
           String const& aname (eaname (a));
-          String ns (a.qualified () ? a.namespace_ ().name () : "");
+          String ns (a.qualified_p () ? a.namespace_ ().name () : "");
 
           os << "// " << comment (a.name ()) << endl
              << "//" << endl;
 
-          if (a.optional () && !a.default_ ())
+          if (a.optional_p () && !a.default_p ())
           {
             os << "if (i." << aname << " ())"
                << "{"
@@ -611,7 +611,7 @@ namespace CXX
           {
             // Make sure we serialize required fixed attributes.
             //
-            if (a.optional () &&
+            if (a.optional_p () &&
                 options.value<CLI::omit_default_attributes> ())
             {
               os << "if (i." << aname << " () != " << scope <<

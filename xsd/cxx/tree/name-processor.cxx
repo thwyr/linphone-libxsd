@@ -669,7 +669,7 @@ namespace CXX
           String const& s (m.context ().get<String> ("stem"));
           String const& b (m.context ().get<String> ("name"));
 
-          Boolean def_attr (m.default_ () &&
+          Boolean def_attr (m.default_p () &&
                             m.is_a<SemanticGraph::Attribute> ());
 
           // Accessors/modifiers. Note that we postpone inserting
@@ -807,7 +807,7 @@ namespace CXX
 
           // Default value.
           //
-          if (m.default_ ())
+          if (m.default_p ())
           {
             Boolean simple (true);
 

@@ -1037,7 +1037,7 @@ namespace CXX
       virtual Void
       traverse (SemanticGraph::Fundamental::IdRef& t)
       {
-        if (t.named ())
+        if (t.named_p ())
         {
           // IDREF<anyType>
           //
@@ -1057,7 +1057,7 @@ namespace CXX
       virtual Void
       traverse (SemanticGraph::Fundamental::IdRefs& t)
       {
-        if (t.named ())
+        if (t.named_p ())
         {
           // IDREFS<anyType>
           //

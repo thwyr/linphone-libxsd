@@ -275,7 +275,7 @@ namespace Processing
         {
           SemanticGraph::ContainsParticle& cp (e.contained_particle ());
 
-          String name (e.qualified ()
+          String name (e.qualified_p ()
                        ? e.namespace_ ().name () + L" " + e.name ()
                        : e.name ());
 
@@ -345,7 +345,7 @@ namespace Processing
         {
           FrontendElements::Context& ctx (a.context ());
 
-          ctx.set ("min", a.optional () ? 0UL : 1UL);
+          ctx.set ("min", a.optional_p () ? 0UL : 1UL);
           ctx.set ("max", 1UL);
         }
       };

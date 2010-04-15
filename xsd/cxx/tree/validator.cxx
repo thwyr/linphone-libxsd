@@ -67,7 +67,7 @@ namespace CXX
           if (n.is_a<SemanticGraph::Namespace> ())
             return L"<namespace-level>"; // There is a bug if you see this.
 
-          if (n.named ())
+          if (n.named_p ())
           {
             SemanticGraph::Scope& scope (n.scope ());
 
@@ -130,7 +130,7 @@ namespace CXX
 
             using SemanticGraph::Any;
 
-            Boolean q (e.qualified ());
+            Boolean q (e.qualified_p ());
             String ns (q ? e.namespace_ ().name () : "");
 
             for (Any::NamespaceIterator i (any_.namespace_begin ());
@@ -306,7 +306,7 @@ namespace CXX
           {
             SemanticGraph::Type& t (c.inherits ().base ());
 
-            if (t.named () &&
+            if (t.named_p () &&
                 types_.find (
                   t.scope ().name () + L"#" + t.name ()) == types_.end ())
             {
@@ -346,7 +346,7 @@ namespace CXX
         {
           // This is also used to traverse Complex.
           //
-          if (t.named ())
+          if (t.named_p ())
           {
             types_.insert (t.scope ().name () + L"#" + t.name ());
           }
@@ -437,7 +437,7 @@ namespace CXX
         {
           SemanticGraph::Type& t (m.type ());
 
-          if (!t.named ()
+          if (!t.named_p ()
               && !t.is_a<SemanticGraph::Fundamental::IdRef> ()
               && !t.is_a<SemanticGraph::Fundamental::IdRefs> ())
           {

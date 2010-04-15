@@ -557,7 +557,7 @@ namespace CXX
 
           // default_value
           //
-          if (m.default_ ())
+          if (m.default_p ())
           {
             SemanticGraph::Type& t (m.type ());
             Boolean simple (true);
@@ -704,12 +704,12 @@ namespace CXX
                << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "tfm.create (" << endl
                << strlit (e.name ()) << "," << endl
-               << (e.qualified ()
+               << (e.qualified_p ()
                    ? strlit (e.namespace_ ().name ())
                    : L + String ("\"\"")) << "," << endl
                << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl
-               << (e.global () ? "true" : "false") << ", " <<
-              (e.qualified () ? "true" : "false") << ", " <<
+               << (e.global_p () ? "true" : "false") << ", " <<
+              (e.qualified_p () ? "true" : "false") << ", " <<
               "i, n, f, this));"
                << endl
                << "if (tmp.get () != 0)"
@@ -717,7 +717,7 @@ namespace CXX
           }
           else
           {
-            if (e.qualified () && e.namespace_ ().name ())
+            if (e.qualified_p () && e.namespace_ ().name ())
             {
               os << "if (n.name () == " << strlit (e.name ()) << " && " <<
                 "n.namespace_ () == " << strlit (e.namespace_ ().name ()) << ")"
@@ -878,7 +878,7 @@ namespace CXX
                << "throw ::xsd::cxx::tree::expected_element< " <<
               char_type << " > (" << endl
                << strlit (e.name ()) << "," << endl
-               << (e.qualified ()
+               << (e.qualified_p ()
                    ? strlit (e.namespace_ ().name ())
                    : L + String ("\"\"")) << ");"
                << "}";
@@ -1062,7 +1062,7 @@ namespace CXX
 
           String const& tr (etraits (a)); // traits type name
 
-          if (a.qualified () && a.namespace_ ().name ())
+          if (a.qualified_p () && a.namespace_ ().name ())
           {
             os << "if (n.name () == " << strlit (a.name ()) << " && " <<
               "n.namespace_ () == " << strlit (a.namespace_ ().name ()) << ")"
@@ -1207,12 +1207,12 @@ namespace CXX
         {
           String const& member (emember (a));
 
-          if (!a.optional () || a.default_ ())
+          if (!a.optional_p () || a.default_p ())
           {
             os << "if (!" << member << ".present ())"
                << "{";
 
-            if (a.default_ ())
+            if (a.default_p ())
             {
               os << "this->" << member << ".set (" <<
                 edefault_value (a) << " ());";
@@ -1221,7 +1221,7 @@ namespace CXX
               os << "throw ::xsd::cxx::tree::expected_attribute< " <<
                 char_type << " > (" << endl
                  << strlit (a.name ()) << "," << endl
-                 << (a.qualified ()
+                 << (a.qualified_p ()
                      ? strlit (a.namespace_ ().name ())
                      : L + String ("\"\"")) << ");";
 
@@ -1331,7 +1331,7 @@ namespace CXX
             // Note that we are not including attributes with default
             // or required fixed values here.
             //
-            if (min (a) == 1 && !a.fixed ())
+            if (min (a) == 1 && !a.fixed_p ())
             {
               // one
               //
@@ -1408,7 +1408,7 @@ namespace CXX
         {
           String const& member (emember (a));
 
-          Boolean def (a.default_ ());
+          Boolean def (a.default_p ());
 
           if (min (a) == 0 && !def)
           {
@@ -1644,7 +1644,7 @@ namespace CXX
         {
           String const& member (emember (a));
 
-          if (a.default_ ())
+          if (a.default_p ())
           {
             // This is an attribute with default or fixed value. We are
             // going to initialize it to its default value.

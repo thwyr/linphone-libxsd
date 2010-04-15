@@ -443,7 +443,7 @@ namespace CXX
             t.dispatch (m.type ());
           }
 
-          Boolean def_attr (m.default_ () &&
+          Boolean def_attr (m.default_p () &&
                             m.is_a<SemanticGraph::Attribute> ());
 
           if (max (m) != 1)
@@ -561,7 +561,7 @@ namespace CXX
 
             // Do not generate modifiers for fixed attributes.
             //
-            if (!(def_attr && m.fixed ()))
+            if (!(def_attr && m.fixed_p ()))
             {
               // type&
               // name ();
@@ -611,7 +611,7 @@ namespace CXX
 
           // default_value
           //
-          if (m.default_ ())
+          if (m.default_p ())
           {
             Boolean simple (true);
 

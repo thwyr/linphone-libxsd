@@ -200,16 +200,16 @@ namespace CXX
               if (typeid (bm) != typeid (m))
                 continue;
 
-              if (m.qualified ())
+              if (m.qualified_p ())
               {
-                if (bm.qualified () &&
+                if (bm.qualified_p () &&
                     m.name () == bm.name () &&
                     m.namespace_ ().name () == bm.namespace_ ().name ())
                   return bm;
               }
               else
               {
-                if (!bm.qualified () && m.name () == bm.name ())
+                if (!bm.qualified_p () && m.name () == bm.name ())
                   return bm;
               }
             }

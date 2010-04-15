@@ -309,7 +309,7 @@ namespace CXX
         {
           String const& aname (eaname (a));
 
-          if (a.optional () && !a.default_ ())
+          if (a.optional_p () && !a.default_p ())
           {
             os << "if (i." << aname << " ())"
                << "{"

@@ -395,7 +395,7 @@ namespace CXX
         virtual Void
         traverse (Type& a)
         {
-          if (!a.optional ())
+          if (!a.optional_p ())
           {
             os << "bool " << ename (a) << ";";
           }
@@ -590,7 +590,7 @@ namespace CXX
 
           // characters
           //
-          if (validation && c.mixed ())
+          if (validation && c.mixed_p ())
           {
             os << "virtual bool" << endl
                << "_characters_impl (const " << string_type << "&);"

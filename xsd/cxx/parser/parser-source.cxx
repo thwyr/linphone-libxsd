@@ -289,10 +289,10 @@ namespace CXX
 
           os << "if (";
 
-          if (poly && e.global ())
+          if (poly && e.global_p ())
             os << "(";
 
-          if (e.qualified () && e.namespace_ ().name ())
+          if (e.qualified_p () && e.namespace_ ().name ())
           {
             os << "n == " << strlit (e.name ()) << " && " <<
               "ns == " << strlit (e.namespace_ ().name ());
@@ -304,7 +304,7 @@ namespace CXX
 
           // Only a globally-defined element can be a subst-group root.
           //
-          if (poly && e.global ())
+          if (poly && e.global_p ())
           {
             os << ") ||" << endl
                << "::xsd::cxx::parser::substitution_map_instance< " <<
@@ -389,10 +389,10 @@ namespace CXX
 
           os << "if (";
 
-          if (poly && e.global ())
+          if (poly && e.global_p ())
             os << "(";
 
-          if (e.qualified () && e.namespace_ ().name ())
+          if (e.qualified_p () && e.namespace_ ().name ())
           {
             os << "n == " << strlit (e.name ()) << " && " <<
               "ns == " << strlit (e.namespace_ ().name ());
@@ -404,7 +404,7 @@ namespace CXX
 
           // Only a globally-defined element can be a subst-group root.
           //
-          if (poly && e.global ())
+          if (poly && e.global_p ())
           {
             os << ") ||" << endl
                << "::xsd::cxx::parser::substitution_map_instance< " <<
@@ -455,7 +455,7 @@ namespace CXX
           String const& name (ename (a));
           String const& inst (emember (a));
 
-          if (a.qualified () && a.namespace_ ().name ())
+          if (a.qualified_p () && a.namespace_ ().name ())
           {
             os << "if (n == " << strlit (a.name ()) << " && " <<
               "ns == " << strlit (a.namespace_ ().name ()) << ")"
