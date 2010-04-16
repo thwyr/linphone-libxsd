@@ -2391,19 +2391,14 @@ auto_ptr&lt;people_t> p (people ("people.xml", 0, props));
      this file with validation enabled:</p>
 
   <pre class="terminal">
-people.xml:3:18 error: Unknown element 'person'
-people.xml:3:18 error: Attribute 'id' is not declared for element 'person'
-people.xml:4:17 error: Unknown element 'first-name'
-people.xml:5:16 error: Unknown element 'last-name'
-people.xml:6:13 error: Unknown element 'gender'
-people.xml:7:10 error: Unknown element 'age'
-people.xml:9:18 error: Unknown element 'person'
-people.xml:9:18 error: Attribute 'id' is not declared for element 'person'
-people.xml:10:17 error: Unknown element 'first-name'
-people.xml:11:18 error: Unknown element 'middle-name'
-people.xml:12:16 error: Unknown element 'last-name'
-people.xml:13:13 error: Unknown element 'gender'
-people.xml:14:10 error: Unknown element 'age'
+people.xml:2:63 error: no declaration found for element 'people'
+people.xml:4:18 error: no declaration found for element 'person'
+people.xml:4:18 error: attribute 'id' is not declared for element 'person'
+people.xml:5:17 error: no declaration found for element 'first-name'
+people.xml:6:18 error: no declaration found for element 'middle-name'
+people.xml:7:16 error: no declaration found for element 'last-name'
+people.xml:8:13 error: no declaration found for element 'gender'
+people.xml:9:10 error: no declaration found for element 'age'
   </pre>
 
   <h2><a name="5.2">5.2 Error Handling</a></h2>
