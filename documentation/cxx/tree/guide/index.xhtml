@@ -2368,12 +2368,18 @@ auto_ptr&lt;people_t> p (people ("people.xml", 0, props));
 
   <p>A third method is the most useful if you are planning to parse
      several XML documents of the same vocabulary. In that case
-     it may be beneficial to pre-parse and cache the schema in
+     it may be beneficial to pre-parse and cache the schemas in
      the XML parser which can then be used to parse all documents
      without re-parsing the schemas. For more information on
      this method refer to the <code>caching</code> example in the
      <code>examples/cxx/tree/</code> directory of the XSD
-     distribution.</p>
+     distribution. It is also possible to convert the schemas into
+     a pre-compiled binary representation and embed this  representation
+     directly into the application executable. With this approach your
+     application can perform XML Schema validation without depending on
+     any external schema files. For more information on how to achieve
+     this refer to the <code>embedded</code> example in the
+     <code>examples/cxx/tree/</code> directory of the XSD distribution.</p>
 
   <p>When the XML parser cannot locate a schema for the
      XML document, the validation fails and XML document
