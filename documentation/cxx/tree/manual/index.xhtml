@@ -2670,6 +2670,35 @@ public:
 };
   </pre>
 
+   <p>In addition, if a member has a default or fixed value, a static
+      accessor function is generated that returns this value. For
+      example:</p>
+
+<pre class="xml">
+&lt;complexType name="object">
+  &lt;attribute name="data" type="string" default="test"/>
+&lt;/complexType>
+  </pre>
+
+  <p>is mapped to:</p>
+
+  <pre class="c++">
+class object: xml_schema::type
+{
+public:
+  typedef xml_schema::string data_type;
+
+  const data_type&amp;
+  data () const;
+
+  static const data_type&amp;
+  data_default_value ();
+
+  ...
+
+};
+  </pre>
+
    <p>Names and semantics of type definitions for the member as well
       as signatures of the accessor and modifier functions depend on
       the member's cardinality class and are described in the following
