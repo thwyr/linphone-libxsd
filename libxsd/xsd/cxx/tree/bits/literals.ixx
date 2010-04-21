@@ -306,6 +306,141 @@ namespace xsd
         {
           return "--";
         }
+
+        //
+        //
+        template <>
+        inline const char*
+        ex_error_error ()
+        {
+          return " error: ";
+        }
+
+        template <>
+        inline const char*
+        ex_error_warning ()
+        {
+          return " warning: ";
+        }
+
+        template <>
+        inline const char*
+        ex_parsing_msg ()
+        {
+          return "instance document parsing failed";
+        }
+
+        template <>
+        inline const char*
+        ex_eel_expected ()
+        {
+          return "expected element '";
+        }
+
+        template <>
+        inline const char*
+        ex_uel_expected ()
+        {
+          return "expected element '";
+        }
+
+        template <>
+        inline const char*
+        ex_uel_instead ()
+        {
+          return "' instead of '";
+        }
+
+        template <>
+        inline const char*
+        ex_uel_unexpected ()
+        {
+          return "unexpected element '";
+        }
+
+        template <>
+        inline const char*
+        ex_eat_expected ()
+        {
+          return "expected attribute '";
+        }
+
+        template <>
+        inline const char*
+        ex_uen_unexpected ()
+        {
+          return "unexpected enumerator '";
+        }
+
+        template <>
+        inline const char*
+        ex_etc_msg ()
+        {
+          return "expected text content";
+        }
+
+        template <>
+        inline const char*
+        ex_nti_no_type_info ()
+        {
+          return "no type information available for type '";
+        }
+
+        template <>
+        inline const char*
+        ex_nei_no_element_info ()
+        {
+          return "no parsing or serialization information available for "
+            "element '";
+        }
+        template <>
+        inline const char*
+        ex_nd_type ()
+        {
+          return "type '";
+        }
+
+        template <>
+        inline const char*
+        ex_nd_not_derived ()
+        {
+          return "' is not derived from '";
+        }
+
+        template <>
+        inline const char*
+        ex_di_id ()
+        {
+          return "ID '";
+        }
+
+        template <>
+        inline const char*
+        ex_di_already_exist ()
+        {
+          return "' already exist";
+        }
+
+        template <>
+        inline const char*
+        ex_serialization_msg ()
+        {
+          return "serialization failed";
+        }
+
+        template <>
+        inline const char*
+        ex_npm_no_mapping ()
+        {
+          return "no mapping provided for namespace prefix '";
+        }
+
+        template <>
+        inline const char*
+        ex_bounds_msg ()
+        {
+          return "buffer boundary rules have been violated";
+        }
       }
     }
   }
@@ -596,6 +731,141 @@ namespace xsd
         gmonth_prefix<wchar_t> ()
         {
           return L"--";
+        }
+
+        //
+        //
+        template <>
+        inline const wchar_t*
+        ex_error_error ()
+        {
+          return L" error: ";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_error_warning ()
+        {
+          return L" warning: ";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_parsing_msg ()
+        {
+          return L"instance document parsing failed";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_eel_expected ()
+        {
+          return L"expected element '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_uel_expected ()
+        {
+          return L"expected element '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_uel_instead ()
+        {
+          return L"' instead of '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_uel_unexpected ()
+        {
+          return L"unexpected element '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_eat_expected ()
+        {
+          return L"expected attribute '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_uen_unexpected ()
+        {
+          return L"unexpected enumerator '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_etc_msg ()
+        {
+          return L"expected text content";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_nti_no_type_info ()
+        {
+          return L"no type information available for type '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_nei_no_element_info ()
+        {
+          return L"no parsing or serialization information available for "
+            L"element '";
+        }
+        template <>
+        inline const wchar_t*
+        ex_nd_type ()
+        {
+          return L"type '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_nd_not_derived ()
+        {
+          return L"' is not derived from '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_di_id ()
+        {
+          return L"ID '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_di_already_exist ()
+        {
+          return L"' already exist";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_serialization_msg ()
+        {
+          return L"serialization failed";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_npm_no_mapping ()
+        {
+          return L"no mapping provided for namespace prefix '";
+        }
+
+        template <>
+        inline const wchar_t*
+        ex_bounds_msg ()
+        {
+          return L"buffer boundary rules have been violated";
         }
       }
     }

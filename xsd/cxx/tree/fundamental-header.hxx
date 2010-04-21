@@ -7,6 +7,7 @@
 #define CXX_TREE_FUNDAMENTAL_HEADER_HXX
 
 #include <cult/containers/set.hxx>
+#include <cult/containers/vector.hxx>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
@@ -92,7 +93,8 @@ namespace CXX
                    String const& type,
                    String const& arg1 = L"",
                    String const& arg2 = L"",
-                   String const& arg3 = L"")
+                   String const& arg3 = L"",
+                   Boolean export_type = true)
       {
         os << "typedef " << type;
 
@@ -116,7 +118,7 @@ namespace CXX
 
         os << " " << name << ";";
 
-        if (export_ && type.find (L'<') != String::npos)
+        if (export_type && export_ && type.find (L'<') != String::npos)
         {
           String s (type);
 
@@ -147,7 +149,11 @@ namespace CXX
             s += " >";
           }
 
-          exports_.insert (s);
+          if (exports_set_.count (s) == 0)
+          {
+            exports_.push_back (s);
+            exports_set_.insert (s);
+          }
         }
       }
 
@@ -795,8 +801,15 @@ namespace CXX
                << " * @brief Serialization wrapper for the %double type." << endl
                << " */" << endl;
 
+          // Do not export as_double and as_decimal since they are already
+          // instantiated.
+          //
           gen_typedef (c.get<String> ("as-double"),
-                       L"::xsd::cxx::tree::as_double< ", double_);
+                       L"::xsd::cxx::tree::as_double< ",
+                       double_,
+                       "",
+                       "",
+                       false);
 
           if (doxygen)
             os << endl
@@ -805,7 +818,11 @@ namespace CXX
                << " */" << endl;
 
           gen_typedef (c.get<String> ("as-decimal"),
-                       L"::xsd::cxx::tree::as_decimal< ", decimal_);
+                       L"::xsd::cxx::tree::as_decimal< ",
+                       decimal_,
+                       "",
+                       "",
+                       false);
 
           if (doxygen)
             os << endl
@@ -870,6 +887,42 @@ namespace CXX
                      L"::xsd::cxx::tree::properties< " + char_type + L" >");
         os << endl;
 
+
+        //
+        //
+        if (parsing || serialization)
+        {
+          os << "// Parsing/serialization diagnostics." << endl
+             << "//" << endl;
+
+          if (doxygen)
+            os << endl
+               << "/**" << endl
+               << " * @brief Error severity." << endl
+               << " */" << endl;
+
+          gen_typedef (c.get<String> ("severity"),
+                       "::xsd::cxx::tree::severity");
+
+          if (doxygen)
+            os << endl
+               << "/**" << endl
+               << " * @brief Error condition." << endl
+               << " */" << endl;
+
+          gen_typedef (c.get<String> ("error"),
+                       L"::xsd::cxx::tree::error< " + char_type + L" >");
+
+          if (doxygen)
+            os << endl
+               << "/**" << endl
+               << " * @brief List of %error conditions." << endl
+               << " */" << endl;
+
+          gen_typedef (c.get<String> ("diagnostics"),
+                       L"::xsd::cxx::tree::diagnostics< " + char_type + L" >");
+          os << endl;
+        }
 
         //
         //
@@ -1061,42 +1114,6 @@ namespace CXX
 
         os << endl;
 
-        //
-        //
-        if (parsing || serialization)
-        {
-          os << "// Parsing/serialization diagnostics." << endl
-             << "//" << endl;
-
-          if (doxygen)
-            os << endl
-               << "/**" << endl
-               << " * @brief Error severity." << endl
-               << " */" << endl;
-
-          gen_typedef (c.get<String> ("severity"),
-                       "::xsd::cxx::tree::severity");
-
-          if (doxygen)
-            os << endl
-               << "/**" << endl
-               << " * @brief Error condition." << endl
-               << " */" << endl;
-
-          gen_typedef (c.get<String> ("error"),
-                       L"::xsd::cxx::tree::error< " + char_type + L" >");
-
-          if (doxygen)
-            os << endl
-               << "/**" << endl
-               << " * @brief List of %error conditions." << endl
-               << " */" << endl;
-
-          gen_typedef (c.get<String> ("diagnostics"),
-                       L"::xsd::cxx::tree::diagnostics< " + char_type + L" >");
-          os << endl;
-        }
-
         if (parsing || serialization)
         {
           if (doxygen)
@@ -1211,7 +1228,7 @@ namespace CXX
         {
           StringSet ns_set;
 
-          for (StringSet::ConstIterator i (exports_.begin ());
+          for (StringList::ConstIterator i (exports_.begin ());
                i != exports_.end (); ++i)
           {
             String const& e (*i);
@@ -1247,7 +1264,7 @@ namespace CXX
               e = ns.find (':', b);
             }
 
-            for (StringSet::ConstIterator i (exports_.begin ());
+            for (StringList::ConstIterator i (exports_.begin ());
                  i != exports_.end (); ++i)
             {
               String const& e (*i);
@@ -1273,9 +1290,11 @@ namespace CXX
 
     private:
       typedef Cult::Containers::Set<String> StringSet;
+      typedef Cult::Containers::Vector<String> StringList;
 
       Boolean export_;
-      StringSet exports_;
+      StringList exports_;
+      StringSet exports_set_;
       String xs_ns_;
 
       Traversal::Names names_;
