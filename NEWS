@@ -1,12 +1,12 @@
 Version 3.3.0
 
-  * New option, --char-encoding, allows to specify the character encoding
+  * New option, --char-encoding, allows you to specify the character encoding
     that should be used in the generated code. Valid values for the 'char'
     character type are 'utf8' (default), 'iso8859-1' (new), 'lcp' (Xerces-C++
     local code page), and 'custom' (provides support for custom encodings). 
     Note that if you use a non-default character encoding and include some 
     libxsd headers (e.g., xsd/cxx/xml/string.hxx) directly, then you will 
-    need to fist include the correct xsd/cxx/xml/char-<enc>.hxx header, 
+    need to first include the correct xsd/cxx/xml/char-<enc>.hxx header, 
     where <enc> is iso8859-1, lcp, etc. This mechanism replaces the 
     XSD_USE_LCP macro.
 
@@ -62,7 +62,7 @@ Version 3.3.0
     User Manual.
 
   * Prior to this version, if the --generate-polymorphic option is 
-    specified the compiler treats all types as potentially polymorphic.
+    specified, the compiler treats all types as potentially polymorphic.
     Now by default only type hierarchies used in substitution groups and 
     those explicitly declared polymorphic with the new --polymorphic-type
     option are treated as polymorphic. This results in smaller and faster
@@ -112,7 +112,7 @@ Version 3.3.0
 
   * XML Schema union types with members that are enumeration types are 
     automatically converted to equivalent enumeration types with a union 
-    of all the member's enumerators.
+    of all the members' enumerators.
 
 Version 3.2.0
 
