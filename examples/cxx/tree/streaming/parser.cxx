@@ -32,7 +32,7 @@ using namespace xercesc;
 namespace xml = xsd::cxx::xml;
 namespace tree = xsd::cxx::tree;
 
-class parser_impl: DefaultHandler
+class parser_impl: public DefaultHandler
 {
 public:
   parser_impl ();
