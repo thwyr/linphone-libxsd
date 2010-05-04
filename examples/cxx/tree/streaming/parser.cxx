@@ -220,9 +220,17 @@ startElement (const XMLCh* const uri,
   for (unsigned int i (0), end (attr.getLength()); i < end; ++i)
 #endif
   {
-    cur_->setAttributeNS (attr.getURI (i),
-                          attr.getQName (i),
-                          attr.getValue (i));
+    const XMLCh* qn (attr.getQName (i));
+    const XMLCh* ns (attr.getURI (i));
+
+    // When SAX2 reports the xmlns attribute, it does not include
+    // the proper attribute namespace. So we have to detect and
+    // handle this case.
+    //
+    if (XMLString::equals (qn, XMLUni::fgXMLNSString))
+      ns = XMLUni::fgXMLNSURIName;
+
+    cur_->setAttributeNS (ns, qn, attr.getValue (i));
   }
 
   depth_++;
