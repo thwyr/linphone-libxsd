@@ -24,7 +24,7 @@ namespace os
     FILETIME ft;
     GetSystemTimeAsFileTime (&ft);
     unsigned long long v (
-      (unsigned long long (ft.dwHighDateTime) << 32) + ft.dwLowDateTime);
+      ((unsigned long long) (ft.dwHighDateTime) << 32) + ft.dwLowDateTime);
 
     sec_  = static_cast<unsigned long> (v / 10000000ULL);
     nsec_ = static_cast<unsigned long> ((v % 10000000ULL) * 100);
