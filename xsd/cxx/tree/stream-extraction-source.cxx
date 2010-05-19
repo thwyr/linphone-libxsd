@@ -613,7 +613,8 @@ namespace CXX
                  << unclash (name, "parse") << " (" <<
                 istream_type << "< " << i->c_str () << " >& s," << endl
                  << flags_type << " f)"
-                 << "{";
+                 << "{"
+                 << "XSD_UNUSED (f);"; // Can be unused.
               {
                 Element element (*this, *i);
                 Attribute attribute (*this);
