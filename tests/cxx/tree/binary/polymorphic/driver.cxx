@@ -11,6 +11,8 @@
 #include <iostream>
 #include <typeinfo>
 
+#include <ace/Log_Msg.h>  // ACE_HEX_DUMP
+
 #include "test.hxx"
 
 using namespace std;
@@ -34,6 +36,19 @@ main (int argc, char* argv[])
     ACE_OutputCDR ace_ocdr;
     xml_schema::ostream<ACE_OutputCDR> ocdr (ace_ocdr);
     ocdr << *r;
+
+    /*
+    // Print the binary representation.
+    //
+    cerr << "binary representation size: " << ace_ocdr.total_length () << endl;
+
+    for (const ACE_Message_Block* mb = ace_ocdr.begin ();
+         mb != 0;
+         mb = mb->cont ())
+    {
+      ACE_HEX_DUMP ((LM_DEBUG, mb->rd_ptr (), mb->length ()));
+    }
+    */
 
     // Load from a CDR stream.
     //

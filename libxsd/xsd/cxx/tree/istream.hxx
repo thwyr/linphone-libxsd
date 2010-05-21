@@ -6,6 +6,9 @@
 #ifndef XSD_CXX_TREE_ISTREAM_HXX
 #define XSD_CXX_TREE_ISTREAM_HXX
 
+#include <map>
+#include <string>
+#include <memory>  // std::auto_ptr
 #include <cstddef> // std::size_t
 
 #include <xsd/cxx/tree/istream-fwd.hxx>
@@ -138,6 +141,36 @@ namespace xsd
           return s_;
         }
 
+        // Add string to the pool. The application should add every
+        // potentially pooled string to correctly re-create the pool
+        // constructed during insertion.
+        //
+        template <typename C>
+        void
+        pool_add (const std::basic_string<C>& s)
+        {
+          typedef pool_impl<C> pool_type;
+
+          if (pool_.get () == 0)
+            pool_.reset (new pool_type);
+
+          pool_type& p (*static_cast<pool_type*> (pool_.get ()));
+          p.push_back (s);
+        }
+
+        // Get string from pool id. We return the result via an argument
+        // instead of as a return type to avoid difficulties some compilers
+        // (e.g., GCC) experience with calls like istream<S>::pool_string<C>.
+        //
+        template <typename C>
+        void
+        pool_string (std::size_t id, std::basic_string<C>& out)
+        {
+          typedef pool_impl<C> pool_type;
+          pool_type& p (*static_cast<pool_type*> (pool_.get ()));
+          out = p[id - 1];
+        }
+
       public:
         // 8-bit
         //
@@ -190,7 +223,20 @@ namespace xsd
         operator= (const istream&);
 
       private:
+        struct pool
+        {
+          virtual
+          ~pool () {}
+        };
+
+        template <typename C>
+        struct pool_impl: pool, std::vector<std::basic_string<C> >
+        {
+        };
+
         S& s_;
+        std::size_t seq_;
+        std::auto_ptr<pool> pool_;
       };
 
 

@@ -236,8 +236,31 @@ namespace xsd
       std::auto_ptr<type> stream_extraction_map<S, C>::
       extract (istream<S>& s, flags f, container* c)
       {
-        std::basic_string<C> name, ns;
-        s >> ns >> name;
+        std::basic_string<C> ns, name;
+
+        // The namespace and name strings are pooled.
+        //
+        std::size_t id;
+        istream_common::as_size<std::size_t> as_size (id);
+        s >> as_size;
+
+        if (id != 0)
+          s.pool_string (id, ns);
+        else
+        {
+          s >> ns;
+          s.pool_add (ns);
+        }
+
+        s >> as_size;
+
+        if (id != 0)
+          s.pool_string (id, name);
+        else
+        {
+          s >> name;
+          s.pool_add (name);
+        }
 
         if (extractor e = find (qualified_name (name, ns)))
         {

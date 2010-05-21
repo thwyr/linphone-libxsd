@@ -269,7 +269,24 @@ namespace xsd
         {
           const qualified_name& qn (ti->name ());
 
-          s << qn.namespace_ () << qn.name ();
+          // Pool the namespace and name strings.
+          //
+          const std::basic_string<C>& ns (qn.namespace_ ());
+          const std::basic_string<C>& n (qn.name ());
+
+          std::size_t ns_id (s.pool_string (ns));
+          std::size_t n_id (s.pool_string (n));
+
+          s << ostream_common::as_size<std::size_t> (ns_id);
+
+          if (ns_id == 0)
+            s << ns;
+
+          s << ostream_common::as_size<std::size_t> (n_id);
+
+          if (n_id == 0)
+            s << n;
+
           ti->inserter () (s, x);
         }
         else
