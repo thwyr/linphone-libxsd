@@ -1,3 +1,17 @@
+Version 4.0.0
+
+C++/Tree
+
+  * Binary representation now stores string-based enumerations as integer 
+    values corresponding to C++ enumerators instead of string literals. 
+
+  * Binary representation now pools polymorphic type-id strings in an 
+    implicit string pool. The string pool support can also be used to
+    pool strings in other situations. For example, you can implement
+    string insertion/extraction operators for your stream to pool all
+    strings. This can be useful if your documents contain a large number
+    of repetitive strings.
+
 Version 3.3.0
 
   * New option, --char-encoding, allows you to specify the character encoding
