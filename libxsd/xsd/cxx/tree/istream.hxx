@@ -138,6 +138,52 @@ namespace xsd
           return s_;
         }
 
+      public:
+        // 8-bit
+        //
+        signed char
+        read_char ();
+
+        unsigned char
+        read_uchar ();
+
+        // 16-bit
+        //
+        unsigned short
+        read_short ();
+
+        unsigned short
+        read_ushort ();
+
+        // 32-bit
+        //
+        unsigned int
+        read_int ();
+
+        unsigned int
+        read_uint ();
+
+        // 64-bit
+        //
+        unsigned long long
+        read_ulonglong ();
+
+        unsigned long long
+        read_longlong ();
+
+        // Boolean
+        //
+        bool
+        read_bool ();
+
+        // Floating-point
+        //
+        float
+        read_float ();
+
+        double
+        read_double ();
+
       private:
         istream (const istream&);
         istream&
@@ -250,6 +296,109 @@ namespace xsd
       {
         istream_common::as_float64<double> as_float64 (x);
         return s >> as_float64;
+      }
+
+      //
+      // read_* functions.
+      //
+
+      template <typename S>
+      inline signed char istream<S>::
+      read_char ()
+      {
+        signed char r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline unsigned char istream<S>::
+      read_uchar ()
+      {
+        unsigned char r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline unsigned short istream<S>::
+      read_short ()
+      {
+        short r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline unsigned short istream<S>::
+      read_ushort ()
+      {
+        unsigned short r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline unsigned int istream<S>::
+      read_int ()
+      {
+        int r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline unsigned int istream<S>::
+      read_uint ()
+      {
+        unsigned int r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline unsigned long long istream<S>::
+      read_ulonglong ()
+      {
+        long long r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline unsigned long long istream<S>::
+      read_longlong ()
+      {
+        unsigned long long r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline bool istream<S>::
+      read_bool ()
+      {
+        bool r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline float istream<S>::
+      read_float ()
+      {
+        float r;
+        *this >> r;
+        return r;
+      }
+
+      template <typename S>
+      inline double istream<S>::
+      read_double ()
+      {
+        double r;
+        *this >> r;
+        return r;
       }
     }
   }

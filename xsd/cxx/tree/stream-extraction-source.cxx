@@ -175,6 +175,20 @@ namespace CXX
             t.dispatch (e);
           }
 
+          Boolean enum_based (false);
+          if (string_based)
+          {
+            SemanticGraph::Enumeration* base_enum (0);
+            IsEnumBasedType t (base_enum);
+            t.dispatch (e);
+
+            enum_based = (base_enum != 0);
+          }
+
+          String value;
+          if (string_based)
+            value = evalue (e);
+
           UnsignedLong n (0);
           Streams const& st (options.value<CLI::generate_extraction> ());
           for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
@@ -188,8 +202,18 @@ namespace CXX
 
             inherits (e, inherits_base_);
 
-            os << " (s, f, c)"
-               << "{";
+            if (string_based && !enum_based)
+            {
+              // Use copy c-tor to pass the flags and container.
+              //
+              os << " (" << endl;
+              inherits (e, inherits_base_);
+              os << " (_xsd_" << name << "_literals_[s.read_uint ()]), f, c)";
+            }
+            else
+              os << " (s, f, c)";
+
+            os << "{";
 
             if (string_based)
               os << "_xsd_" << name << "_convert ();";

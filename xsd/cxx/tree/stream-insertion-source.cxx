@@ -168,6 +168,26 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
+          Boolean string_based (false);
+          {
+            IsStringBasedType t (string_based);
+            t.dispatch (e);
+          }
+
+          Boolean enum_based (false);
+          if (string_based)
+          {
+            SemanticGraph::Enumeration* base_enum (0);
+            IsEnumBasedType t (base_enum);
+            t.dispatch (e);
+
+            enum_based = (base_enum != 0);
+          }
+
+          String value;
+          if (string_based)
+            value = evalue (e);
+
           UnsignedLong n (0);
           Streams const& st (options.value<CLI::generate_insertion> ());
           for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
@@ -177,13 +197,21 @@ namespace CXX
             os << stream_type << "&" << endl
                << "operator<< (" << stream_type << "& s," << endl
                << "const " << name << "& x)"
-               << "{"
-               << "return s << static_cast< const ";
+               << "{";
 
-            inherits (e, inherits_base_);
+            if (!string_based || enum_based)
+            {
+              os << "return s << static_cast< const ";
+              inherits (e, inherits_base_);
+              os << "& > (x);";
+            }
+            else
+            {
+              os << name << "::" << value << " v (x);"
+                 << "return s << static_cast< unsigned int > (v);";
+            }
 
-            os << "& > (x);"
-               << "}";
+            os << "}";
 
             // Register with type map.
             //
