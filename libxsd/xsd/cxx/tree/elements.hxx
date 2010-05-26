@@ -628,7 +628,7 @@ namespace xsd
         //@cond
 
         void
-        _register_id (const identity& id, type* t)
+        _register_id (const identity& i, type* t)
         {
           // We should be the root.
           //
@@ -641,9 +641,9 @@ namespace xsd
           }
 
           if (!map_->insert (
-                std::pair<const identity*, type*> (&id, t)).second)
+                std::pair<const identity*, type*> (&i, t)).second)
           {
-            id.throw_duplicate_id ();
+            i.throw_duplicate_id ();
           }
         }
 
