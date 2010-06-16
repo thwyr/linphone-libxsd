@@ -604,6 +604,13 @@ namespace CXX
     Boolean Context::
     polymorphic_p (SemanticGraph::Type& t)
     {
+      // ID/IDREF templates cannot be polymorphic.
+      //
+      if (!t.named_p () &&
+          (t.is_a<SemanticGraph::Fundamental::Id> () ||
+           t.is_a<SemanticGraph::Fundamental::IdRef> ()))
+        return false;
+
       if (polymorphic_all)
       {
         Boolean fund (false);

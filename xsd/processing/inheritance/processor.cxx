@@ -242,6 +242,13 @@ namespace Processing
             Dep const& dep (*i);
             Type& t (dep.type);
 
+            // Ignore ID/IDREF templates.
+            //
+            if (!t.named_p () &&
+                (t.is_a<SemanticGraph::Fundamental::Id> () ||
+                 t.is_a<SemanticGraph::Fundamental::IdRef> ()))
+              continue;
+
             // We won't be able to generate compilable code in case of a
             // dependency on ourselves (e.g., a member element with
             // anonymous type that inherits from us).
