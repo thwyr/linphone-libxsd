@@ -12,6 +12,7 @@
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 #include <xercesc/validators/schema/SchemaSymbols.hpp>
 #include <xercesc/util/XMLUni.hpp>
+#include <xercesc/util/XMLString.hpp>
 
 #include <xsd/cxx/xml/string.hxx>
 #include <xsd/cxx/xml/sax/std-input-source.hxx>
@@ -670,6 +671,9 @@ namespace xsd
                      const XMLCh* const /*qname*/,
                      const xercesc::Attributes& attributes)
         {
+          using xercesc::XMLUni;
+          using xercesc::XMLString;
+
           typedef std::basic_string<C> string;
 
           {
@@ -798,7 +802,17 @@ namespace xsd
           for (unsigned int i (0), end (attributes.getLength()); i < end; ++i)
 #endif
           {
-            string ns (xml::transcode<C> (attributes.getURI (i)));
+            const XMLCh* xns (attributes.getURI (i));
+
+            // When SAX2 reports the xmlns attribute, it does not include
+            // the proper attribute namespace. So we have to detect and
+            // rectify this case.
+            //
+            if (XMLString::equals (attributes.getQName (i),
+                                   XMLUni::fgXMLNSString))
+              xns = XMLUni::fgXMLNSURIName;
+
+            string ns (xml::transcode<C> (xns));
             string name (xml::transcode<C> (attributes.getLocalName (i)));
             string value (xml::transcode<C> (attributes.getValue (i)));
 
