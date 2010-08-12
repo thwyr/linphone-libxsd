@@ -24,19 +24,25 @@ namespace tree = xsd::cxx::tree;
 class serializer_impl
 {
 public:
+  typedef serializer::namespace_infomap namespace_infomap;
+
   serializer_impl ();
 
   void
   start (ostream& os, const string& encoding);
 
   DOMElement*
-  create (const string& name);
+  create (const string& name, const namespace_infomap&);
 
   DOMElement*
-  create (const string& ns, const string& qname);
+  create (const string& ns, const string& qname, const namespace_infomap&);
 
   void
   serialize (DOMElement& e);
+
+private:
+  void
+  add_namespaces (xercesc::DOMElement*, const namespace_infomap&);
 
 private:
   // Serializer.
@@ -101,16 +107,53 @@ start (ostream& os, const string& encoding)
 }
 
 DOMElement* serializer_impl::
-create (const string& name)
+create (const string& name, const namespace_infomap& map)
 {
-  return doc_->createElement (xml::string (name).c_str ());
+  DOMElement* r (doc_->createElement (xml::string (name).c_str ()));
+
+  if (!map.empty ())
+    add_namespaces (r, map);
+
+  return r;
 }
 
 DOMElement* serializer_impl::
-create (const string& ns, const string& qname)
+create (const string& ns, const string& qname, const namespace_infomap& map)
 {
-  return doc_->createElementNS (
-    xml::string (ns).c_str (), xml::string (qname).c_str ());
+  DOMElement* r (
+    doc_->createElementNS (
+      xml::string (ns).c_str (), xml::string (qname).c_str ()));
+
+  if (!map.empty ())
+    add_namespaces (r, map);
+
+  return r;
+}
+
+void serializer_impl::
+add_namespaces (DOMElement* e, const namespace_infomap& map)
+{
+  for (namespace_infomap::const_iterator i (map.begin ()), end (map.end ());
+       i != end; ++i)
+  {
+    if (i->first.empty ())
+    {
+      // Empty prefix.
+      //
+      if (!i->second.name.empty ())
+        e->setAttributeNS (
+          XMLUni::fgXMLNSURIName,
+          xml::string ("xmlns").c_str (),
+          xml::string (i->second.name).c_str ());
+    }
+    else
+    {
+      e->setAttributeNS (
+        XMLUni::fgXMLNSURIName,
+        xml::string ("xmlns:" + i->first).c_str (),
+        xml::string (i->second.name).c_str ());
+    }
+  }
 }
 
 void serializer_impl::
@@ -147,15 +190,15 @@ start (ostream& os, const string& encoding)
 }
 
 DOMElement* serializer::
-create (const string& name)
+create (const string& name, const namespace_infomap& map)
 {
-  return impl_->create (name);
+  return impl_->create (name, map);
 }
 
 DOMElement* serializer::
-create (const string& ns, const string& qname)
+create (const string& ns, const string& qname, const namespace_infomap& map)
 {
-  return impl_->create (ns, qname);
+  return impl_->create (ns, qname, map);
 }
 
 void serializer::
