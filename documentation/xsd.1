@@ -869,6 +869,11 @@ not initialized and accessing them results in undefined behavior.
 Generate constructors that expect an instance of a base type followed by all
 required members.
 
+.IP "\fB\--suppress-assignment\fR"
+Suppress the generation of copy assignment operators for complex types.
+If this option is specified, the copy assignment operators for such
+types are declared private and left unimplemented.
+
 .IP "\fB\--generate-detach\fR"
 Generate detach functions for required elements and attributes (detach
 functions for optional and sequence cardinalities are provided by the

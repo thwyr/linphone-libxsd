@@ -129,6 +129,7 @@ namespace CXX
       extern Key generate_comparison      = "generate-comparison";
       extern Key generate_default_ctor    = "generate-default-ctor";
       extern Key generate_from_base_ctor  = "generate-from-base-ctor";
+      extern Key suppress_assignment      = "suppress-assignment";
       extern Key generate_detach          = "generate-detach";
       extern Key generate_wildcard        = "generate-wildcard";
       extern Key generate_insertion       = "generate-insertion";
@@ -282,6 +283,11 @@ namespace CXX
 
     e << "--generate-from-base-ctor" << endl
       << " Generate from-base constructors."
+      << endl;
+
+    e << "--suppress-assignment" << endl
+      << " Suppress the generation of copy assignment\n"
+      << " operators for complex types."
       << endl;
 
     e << "--generate-detach" << endl

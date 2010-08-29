@@ -2969,11 +2969,60 @@ namespace CXX
              << container << "* c = 0) const;"
              << endl;
 
+          // operator=
+          //
+          bool priv (false);
+
+          if (!simple)
+          {
+            if (options.value<CLI::suppress_assignment> ())
+            {
+              priv = true;
+              os << "private:" << endl;
+
+              if (doxygen)
+              {
+                os << "/**" << endl
+                   << " * @brief Disabled copy assignment operator." << endl
+                   << " *" << endl
+                   << " * @param x An instance to make a copy of." << endl
+                   << " * @return A reference to itself." << endl
+                   << " */" << endl;
+              }
+
+              os << name << "&" << endl
+                 << "operator= (const " << name << "& x);"
+                 << endl;
+            }
+            else if (has_members || (gen_wildcard && (hae || haa)))
+            {
+              if (doxygen)
+              {
+                os << "/**" << endl
+                   << " * @brief Copy assignment operator." << endl
+                   << " *" << endl
+                   << " * @param x An instance to make a copy of." << endl
+                   << " * @return A reference to itself." << endl
+                   << " *" << endl
+                   << " * For polymorphic object models use the @c _clone " <<
+                  "function instead." << endl
+                   << " */" << endl;
+              }
+
+              os << name << "&" << endl
+                 << "operator= (const " << name << "& x);"
+                 << endl;
+            }
+          }
+
           if (doxygen)
           {
             os << "//@}" << endl
                << endl;
           }
+
+          if (priv)
+            os << "public:" << endl;
 
           // d-tor
           //

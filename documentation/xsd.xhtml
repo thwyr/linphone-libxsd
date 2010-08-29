@@ -763,6 +763,11 @@
     <dd>Generate constructors that expect an instance of a base type
         followed by all required members.</dd>
 
+    <dt><code><b>--suppress-assignment</b></code></dt>
+    <dd>Suppress the generation of copy assignment operators for complex
+        types. If this option is specified, the copy assignment operators
+        for such types are declared private and left unimplemented.</dd>
+
     <dt><code><b>--generate-detach</b></code></dt>
     <dd>Generate detach functions for required elements and attributes
         (detach functions for optional and sequence cardinalities are

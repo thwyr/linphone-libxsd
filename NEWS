@@ -2,6 +2,11 @@ Version 4.0.0
 
 C++/Tree
 
+  * New option, --suppress-assignment, suppress the generation of copy 
+    assignment operators for complex types. If this option is specified,
+    the copy assignment operators for such types are declared private 
+    and left unimplemented.
+
   * Binary representation now stores string-based enumerations as integer 
     values corresponding to C++ enumerators instead of string literals. 
 

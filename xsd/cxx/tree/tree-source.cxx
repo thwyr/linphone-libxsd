@@ -1558,6 +1558,48 @@ namespace CXX
         String arg_name;
       };
 
+      struct AssignMember: Traversal::Member, Context
+      {
+        AssignMember (Context& c)
+            : Context (c)
+        {
+        }
+
+        virtual Void
+        traverse (SemanticGraph::Member& m)
+        {
+          if (skip (m))
+            return;
+
+          String const& member (emember (m));
+          os << "this->" << member << " = x." << member << ";";
+        }
+      };
+
+      struct AssignAny: Traversal::Any,
+                        Traversal::AnyAttribute,
+                        Context
+      {
+        AssignAny (Context& c)
+            : Context (c)
+        {
+        }
+
+        virtual Void
+        traverse (SemanticGraph::Any& a)
+        {
+          String const& member (emember (a));
+          os << "this->" << member << " = x." << member << ";";
+        }
+
+        virtual Void
+        traverse (SemanticGraph::AnyAttribute& a)
+        {
+          String const& member (emember (a));
+          os << "this->" << member << " = x." << member << ";";
+        }
+      };
+
 
       // Element parsing c-tor initializers.
       //
@@ -2078,18 +2120,22 @@ namespace CXX
               ctor_member_ (c),
               element_ctor_any_ (c),
               element_ctor_member_ (c),
+              assign_any_ (c),
+              assign_member_ (c),
               comparison_any_ (c),
               comparison_member_ (c),
               facet_array_ (c)
         {
+          Boolean gen_wildcard (options.value<CLI::generate_wildcard> ());
+
           inherits_member_ >> member_name_;
 
           names_element_ >> element_;
-          if (options.value<CLI::generate_wildcard> ())
+          if (gen_wildcard)
             names_element_ >> any_;
 
           names_element_test_ >> element_test_;
-          if (options.value<CLI::generate_wildcard> ())
+          if (gen_wildcard)
             names_element_test_ >> any_test_;
 
           names_attribute_ >> attribute_;
@@ -2097,19 +2143,23 @@ namespace CXX
           names_any_attribute_ >> any_attribute_;
 
           default_ctor_init_names_ >> default_ctor_member_init_;
-          if (options.value<CLI::generate_wildcard> ())
+          if (gen_wildcard)
             default_ctor_init_names_ >> default_ctor_any_init_;
 
           ctor_names_ >> ctor_member_;
-          if (options.value<CLI::generate_wildcard> ())
+          if (gen_wildcard)
             ctor_names_ >> ctor_any_;
 
           element_ctor_names_ >> element_ctor_member_;
-          if (options.value<CLI::generate_wildcard> ())
+          if (gen_wildcard)
             element_ctor_names_ >> element_ctor_any_;
 
+          assign_names_ >> assign_member_;
+          if (gen_wildcard)
+            assign_names_ >> assign_any_;
+
           comparison_names_ >> comparison_member_;
-          if (options.value<CLI::generate_wildcard> ())
+          if (gen_wildcard)
             comparison_names_ >> comparison_any_;
         }
 
@@ -2977,6 +3027,29 @@ namespace CXX
              << "return new class " << name << " (*this, f, c);"
              << "}";
 
+          // operator=
+          //
+          if (!options.value<CLI::suppress_assignment> () &&
+              (he || ha || (gen_wildcard && (hae || haa))))
+          {
+            os << name << "& " << name << "::" << endl
+               << "operator= (const " << name << "& x)"
+               << "{"
+               << "if (this != &x)"
+               << "{"
+               << "static_cast< " << base << "& > (*this) = x;";
+
+            // Note that here we don't assign the DOMDocument that is
+            // used to hold wildcard fragments. Each document has its
+            // own copy.
+            //
+            names (c, assign_names_);
+
+            os << "}"
+               << "return *this;"
+               << "}";
+          }
+
           // d-tor
           //
           os << name << "::" << endl
@@ -3087,6 +3160,10 @@ namespace CXX
         ElementCtorAny element_ctor_any_;
         ElementCtorMember element_ctor_member_;
         Traversal::Names element_ctor_names_;
+
+        AssignAny assign_any_;
+        AssignMember assign_member_;
+        Traversal::Names assign_names_;
 
         AnyComparison comparison_any_;
         MemberComparison comparison_member_;
