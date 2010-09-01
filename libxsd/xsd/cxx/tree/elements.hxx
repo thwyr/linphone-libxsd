@@ -377,7 +377,17 @@ namespace xsd
         type&
         operator= (const type& x)
         {
-          while (&x == 0) /* unused */;
+          if (this != &x)
+          {
+            // Drop DOM association.
+            //
+            if (dom_info_.get ())
+            {
+              std::auto_ptr<dom_info> r (0);
+              dom_info_ = r;
+            }
+          }
+
           return *this;
         }
 
