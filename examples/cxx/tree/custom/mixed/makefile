@@ -44,7 +44,7 @@ $(gen): xsd_options := \
 --generate-inline \
 --generate-serialization \
 --custom-type bio=/bio_base \
---hxx-epilogue '\\\#include "people-custom.hxx"'
+--hxx-epilogue '\#include "people-custom.hxx"'
 
 $(gen): $(out_root)/xsd/xsd
 

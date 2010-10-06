@@ -43,7 +43,7 @@ $(gen): xsd := $(out_root)/xsd/xsd
 $(gen): xsd_options := \
 --generate-inline \
 --custom-type contact=/contact_base \
---hxx-epilogue '\\\#include "contacts-custom.hxx"'
+--hxx-epilogue '\#include "contacts-custom.hxx"'
 
 $(gen): $(out_root)/xsd/xsd
 

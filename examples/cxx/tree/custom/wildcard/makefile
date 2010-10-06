@@ -45,7 +45,7 @@ $(gen): xsd_options := \
 --generate-ostream \
 --generate-serialization \
 --custom-type data=/data_base \
---hxx-epilogue '\\\#include "wildcard-custom.hxx"'
+--hxx-epilogue '\#include "wildcard-custom.hxx"'
 
 $(gen): $(out_root)/xsd/xsd
 

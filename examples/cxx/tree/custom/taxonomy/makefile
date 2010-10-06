@@ -48,8 +48,8 @@ $(gen): xsd_options := \
 --custom-type "person=person_impl<person_base>/person_base" \
 --custom-type "superman=superman_impl<superman_base>/superman_base" \
 --custom-type "batman=batman_impl<batman_base>/batman_base" \
---fwd-prologue '\\\#include "people-custom-fwd.hxx"' \
---hxx-prologue '\\\#include "people-custom.hxx"'
+--fwd-prologue '\#include "people-custom-fwd.hxx"' \
+--hxx-prologue '\#include "people-custom.hxx"'
 
 $(gen): $(out_root)/xsd/xsd
 
