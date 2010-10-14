@@ -1195,6 +1195,18 @@ namespace CXX
             << "#define " << guard << endl
             << endl;
 
+        // Version check.
+        //
+        hxx << "#include <xsd/cxx/config.hxx>" << endl
+            << endl
+            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
+            << "#error XSD runtime version mismatch" << endl
+            << "#endif" << endl
+            << endl;
+
+        hxx << "#include <xsd/cxx/pre.hxx>" << endl
+            << endl;
+
         // Copy prologue.
         //
         hxx << "// Begin prologue." << endl
@@ -1208,19 +1220,7 @@ namespace CXX
             << "// End prologue." << endl
             << endl;
 
-        // Version check.
-        //
-        hxx << "#include <xsd/cxx/config.hxx>" << endl
-            << endl
-            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
-            << "#error XSD runtime version mismatch" << endl
-            << "#endif" << endl
-            << endl;
-
         {
-          hxx << "#include <xsd/cxx/pre.hxx>" << endl
-              << endl;
-
           // Set auto-indentation.
           //
           Indentation::Clip<Indentation::CXX, WideChar> hxx_clip (hxx);
@@ -1236,9 +1236,6 @@ namespace CXX
 
           if (inline_)
             hxx << "#include " << ctx.process_include_path (ixx_name) << endl;
-
-          hxx << "#include <xsd/cxx/post.hxx>" << endl
-              << endl;
         }
 
         // Copy epilogue.
@@ -1252,6 +1249,9 @@ namespace CXX
 
         hxx << "//" << endl
             << "// End epilogue." << endl
+            << endl;
+
+        hxx << "#include <xsd/cxx/post.hxx>" << endl
             << endl;
 
         hxx << "#endif // " << guard << endl;

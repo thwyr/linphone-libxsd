@@ -1268,6 +1268,18 @@ namespace CXX
             << "#define " << guard << endl
             << endl;
 
+        // Version check.
+        //
+        fwd << "#include <xsd/cxx/version.hxx>" << endl
+            << endl
+            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
+            << "#error XSD runtime version mismatch" << endl
+            << "#endif" << endl
+            << endl;
+
+        fwd << "#include <xsd/cxx/pre.hxx>" << endl
+              << endl;
+
         // Copy prologue.
         //
         fwd << "// Begin prologue." << endl
@@ -1282,19 +1294,7 @@ namespace CXX
             << "// End prologue." << endl
             << endl;
 
-        // Version check.
-        //
-        fwd << "#include <xsd/cxx/version.hxx>" << endl
-            << endl
-            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
-            << "#error XSD runtime version mismatch" << endl
-            << "#endif" << endl
-
-            << endl;
         {
-          fwd << "#include <xsd/cxx/pre.hxx>" << endl
-              << endl;
-
           if (ctx.char_type == L"char")
           {
             fwd << "#ifndef XSD_USE_CHAR" << endl
@@ -1328,9 +1328,6 @@ namespace CXX
           // Generate.
           //
           generate_forward (ctx);
-
-          fwd << "#include <xsd/cxx/post.hxx>" << endl
-              << endl;
         }
 
         // Copy epilogue.
@@ -1345,6 +1342,9 @@ namespace CXX
 
         fwd << "//" << endl
             << "// End epilogue." << endl
+            << endl;
+
+        fwd << "#include <xsd/cxx/post.hxx>" << endl
             << endl;
 
         fwd << "#endif // " << guard << endl;
@@ -1384,6 +1384,18 @@ namespace CXX
             << "#define " << guard << endl
             << endl;
 
+        // Version check.
+        //
+        hxx << "#include <xsd/cxx/config.hxx>" << endl
+            << endl
+            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
+            << "#error XSD runtime version mismatch" << endl
+            << "#endif" << endl
+            << endl;
+
+        hxx << "#include <xsd/cxx/pre.hxx>" << endl
+            << endl;
+
         // Copy prologue.
         //
         hxx << "// Begin prologue." << endl
@@ -1397,19 +1409,7 @@ namespace CXX
             << "// End prologue." << endl
             << endl;
 
-        // Version check.
-        //
-        hxx << "#include <xsd/cxx/config.hxx>" << endl
-            << endl
-            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
-            << "#error XSD runtime version mismatch" << endl
-            << "#endif" << endl
-            << endl;
-
         {
-          hxx << "#include <xsd/cxx/pre.hxx>" << endl
-              << endl;
-
           // Generate character selection defines.
           //
           if (!forward)
@@ -1482,9 +1482,6 @@ namespace CXX
                 << "#endif // XSD_DONT_INCLUDE_INLINE" << endl
                 << endl;
           }
-
-          hxx << "#include <xsd/cxx/post.hxx>" << endl
-              << endl;
         }
 
         // Copy epilogue.
@@ -1499,6 +1496,9 @@ namespace CXX
         hxx << "//" << endl
             << "// End epilogue." << endl
             << endl;
+
+        hxx << "#include <xsd/cxx/post.hxx>" << endl
+              << endl;
 
         hxx << "#endif // " << guard << endl;
 
@@ -1663,6 +1663,9 @@ namespace CXX
 
           Indentation::Clip<Indentation::SLOC, WideChar> cxx_sloc (os);
 
+          os << "#include <xsd/cxx/pre.hxx>" << endl
+             << endl;
+
           // Copy prologue.
           //
           os << "// Begin prologue." << endl
@@ -1678,9 +1681,6 @@ namespace CXX
              << endl;
 
           {
-            os << "#include <xsd/cxx/pre.hxx>" << endl
-               << endl;
-
             // Set auto-indentation.
             //
             Indentation::Clip<Indentation::CXX, WideChar> cxx_clip (os);
@@ -1711,9 +1711,6 @@ namespace CXX
 
             if (!ops.value<CLI::generate_insertion> ().empty ())
               generate_stream_insertion_source (ctx);
-
-            os << "#include <xsd/cxx/post.hxx>" << endl
-               << endl;
           }
 
           // Copy epilogue.
@@ -1728,6 +1725,9 @@ namespace CXX
 
           os << "//" << endl
              << "// End epilogue." << endl
+             << endl;
+
+          os << "#include <xsd/cxx/post.hxx>" << endl
              << endl;
 
           if (show_sloc)
