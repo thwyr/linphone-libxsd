@@ -57,7 +57,7 @@ main (int argc, char* argv[])
     xml_schema::namespace_infomap map;
     map["t"].name = "test";
 
-    root (std::cout, *r, map, "UCS-4LE");
+    root (std::cout, *r, map, "ASCII");
   }
   catch (xml_schema::exception const& e)
   {
