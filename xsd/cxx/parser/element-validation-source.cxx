@@ -196,6 +196,7 @@ namespace CXX
           if (Element* e = dynamic_cast<Element*> (&p))
           {
             SemanticGraph::Type& type (e->type ());
+            String const& fq_type (fq_name (type));
             Boolean poly (polymorphic && !anonymous (type));
 
             String name, inst, def_parser, map;
@@ -203,13 +204,15 @@ namespace CXX
             if (e->context ().count("name"))
             {
               name = ename (*e);
-              inst = poly ? emember_cache (*e) : emember (*e);
 
               if (poly)
               {
                 def_parser = emember (*e);
                 map = emember_map (*e);
+                inst = "p";
               }
+              else
+                inst = L"this->" + emember (*e);
             }
             else
             {
@@ -222,13 +225,15 @@ namespace CXX
               Element& fe (dynamic_cast<Element&>(ip.first->named ()));
 
               name = ename (fe);
-              inst = poly ? emember_cache (fe) : emember (fe);
 
               if (poly)
               {
                 def_parser = emember (fe);
                 map = emember_map (fe);
+                inst = "p";
               }
+              else
+                inst = L"this->" + emember (fe);
             }
 
             if (poly)
@@ -243,8 +248,10 @@ namespace CXX
                 type_id += type_ns;
               }
 
-              os << "if (t == 0 && this->" << def_parser << " != 0)" << endl
-                 << "this->" << inst << " = this->" << def_parser << ";"
+              os << fq_type << "* p = 0;"
+                 << endl
+                 << "if (t == 0 && this->" << def_parser << " != 0)" << endl
+                 << inst << " = this->" << def_parser << ";"
                  << "else"
                  << "{"
                  << string_type << " ts (" << fq_name (type) <<
@@ -254,7 +261,7 @@ namespace CXX
                  << "t = &ts;"
                  << endl
                  << "if (this->" << def_parser << " != 0 && *t == ts)" << endl
-                 << "this->" << inst << " = this->" << def_parser << ";"
+                 << inst << " = this->" << def_parser << ";"
                  << "else"
                  << "{";
 
@@ -269,34 +276,38 @@ namespace CXX
                 " > (*t);"
                  << endl
                  << "if (this->" << map << " != 0)" << endl
-                 << "this->" << inst << " = dynamic_cast< " <<
-                fq_name (type) << "* > (" << endl
+                 << inst << " = dynamic_cast< " << fq_type << "* > (" << endl
                  << "this->" << map << "->find (*t));"
-                 << "else" << endl
-                 << "this->" << inst << " = 0;"
                  << "}"
                  << "}";
             }
 
             os << "this->" << complex_base << "::context_.top ()." <<
-              "parser_ = this->" << inst << ";"
+              "parser_ = " << inst << ";"
                << endl
-               << "if (this->" << inst << ")" << endl
-               << "this->" << inst << "->pre ();"
+               << "if (" << inst << ")" << endl
+               << inst << "->pre ();"
                << "}"
                << "else" // start
-               << "{"
-               << "if (this->" << inst << ")"
+               << "{";
+
+            if (poly)
+              os << fq_type << "* p =" << endl
+                 << "static_cast< " << fq_type << "* > (" << endl
+                 << "this->" << complex_base << "::context_.top ().parser_);"
+                 << endl;
+
+            os << "if (" << inst << ")"
                << "{";
 
             String const& ret (ret_type (type));
             String const& post (post_name (type));
 
             if (ret == L"void")
-              os << "this->" << inst << "->" << post << " ();"
+              os << inst << "->" << post << " ();"
                  << "this->" << name << " ();";
             else
-              os << arg_type (type) << " tmp (this->" << inst << "->" <<
+              os << arg_type (type) << " tmp (" << inst << "->" <<
                 post << " ());"
                  << "this->" << name << " (tmp);";
 

@@ -156,9 +156,6 @@ namespace CXX
               !m.type ().context ().count ("anonymous"))
           {
             m.context ().set (
-              "member-cache", find_name (base + L"_parser_cache_", set_));
-
-            m.context ().set (
               "member-map", find_name (base + L"_parser_map_", set_));
 
             m.context ().set (
@@ -292,7 +289,7 @@ namespace CXX
                         m.is_a<SemanticGraph::Element> () &&
                         !m.type ().context ().count ("anonymous"));
 
-          String parser, member, member_cache, member_map, member_map_impl;
+          String parser, member, member_map, member_map_impl;
 
           try
           {
@@ -306,7 +303,6 @@ namespace CXX
 
             if (poly)
             {
-              member_cache = bm.context ().get<String> ("member-cache");
               member_map = bm.context ().get<String> ("member-map");
               member_map_impl = bm.context ().get<String> ("member-map-impl");
             }
@@ -322,7 +318,6 @@ namespace CXX
 
             if (poly)
             {
-              member_cache = find_name (base + L"_parser_cache_", set_);
               member_map = find_name (base + L"_parser_map_", set_);
               member_map_impl = find_name (base + L"_parser_map_impl_", set_);
             }
@@ -333,7 +328,6 @@ namespace CXX
 
           if (poly)
           {
-            m.context ().set ("member-cache", member_cache);
             m.context ().set ("member-map", member_map);
             m.context ().set ("member-map-impl", member_map_impl);
           }

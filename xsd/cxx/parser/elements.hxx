@@ -90,9 +90,6 @@ namespace CXX
       emember (SemanticGraph::Member&);
 
       static String const&
-      emember_cache (SemanticGraph::Member&);
-
-      static String const&
       emember_map (SemanticGraph::Member&);
 
     public:

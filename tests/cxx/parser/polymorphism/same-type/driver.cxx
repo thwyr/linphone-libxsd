@@ -45,7 +45,7 @@ main (int argc, char* argv[])
     base_p.parsers (string_p);
     type_p.parsers (base_p);
 
-    xml_schema::document doc_p (type_p, "test", "root");
+    xml_schema::document doc_p (type_p, "test", "root", true);
 
     type_p.pre ();
     doc_p.parse (argv[1]);

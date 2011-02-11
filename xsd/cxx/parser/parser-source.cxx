@@ -290,8 +290,6 @@ namespace CXX
 
           Boolean poly (polymorphic && !anonymous (e.type ()));
 
-          String const& inst (poly ? emember_cache (e) : emember (e));
-
           os << "if (";
 
           if (poly && e.global_p ())
@@ -321,9 +319,12 @@ namespace CXX
           os << ")"
              << "{";
 
+          String inst;
+
           if (poly)
           {
             SemanticGraph::Type& t (e.type ());
+            inst = "p";
 
             // For pre-computing length.
             //
@@ -339,8 +340,10 @@ namespace CXX
             String const& member (emember (e));
             String const& member_map (emember_map (e));
 
-            os << "if (t == 0 && this->" << member << " != 0)" << endl
-               << "this->" << inst << " = this->" << member << ";"
+            os << fq_type << "* p = 0;"
+               << endl
+               << "if (t == 0 && this->" << member << " != 0)" << endl
+               << inst << " = this->" << member << ";"
                << "else"
                << "{"
                << string_type << " ts (" << fq_type <<
@@ -350,21 +353,21 @@ namespace CXX
                << "t = &ts;"
                << endl
                << "if (this->" << member << " != 0 && *t == ts)" << endl
-               << "this->" << inst << " = this->" << member << ";"
+               << inst << " = this->" << member << ";"
                << "else if (this->" << member_map << " != 0)" << endl
-               << "this->" << inst << " = dynamic_cast< " << fq_type <<
+               << inst << " = dynamic_cast< " << fq_type <<
               "* > (" << endl
                << "this->" << member_map << "->find (*t));"
-               << "else" << endl
-               << "this->" << inst << " = 0;"
                << "}";
           }
+          else
+            inst = L"this->" + emember (e);
 
           os << "this->" << complex_base << "::context_.top ().parser_ = " <<
-            "this->" << inst << ";"
+            inst << ";"
              << endl
-             << "if (this->" << inst << ")" << endl
-             << "this->" << inst << "->pre ();" // _start_element calls _pre
+             << "if (" << inst << ")" << endl
+             << inst << "->pre ();" // _start_element calls _pre
              << endl
              << "return true;"
              << "}";
@@ -388,9 +391,7 @@ namespace CXX
             return;
 
           Boolean poly (polymorphic && !anonymous (e.type ()));
-
           String const& name (ename (e));
-          String const& inst (poly ? emember_cache (e) : emember (e));
 
           os << "if (";
 
@@ -426,18 +427,31 @@ namespace CXX
 
           SemanticGraph::Type& type (e.type ());
           String const& post (post_name (type));
+          String inst;
 
-          os << "if (this->" << inst << ")";
+          if (poly)
+          {
+            String const& fq_type (fq_name (type));
+            inst = "p";
+
+            os << fq_type << "* p =" << endl
+               << "static_cast< " << fq_type << "* > (" << endl
+               << "this->" << complex_base << "::context_.top ().parser_);"
+               << endl;
+          }
+          else
+            inst = L"this->" + emember (e);
+
+          os << "if (" << inst << ")";
 
           if (ret_type (type) == L"void")
             os << "{"
-               << "this->" << inst << "->" << post << " ();"
+               << inst << "->" << post << " ();"
                << "this->" << name << " ();"
                << "}";
           else
             os << endl
-               << "this->" << name << " (this->" << inst << "->" <<
-              post << " ());"
+               << "this->" << name << " (" << inst << "->" << post << " ());"
                << endl;
 
           os << "return true;"

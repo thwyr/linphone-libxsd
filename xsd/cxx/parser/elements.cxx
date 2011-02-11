@@ -181,12 +181,6 @@ namespace CXX
     }
 
     String const& Context::
-    emember_cache (SemanticGraph::Member& m)
-    {
-      return m.context ().get<String> ("member-cache");
-    }
-
-    String const& Context::
     emember_map (SemanticGraph::Member& m)
     {
       return m.context ().get<String> ("member-map");

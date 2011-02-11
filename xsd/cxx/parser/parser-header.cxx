@@ -295,8 +295,7 @@ namespace CXX
               m.is_a<SemanticGraph::Element> () &&
               !anonymous (m.type ()))
           {
-            os << type << "* " << emember_cache (m) << ";"
-               << "const " << parser_map << "* " << emember_map (m) << ";"
+            os << "const " << parser_map << "* " << emember_map (m) << ";"
                << endl;
           }
         }

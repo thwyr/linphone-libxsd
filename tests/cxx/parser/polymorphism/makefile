@@ -5,7 +5,7 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
-tests := same-type
+tests := same-type recursive
 
 default   := $(out_base)/
 test      := $(out_base)/.test
