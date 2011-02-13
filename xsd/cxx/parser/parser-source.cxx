@@ -435,7 +435,7 @@ namespace CXX
             inst = "p";
 
             os << fq_type << "* p =" << endl
-               << "static_cast< " << fq_type << "* > (" << endl
+               << "dynamic_cast< " << fq_type << "* > (" << endl
                << "this->" << complex_base << "::context_.top ().parser_);"
                << endl;
           }
