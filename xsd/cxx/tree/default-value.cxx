@@ -460,8 +460,14 @@ namespace CXX
       Traversal::NodeBase::dispatch (ultimate_base (c));
     }
 
-    // anySimpleType.
+    // anyType & anySimpleType.
     //
+    Void InitValue::
+    traverse (SemanticGraph::AnyType& t)
+    {
+      os << fq_name (t) << " (" << strlit (value_) << ")";
+    }
+
     Void InitValue::
     traverse (SemanticGraph::AnySimpleType& t)
     {

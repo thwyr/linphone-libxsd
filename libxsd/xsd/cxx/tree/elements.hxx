@@ -284,10 +284,15 @@ namespace xsd
         /**
          * @brief Default constructor.
          */
-        _type ()
-            : container_ (0)
-        {
-        }
+        _type ();
+
+        /**
+         * @brief Create an instance from a string.
+         *
+         * @param s A string to initialize the instance with.
+         */
+        template <typename C>
+        _type (const C* s);
 
       public:
         /**

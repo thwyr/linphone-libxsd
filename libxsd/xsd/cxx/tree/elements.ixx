@@ -9,6 +9,22 @@ namespace xsd
   {
     namespace tree
     {
+      // type
+      //
+
+      inline _type::
+      _type ()
+          : container_ (0)
+      {
+      }
+
+      template <typename C>
+      inline _type::
+      _type (const C*)
+          : container_ (0)
+      {
+      }
+
       // simple_type
       //
 

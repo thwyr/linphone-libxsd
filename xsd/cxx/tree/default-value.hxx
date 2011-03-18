@@ -178,6 +178,7 @@ namespace CXX
                       Traversal::Union,
                       Traversal::Complex,
 
+                      Traversal::AnyType,
                       Traversal::AnySimpleType,
 
                       Traversal::Fundamental::String,
@@ -236,8 +237,11 @@ namespace CXX
       virtual Void
       traverse (SemanticGraph::Complex&);
 
-      // anySimpleType.
+      // anyType & anySimpleType.
       //
+      virtual Void
+      traverse (SemanticGraph::AnyType&);
+
       virtual Void
       traverse (SemanticGraph::AnySimpleType&);
 
