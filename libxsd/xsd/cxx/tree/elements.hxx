@@ -968,10 +968,10 @@ namespace xsd
       };
 
       inline _type::
-      _type (const type& x, flags, container* c)
+      _type (const type& x, flags f, container* c)
           : container_ (c)
       {
-        if (x.dom_info_.get ())
+        if (x.dom_info_.get () != 0 && (f & flags::keep_dom))
         {
           std::auto_ptr<dom_info> r (x.dom_info_->clone (*this, c));
           dom_info_ = r;

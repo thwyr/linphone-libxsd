@@ -5788,10 +5788,39 @@ XMLPlatformUtils::Terminate ();
      call, you need to initialize the Xerces-C++ runtime before calling
      one of the parsing functions with the <code>keep_dom</code> flag and
      terminate it after the object model is destroyed (see
-     <a href="#3.1">Section 3.1, "Initializing the Xerces-C++ Runtime"</a>).
-     The DOM association is also maintained in complete copies of the
-     object model (that is, the DOM document is cloned and associations
-     are reestablished).</p>
+     <a href="#3.1">Section 3.1, "Initializing the Xerces-C++ Runtime"</a>).</p>
+
+   <p>If the <code>keep_dom</code> flag is passed
+      as the second argument to the copy constructor and the copy
+      being made is of a complete tree, then the DOM association
+      is also maintained in the copy by cloning the underlying
+      DOM document and reestablishing the associations. For example:</p>
+
+  <pre class="c++">
+using namespace xercesc;
+
+XMLPlatformUtils::Initialize ();
+
+{
+  // Parse XML to object model.
+  //
+  std::auto_ptr&lt;type> r = root (
+    "root.xml",
+     xml_schema::flags::keep_dom |
+     xml_schema::flags::dont_initialize);
+
+   // Copy without DOM association.
+   //
+   type copy1 (*r);
+
+   // Copy with DOM association.
+   //
+   type copy2 (*r, xml_schema::flags::keep_dom);
+}
+
+XMLPlatformUtils::Terminate ();
+  </pre>
+
 
   <p>To obtain the corresponding DOM node from an object model node
      you will need to call the <code>_node</code> accessor function

@@ -47,10 +47,12 @@ main (int argc, char* argv[])
              xml_schema::flags::keep_dom |
              xml_schema::flags::dont_initialize));
 
-    // Note that DOM association is preserved in copies but only if they
-    // are "complete", i.e., made from the root of the tree.
+    // The DOM association can be recreated in a copy (the underlying
+    // DOM document is cloned) if explicitly requested with the keep_dom
+    // flag and only if this copy is "complete", i.e., made from the root
+    // of the tree.
     //
-    text copy (*t);
+    text copy (*t, xml_schema::flags::keep_dom);
 
     // Print text.
     //
