@@ -39,8 +39,8 @@ namespace xsd
       {
       public:
         explicit
-        list (flags f = 0, container* c = 0)
-            : sequence<T> (f, c)
+        list (container* c = 0)
+            : sequence<T> (c)
         {
         }
 
@@ -60,8 +60,8 @@ namespace xsd
         template <typename S>
         list (istream<S>&, flags = 0, container* c = 0);
 
-        list (const list<T, C, ST, false>& v, flags f = 0, container* c = 0)
-            : sequence<T> (v, f, c)
+        list (const list<T, C, ST, false>& l, flags f = 0, container* c = 0)
+            : sequence<T> (l, f, c)
         {
         }
 
@@ -77,7 +77,9 @@ namespace xsd
 
       private:
         void
-        init (const std::basic_string<C>&, const xercesc::DOMElement*);
+        init (const std::basic_string<C>&,
+              const xercesc::DOMElement*,
+              flags);
       };
 
 
@@ -88,8 +90,8 @@ namespace xsd
       {
       public:
         explicit
-        list (flags f = 0, container* c = 0)
-            : sequence<T> (f, c)
+        list (container* c = 0)
+            : sequence<T> (c)
         {
         }
 
@@ -108,8 +110,8 @@ namespace xsd
         template <typename S>
         list (istream<S>&, flags = 0, container* c = 0);
 
-        list (const list<T, C, ST, true>& s, flags f = 0, container* c = 0)
-            : sequence<T> (s, f, c)
+        list (const list<T, C, ST, true>& l, flags f = 0, container* c = 0)
+            : sequence<T> (l, f, c)
         {
         }
 

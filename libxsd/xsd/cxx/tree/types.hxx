@@ -1014,7 +1014,7 @@ namespace xsd
          * @brief Default constructor creates no elements.
          */
         nmtokens ()
-            : base_type (0, this)
+            : base_type (this)
         {
         }
 
@@ -2483,7 +2483,7 @@ namespace xsd
          * @brief Default constructor creates no elements.
          */
         idrefs ()
-            : base_type (0, this)
+            : base_type (this)
         {
         }
 
@@ -3677,7 +3677,7 @@ namespace xsd
          * @brief Default constructor creates no elements.
          */
         entities ()
-            : base_type (0, this)
+            : base_type (this)
         {
         }
 

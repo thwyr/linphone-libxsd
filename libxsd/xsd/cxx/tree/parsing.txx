@@ -176,17 +176,19 @@ namespace xsd
       template <typename T, typename C, schema_type::value ST>
       list<T, C, ST, false>::
       list (const xercesc::DOMElement& e, flags f, container* c)
-          : sequence<T> (flags (f & ~flags::keep_dom), c) // ambiguous
+          : sequence<T> (c)
       {
-        init (text_content<C> (e), &e);
+        init (text_content<C> (e), &e, f & ~flags::keep_dom);
       }
 
       template <typename T, typename C, schema_type::value ST>
       list<T, C, ST, false>::
       list (const xercesc::DOMAttr& a, flags f, container* c)
-          : sequence<T> (flags (f & ~flags::keep_dom), c) // ambiguous
+          : sequence<T> (c)
       {
-        init (xml::transcode<C> (a.getValue ()), a.getOwnerElement ());
+        init (xml::transcode<C> (a.getValue ()),
+              a.getOwnerElement (),
+              f & ~flags::keep_dom);
       }
 
       template <typename T, typename C, schema_type::value ST>
@@ -195,14 +197,16 @@ namespace xsd
             const xercesc::DOMElement* e,
             flags f,
             container* c)
-          : sequence<T> (flags (f & ~flags::keep_dom), c) // ambiguous
+          : sequence<T> (c)
       {
-        init (s, e);
+        init (s, e, f & ~flags::keep_dom);
       }
 
       template <typename T, typename C, schema_type::value ST>
       void list<T, C, ST, false>::
-      init (const std::basic_string<C>& s, const xercesc::DOMElement* parent)
+      init (const std::basic_string<C>& s,
+            const xercesc::DOMElement* parent,
+            flags f)
       {
         if (s.size () == 0)
           return;
@@ -226,7 +230,7 @@ namespace xsd
             ptr r (
               new T (basic_string<C> (data + i, j - i),
                      parent,
-                     this->flags_,
+                     f,
                      this->container_));
 
             this->v_.push_back (r);
@@ -240,7 +244,7 @@ namespace xsd
             ptr r (
               new T (basic_string<C> (data + i, size - i),
                      parent,
-                     this->flags_,
+                     f,
                      this->container_));
 
             this->v_.push_back (r);
@@ -252,16 +256,16 @@ namespace xsd
 
       template <typename T, typename C, schema_type::value ST>
       list<T, C, ST, true>::
-      list (const xercesc::DOMElement& e, flags f, container* c)
-          : sequence<T> (flags (f & ~flags::keep_dom), c) // ambiguous
+      list (const xercesc::DOMElement& e, flags, container* c)
+          : sequence<T> (c)
       {
         init (text_content<C> (e), &e);
       }
 
       template <typename T, typename C, schema_type::value ST>
       inline list<T, C, ST, true>::
-      list (const xercesc::DOMAttr& a, flags f, container* c)
-          : sequence<T> (flags (f & ~flags::keep_dom), c) // ambiguous
+      list (const xercesc::DOMAttr& a, flags, container* c)
+          : sequence<T> (c)
       {
         init (xml::transcode<C> (a.getValue ()), a.getOwnerElement ());
       }
@@ -270,9 +274,9 @@ namespace xsd
       inline list<T, C, ST, true>::
       list (const std::basic_string<C>& s,
             const xercesc::DOMElement* parent,
-            flags f,
+            flags,
             container* c)
-          : sequence<T> (flags (f & ~flags::keep_dom), c) // ambiguous
+          : sequence<T> (c)
       {
         init (s, parent);
       }

@@ -23,23 +23,23 @@ namespace xsd
 
       template<typename T>
       one<T, false>::
-      one (flags f, container* c)
-          : x_ (0), flags_ (f), container_ (c)
+      one (container* c)
+          : x_ (0), container_ (c)
       {
       }
 
       template<typename T>
       one<T, false>::
-      one (const T& x, flags f, container* c)
-          : x_ (0), flags_ (f), container_ (c)
+      one (const T& x, container* c)
+          : x_ (0), container_ (c)
       {
         set (x);
       }
 
       template<typename T>
       one<T, false>::
-      one (std::auto_ptr<T> x, flags f, container* c)
-          : x_ (0), flags_ (f), container_ (c)
+      one (std::auto_ptr<T> x, container* c)
+          : x_ (0), container_ (c)
       {
         set (x);
       }
@@ -47,10 +47,10 @@ namespace xsd
       template<typename T>
       one<T, false>::
       one (const one<T, false>& x, flags f, container* c)
-          : x_ (0), flags_ (f), container_ (c)
+          : x_ (0), container_ (c)
       {
         if (x.present ())
-          set (x.get ());
+          set (x.get (), f);
       }
 
       template<typename T>
@@ -73,12 +73,12 @@ namespace xsd
 
       template<typename T>
       void one<T, false>::
-      set (const T& x)
+      set (const T& x, flags f)
       {
         // We always do a fresh copy because T may not be x's
         // dynamic type.
         //
-        T* r (x._clone (flags_, container_));
+        T* r (x._clone (f, container_));
 
         delete x_;
         x_ = r;
@@ -113,23 +113,23 @@ namespace xsd
 
       template <typename T>
       optional<T, false>::
-      optional (flags f, container* c)
-          : x_ (0), flags_ (f), container_ (c)
+      optional (container* c)
+          : x_ (0), container_ (c)
       {
       }
 
       template <typename T>
       optional<T, false>::
-      optional (const T& x, flags f, container* c)
-          : x_ (0), flags_ (f), container_ (c)
+      optional (const T& x, container* c)
+          : x_ (0), container_ (c)
       {
         set (x);
       }
 
       template <typename T>
       optional<T, false>::
-      optional (std::auto_ptr<T> x, flags f, container* c)
-          : x_ (0), flags_ (f), container_ (c)
+      optional (std::auto_ptr<T> x, container* c)
+          : x_ (0), container_ (c)
       {
         set (x);
       }
@@ -137,10 +137,10 @@ namespace xsd
       template <typename T>
       optional<T, false>::
       optional (const optional<T, false>& x, flags f, container* c)
-          : x_ (0), flags_ (f), container_ (c)
+          : x_ (0), container_ (c)
       {
         if (x)
-          set (*x);
+          set (*x, f);
       }
 
       template <typename T>
@@ -172,12 +172,12 @@ namespace xsd
 
       template <typename T>
       void optional<T, false>::
-      set (const T& x)
+      set (const T& x, flags f)
       {
         // We always do a fresh copy because T may not be x's
         // dynamic type.
         //
-        T* r (x._clone (flags_, container_));
+        T* r (x._clone (f, container_));
 
         delete x_;
         x_ = r;
@@ -220,7 +220,7 @@ namespace xsd
       //
       template <typename T>
       optional<T, true>::
-      optional (const T& y, flags, container*)
+      optional (const T& y, container*)
           : present_ (false)
       {
         set (y);

@@ -1384,22 +1384,21 @@ namespace CXX
             // sequence
             //
             os << "," << endl
-               << "  " << member << " (" << flags_type << " (), this)";
+               << "  " << member << " (this)";
           }
           else if (min (e) == 0)
           {
             // optional
             //
             os << "," << endl
-               << "  " << member << " (" << flags_type << " (), this)";
+               << "  " << member << " (this)";
           }
           else
           {
             // one
             //
             os << "," << endl
-               << "  " << member << " (" << ename (e) << ", " <<
-              flags_type << " (), this)";
+               << "  " << member << " (" << ename (e) << ", this)";
           }
         }
 
@@ -1415,7 +1414,7 @@ namespace CXX
             // optional
             //
             os << "," << endl
-               << "  " << member << " (" << flags_type << " (), this)";
+               << "  " << member << " (this)";
           }
           else
           {
@@ -1429,13 +1428,12 @@ namespace CXX
               //
               os << "," << endl
                  << "  " << member << " (" <<
-                edefault_value (a) << " (), " << flags_type << " (), this)";
+                edefault_value (a) << " (), this)";
             }
             else
             {
               os << "," << endl
-                 << "  " << member << " (" << ename (a) << ", " <<
-                flags_type << " (), this)";
+                 << "  " << member << " (" << ename (a) << ", this)";
             }
           }
         }
@@ -1619,7 +1617,7 @@ namespace CXX
           String const& member (emember (m));
 
           os << "," << endl
-             << "  " << member << " (f, this)";
+             << "  " << member << " (this)";
         }
       };
 
@@ -1678,7 +1676,7 @@ namespace CXX
           String const& member (emember (e));
 
           os << "," << endl
-             << "  " << member << " (" << flags_type << " (), this)";
+             << "  " << member << " (this)";
         }
 
         virtual Void
@@ -1693,11 +1691,11 @@ namespace CXX
             //
             os << "," << endl
                << "  " << member << " (" <<
-              edefault_value (a) << " (), " << flags_type << " (), this)";
+              edefault_value (a) << " (), this)";
           }
           else
             os << "," << endl
-               << "  " << member << " (" << flags_type << " (), this)";
+               << "  " << member << " (this)";
         }
       };
 
@@ -3247,7 +3245,7 @@ namespace CXX
             {
               os << name << "::" << endl
                  << name << " ()" << endl
-                 << ": " << member << " (0, 0)"
+                 << ": " << member << " (0)"
                  << "{"
                  << "}";
             }
@@ -3256,7 +3254,7 @@ namespace CXX
             //
             os << name << "::" << endl
                << name << " (const " << type << "& x)" << endl
-               << ": " << member << " (x, 0, 0)"
+               << ": " << member << " (x, 0)"
                << "{"
                << "}";
 
@@ -3267,7 +3265,7 @@ namespace CXX
             {
               os << name << "::" << endl
                  << name << " (::std::auto_ptr< " << type << " > p)" << endl
-                 << ": " << member << " (p, 0, 0)"
+                 << ": " << member << " (p, 0)"
                  << "{"
                  << "}";
             }
@@ -3286,7 +3284,7 @@ namespace CXX
               os << name << "::" << endl
                  << name << " (const " << xerces_ns << "::DOMElement& e, " <<
                 flags_type << " f)" << endl
-                 << ": " << member << " (f, 0)"
+                 << ": " << member << " (0)"
                  << "{"
                  << "const " << qname_type << " n (" << endl
                  << "::xsd::cxx::xml::dom::name< " << char_type << " > (e));"

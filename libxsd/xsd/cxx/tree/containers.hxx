@@ -132,11 +132,11 @@ namespace xsd
       public:
         ~one ();
 
-        one (flags, container*);
+        one (container*);
 
-        one (const T&, flags, container*);
+        one (const T&, container*);
 
-        one (std::auto_ptr<T>, flags, container*);
+        one (std::auto_ptr<T>, container*);
 
         one (const one&, flags, container*);
 
@@ -157,7 +157,10 @@ namespace xsd
         }
 
         void
-        set (const T&);
+        set (const T& x)
+        {
+          set (x, 0);
+        }
 
         void
         set (std::auto_ptr<T>);
@@ -178,8 +181,11 @@ namespace xsd
         }
 
       protected:
+        void
+        set (const T&, flags);
+
+      protected:
         T* x_;
-        flags flags_;
         container* container_;
       };
 
@@ -188,12 +194,12 @@ namespace xsd
       class one<T, true>
       {
       public:
-        one (flags, container*)
+        one (container*)
             : present_ (false)
         {
         }
 
-        one (const T& x, flags, container*)
+        one (const T& x, container*)
             : x_ (x), present_ (true)
         {
         }
@@ -259,13 +265,13 @@ namespace xsd
         ~optional ();
 
         explicit
-        optional (flags = 0, container* = 0);
+        optional (container* = 0);
 
         explicit
-        optional (const T&, flags = 0, container* = 0);
+        optional (const T&, container* = 0);
 
         explicit
-        optional (std::auto_ptr<T>, flags = 0, container* = 0);
+        optional (std::auto_ptr<T>, container* = 0);
 
         optional (const optional&, flags = 0, container* = 0);
 
@@ -332,7 +338,10 @@ namespace xsd
         }
 
         void
-        set (const T&);
+        set (const T& x)
+        {
+          set (x, 0);
+        }
 
         void
         set (std::auto_ptr<T>);
@@ -349,13 +358,15 @@ namespace xsd
           return std::auto_ptr<T> (x);
         }
 
-      private:
+      protected:
+        void
+        set (const T&, flags);
+
         void
         true_ ();
 
-      private:
+      protected:
         T* x_;
-        flags flags_;
         container* container_;
       };
 
@@ -367,13 +378,13 @@ namespace xsd
       {
       public:
         explicit
-        optional (flags  = 0, container* = 0)
+        optional (container* = 0)
             : present_ (false)
         {
         }
 
         explicit
-        optional (const T&, flags = 0, container* = 0);
+        optional (const T&, container* = 0);
 
         optional (const optional&, flags = 0, container* = 0);
 
@@ -859,33 +870,33 @@ namespace xsd
         typedef base_sequence::allocator_type  allocator_type;
 
       protected:
-        sequence_common (flags f, container* c)
-            : flags_ (f), container_ (c)
+        sequence_common (container* c)
+            : container_ (c)
         {
         }
 
         sequence_common (size_type n, const type& x, container* c)
-            : flags_ (0), container_ (c)
+            : container_ (c)
         {
           assign (n, x);
         }
 
         template <typename I>
         sequence_common (const I& begin, const I& end, container* c)
-            : flags_ (0), container_ (c)
+            : container_ (c)
         {
           assign (begin, end);
         }
 
         sequence_common (const sequence_common& v, flags f, container* c)
-            : flags_ (f), container_ (c)
+            : container_ (c)
         {
           v_.reserve (v.v_.size ());
 
           for (base_const_iterator i (v.v_.begin ()), e (v.v_.end ());
                i != e; ++i)
           {
-            ptr p ((**i)._clone (flags_, container_));
+            ptr p ((**i)._clone (f, container_));
             v_.push_back (p);
           }
         }
@@ -906,7 +917,7 @@ namespace xsd
           {
             // We have no ptr_ref.
             //
-            ptr p ((**si)._clone (flags_, container_));
+            ptr p ((**si)._clone (0, container_));
             *di = p;
           }
 
@@ -958,7 +969,7 @@ namespace xsd
 
           for (base_iterator i (v_.begin ()), e (v_.end ()); i != e; ++i)
           {
-            ptr p (x._clone (flags_, container_));
+            ptr p (x._clone (0, container_));
             *i = p;
           }
         }
@@ -974,7 +985,7 @@ namespace xsd
 
           for (I i (begin); i != end; ++i)
           {
-            ptr p (i->_clone (flags_, container_));
+            ptr p (i->_clone (0, container_));
             v_.push_back (p);
           }
         }
@@ -990,7 +1001,7 @@ namespace xsd
             for (base_iterator i (v_.begin () + old), e (v_.end ());
                  i != e; ++i)
             {
-              ptr p (x._clone (flags_, container_));
+              ptr p (x._clone (0, container_));
               *i = p;
             }
           }
@@ -1004,7 +1015,7 @@ namespace xsd
 
           for (base_iterator i (v_.end () - d); n != 0; --n)
           {
-            ptr r (x._clone (flags_, container_));
+            ptr r (x._clone (0, container_));
             *(--i) = r;
           }
         }
@@ -1021,7 +1032,7 @@ namespace xsd
             for (I i (end);;)
             {
               --i;
-              ptr r (i->_clone (flags_, container_));
+              ptr r (i->_clone (0, container_));
               p = v_.insert (p, r);
 
               if (i == begin)
@@ -1031,7 +1042,6 @@ namespace xsd
         }
 
       protected:
-        flags flags_;
         container* container_;
         base_sequence v_;
       };
@@ -1075,8 +1085,8 @@ namespace xsd
 
       public:
         explicit
-        sequence (flags f = 0, container* c = 0)
-            : sequence_common (f, c)
+        sequence (container* c = 0)
+            : sequence_common (c)
         {
         }
 
@@ -1260,7 +1270,7 @@ namespace xsd
         void
         push_back (const T& x)
         {
-          v_.push_back (ptr (x._clone (flags_, container_)));
+          v_.push_back (ptr (x._clone (0, container_)));
         }
 
         void
@@ -1296,7 +1306,7 @@ namespace xsd
         {
           return iterator (
             v_.insert (
-              position.base (), ptr (x._clone (flags_, container_))));
+              position.base (), ptr (x._clone (0, container_))));
         }
 
         iterator
@@ -1368,7 +1378,7 @@ namespace xsd
 
       public:
         explicit
-        sequence (flags = 0, container* = 0)
+        sequence (container* = 0)
         {
         }
 

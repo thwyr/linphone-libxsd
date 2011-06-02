@@ -55,7 +55,7 @@ namespace xsd
       template <typename S>
       list<T, C, ST, false>::
       list (istream<S>& s, flags f, container* c)
-          : sequence<T> (f, c)
+          : sequence<T> (c)
       {
         std::size_t size;
         istream_common::as_size<std::size_t> as_size (size);
@@ -76,8 +76,8 @@ namespace xsd
       template <typename T, typename C, schema_type::value ST>
       template <typename S>
       list<T, C, ST, true>::
-      list (istream<S>& s, flags f, container* c)
-          : sequence<T> (f, c)
+      list (istream<S>& s, flags, container* c)
+          : sequence<T> (c)
       {
         std::size_t size;
         istream_common::as_size<std::size_t> as_size (size);

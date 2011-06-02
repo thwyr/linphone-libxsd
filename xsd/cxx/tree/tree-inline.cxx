@@ -54,7 +54,7 @@ namespace CXX
           os << inl
              << name << "::" << endl
              << name << " ()" << endl
-             << ": " << base_type << " ( " << flags_type << " (0), this)"
+             << ": " << base_type << " (this)"
              << "{"
              << "}";
 
