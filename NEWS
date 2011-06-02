@@ -1,16 +1,23 @@
 Version 4.0.0
 
+  * New option, --fat-type-file, triggers the generation of code
+    corresponding to global elements into type files instead of schema
+    files in the file-per-type mode. This option is primarily useful
+    when trying to minimize the amount of object code that is linked
+    to an executable by packaging compiled generated code into a static
+    (archive) library.
+
 C++/Tree
 
-  * New option, --suppress-assignment, suppress the generation of copy 
+  * New option, --suppress-assignment, suppress the generation of copy
     assignment operators for complex types. If this option is specified,
-    the copy assignment operators for such types are declared private 
+    the copy assignment operators for such types are declared private
     and left unimplemented.
 
-  * Binary representation now stores string-based enumerations as integer 
-    values corresponding to C++ enumerators instead of string literals. 
+  * Binary representation now stores string-based enumerations as integer
+    values corresponding to C++ enumerators instead of string literals.
 
-  * Binary representation now pools polymorphic type-id strings in an 
+  * Binary representation now pools polymorphic type-id strings in an
     implicit string pool. The string pool support can also be used to
     pool strings in other situations. For example, you can implement
     string insertion/extraction operators for your stream to pool all
@@ -26,15 +33,15 @@ Version 3.3.0
   * New option, --char-encoding, allows you to specify the character encoding
     that should be used in the generated code. Valid values for the 'char'
     character type are 'utf8' (default), 'iso8859-1' (new), 'lcp' (Xerces-C++
-    local code page), and 'custom' (provides support for custom encodings). 
-    Note that if you use a non-default character encoding and include some 
-    libxsd headers (e.g., xsd/cxx/xml/string.hxx) directly, then you will 
-    need to first include the correct xsd/cxx/xml/char-<enc>.hxx header, 
-    where <enc> is iso8859-1, lcp, etc. This mechanism replaces the 
+    local code page), and 'custom' (provides support for custom encodings).
+    Note that if you use a non-default character encoding and include some
+    libxsd headers (e.g., xsd/cxx/xml/string.hxx) directly, then you will
+    need to first include the correct xsd/cxx/xml/char-<enc>.hxx header,
+    where <enc> is iso8859-1, lcp, etc. This mechanism replaces the
     XSD_USE_LCP macro.
 
-    For the wchar_t character type the only valid value for this option is 
-    'auto' and the encoding is automatically selected between UTF-16 and 
+    For the wchar_t character type the only valid value for this option is
+    'auto' and the encoding is automatically selected between UTF-16 and
     UTF-32, depending on the wchar_t type size.
 
   * When the XSD compiler is built with Xerces-C++ 3.1.0 or later, the
@@ -48,7 +55,7 @@ Version 3.3.0
     in the urn name is used to derive the C++ namespace name.
 
   * New option, --schema-file-regex, in combination with the existing
-    --type-file-regex, can be used to place the generated files into 
+    --type-file-regex, can be used to place the generated files into
     subdirectories or to resolve file name conflicts in the file-per-
     type mode (--file-per-type).
 
@@ -57,12 +64,12 @@ Version 3.3.0
     driver, P - C++/Parser mapping, T - C++/Tree mapping.
 
   * Strings used to match regular expressions supplied with the
-    --namespace-regex and --anonymous-regex options now include the file 
+    --namespace-regex and --anonymous-regex options now include the file
     component for the schema being compiled.
 
   * The XSD_NO_EXPORT macro can be used to omit code generated with the
     --export/import-maps and, for C++/Tree, --generate-xml-schema options
-    during C++ compilation. This may be useful if you would like to use 
+    during C++ compilation. This may be useful if you would like to use
     the same generated code across multiple platforms.
 
  C++/Tree
@@ -72,7 +79,7 @@ Version 3.3.0
     is primarily useful to distinguish object models with the same root
     type but with different root elements. For more information, refer
     to the messaging example and Section 2.9.1, "Element Types" in the
-    C++/Tree Mapping User Manual. To support the customization of the 
+    C++/Tree Mapping User Manual. To support the customization of the
     element type naming the --element-type-regex option has been added.
     See the NAMING CONVENTION section in the compiler command line manual
     (man pages) for details.
@@ -84,9 +91,9 @@ Version 3.3.0
     example and Section 2.9.2, "Element Map" in the C++/Tree Mapping
     User Manual.
 
-  * Prior to this version, if the --generate-polymorphic option is 
+  * Prior to this version, if the --generate-polymorphic option is
     specified, the compiler treats all types as potentially polymorphic.
-    Now by default only type hierarchies used in substitution groups and 
+    Now by default only type hierarchies used in substitution groups and
     those explicitly declared polymorphic with the new --polymorphic-type
     option are treated as polymorphic. This results in smaller and faster
     generated code. If you would like to continue using the old behavior,
@@ -94,13 +101,13 @@ Version 3.3.0
     on this change see Section 2.11, "Mapping for xsi:type and Substitution
     Groups" in the C++/Tree Mapping User Manual.
 
-  * New option, --generate-detach, triggers the generation of detach 
-    functions for required elements and attributes. For optional and 
-    sequence cardinalities the detach functions are now provided by the 
-    respective containers even without this option. These functions, for 
+  * New option, --generate-detach, triggers the generation of detach
+    functions for required elements and attributes. For optional and
+    sequence cardinalities the detach functions are now provided by the
+    respective containers even without this option. These functions, for
     example, allow one to move sub-trees in the object model either within
-    the same tree or between different trees without copying. For more 
-    information, refer to Section 2.8 "Mapping for Local Elements and 
+    the same tree or between different trees without copying. For more
+    information, refer to Section 2.8 "Mapping for Local Elements and
     Attributes" in the C++/Tree Mapping User Manual.
 
   * New option, --export-xml-schema, causes the compiler to export/import
@@ -108,33 +115,33 @@ Version 3.3.0
     with the --export-symbol option.
 
   * New example, embedded, shows how to embed the binary representation of
-    the schema grammar into an application and then use it to parse and 
+    the schema grammar into an application and then use it to parse and
     validate XML documents.
 
-  * New example, compression, shows how to compress an XML document during 
+  * New example, compression, shows how to compress an XML document during
     serialization and decompress it during parsing using the zlib library.
 
-  * New example, custom/mixed, shows how to use type customization to parse 
+  * New example, custom/mixed, shows how to use type customization to parse
     and serialize mixed content.
 
   * The streaming example has been extended to show how to perform stream-
     oriented, partially in-memory XML processing using the C++/Tree mapping.
     With the partially in-memory parsing and serialization only a part of
     the object model is in memory at any given time. With this approach one
-    can process parts of the document as they become available as well as 
+    can process parts of the document as they become available as well as
     handle documents that are too large to fit into memory.
 
   * New default/fixed value initialization code. Now the default/fixed values
     are parsed by the XSD compiler at compile time instead of the standard
-    parsing code at runtime. This will allow the compilation of schemas that 
-    use the default/fixed values without support for XML parsing 
+    parsing code at runtime. This will allow the compilation of schemas that
+    use the default/fixed values without support for XML parsing
     (--suppress-parsing option).
 
-  * Empty XML Schema enumeration values are now mapped to the 'empty' C++ 
+  * Empty XML Schema enumeration values are now mapped to the 'empty' C++
     enumerator name instead of 'cxx'.
 
-  * XML Schema union types with members that are enumeration types are 
-    automatically converted to equivalent enumeration types with a union 
+  * XML Schema union types with members that are enumeration types are
+    automatically converted to equivalent enumeration types with a union
     of all the members' enumerators.
 
 Version 3.2.0
@@ -143,7 +150,7 @@ Version 3.2.0
     the specified id. Specifying 'all' for the warning id disables all
     warnings.
 
-  * New options, --export-maps and --import-maps, provide support for 
+  * New options, --export-maps and --import-maps, provide support for
     splitting a polymorphic type hierarchy across several Win32 DLLs.
     See the compiler command line manual (man pages) for details.
 
@@ -172,14 +179,14 @@ Version 3.2.0
     with specific cardinalities. For more information see the NAMING
     CONVENTION section in the compiler command line manual (man pages).
 
-  * Support for comparison (--generate-comparison) and printing 
+  * Support for comparison (--generate-comparison) and printing
     (--generate-ostream) of polymorphic object models.
 
   * New serialization flag, xml_schema::flags::dont_pretty_print,
     disables extra spaces and new lines that make the resulting XML
     slightly bigger but easier to read.
 
-  * New example, custom/double, shows how to customize parsing and 
+  * New example, custom/double, shows how to customize parsing and
     serialization code for the xsd:double XML Schema built-in type.
     It can be used as a guide on how to customize built-in XML Schema
     types that are mapped to fundamental C++ types.
@@ -187,7 +194,7 @@ Version 3.2.0
   * Support for fractionDigits and totalDigits facets in serialization
     of types derived from xsd:decimal.
 
-  * New set of compile-time macros that control how the xsd:float, 
+  * New set of compile-time macros that control how the xsd:float,
     xsd:double, and xsd:decimal types are serialized. The following
     macros control the format:
 
@@ -257,7 +264,7 @@ Version 3.2.0
     a pointer or a reference) and 'const return type&' otherwise.
 
   * The interface for polymorphic parsing has been simplified. Calling the
-    *_parser() functions multiple times to specify several parsers is no 
+    *_parser() functions multiple times to specify several parsers is no
     longer supported. Instead you need to pass the xml_schema::parser_map
     object which contains the parsers. For more information refer to
     Section 5.4, "Support for Polymorphism" in the C++/Parser Mapping

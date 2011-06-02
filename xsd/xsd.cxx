@@ -88,6 +88,7 @@ namespace CLI
   extern Key type_file_regex_trace   = "type-file-regex-trace";
   extern Key schema_file_regex       = "schema-file-regex";
   extern Key schema_file_regex_trace = "schema-file-regex-trace";
+  extern Key fat_type_file           = "fat-type-file";
   extern Key file_list               = "file-list";
   extern Key file_list_prologue      = "file-list-prologue";
   extern Key file_list_epilogue      = "file-list-epilogue";
@@ -113,6 +114,7 @@ namespace CLI
     type_file_regex_trace,   Boolean,
     schema_file_regex,       NarrowStrings,
     schema_file_regex_trace, Boolean,
+    fat_type_file,           Boolean,
     file_list,               NarrowString,
     file_list_prologue,      NarrowString,
     file_list_epilogue,      NarrowString,
@@ -395,6 +397,12 @@ main (Int argc, Char* argv[])
         e << "--schema-file-regex-trace" << endl
           << " Trace the process of applying regular expressions\n"
           << " specified with the --schema-file-regex option."
+          << endl;
+
+        e << "--fat-type-file" << endl
+          << " Generate code corresponding to global elements\n"
+          << " into type files instead of schema files when the\n"
+          << " --file-per-type option is specified."
           << endl;
 
         // File list options.
@@ -920,7 +928,10 @@ main (Int argc, Char* argv[])
         common_ops.value<CLI::schema_file_regex> (),
         common_ops.value<CLI::schema_file_regex_trace> ());
 
-      Transformations::SchemaPerType trans (type_translator);
+      Transformations::SchemaPerType trans (
+        type_translator,
+        common_ops.value<CLI::fat_type_file> ());
+
       Schemas schemas (trans.transform (*schema));
 
       // Generate code.
