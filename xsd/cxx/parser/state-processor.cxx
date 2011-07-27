@@ -300,7 +300,7 @@ namespace CXX
     process (SemanticGraph::Schema& tu, SemanticGraph::Path const&)
     {
       Traversal::Schema schema;
-      Traversal::Sources sources;
+      Sources sources;
       Traversal::Names schema_names;
       Traversal::Namespace ns;
       Traversal::Names ns_names;

@@ -286,7 +286,7 @@ namespace CXX
           //
           Traversal::Schema schema;
           Traversal::Schema xs_schema;
-          Traversal::Sources sources;
+          Sources sources;
           Traversal::Implies implies;
 
           schema >> sources >> schema;
@@ -320,7 +320,7 @@ namespace CXX
             SemanticGraph::Element* root (0);
             {
               Traversal::Schema schema;
-              Traversal::Sources sources;
+              Sources sources;
 
               schema >> sources >> schema;
 

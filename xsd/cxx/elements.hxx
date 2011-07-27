@@ -438,6 +438,21 @@ namespace CXX
       return 0;
   }
 
+  // Sources traverser that goes into each schema only once.
+  //
+  struct Sources: Traversal::Sources
+  {
+    virtual void
+    traverse (SemanticGraph::Sources& s)
+    {
+      if (schemas_.insert (&s.schema ()).second)
+        Traversal::Sources::traverse (s);
+    }
+
+  private:
+    Cult::Containers::Set<SemanticGraph::Schema*> schemas_;
+  };
+
   // Usual namespace mapping.
   //
   struct Namespace: Traversal::Namespace
@@ -475,7 +490,6 @@ namespace CXX
     Context& ctx_;
     ScopeTracker* st_;
   };
-
 
   //
   //

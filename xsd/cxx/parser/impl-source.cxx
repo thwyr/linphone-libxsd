@@ -362,7 +362,7 @@ namespace CXX
                << endl;
 
       Traversal::Schema schema;
-      Traversal::Sources sources;
+      Sources sources;
       Traversal::Names schema_names;
       Namespace ns (ctx);
       Traversal::Names names;

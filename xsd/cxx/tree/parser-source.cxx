@@ -528,7 +528,7 @@ namespace CXX
              << endl;
 
       Traversal::Schema schema;
-      Traversal::Sources sources;
+      Sources sources;
       Traversal::Names names_ns, names;
       Namespace ns (ctx, first, last);
       ElementFunction element (ctx);

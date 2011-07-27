@@ -244,7 +244,7 @@ namespace CXX
       Context ctx (std::wcerr, tu, path, options, counts, false, 0, 0, 0, 0);
 
       Traversal::Schema schema;
-      Traversal::Sources sources;
+      Sources sources;
 
       schema >> sources >> schema;
 
