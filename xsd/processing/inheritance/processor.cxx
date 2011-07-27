@@ -318,7 +318,6 @@ namespace Processing
                 continue;
               }
 
-
               //wcerr << "type '" << t.name () << "' needs to be moved " <<
               //  "before " << (global.is_a<Type> () ? "type" : "element") <<
               //  " '" << global.name () << "'" << endl;
@@ -335,6 +334,11 @@ namespace Processing
               // Insert a new Names edge before global.
               //
               {
+                // t.scope () and global.scope () can be different in
+                // case of the chameleon inclusion.
+                //
+                Scope& scope (global.scope ());
+
                 // Convert to the insert-after call.
                 //
                 Scope::NamesIterator i (scope.find (global.named ()));
