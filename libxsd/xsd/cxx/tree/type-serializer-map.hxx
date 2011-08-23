@@ -35,7 +35,7 @@ namespace xsd
         register_type (const type_id&,
                        const qualified_name& name,
                        serializer,
-                       bool override = true);
+                       bool replace = true);
 
         void
         unregister_type (const type_id&);

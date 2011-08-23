@@ -219,9 +219,9 @@ namespace xsd
       void stream_extraction_map<S, C>::
       register_type (const qualified_name& name,
                      extractor e,
-                     bool override)
+                     bool replace)
       {
-        if (override || type_map_.find (name) == type_map_.end ())
+        if (replace || type_map_.find (name) == type_map_.end ())
           type_map_[name] = e;
       }
 

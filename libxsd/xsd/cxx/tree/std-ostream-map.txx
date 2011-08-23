@@ -211,9 +211,9 @@ namespace xsd
 
       template <typename C>
       void std_ostream_map<C>::
-      register_type (const type_id& tid, inserter i, bool override)
+      register_type (const type_id& tid, inserter i, bool replace)
       {
-        if (override || type_map_.find (&tid) == type_map_.end ())
+        if (replace || type_map_.find (&tid) == type_map_.end ())
           type_map_[&tid] = i;
       }
 

@@ -248,9 +248,9 @@ namespace xsd
       register_type (const type_id& tid,
                      const qualified_name& name,
                      inserter i,
-                     bool override)
+                     bool replace)
       {
-        if (override || type_map_.find (&tid) == type_map_.end ())
+        if (replace || type_map_.find (&tid) == type_map_.end ())
           type_map_[&tid] = type_info (name, i);
       }
 

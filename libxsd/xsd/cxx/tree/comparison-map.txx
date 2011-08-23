@@ -212,9 +212,9 @@ namespace xsd
 
       template <typename C>
       void comparison_map<C>::
-      register_type (const type_id& tid, comparator c, bool override)
+      register_type (const type_id& tid, comparator c, bool replace)
       {
-        if (override || type_map_.find (&tid) == type_map_.end ())
+        if (replace || type_map_.find (&tid) == type_map_.end ())
           type_map_[&tid] = c;
       }
 

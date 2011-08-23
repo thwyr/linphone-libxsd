@@ -33,7 +33,7 @@ namespace xsd
         void
         register_type (const qualified_name& name,
                        extractor,
-                       bool override = true);
+                       bool replace = true);
 
         void
         unregister_type (const qualified_name& name);

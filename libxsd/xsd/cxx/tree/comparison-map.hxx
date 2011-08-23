@@ -27,7 +27,7 @@ namespace xsd
         comparison_map ();
 
         void
-        register_type (const type_id&, comparator, bool override = true);
+        register_type (const type_id&, comparator, bool replace = true);
 
         void
         unregister_type (const type_id&);

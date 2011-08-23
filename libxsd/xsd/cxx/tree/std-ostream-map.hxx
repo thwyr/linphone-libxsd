@@ -28,7 +28,7 @@ namespace xsd
         std_ostream_map ();
 
         void
-        register_type (const type_id&, inserter, bool override = true);
+        register_type (const type_id&, inserter, bool replace = true);
 
         void
         unregister_type (const type_id&);

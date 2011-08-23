@@ -226,9 +226,9 @@ namespace xsd
       void type_factory_map<C>::
       register_type (const qualified_name& name,
                      factory f,
-                     bool override)
+                     bool replace)
       {
-        if (override || type_map_.find (name) == type_map_.end ())
+        if (replace || type_map_.find (name) == type_map_.end ())
           type_map_[name] = f;
       }
 
