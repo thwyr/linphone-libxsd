@@ -180,6 +180,7 @@ namespace xsd
         s.impl () >> size;
         x.size (size);
         s.impl ().load_binary (x.data (), size);
+        return s;
       }
     }
   }

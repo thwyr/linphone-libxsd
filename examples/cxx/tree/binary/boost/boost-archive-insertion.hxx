@@ -169,6 +169,7 @@ namespace xsd
         std::size_t size (x.size());
         s.impl () << size;
         s.impl ().save_binary (x.data (), x.size ());
+        return s;
       }
     }
   }
