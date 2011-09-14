@@ -29,10 +29,12 @@ namespace CXX
       // For base types we only want member's types, but not the
       // base itself.
       //
-      struct BaseType: Traversal::Complex, Context
+      struct BaseType: Traversal::Complex,
+                       Traversal::List,
+                       Context
       {
-        BaseType (Context& c)
-            : Context (c)
+        BaseType (Context& c, Traversal::NodeBase& def)
+            : Context (c), def_ (def)
         {
         }
 
@@ -44,6 +46,15 @@ namespace CXX
           if (!restriction_p (c))
             names (c);
         }
+
+        virtual Void
+        traverse (SemanticGraph::List& l)
+        {
+          def_.dispatch (l.argumented ().type ());
+        }
+
+      private:
+        Traversal::NodeBase& def_;
       };
 
       struct ParserDef: Traversal::Type,
@@ -109,7 +120,7 @@ namespace CXX
                         Context
       {
         ParserDef (Context& c, TypeInstanceMap& map, InstanceSet& set)
-            : Context (c), map_ (map), set_ (set), base_ (c)
+            : Context (c), map_ (map), set_ (set), base_ (c, *this)
         {
           *this >> inherits_ >> base_ >> inherits_;
 
@@ -564,7 +575,7 @@ namespace CXX
                             Context
       {
         ParserConnect (Context& c, TypeInstanceMap& map)
-            : Context (c), map_ (map), base_ (c)
+            : Context (c), map_ (map), base_ (c, *this)
         {
           *this >> inherits_ >> base_ >> inherits_;
 
