@@ -105,13 +105,17 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && polymorphic_p (l) && !anonymous_p (l))
+          if (polymorphic && polymorphic_p (l))
           {
             // Note that we are using the original type name.
             //
             String const& name (ename (l));
 
-            if (!options.value<CLI::suppress_parsing> ())
+            // If this type is anonymous but substitutes, then it will
+            // be registered as part of the substitution registration.
+            //
+            if (!anonymous_p (l) && !options.value<CLI::suppress_parsing> ())
+            {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
@@ -119,13 +123,17 @@ namespace CXX
                  << strlit (l.name ()) << "," << endl
                  << strlit (xml_ns_name (l)) << ");"
                  << endl;
+            }
 
-            if (options.value<CLI::generate_comparison> ())
+            if ((!anonymous_p (l) || anonymous_substitutes_p (l)) &&
+                options.value<CLI::generate_comparison> ())
+            {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_comparison_init;"
                  << endl;
+            }
           }
         }
 
@@ -212,13 +220,17 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && polymorphic_p (u) && !anonymous_p (u))
+          if (polymorphic && polymorphic_p (u))
           {
             // Note that we are using the original type name.
             //
             String const& name (ename (u));
 
-            if (!options.value<CLI::suppress_parsing> ())
+            // If this type is anonymous but substitutes, then it will
+            // be registered as part of the substitution registration.
+            //
+            if (!anonymous_p (u) && !options.value<CLI::suppress_parsing> ())
+            {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
@@ -226,13 +238,17 @@ namespace CXX
                  << strlit (u.name ()) << "," << endl
                  << strlit (xml_ns_name (u)) << ");"
                  << endl;
+            }
 
-            if (options.value<CLI::generate_comparison> ())
+            if ((!anonymous_p (u) || anonymous_substitutes_p (u)) &&
+                options.value<CLI::generate_comparison> ())
+            {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_comparison_init;"
                  << endl;
+            }
           }
         }
       };
@@ -504,13 +520,17 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && polymorphic_p (e) && !anonymous_p (e))
+          if (polymorphic && polymorphic_p (e))
           {
             // Note that we are using the original type name.
             //
             String const& name (ename (e));
 
-            if (!options.value<CLI::suppress_parsing> ())
+            // If this type is anonymous but substitutes, then it will
+            // be registered as part of the substitution registration.
+            //
+            if (!anonymous_p (e) && !options.value<CLI::suppress_parsing> ())
+            {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
@@ -518,13 +538,17 @@ namespace CXX
                  << strlit (e.name ()) << "," << endl
                  << strlit (xml_ns_name (e)) << ");"
                  << endl;
+            }
 
-            if (options.value<CLI::generate_comparison> ())
+            if ((!anonymous_p (e) || anonymous_substitutes_p (e)) &&
+                options.value<CLI::generate_comparison> ())
+            {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_comparison_init;"
                  << endl;
+            }
           }
         }
 
@@ -3057,13 +3081,17 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && polymorphic_p (c) && !anonymous_p (c))
+          if (polymorphic && polymorphic_p (c))
           {
             // Note that we are using the original type name.
             //
             String const& name (ename (c));
 
-            if (!options.value<CLI::suppress_parsing> ())
+            // If this type is anonymous but substitutes, then it will
+            // be registered as part of the substitution registration.
+            //
+            if (!anonymous_p (c) && !options.value<CLI::suppress_parsing> ())
+            {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
@@ -3071,13 +3099,17 @@ namespace CXX
                  << strlit (c.name ()) << "," << endl
                  << strlit (xml_ns_name (c)) << ");"
                  << endl;
+            }
 
-            if (options.value<CLI::generate_comparison> ())
+            if ((!anonymous_p (c) || anonymous_substitutes_p (c)) &&
+                options.value<CLI::generate_comparison> ())
+            {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
                 char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_comparison_init;"
                  << endl;
+            }
           }
 
           // Comparison operators.

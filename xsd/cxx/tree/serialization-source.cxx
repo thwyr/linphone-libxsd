@@ -91,7 +91,9 @@ namespace CXX
              << "l << static_cast< const " << base << "& > (i);"
              << "}";
 
-          // Register with type factory map.
+          // Register with type factory map. If this type is anonymous
+          // but substitutes, then it will be registered as part of the
+          // substitution registration.
           //
           if (polymorphic && polymorphic_p (l) && !anonymous_p (l))
           {
@@ -171,7 +173,9 @@ namespace CXX
              << "l << static_cast< const " << base << "& > (i);"
              << "}";
 
-          // Register with type factory map.
+          // Register with type factory map. If this type is anonymous
+          // but substitutes, then it will be registered as part of the
+          // substitution registration.
           //
           if (polymorphic && polymorphic_p (u) && !anonymous_p (u))
           {
@@ -253,7 +257,9 @@ namespace CXX
              << "}";
 
 
-          // Register with type factory map.
+          // Register with type factory map. If this type is anonymous
+          // but substitutes, then it will be registered as part of the
+          // substitution registration.
           //
           if (polymorphic && polymorphic_p (e) && !anonymous_p (e))
           {
@@ -805,7 +811,9 @@ namespace CXX
             os << "}";
           }
 
-          // Register with type factory map.
+          // Register with type factory map. If this type is anonymous
+          // but substitutes, then it will be registered as part of the
+          // substitution registration.
           //
           if (polymorphic && polymorphic_p (c) && !anonymous_p (c))
           {

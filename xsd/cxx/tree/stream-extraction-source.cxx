@@ -61,7 +61,9 @@ namespace CXX
 
             // Register with type map.
             //
-            if (polymorphic && polymorphic_p (l) && !anonymous_p (l))
+            if (polymorphic &&
+                polymorphic_p (l) &&
+                (!anonymous_p (l) || anonymous_substitutes_p (l)))
             {
               // Note that we are using the original type name.
               //
@@ -129,7 +131,9 @@ namespace CXX
 
             // Register with type map.
             //
-            if (polymorphic && polymorphic_p (u) && !anonymous_p (u))
+            if (polymorphic &&
+                polymorphic_p (u) &&
+                (!anonymous_p (u) || anonymous_substitutes_p (u)))
             {
               // Note that we are using the original type name.
               //
@@ -222,7 +226,9 @@ namespace CXX
 
             // Register with type map.
             //
-            if (polymorphic && polymorphic_p (e) && !anonymous_p (e))
+            if (polymorphic &&
+                polymorphic_p (e) &&
+                (!anonymous_p (e) || anonymous_substitutes_p (e)))
             {
               // Note that we are using the original type name.
               //
@@ -656,7 +662,9 @@ namespace CXX
 
             // Register with type map.
             //
-            if (polymorphic && polymorphic_p (c) && !anonymous_p (c))
+            if (polymorphic &&
+                polymorphic_p (c) &&
+                (!anonymous_p (c) || anonymous_substitutes_p (c)))
             {
               // Note that we are using the original type name.
               //

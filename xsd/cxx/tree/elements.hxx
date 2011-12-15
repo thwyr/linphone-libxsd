@@ -170,6 +170,12 @@ namespace CXX
         return t.context ().count ("anonymous");
       }
 
+      // Return true if this anonymous type is defined in an element
+      // that belongs to a substitution group.
+      //
+      Boolean
+      anonymous_substitutes_p (SemanticGraph::Type&);
+
       // Escaped names.
       //
     public:

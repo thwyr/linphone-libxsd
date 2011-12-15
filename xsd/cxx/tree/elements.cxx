@@ -622,6 +622,32 @@ namespace CXX
         return t.context ().get<Boolean> ("polymorphic");
     }
 
+    Boolean Context::
+    anonymous_substitutes_p (SemanticGraph::Type& t)
+    {
+      // ID/IDREF templates cannot match.
+      //
+      if (!t.named_p () &&
+          (t.is_a<SemanticGraph::Fundamental::Id> () ||
+           t.is_a<SemanticGraph::Fundamental::IdRef> ()))
+        return false;
+
+      // See which elements this type classifies.
+      //
+      for (SemanticGraph::Type::ClassifiesIterator i (t.classifies_begin ()),
+             e (t.classifies_end ()); i != e; ++i)
+      {
+        if (SemanticGraph::Element* e =
+            dynamic_cast<SemanticGraph::Element*> (&i->instance ()))
+        {
+          if (e->substitutes_p ())
+            return true;
+        }
+      }
+
+      return false;
+    }
+
     // GenerateDefautCtor
     //
     GenerateDefaultCtor::

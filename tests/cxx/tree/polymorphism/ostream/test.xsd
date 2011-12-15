@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:t="test" targetNamespace="test">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:t="test"
+        targetNamespace="test" elementFormDefault="qualified">
 
   <complexType name="base">
     <sequence>
@@ -7,6 +8,7 @@
       <element name="fund" type="int"/>
     </sequence>
   </complexType>
+  <element name="base" type="t:base"/>
 
   <complexType name="derived1">
     <complexContent>
@@ -28,9 +30,21 @@
     </complexContent>
   </complexType>
 
+  <element name="derived3" substitutionGroup="t:base">
+    <complexType>
+      <complexContent>
+        <extension base="t:base">
+          <sequence>
+            <element name="d" type="string" maxOccurs="unbounded"/>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
   <complexType name="type">
     <sequence>
-      <element name="base" type="t:base" maxOccurs="unbounded"/>
+      <element ref="t:base" maxOccurs="unbounded"/>
     </sequence>
   </complexType>
 
