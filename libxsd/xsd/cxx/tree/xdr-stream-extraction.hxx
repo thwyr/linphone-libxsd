@@ -9,12 +9,13 @@
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 
-// Of course BSD has to be different and name its functions xdr_u_intXX
-// instead of xdr_uintXX.
+// Of course BSD has to be different and name its functions u_intXX
+// instead of uintXX. Plus it does not have XX == 8.
 //
 #if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__)
-#  if !defined(XSD_CXX_TREE_ASSUME_SUN_XDR) && !defined(xdr_uint8_t)
-#    define xdr_uint8_t xdr_u_int8_t
+#  if !defined(XSD_CXX_TREE_ASSUME_SUN_XDR) && !defined(xdr_int8_t)
+#    define xdr_int8_t(x, y) xdr_char(x, reinterpret_cast<char*> (y))
+#    define xdr_uint8_t(x, y) xdr_u_char(x, reinterpret_cast<unsigned char*> (y))
 #    define xdr_uint16_t xdr_u_int16_t
 #    define xdr_uint32_t xdr_u_int32_t
 #    define xdr_uint64_t xdr_u_int64_t
