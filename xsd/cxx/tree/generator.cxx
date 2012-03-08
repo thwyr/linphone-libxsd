@@ -50,6 +50,7 @@
 
 using std::endl;
 using std::wcerr;
+using std::wcout;
 
 using namespace XSDFrontend::SemanticGraph;
 
@@ -218,15 +219,15 @@ namespace CXX
   Void Tree::Generator::
   usage ()
   {
-    std::wostream& e (wcerr);
-    ::CLI::Indent::Clip< ::CLI::OptionsUsage, WideChar> clip (e);
+    std::wostream& o (wcout);
+    ::CLI::Indent::Clip< ::CLI::OptionsUsage, WideChar> clip (o);
 
-    e << "--char-type <type>" << endl
+    o << "--char-type <type>" << endl
       << " Use <type> as the base character type. Valid\n"
       << " values are 'char' (default) and 'wchar_t'."
       << endl;
 
-    e << "--char-encoding <enc>" << endl
+    o << "--char-encoding <enc>" << endl
       << " Specify the character encoding that should be used\n"
       << " in the object model. Valid values for the 'char'\n"
       << " character type are 'utf8' (default), 'iso8859-1',\n"
@@ -234,293 +235,293 @@ namespace CXX
       << " type the only valid value is 'auto'."
       << endl;
 
-    e << "--output-dir <dir>" << endl
+    o << "--output-dir <dir>" << endl
       << " Write generated files to <dir> instead of current\n"
       << " directory."
       << endl;
 
-    e << "--generate-polymorphic" << endl
+    o << "--generate-polymorphic" << endl
       << " Generate polymorphism-aware code. Specify this\n"
       << " option if you use substitution groups or xsi:type."
       << endl;
 
-    e << "--polymorphic-type <type>" << endl
+    o << "--polymorphic-type <type>" << endl
       << " Indicate that <type> is a root of a polymorphic\n"
       << " type hierarchy."
       << endl;
 
-    e << "--polymorphic-type-all" << endl
+    o << "--polymorphic-type-all" << endl
       << " Indicate that all types should be treated as\n"
       << " polymorphic."
       << endl;
 
-    e << "--generate-serialization" << endl
+    o << "--generate-serialization" << endl
       << " Generate serialization functions. They convert an\n"
       << " in-memory representation back to XML."
       << endl;
 
-    e << "--generate-inline" << endl
+    o << "--generate-inline" << endl
       << " Generate certain functions inline."
       << endl;
 
-    e << "--generate-ostream" << endl
+    o << "--generate-ostream" << endl
       << " Generate ostream insertion operators."
       << endl;
 
-    e << "--generate-doxygen" << endl
+    o << "--generate-doxygen" << endl
       << " Generate documentation comments in the Doxygen\n"
       << " format."
       << endl;
 
-    e << "--generate-comparison" << endl
+    o << "--generate-comparison" << endl
       << " Generate comparison operators."
       << endl;
 
-    e << "--generate-default-ctor" << endl
+    o << "--generate-default-ctor" << endl
       << " Generate default constructors even for types that\n"
       << " have required members."
       << endl;
 
-    e << "--generate-from-base-ctor" << endl
+    o << "--generate-from-base-ctor" << endl
       << " Generate from-base constructors."
       << endl;
 
-    e << "--suppress-assignment" << endl
+    o << "--suppress-assignment" << endl
       << " Suppress the generation of copy assignment\n"
       << " operators for complex types."
       << endl;
 
-    e << "--generate-detach" << endl
+    o << "--generate-detach" << endl
       << " Generate detach functions for required members."
       << endl;
 
-    e << "--generate-wildcard" << endl
+    o << "--generate-wildcard" << endl
       << " Generate accessors/modifiers as well as parsing\n"
       << " and serialization code for XML Schema wildcards."
       << endl;
 
-    e << "--generate-insertion <os>" << endl
+    o << "--generate-insertion <os>" << endl
       << " Generate data representation stream insertion\n"
       << " operators for the <os> output stream type."
       << endl;
 
-    e << "--generate-extraction <is>" << endl
+    o << "--generate-extraction <is>" << endl
       << " Generate data representation stream extraction\n"
       << " constructors for the <is> input stream type."
       << endl;
 
-    e << "--generate-forward" << endl
+    o << "--generate-forward" << endl
       << " Generate forward declaration file."
       << endl;
 
-    e << "--generate-xml-schema" << endl
+    o << "--generate-xml-schema" << endl
       << " Generate a C++ header file as if the schema being\n"
       << " compiled defines the XML Schema namespace."
       << endl;
 
-    e << "--extern-xml-schema <file>" << endl
+    o << "--extern-xml-schema <file>" << endl
       << " Generate code as if the XML Schema namespace was\n"
       << " defined in <file> and xsd:included in the schema\n"
       << " being compiled."
       << endl;
 
-    e << "--suppress-parsing" << endl
+    o << "--suppress-parsing" << endl
       << " Suppress the generation of parsing functions."
       << endl;
 
-    e << "--generate-element-type" << endl
+    o << "--generate-element-type" << endl
       << " Generate types instead of parsing/serialization\n"
       << " functions for root elements."
       << endl;
 
-    e << "--generate-element-map" << endl
+    o << "--generate-element-map" << endl
       << " Generate a root element map that allows uniform\n"
       << " parsing/serialization of multiple root elements.\n"
       << endl;
 
-    e << "--generate-intellisense" << endl
+    o << "--generate-intellisense" << endl
       << " Generate workarounds for IntelliSense bugs in\n"
       << " Visual Studio 2005 (8.0)."
       << endl;
 
-    e << "--omit-default-attributes" << endl
+    o << "--omit-default-attributes" << endl
       << " Omit attributes with default and fixed values\n"
       << " from serialized XML documents."
       << endl;
 
-    e << "--namespace-map <xns>=<cns>" << endl
+    o << "--namespace-map <xns>=<cns>" << endl
       << " Map XML Schema namespace <xns> to C++ namespace\n"
       << " <cns>. Repeat this option to specify mapping for\n"
       << " more than one XML Schema namespace."
       << endl;
 
-    e << "--namespace-regex <regex>" << endl
+    o << "--namespace-regex <regex>" << endl
       << " Add <regex> to the list of regular expressions\n"
       << " used to translate XML Schema namespace names to\n"
       << " C++ namespace names."
       << endl;
 
-    e << "--namespace-regex-trace" << endl
+    o << "--namespace-regex-trace" << endl
       << " Trace the process of applying regular expressions\n"
       << " specified with the --namespace-regex option."
       << endl;
 
-    e << "--reserved-name <name>" << endl
+    o << "--reserved-name <name>" << endl
       << " Add <name> to the list of names that should not\n"
       << " be used as identifiers. The name can optionally\n"
       << " be followed by '=' and the replacement name that\n"
       << " should be used instead."
       << endl;
 
-    e << "--type-naming <style>" << endl
+    o << "--type-naming <style>" << endl
       << " Specify the type naming convention that should be\n"
       << " used in the generated code. Valid styles are 'knr'\n"
       << " (default), 'ucc', and 'java'."
       << endl;
 
-    e << "--function-naming <style>" << endl
+    o << "--function-naming <style>" << endl
       << " Specify the function naming convention that should\n"
       << " be used in the generated code. Valid styles are\n"
       << " 'knr' (default), 'lcc', and 'java'."
       << endl;
 
-    e << "--type-regex <expr>" << endl
+    o << "--type-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema type names to C++\n"
       << " type names."
       << endl;
 
-    e << "--accessor-regex <expr>" << endl
+    o << "--accessor-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema names of elements and\n"
       << " attributes to C++ accessor function names."
       << endl;
 
-    e << "--one-accessor-regex <expr>" << endl
+    o << "--one-accessor-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema names of elements\n"
       << " and attributes with cardinality one to C++\n"
       << " accessor function names."
       << endl;
 
-    e << "--opt-accessor-regex <expr>" << endl
+    o << "--opt-accessor-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema names of elements\n"
       << " and attributes with cardinality optional to C++\n"
       << " accessor function names."
       << endl;
 
-    e << "--seq-accessor-regex <expr>" << endl
+    o << "--seq-accessor-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema names of elements\n"
       << " and attributes with cardinality sequence to C++\n"
       << " accessor function names."
       << endl;
 
-    e << "--modifier-regex <expr>" << endl
+    o << "--modifier-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema names of elements and\n"
       << " attributes to C++ modifier function names."
       << endl;
 
-    e << "--one-modifier-regex <expr>" << endl
+    o << "--one-modifier-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema names of elements\n"
       << " and attributes with cardinality one to C++\n"
       << " modifier function names."
       << endl;
 
-    e << "--opt-modifier-regex <expr>" << endl
+    o << "--opt-modifier-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema names of elements\n"
       << " and attributes with cardinality optional to C++\n"
       << " modifier function names."
       << endl;
 
-    e << "--seq-modifier-regex <expr>" << endl
+    o << "--seq-modifier-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema names of elements\n"
       << " and attributes with cardinality sequence to C++\n"
       << " modifier function names."
       << endl;
 
-    e << "--parser-regex <expr>" << endl
+    o << "--parser-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema element names to\n"
       << " C++ parsing function names."
       << endl;
 
-    e << "--serializer-regex <expr>" << endl
+    o << "--serializer-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema element names to\n"
       << " C++ serialization function names."
       << endl;
 
-    e << "--enumerator-regex <expr>" << endl
+    o << "--enumerator-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema enumeration values\n"
       << " to C++ enumerator names."
       << endl;
 
-    e << "--element-type-regex <expr>" << endl
+    o << "--element-type-regex <expr>" << endl
       << " Add <expr> to the list of regular expressions\n"
       << " used to translate XML Schema element names to\n"
       << " C++ element type names."
       << endl;
 
-    e << "--name-regex-trace" << endl
+    o << "--name-regex-trace" << endl
       << " Trace the process of applying regular expressions\n"
       << " specified with the name transformation options."
       << endl;
 
-    e << "--include-with-brackets" << endl
+    o << "--include-with-brackets" << endl
       << " Use angle brackets (<>) instead of quotes (\"\") in\n"
       << " generated #include directives."
       << endl;
 
-    e << "--include-prefix <prefix>" << endl
+    o << "--include-prefix <prefix>" << endl
       << " Add <prefix> to generated #include directive\n"
       << " paths."
       << endl;
 
-    e << "--include-regex <regex>" << endl
+    o << "--include-regex <regex>" << endl
       << " Add <regex> to the list of regular expressions\n"
       << " used to transform #include directive paths."
       << endl;
 
-    e << "--include-regex-trace" << endl
+    o << "--include-regex-trace" << endl
       << " Trace the process of applying regular expressions\n"
       << " specified with the --include-regex option."
       << endl;
 
-    e << "--guard-prefix <prefix>" << endl
+    o << "--guard-prefix <prefix>" << endl
       << " Add <prefix> to generated header inclusion guards."
       << endl;
 
-    e << "--root-element-first" << endl
+    o << "--root-element-first" << endl
       << " Treat only the first global element as a document\n"
       << " root."
       << endl;
 
-    e << "--root-element-last" << endl
+    o << "--root-element-last" << endl
       << " Treat only the last global element as a document\n"
       << " root."
       << endl;
 
-    e << "--root-element-all" << endl
+    o << "--root-element-all" << endl
       << " Treat all global elements as document roots."
       << endl;
 
-    e << "--root-element-none" << endl
+    o << "--root-element-none" << endl
       << " Don't treat any global elements as document roots."
       << endl;
 
-    e << "--root-element <element>" << endl
+    o << "--root-element <element>" << endl
       << " Treat only <element> as a document root. Repeat\n"
       << " this option to specify more than one root element."
       << endl;
 
-    e << "--custom-type <map>" << endl
+    o << "--custom-type <map>" << endl
       << " Use a custom C++ type instead of the generated\n"
       << " class. The <map> argument is in the form\n"
       << " name[=type[/base]], where <name> is a type name as\n"
@@ -532,7 +533,7 @@ namespace CXX
       << " type."
       << endl;
 
-    e << "--custom-type-regex <regex>" << endl
+    o << "--custom-type-regex <regex>" << endl
       << " Use custom C++ types instead of the generated\n"
       << " classes. The <regex> argument is in the form\n"
       << " /name/[type/[base/]], where <name> is a regex\n"
@@ -544,67 +545,67 @@ namespace CXX
       << " definition."
       << endl;
 
-    e << "--hxx-suffix <suffix>" << endl
+    o << "--hxx-suffix <suffix>" << endl
       << " Use <suffix> instead of the default '.hxx' to\n"
       << " construct the name of the header file."
       << endl;
 
-    e << "--ixx-suffix <suffix>" << endl
+    o << "--ixx-suffix <suffix>" << endl
       << " Use <suffix> instead of the default '.ixx' to\n"
       << " construct the name of the inline file."
       << endl;
 
-    e << "--cxx-suffix <suffix>" << endl
+    o << "--cxx-suffix <suffix>" << endl
       << " Use <suffix> instead of the default '.cxx' to\n"
       << " construct the name of the source file."
       << endl;
 
-    e << "--fwd-suffix <suffix>" << endl
+    o << "--fwd-suffix <suffix>" << endl
       << " Use <suffix> instead of the default '-fwd.hxx'\n"
       << " to construct the name of the forward declaration\n"
       << " file."
       << endl;
 
-    e << "--hxx-regex <regex>" << endl
+    o << "--hxx-regex <regex>" << endl
       << " Use <regex> to construct the name of the header\n"
       << " file."
       << endl;
 
-    e << "--ixx-regex <regex>" << endl
+    o << "--ixx-regex <regex>" << endl
       << " Use <regex> to construct the name of the inline\n"
       << " file."
       << endl;
 
-    e << "--cxx-regex <regex>" << endl
+    o << "--cxx-regex <regex>" << endl
       << " Use <regex> to construct the name of the source\n"
       << " file."
       << endl;
 
-    e << "--fwd-regex <regex>" << endl
+    o << "--fwd-regex <regex>" << endl
       << " Use <regex> to construct the name of the forward\n"
       << " declaration file."
       << endl;
 
     // Prologues.
     //
-    e << "--hxx-prologue <text>" << endl
+    o << "--hxx-prologue <text>" << endl
       << " Insert <text> at the beginning of the header file."
       << endl;
 
-    e << "--ixx-prologue <text>" << endl
+    o << "--ixx-prologue <text>" << endl
       << " Insert <text> at the beginning of the inline file."
       << endl;
 
-    e << "--cxx-prologue <text>" << endl
+    o << "--cxx-prologue <text>" << endl
       << " Insert <text> at the beginning of the source file."
       << endl;
 
-    e << "--fwd-prologue <text>" << endl
+    o << "--fwd-prologue <text>" << endl
       << " Insert <text> at the beginning of the forward\n"
       << " declaration file."
       << endl;
 
-    e << "--prologue <text>" << endl
+    o << "--prologue <text>" << endl
       << " Insert <text> at the beginning of each generated\n"
       << " file for which there is no file-specific prologue."
       << endl;
@@ -612,24 +613,24 @@ namespace CXX
 
     // Epilogues.
     //
-    e << "--hxx-epilogue <text>" << endl
+    o << "--hxx-epilogue <text>" << endl
       << " Insert <text> at the end of the header file."
       << endl;
 
-    e << "--ixx-epilogue <text>" << endl
+    o << "--ixx-epilogue <text>" << endl
       << " Insert <text> at the end of the inline file."
       << endl;
 
-    e << "--cxx-epilogue <text>" << endl
+    o << "--cxx-epilogue <text>" << endl
       << " Insert <text> at the end of the source file."
       << endl;
 
-    e << "--fwd-epilogue <text>" << endl
+    o << "--fwd-epilogue <text>" << endl
       << " Insert <text> at the end of the forward\n"
       << " declaration file."
       << endl;
 
-    e << "--epilogue <text>" << endl
+    o << "--epilogue <text>" << endl
       << " Insert <text> at the end of each generated file\n"
       << " for which there is no file-specific epilogue."
       << endl;
@@ -637,27 +638,27 @@ namespace CXX
 
     // Prologue files.
     //
-    e << "--hxx-prologue-file <file>" << endl
+    o << "--hxx-prologue-file <file>" << endl
       << " Insert the content of the <file> at the beginning\n"
       << " of the header file."
       << endl;
 
-    e << "--ixx-prologue-file <file>" << endl
+    o << "--ixx-prologue-file <file>" << endl
       << " Insert the content of the <file> at the beginning\n"
       << " of the inline file."
       << endl;
 
-    e << "--cxx-prologue-file <file>" << endl
+    o << "--cxx-prologue-file <file>" << endl
       << " Insert the content of the <file> at the beginning\n"
       << " of the source file."
       << endl;
 
-    e << "--fwd-prologue-file <file>" << endl
+    o << "--fwd-prologue-file <file>" << endl
       << " Insert the content of the <file> at the beginning\n"
       << " of the forward declaration file."
       << endl;
 
-    e << "--prologue-file <file>" << endl
+    o << "--prologue-file <file>" << endl
       << " Insert the content of the <file> at the beginning\n"
       << " of each generated file for which there is no file-\n"
       << " specific prologue file."
@@ -665,27 +666,27 @@ namespace CXX
 
     // Epilogue files.
     //
-    e << "--hxx-epilogue-file <file>" << endl
+    o << "--hxx-epilogue-file <file>" << endl
       << " Insert the content of the <file> at the end of\n"
       << " the header file."
       << endl;
 
-    e << "--ixx-epilogue-file <file>" << endl
+    o << "--ixx-epilogue-file <file>" << endl
       << " Insert the content of the <file> at the end of\n"
       << " the inline file."
       << endl;
 
-    e << "--cxx-epilogue-file <file>" << endl
+    o << "--cxx-epilogue-file <file>" << endl
       << " Insert the content of the <file> at the end of\n"
       << " the source file."
       << endl;
 
-    e << "--fwd-epilogue-file <file>" << endl
+    o << "--fwd-epilogue-file <file>" << endl
       << " Insert the content of the <file> at the end of\n"
       << " the forward declaration file."
       << endl;
 
-    e << "--epilogue-file <file>" << endl
+    o << "--epilogue-file <file>" << endl
       << " Insert the content of the <file> at the end of\n"
       << " each generated file for which there is no file-\n"
       << " specific epilogue file."
@@ -693,58 +694,58 @@ namespace CXX
 
     // Misc.
     //
-    e << "--parts <num>" << endl
+    o << "--parts <num>" << endl
       << " Split generated source code into <num> parts."
       << endl;
 
-    e << "--parts-suffix <suffix>" << endl
+    o << "--parts-suffix <suffix>" << endl
       << " Use <suffix> instead of the default '-' to\n"
       << " separate the file name from the part number."
       << endl;
 
-    e << "--custom-literals <file>" << endl
+    o << "--custom-literals <file>" << endl
       << " Load custom XML string to C++ literal mappings\n"
       << " from <file>."
       << endl;
 
-    e << "--export-symbol <symbol>" << endl
+    o << "--export-symbol <symbol>" << endl
       << " Export symbol for Win32 DLL export/import control."
       << endl;
 
-    e << "--export-xml-schema" << endl
+    o << "--export-xml-schema" << endl
       << " Export/import types in the XML Schema namespace."
       << endl;
 
-    e << "--export-maps" << endl
+    o << "--export-maps" << endl
       << " Export polymorphism support maps from Win32 DLL."
       << endl;
 
-    e << "--import-maps" << endl
+    o << "--import-maps" << endl
       << " Import polymorphism support maps from Win32 DLL."
       << endl;
 
-    e << "--show-anonymous" << endl
+    o << "--show-anonymous" << endl
       << " Show elements and attributes that are of anonymous\n"
       << " types."
       << endl;
 
-    e << "--show-sloc" << endl
+    o << "--show-sloc" << endl
       << " Show the number of generated physical source lines\n"
       << " of code (SLOC)."
       << endl;
 
-    e << "--sloc-limit <num>" << endl
+    o << "--sloc-limit <num>" << endl
       << " Check that the number of generated physical source\n"
       << " lines of code (SLOC) does not exceed <num>."
       << endl;
 
-    e << "--options-file <file>" << endl
+    o << "--options-file <file>" << endl
       << " Read additional options from <file>. Each option\n"
       << " should appear on a separate line optionally\n"
       << " followed by space and an argument."
       << endl;
 
-    e << "--proprietary-license" << endl
+    o << "--proprietary-license" << endl
       << " Indicate that the generated code is licensed under\n"
       << " a proprietary license instead of the GPL."
       << endl;

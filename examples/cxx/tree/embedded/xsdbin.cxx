@@ -88,10 +88,13 @@ main (int argc, char* argv[])
   string base;
   string outdir;
 
-  class usage {};
+  struct usage
+  {
+    usage (bool e = true): error (e) {}
+    bool error;
+  };
 
   int argi (1);
-  bool help (false);
   bool multi_import (true);
   bool verbose (false);
 
@@ -102,10 +105,7 @@ main (int argc, char* argv[])
       string a (argv[argi]);
 
       if (a == "--help")
-      {
-        help = true;
-        throw usage ();
-      }
+        throw usage (false);
       else if (a == "--verbose")
       {
         verbose = true;
@@ -154,20 +154,22 @@ main (int argc, char* argv[])
 
     base = argv[argi];
   }
-  catch (usage const&)
+  catch (usage const& e)
   {
-    cerr << "Usage: " << argv[0] << " [options] <files>" << endl
-         << "Options:" << endl
-         << "  --help                 Print usage information and exit." << endl
-         << "  --verbose              Print progress information." << endl
-         << "  --output-dir <dir>     Write generated files to <dir>." << endl
-         << "  --hxx-suffix <sfx>     Header file suffix instead of '-schema.hxx'." << endl
-         << "  --cxx-suffix <sfx>     Source file suffix instead of '-schema.cxx'." << endl
-         << "  --array-name <name>    Binary data array name." << endl
-         << "  --disable-multi-import Disable multiple import support." << endl
-         << endl;
+    ostream& o (e.error ? cerr : cout);
 
-    return help ? 0 : 1;
+    o << "Usage: " << argv[0] << " [options] <files>" << endl
+      << "Options:" << endl
+      << "  --help                 Print usage information and exit." << endl
+      << "  --verbose              Print progress information." << endl
+      << "  --output-dir <dir>     Write generated files to <dir>." << endl
+      << "  --hxx-suffix <sfx>     Header file suffix instead of '-schema.hxx'." << endl
+      << "  --cxx-suffix <sfx>     Source file suffix instead of '-schema.cxx'." << endl
+      << "  --array-name <name>    Binary data array name." << endl
+      << "  --disable-multi-import Disable multiple import support." << endl
+      << endl;
+
+    return e.error ? 0 : 1;
   }
 
   XMLPlatformUtils::Initialize ();
