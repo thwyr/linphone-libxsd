@@ -1351,12 +1351,9 @@ namespace CXX
         fwd << "#endif // " << guard << endl;
 
         if (show_sloc)
-        {
-          wcerr << fwd_path << ": "
-                << fwd_sloc.buffer ().count () << endl;
+          wcerr << fwd_path << ": " << fwd_sloc.buffer ().count () << endl;
 
-          sloc += fwd_sloc.buffer ().count ();
-        }
+        sloc += fwd_sloc.buffer ().count ();
       }
 
       // HXX
@@ -1504,12 +1501,9 @@ namespace CXX
         hxx << "#endif // " << guard << endl;
 
         if (show_sloc)
-        {
-          wcerr << hxx_path << ": "
-                << hxx_sloc.buffer ().count () << endl;
+          wcerr << hxx_path << ": " << hxx_sloc.buffer ().count () << endl;
 
-          sloc += hxx_sloc.buffer ().count ();
-        }
+        sloc += hxx_sloc.buffer ().count ();
       }
 
 
@@ -1580,12 +1574,9 @@ namespace CXX
         ixx << "#endif // " << guard.c_str () << endl;
 
         if (show_sloc)
-        {
-          wcerr << ixx_path << ": "
-                << ixx_sloc.buffer ().count () << endl;
+          wcerr << ixx_path << ": " << ixx_sloc.buffer ().count () << endl;
 
-          sloc += ixx_sloc.buffer ().count ();
-        }
+        sloc += ixx_sloc.buffer ().count ();
       }
 
 
@@ -1732,12 +1723,10 @@ namespace CXX
              << endl;
 
           if (show_sloc)
-          {
-            wcerr << cxx_paths[part] << ": "
-                  << cxx_sloc.buffer ().count () << endl;
+            wcerr << cxx_paths[part] << ": " << cxx_sloc.buffer ().count ()
+                  << endl;
 
-            sloc += cxx_sloc.buffer ().count ();
-          }
+          sloc += cxx_sloc.buffer ().count ();
         }
       }
 
