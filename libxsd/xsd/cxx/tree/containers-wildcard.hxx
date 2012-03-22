@@ -936,7 +936,7 @@ namespace xsd
 
             return r < 0
               ? true
-              : (r > 0 ? false : XMLString::compareString (an, bn));
+              : (r > 0 ? false : XMLString::compareString (an, bn) < 0);
           }
         };
 
