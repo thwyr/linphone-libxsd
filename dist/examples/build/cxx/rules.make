@@ -12,6 +12,11 @@ ifeq ($(cxx_id),gnu)
   CXXFLAGS := -W -Wall -O3
 endif
 
+# Clang
+#
+ifeq ($(cxx_id),clang)
+  CXXFLAGS := -W -O3
+endif
 
 # Intel C++
 #
