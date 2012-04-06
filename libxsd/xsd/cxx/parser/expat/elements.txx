@@ -594,7 +594,7 @@ namespace xsd
             {
               try
               {
-                start_element (ns, name, 0);
+                this->start_element (ns, name, 0);
               }
               catch (const schema_exception<C>& e)
               {
@@ -621,7 +621,7 @@ namespace xsd
               {
                 try
                 {
-                  start_element (ns, name, 0);
+                  this->start_element (ns, name, 0);
                 }
                 catch (const schema_exception<C>& e)
                 {
@@ -693,7 +693,7 @@ namespace xsd
                   }
 
                   ro_string<C> ro_id (id);
-                  start_element (ns, name, &ro_id);
+                  this->start_element (ns, name, &ro_id);
                 }
                 catch (const schema_exception<C>& e)
                 {
@@ -713,7 +713,7 @@ namespace xsd
 
             try
             {
-              attribute (ns, name, value);
+              this->attribute (ns, name, value);
             }
             catch (const schema_exception<C>& e)
             {
@@ -748,7 +748,7 @@ namespace xsd
 
           try
           {
-            end_element (ns, name);
+            this->end_element (ns, name);
           }
           catch (const schema_exception<C>& e)
           {
@@ -777,7 +777,7 @@ namespace xsd
 
             try
             {
-              characters (str);
+              this->characters (str);
             }
             catch (const schema_exception<C>& e)
             {
