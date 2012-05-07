@@ -312,7 +312,7 @@ namespace Processing
                  i != t.el_map.end (); ++i)
             {
               ElementInfo& ei (i->second);
-              FrontendElements::Context& ctx (ei.element ().context ());
+              SemanticGraph::Context& ctx (ei.element ().context ());
 
               ctx.set ("min", ei.min);
               ctx.set ("max", ei.max);
@@ -322,7 +322,7 @@ namespace Processing
                  i != t.any_map.end (); ++i)
             {
               AnyInfo& ai (i->second);
-              FrontendElements::Context& ctx (ai.any ().context ());
+              SemanticGraph::Context& ctx (ai.any ().context ());
 
               ctx.set ("min", ai.min);
               ctx.set ("max", ai.max);
@@ -343,7 +343,7 @@ namespace Processing
         virtual Void
         traverse (Type& a)
         {
-          FrontendElements::Context& ctx (a.context ());
+          SemanticGraph::Context& ctx (a.context ());
 
           ctx.set ("min", a.optional_p () ? 0UL : 1UL);
           ctx.set ("max", 1UL);
