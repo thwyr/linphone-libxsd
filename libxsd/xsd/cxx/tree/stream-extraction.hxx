@@ -68,7 +68,7 @@ namespace xsd
           while (size--)
           {
             std::auto_ptr<T> p (new T (s, f, c));
-            push_back (p);
+            this->push_back (p);
           }
         }
       }
@@ -91,7 +91,7 @@ namespace xsd
           {
             T x;
             s >> x;
-            push_back (x);
+            this->push_back (x);
           }
         }
       }
