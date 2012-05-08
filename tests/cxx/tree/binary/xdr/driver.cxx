@@ -17,15 +17,15 @@ using namespace std;
 using namespace test;
 
 extern "C" int
-overflow (char* p, char* buf, int n)
+overflow (char* p, char* buf, int in)
 {
   xml_schema::buffer* dst (reinterpret_cast<xml_schema::buffer*> (p));
 
-  std::size_t size (dst->size ());
+  size_t n (static_cast<size_t> (in)), size (dst->size ());
   dst->size (size + n);
   memcpy (dst->data () + size, buf, n);
 
-  return n;
+  return static_cast<int> (n);
 }
 
 struct underflow_info
@@ -35,17 +35,17 @@ struct underflow_info
 };
 
 extern "C" int
-underflow (char* p, char* buf, int n)
+underflow (char* p, char* buf, int in)
 {
   underflow_info* ui (reinterpret_cast<underflow_info*> (p));
 
-  std::size_t size (ui->buf->size () - ui->pos);
+  size_t n (static_cast<size_t> (in)), size (ui->buf->size () - ui->pos);
   n = size > n ? n : size;
 
   memcpy (buf, ui->buf->data () + ui->pos, n);
   ui->pos += n;
 
-  return n;
+  return static_cast<int> (n);
 }
 
 int
