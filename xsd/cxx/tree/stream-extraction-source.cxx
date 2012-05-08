@@ -266,7 +266,7 @@ namespace CXX
             return;
 
           os << "," << endl
-             << "  " << emember (m) << " (f, this)";
+             << "  " << emember (m) << " (this)";
         }
       };
 
