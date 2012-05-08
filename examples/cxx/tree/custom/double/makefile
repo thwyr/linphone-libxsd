@@ -36,13 +36,12 @@ $(out_base)/xml-schema.hxx: $(out_root)/xsd/xsd
 	$(call message,xsd $(src_base)/xml-schema.xsd,\
 $(out_root)/xsd/xsd cxx-tree --output-dir $(out_base) --generate-xml-schema \
 --generate-serialization --custom-type double=double \
---hxx-epilogue '\#include "double-custom.hxx"' xml-schema.xsd)
+--hxx-epilogue '#include "double-custom.hxx"' xml-schema.xsd)
 
 genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-
 $(gen): xsd_options := \
 --generate-serialization --extern-xml-schema xml-schema.xsd
 
