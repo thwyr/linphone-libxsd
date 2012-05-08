@@ -3,6 +3,22 @@
 // copyright : Copyright (c) 2005-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
+#include <iostream>
+
+#include <boost/filesystem/fstream.hpp>
+
+#include <cult/containers/set.hxx>
+#include <cult/containers/vector.hxx>
+
+#include <cutl/compiler/code-stream.hxx>
+#include <cutl/compiler/cxx-indenter.hxx>
+#include <cutl/compiler/sloc-counter.hxx>
+
+#include <backend-elements/regex.hxx>
+#include <backend-elements/indentation/clip.hxx>
+
+#include <xsd-frontend/semantic-graph.hxx>
+
 #include <cxx/tree/generator.hxx>
 
 #include <cxx/tree/elements.hxx>
@@ -30,20 +46,6 @@
 #include <cxx/tree/stream-insertion-source.hxx>
 #include <cxx/tree/stream-extraction-source.hxx>
 
-#include <xsd-frontend/semantic-graph.hxx>
-
-#include <backend-elements/regex.hxx>
-#include <backend-elements/indentation/cxx.hxx>
-#include <backend-elements/indentation/sloc.hxx>
-#include <backend-elements/indentation/clip.hxx>
-
-#include <cult/containers/set.hxx>
-#include <cult/containers/vector.hxx>
-
-#include <boost/filesystem/fstream.hpp>
-
-#include <iostream>
-
 #include <usage.hxx>
 
 #include "../../../libxsd/xsd/cxx/version.hxx"
@@ -52,6 +54,7 @@ using std::endl;
 using std::wcerr;
 using std::wcout;
 
+using namespace cutl;
 using namespace XSDFrontend::SemanticGraph;
 
 //
@@ -1228,8 +1231,16 @@ namespace CXX
 
       // SLOC counter.
       //
-      UnsignedLong sloc (0);
+      UnsignedLong sloc_total (0);
       Boolean show_sloc (ops.value<CLI::show_sloc> ());
+
+      typedef
+      compiler::ostream_filter<compiler::cxx_indenter, wchar_t>
+      ind_filter;
+
+      typedef
+      compiler::ostream_filter<compiler::sloc_counter, wchar_t>
+      sloc_filter;
 
       //
       //
@@ -1257,7 +1268,7 @@ namespace CXX
                      &hxx_expr,
                      &ixx_expr);
 
-        Indentation::Clip<Indentation::SLOC, WideChar> fwd_sloc (fwd);
+        sloc_filter sloc (fwd);
 
         // Guard
         //
@@ -1295,39 +1306,35 @@ namespace CXX
             << "// End prologue." << endl
             << endl;
 
+        if (ctx.char_type == L"char")
         {
-          if (ctx.char_type == L"char")
-          {
-            fwd << "#ifndef XSD_USE_CHAR" << endl
-                << "#define XSD_USE_CHAR" << endl
-                << "#endif" << endl
-                << endl;
+          fwd << "#ifndef XSD_USE_CHAR" << endl
+              << "#define XSD_USE_CHAR" << endl
+              << "#endif" << endl
+              << endl;
 
-            fwd << "#ifndef XSD_CXX_TREE_USE_CHAR" << endl
-                << "#define XSD_CXX_TREE_USE_CHAR" << endl
-                << "#endif" << endl
-                << endl;
-          }
-          else if (ctx.char_type == L"wchar_t")
-          {
-            fwd << "#ifndef XSD_USE_WCHAR" << endl
-                << "#define XSD_USE_WCHAR" << endl
-                << "#endif" << endl
-                << endl;
+          fwd << "#ifndef XSD_CXX_TREE_USE_CHAR" << endl
+              << "#define XSD_CXX_TREE_USE_CHAR" << endl
+              << "#endif" << endl
+              << endl;
+        }
+        else if (ctx.char_type == L"wchar_t")
+        {
+          fwd << "#ifndef XSD_USE_WCHAR" << endl
+              << "#define XSD_USE_WCHAR" << endl
+              << "#endif" << endl
+              << endl;
 
-            fwd << "#ifndef XSD_CXX_TREE_USE_WCHAR" << endl
-                << "#define XSD_CXX_TREE_USE_WCHAR" << endl
-                << "#endif" << endl
-                << endl;
-          }
+          fwd << "#ifndef XSD_CXX_TREE_USE_WCHAR" << endl
+              << "#define XSD_CXX_TREE_USE_WCHAR" << endl
+              << "#endif" << endl
+              << endl;
+        }
 
-          // Set auto-indentation.
-          //
-          Indentation::Clip<Indentation::CXX, WideChar> fwd_clip (fwd);
-
-
-          // Generate.
-          //
+        // Generate.
+        //
+        {
+          ind_filter ind (fwd); // We don't want to indent prologues/epilogues.
           generate_forward (ctx);
         }
 
@@ -1351,9 +1358,9 @@ namespace CXX
         fwd << "#endif // " << guard << endl;
 
         if (show_sloc)
-          wcerr << fwd_path << ": " << fwd_sloc.buffer ().count () << endl;
+          wcerr << fwd_path << ": " << sloc.stream ().count () << endl;
 
-        sloc += fwd_sloc.buffer ().count ();
+        sloc_total += sloc.stream ().count ();
       }
 
       // HXX
@@ -1370,7 +1377,7 @@ namespace CXX
                      &hxx_expr,
                      &ixx_expr);
 
-        Indentation::Clip<Indentation::SLOC, WideChar> hxx_sloc (hxx);
+        sloc_filter sloc (hxx);
 
         // Guard
         //
@@ -1407,44 +1414,41 @@ namespace CXX
             << "// End prologue." << endl
             << endl;
 
+        // Generate character selection defines.
+        //
+        if (!forward)
         {
-          // Generate character selection defines.
-          //
-          if (!forward)
+          if (ctx.char_type == L"char")
           {
-            if (ctx.char_type == L"char")
-            {
-              hxx << "#ifndef XSD_USE_CHAR" << endl
-                  << "#define XSD_USE_CHAR" << endl
-                  << "#endif" << endl
-                  << endl;
+            hxx << "#ifndef XSD_USE_CHAR" << endl
+                << "#define XSD_USE_CHAR" << endl
+                << "#endif" << endl
+                << endl;
 
-              hxx << "#ifndef XSD_CXX_TREE_USE_CHAR" << endl
-                  << "#define XSD_CXX_TREE_USE_CHAR" << endl
-                  << "#endif" << endl
-                  << endl;
-            }
-            else if (ctx.char_type == L"wchar_t")
-            {
-              hxx << "#ifndef XSD_USE_WCHAR" << endl
-                  << "#define XSD_USE_WCHAR" << endl
-                  << "#endif" << endl
-                  << endl;
-
-              hxx << "#ifndef XSD_CXX_TREE_USE_WCHAR" << endl
-                  << "#define XSD_CXX_TREE_USE_WCHAR" << endl
-                  << "#endif" << endl
-                  << endl;
-            }
+            hxx << "#ifndef XSD_CXX_TREE_USE_CHAR" << endl
+                << "#define XSD_CXX_TREE_USE_CHAR" << endl
+                << "#endif" << endl
+                << endl;
           }
+          else if (ctx.char_type == L"wchar_t")
+          {
+            hxx << "#ifndef XSD_USE_WCHAR" << endl
+                << "#define XSD_USE_WCHAR" << endl
+                << "#endif" << endl
+                << endl;
 
-          // Set auto-indentation.
-          //
-          Indentation::Clip<Indentation::CXX, WideChar> hxx_clip (hxx);
+            hxx << "#ifndef XSD_CXX_TREE_USE_WCHAR" << endl
+                << "#define XSD_CXX_TREE_USE_WCHAR" << endl
+                << "#endif" << endl
+                << endl;
+          }
+        }
 
+        // Generate.
+        //
+        {
+          ind_filter ind (hxx); // We don't want to indent prologues/epilogues.
 
-          // Generate.
-          //
           if (!generate_xml_schema)
           {
             if (forward)
@@ -1458,7 +1462,6 @@ namespace CXX
 
           if (!generate_xml_schema)
           {
-
             if (ops.value<CLI::generate_ostream> ())
               generate_stream_header (ctx);
 
@@ -1472,14 +1475,14 @@ namespace CXX
             if (!ops.value<CLI::generate_insertion> ().empty ())
               generate_stream_insertion_header (ctx);
           }
+        }
 
-          if (inline_)
-          {
-            hxx << "#ifndef XSD_DONT_INCLUDE_INLINE" << endl
-                << "#include " << ctx.process_include_path (ixx_name) << endl
-                << "#endif // XSD_DONT_INCLUDE_INLINE" << endl
-                << endl;
-          }
+        if (inline_)
+        {
+          hxx << "#ifndef XSD_DONT_INCLUDE_INLINE" << endl
+              << "#include " << ctx.process_include_path (ixx_name) << endl
+              << "#endif // XSD_DONT_INCLUDE_INLINE" << endl
+              << endl;
         }
 
         // Copy epilogue.
@@ -1501,9 +1504,9 @@ namespace CXX
         hxx << "#endif // " << guard << endl;
 
         if (show_sloc)
-          wcerr << hxx_path << ": " << hxx_sloc.buffer ().count () << endl;
+          wcerr << hxx_path << ": " << sloc.stream ().count () << endl;
 
-        sloc += hxx_sloc.buffer ().count ();
+        sloc_total += sloc.stream ().count ();
       }
 
 
@@ -1522,7 +1525,7 @@ namespace CXX
                      &hxx_expr,
                      &ixx_expr);
 
-        Indentation::Clip<Indentation::SLOC, WideChar> ixx_sloc (ixx);
+        sloc_filter sloc (ixx);
 
         // Guard
         //
@@ -1547,14 +1550,10 @@ namespace CXX
             << "// End prologue." << endl
             << endl;
 
+        // Generate.
+        //
         {
-          // Set auto-indentation.
-          //
-          Indentation::Clip<Indentation::CXX, WideChar> ixx_clip (ixx);
-
-
-          // Generate.
-          //
+          ind_filter ind (ixx); // We don't want to indent prologues/epilogues.
           generate_tree_inline (ctx, 1, 0);
         }
 
@@ -1574,15 +1573,13 @@ namespace CXX
         ixx << "#endif // " << guard.c_str () << endl;
 
         if (show_sloc)
-          wcerr << ixx_path << ": " << ixx_sloc.buffer ().count () << endl;
+          wcerr << ixx_path << ": " << sloc.stream ().count () << endl;
 
-        sloc += ixx_sloc.buffer ().count ();
+        sloc_total += sloc.stream ().count ();
       }
-
 
       // CXX
       //
-
       if (source)
       {
         UnsignedLong first_unit (0); // First unit in the current part.
@@ -1653,7 +1650,7 @@ namespace CXX
                        &hxx_expr,
                        &ixx_expr);
 
-          Indentation::Clip<Indentation::SLOC, WideChar> cxx_sloc (os);
+          sloc_filter sloc (os);
 
           os << "#include <xsd/cxx/pre.hxx>" << endl
              << endl;
@@ -1672,16 +1669,15 @@ namespace CXX
              << "// End prologue." << endl
              << endl;
 
+          os << "#include " << ctx.process_include_path (hxx_name) << endl
+             << endl;
+
+          // Generate.
+          //
           {
-            // Set auto-indentation.
+            // We don't want to indent prologues/epilogues.
             //
-            Indentation::Clip<Indentation::CXX, WideChar> cxx_clip (os);
-
-
-            // Generate.
-            //
-            os << "#include " << ctx.process_include_path (hxx_name) << endl
-               << endl;
+            ind_filter ind (os);
 
             if (!inline_)
               generate_tree_inline (ctx, first, last);
@@ -1723,14 +1719,14 @@ namespace CXX
              << endl;
 
           if (show_sloc)
-            wcerr << cxx_paths[part] << ": " << cxx_sloc.buffer ().count ()
+            wcerr << cxx_paths[part] << ": " << sloc.stream ().count ()
                   << endl;
 
-          sloc += cxx_sloc.buffer ().count ();
+          sloc_total += sloc.stream ().count ();
         }
       }
 
-      return sloc;
+      return sloc_total;
     }
     catch (UnrepresentableCharacter const& e)
     {
