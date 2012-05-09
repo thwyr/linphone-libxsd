@@ -73,7 +73,7 @@ namespace CXX
           String ns_name (ns.name ());
           String t_name (type.name ());
 
-          // std::wcerr << "traversing: " << ns_name << "#" << t_name << endl;
+          //std::wcerr << "traversing: " << ns_name << "#" << t_name << endl;
 
           for (Namespaces::ConstIterator n (type_map_.begin ());
                n != type_map_.end (); ++n)
@@ -89,7 +89,9 @@ namespace CXX
             else
               ns_match = ns_name.empty ();
 
-            // std::wcerr << "considering ns expr: " << n->xsd_name () << endl;
+            //std::wcerr << "considering ns expr: " << n->xsd_name ()
+            //           << " for " << ns_name
+            //           << ": " << (ns_match ? "+" : "-") << endl;
 
             if (ns_match)
             {
@@ -111,8 +113,8 @@ namespace CXX
                     {
                       if (!n->xsd_name ().empty ())
                       {
-                        cxx_ns = n->xsd_name ().merge (
-                          n->cxx_name (), ns_name, true);
+                        cxx_ns = n->xsd_name ().replace (
+                          ns_name, n->cxx_name (), true);
                       }
                       else
                         cxx_ns = n->cxx_name ();
@@ -124,16 +126,16 @@ namespace CXX
                     //
                     String ret_type (cxx_ns);
 
-                    ret_type += t->xsd_name ().merge (
-                      t->cxx_ret_name (), t_name, true);
+                    ret_type += t->xsd_name ().replace (
+                      t_name, t->cxx_ret_name (), true);
 
                     String arg_type;
 
                     if (t->cxx_arg_name ())
                     {
                       arg_type = cxx_ns;
-                      arg_type += t->xsd_name ().merge (
-                        t->cxx_arg_name (), t_name, true);
+                      arg_type += t->xsd_name ().replace (
+                        t_name, t->cxx_arg_name (), true);
                     }
                     else
                     {
@@ -155,11 +157,11 @@ namespace CXX
 
                     tc.set ("ret-type", ret_type);
                     tc.set ("arg-type", arg_type);
+
+                    //std::wcerr << t_name << " -> " << ret_type << endl;
                   }
 
                   tc.set ("root-schema", &schema_);
-
-                  //std::wcerr << t_name << " -> " << ret_type << endl;
 
                   // See of we need to add any includes to the translations
                   // unit.

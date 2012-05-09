@@ -84,10 +84,6 @@ $(call import,\
   l: be.l,cpp-options: be.l.cpp-options)
 
 $(call import,\
-  $(scf_root)/import/libboost/regex/stub.make,\
-  l: re.l,cpp-options: re.l.cpp-options)
-
-$(call import,\
   $(scf_root)/import/libboost/filesystem/stub.make,\
   l: fs.l,cpp-options: fs.l.cpp-options)
 
@@ -101,7 +97,7 @@ $(call import,\
 
 # Build.
 #
-$(xsd): $(cxx_obj) $(xsd_fe.l) $(be.l) $(cult.l) $(cutl.l) $(fs.l) $(re.l) $(xerces_c.l)
+$(xsd): $(cxx_obj) $(xsd_fe.l) $(be.l) $(cult.l) $(cutl.l) $(fs.l) $(xerces_c.l)
 
 $(cxx_obj) $(cxx_od): cpp_options := -I$(src_base)
 $(cxx_obj) $(cxx_od):      \
@@ -110,7 +106,6 @@ $(cxx_obj) $(cxx_od):      \
   $(cult.l.cpp-options)    \
   $(cutl.l.cpp-options)    \
   $(fs.l.cpp-options)      \
-  $(re.l.cpp-options)      \
   $(xerces_c.l.cpp-options)
 
 $(call include-dep,$(cxx_od))

@@ -5,8 +5,6 @@
 
 #include <cxx/elements.hxx>
 
-#include <backend-elements/regex.hxx>
-
 #include <cctype>    // std::toupper
 #include <memory>
 #include <sstream>
@@ -218,7 +216,7 @@ namespace CXX
     for (Containers::Vector<NarrowString>::ConstIterator
            i (nsr.begin ()), e (nsr.end ()); i != e; ++i)
     {
-      nsr_mapping_.push_back (Regex (*i));
+      nsr_mapping_.push_back (Regex (String (*i)));
     }
 
     // Custom direct mapping.
@@ -251,7 +249,7 @@ namespace CXX
     for (Containers::Vector<NarrowString>::ConstIterator
            i (ir.begin ()), e (ir.end ()); i != e; ++i)
     {
-      include_mapping_.push_back (Regex (*i));
+      include_mapping_.push_back (Regex (String (*i)));
     }
 
     // Reserved names.
@@ -352,12 +350,12 @@ namespace CXX
              e != nsr_mapping.rend (); ++e)
         {
           if (trace_namespace_regex)
-            wcerr << "try: '" << e->pattern () << "' : ";
+            wcerr << "try: '" << e->regex () << "' : ";
 
           if (e->match (pair))
           {
-            tmp = e->merge (pair);
-            tmp = colon.merge (tmp); // replace `/' with `::'
+            tmp = e->replace (pair);
+            tmp = colon.replace (tmp); // replace `/' with `::'
 
             // Check the result.
             //
@@ -388,7 +386,7 @@ namespace CXX
           }
           else
           {
-            tmp = colon.merge (n); // replace `/' with `::'
+            tmp = colon.replace (n); // replace `/' with `::'
 
             if (!cxx_id_expr.match (tmp))
             {
@@ -397,8 +395,8 @@ namespace CXX
               if (urn_mapping.match (n))
               {
                 Regex filter (L"#[.:-]#_#");
-                tmp = urn_mapping.merge (n);
-                tmp = filter.merge (tmp);
+                tmp = urn_mapping.replace (n);
+                tmp = filter.replace (tmp);
 
                 if (!cxx_id_expr.match (tmp))
                   throw NoNamespaceMapping (
@@ -1209,11 +1207,11 @@ namespace CXX
          e != include_mapping.rend (); ++e)
     {
       if (trace_include_regex)
-        wcerr << "try: '" << e->pattern () << "' : ";
+        wcerr << "try: '" << e->regex () << "' : ";
 
       if (e->match (path))
       {
-        r = e->merge (path);
+        r = e->replace (path);
         found = true;
 
         if (trace_include_regex)

@@ -291,7 +291,7 @@ namespace CXX
           }
 
           regex_custom_type_map.push_back (
-            RegexCustomTypeMapInfo (pat, type, base));
+            RegexCustomTypeMapInfo (WideRegexPat (pat), type, base));
         }
       }
     }
@@ -414,7 +414,7 @@ namespace CXX
             return true;
           }
 
-          r = i->pat.merge (i->type_sub, name);
+          r = i->pat.replace (name, i->type_sub);
           return true;
         }
       }
@@ -467,7 +467,7 @@ namespace CXX
         {
           if (!i->base_sub.empty ())
           {
-            r = i->pat.merge (i->base_sub, name);
+            r = i->pat.replace (name, i->base_sub);
           }
           else
             r.clear ();
@@ -1354,25 +1354,25 @@ namespace CXX
       {
       case forward:
         {
-          inc_path = ctx_.fwd_expr->merge (path_str);
+          inc_path = ctx_.fwd_expr->replace (path_str);
           break;
         }
       case header:
       case source:
         {
-          inc_path = ctx_.hxx_expr->merge (path_str);
+          inc_path = ctx_.hxx_expr->replace (path_str);
           break;
         }
       case inline_:
         {
           if (weak)
           {
-            inc_path = ctx_.hxx_expr->merge (path_str);
+            inc_path = ctx_.hxx_expr->replace (path_str);
             ctx_.os << "#include " << ctx_.process_include_path (inc_path)
                     << endl;
           }
 
-          inc_path = ctx_.ixx_expr->merge (path_str);
+          inc_path = ctx_.ixx_expr->replace (path_str);
           break;
         }
       }

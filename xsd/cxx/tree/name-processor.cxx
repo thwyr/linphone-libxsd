@@ -6,11 +6,11 @@
 #include <sstream>
 #include <iostream>
 
+#include <cutl/re.hxx>
+
 #include <cult/containers/set.hxx>
 #include <cult/containers/map.hxx>
 #include <cult/containers/vector.hxx>
-
-#include <backend-elements/regex.hxx>
 
 #include <cxx/tree/default-value.hxx>
 #include <cxx/tree/name-processor.hxx>
@@ -288,9 +288,17 @@ namespace CXX
         }
 
       public:
-        typedef BackendElements::Regex::Expression<WideChar> Regex;
-        typedef BackendElements::Regex::Format<WideChar> RegexFormat;
-        typedef Cult::Containers::Vector<Regex> RegexVector;
+        typedef cutl::re::wregexsub Regex;
+        typedef cutl::re::wformat RegexFormat;
+
+        struct RegexVector: Cult::Containers::Vector<Regex>
+        {
+          void
+          push_back (String const& r)
+          {
+            Cult::Containers::Vector<Regex>::push_back (Regex (r));
+          }
+        };
 
         String
         process_regex (String const& name,
@@ -306,11 +314,11 @@ namespace CXX
                i != rv.rend (); ++i)
           {
             if (trace)
-              os << "try: '" << i->pattern () << "' : ";
+              os << "try: '" << i->regex () << "' : ";
 
             if (i->match (name))
             {
-              String r (i->merge (name));
+              String r (i->replace (name));
 
               if (trace)
                 os << "'" << r << "' : +" << endl;
@@ -340,11 +348,11 @@ namespace CXX
                i != primary.rend (); ++i)
           {
             if (trace)
-              os << "try: '" << i->pattern () << "' : ";
+              os << "try: '" << i->regex () << "' : ";
 
             if (i->match (name))
             {
-              String r (i->merge (name));
+              String r (i->replace (name));
 
               if (trace)
                 os << "'" << r << "' : +" << endl;
@@ -360,11 +368,11 @@ namespace CXX
                i != backup.rend (); ++i)
           {
             if (trace)
-              os << "try: '" << i->pattern () << "' : ";
+              os << "try: '" << i->regex () << "' : ";
 
             if (i->match (name))
             {
-              String r (i->merge (name));
+              String r (i->replace (name));
 
               if (trace)
                 os << "'" << r << "' : +" << endl;
@@ -395,11 +403,11 @@ namespace CXX
                i != rv.rend (); ++i)
           {
             if (trace)
-              os << "try: '" << i->pattern () << "' : ";
+              os << "try: '" << i->regex () << "' : ";
 
             if (i->match (s))
             {
-              String r (i->merge (s));
+              String r (i->replace (s));
 
               if (trace)
                 os << "'" << r << "' : +" << endl;
@@ -431,11 +439,11 @@ namespace CXX
                i != primary.rend (); ++i)
           {
             if (trace)
-              os << "try: '" << i->pattern () << "' : ";
+              os << "try: '" << i->regex () << "' : ";
 
             if (i->match (s))
             {
-              String r (i->merge (s));
+              String r (i->replace (s));
 
               if (trace)
                 os << "'" << r << "' : +" << endl;
@@ -451,11 +459,11 @@ namespace CXX
                i != backup.rend (); ++i)
           {
             if (trace)
-              os << "try: '" << i->pattern () << "' : ";
+              os << "try: '" << i->regex () << "' : ";
 
             if (i->match (s))
             {
-              String r (i->merge (s));
+              String r (i->replace (s));
 
               if (trace)
                 os << "'" << r << "' : +" << endl;
@@ -503,12 +511,12 @@ namespace CXX
           {
             try
             {
-              rv.push_back (Regex (*i));
+              rv.push_back (*i);
             }
             catch (RegexFormat const& e)
             {
               os << "error: invalid " << id << " name regex: '" <<
-                e.expression () << "': " << e.description () << endl;
+                e.regex () << "': " << e.description ().c_str () << endl;
 
               throw Failed ();
             }

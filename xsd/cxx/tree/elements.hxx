@@ -8,11 +8,11 @@
 
 #include <sstream>
 
+#include <cutl/re.hxx>
+
 #include <cult/containers/map.hxx>
 #include <cult/containers/deque.hxx>
 #include <cult/containers/vector.hxx>
-
-#include <backend-elements/regex.hxx>
 
 #include <cxx/elements.hxx>
 
@@ -74,8 +74,8 @@ namespace CXX
     class Context: public CXX::Context
     {
     public:
-      typedef BackendElements::Regex::Expression<Char> Regex;
-      typedef BackendElements::Regex::Pattern<WideChar> WideRegexPat;
+      typedef cutl::re::regexsub Regex;
+      typedef cutl::re::wregex WideRegexPat;
 
       struct DirectCustomTypeMapInfo
       {
