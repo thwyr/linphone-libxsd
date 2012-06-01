@@ -604,11 +604,11 @@ namespace CXX
     Boolean Context::
     polymorphic_p (SemanticGraph::Type& t)
     {
-      // ID/IDREF templates cannot be polymorphic.
+      // IDREF templates cannot be polymorphic.
       //
       if (!t.named_p () &&
-          (t.is_a<SemanticGraph::Fundamental::Id> () ||
-           t.is_a<SemanticGraph::Fundamental::IdRef> ()))
+          (t.is_a<SemanticGraph::Fundamental::IdRef> () ||
+           t.is_a<SemanticGraph::Fundamental::IdRefs> ()))
         return false;
 
       if (polymorphic_all)
@@ -625,11 +625,11 @@ namespace CXX
     Boolean Context::
     anonymous_substitutes_p (SemanticGraph::Type& t)
     {
-      // ID/IDREF templates cannot match.
+      // IDREF templates cannot match.
       //
       if (!t.named_p () &&
-          (t.is_a<SemanticGraph::Fundamental::Id> () ||
-           t.is_a<SemanticGraph::Fundamental::IdRef> ()))
+          (t.is_a<SemanticGraph::Fundamental::IdRef> () ||
+           t.is_a<SemanticGraph::Fundamental::IdRefs> ()))
         return false;
 
       // See which elements this type classifies.
@@ -962,7 +962,11 @@ namespace CXX
 
       if (base_arg_ != 0)
       {
-        *base_arg_ = L"_xsd_" + ename (t) + L"_base";
+        // IDREF templates don't have a name.
+        //
+        *base_arg_ = t.named_p ()
+          ? (L"_xsd_" + ename (t) + L"_base")
+          : L"_xsd_base";
 
         os << " " << *base_arg_;
       }
