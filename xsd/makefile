@@ -49,18 +49,24 @@ cxx_tun += cxx/tree/elements.cxx                      \
            cxx/tree/stream-extraction-source.cxx
 
 
-# Type map
+# Type map.
 #
 cxx_tun += type-map/lexer.cxx  \
            type-map/parser.cxx
 
-# Processing
+# Processing.
 #
 cxx_tun += processing/cardinality/processor.cxx \
            processing/inheritance/processor.cxx
 
+# Options file.
+#
+cli_tun := options.cli            \
+           cxx/options.cli        \
+           cxx/tree/options.cli   \
+           cxx/parser/options.cli
 
-cxx_obj := $(addprefix $(out_base)/,$(cxx_tun:.cxx=.o))
+cxx_obj := $(addprefix $(out_base)/,$(cxx_tun:.cxx=.o) $(cli_tun:.cli=.o))
 cxx_od  := $(cxx_obj:.o=.o.d)
 
 xsd      := $(out_base)/xsd
@@ -72,16 +78,16 @@ clean    := $(out_base)/.clean
 # Import.
 #
 $(call import,\
+  $(scf_root)/import/cli/stub.make,\
+  cli: cli,cli-rules: cli_rules)
+
+$(call import,\
   $(scf_root)/import/libcutl/stub.make,\
   l: cutl.l,cpp-options: cutl.l.cpp-options)
 
 $(call import,\
   $(scf_root)/import/libcult/stub.make,\
   l: cult.l,cpp-options: cult.l.cpp-options)
-
-$(call import,\
-  $(scf_root)/import/libbackend-elements/stub.make,\
-  l: be.l,cpp-options: be.l.cpp-options)
 
 $(call import,\
   $(scf_root)/import/libboost/filesystem/stub.make,\
@@ -97,18 +103,48 @@ $(call import,\
 
 # Build.
 #
-$(xsd): $(cxx_obj) $(xsd_fe.l) $(be.l) $(cult.l) $(cutl.l) $(fs.l) $(xerces_c.l)
+$(xsd): $(cxx_obj) $(xsd_fe.l) $(cult.l) $(cutl.l) $(fs.l) $(xerces_c.l)
 
 $(cxx_obj) $(cxx_od): cpp_options := -I$(src_base)
 $(cxx_obj) $(cxx_od):      \
   $(xsd_fe.l.cpp-options)  \
-  $(be.l.cpp-options)      \
   $(cult.l.cpp-options)    \
   $(cutl.l.cpp-options)    \
   $(fs.l.cpp-options)      \
   $(xerces_c.l.cpp-options)
 
-$(call include-dep,$(cxx_od))
+genf := $(cli_tun:.cli=.hxx) $(cli_tun:.cli=.ixx) $(cli_tun:.cli=.cxx)
+gen  := $(addprefix $(out_base)/,$(genf))
+
+$(gen): $(cli)
+$(gen): cli := $(cli)
+$(gen): cli_options +=         \
+-I $(src_base)                 \
+--ostream-type ::std::wostream \
+--exclude-base                 \
+--suppress-undocumented        \
+--generate-file-scanner        \
+--include-with-brackets        \
+--option-length 28
+
+#--include-prefix xsd
+#--guard-prefix XSD
+
+$(addprefix $(out_base)/cxx/options,.hxx .ixx .cxx): $(src_base)/options.cli
+$(addprefix $(out_base)/cxx/options,.hxx .ixx .cxx): cli_options += \
+--include-prefix cxx --guard-prefix CXX
+
+$(addprefix $(out_base)/cxx/tree/options,.hxx .ixx .cxx): \
+$(src_base)/options.cli $(src_base)/cxx/options.cli
+$(addprefix $(out_base)/cxx/tree/options,.hxx .ixx .cxx): cli_options += \
+--include-prefix cxx/tree --guard-prefix CXX_TREE
+
+$(addprefix $(out_base)/cxx/parser/options,.hxx .ixx .cxx): \
+$(src_base)/options.cli $(src_base)/cxx/options.cli
+$(addprefix $(out_base)/cxx/parser/options,.hxx .ixx .cxx): cli_options += \
+--include-prefix cxx/parser --guard-prefix CXX_PARSER
+
+$(call include-dep,$(cxx_od),$(cxx_obj),$(gen))
 
 # Alias for default target.
 #
@@ -132,14 +168,15 @@ $(dist-win): $(xsd)
 $(clean):                            \
   $(xsd).o.clean                     \
   $(addsuffix .cxx.clean,$(cxx_obj)) \
-  $(addsuffix .cxx.clean,$(cxx_od))
+  $(addsuffix .cxx.clean,$(cxx_od))  \
+  $(addprefix $(out_base)/,$(cli_tun:.cli=.cxx.cli.clean))
 
 # Generated .gitignore.
 #
 ifeq ($(out_base),$(src_base))
 $(xsd): | $(out_base)/.gitignore
 
-$(out_base)/.gitignore: files := xsd
+$(out_base)/.gitignore: files := xsd $(genf)
 $(clean): $(out_base)/.gitignore.clean
 
 $(call include,$(bld_root)/git/gitignore.make)
@@ -147,6 +184,7 @@ endif
 
 # How to.
 #
+$(call include,$(cli_rules))
 $(call include,$(bld_root)/cxx/o-e.make)
 $(call include,$(bld_root)/cxx/cxx-o.make)
 $(call include,$(bld_root)/cxx/cxx-d.make)

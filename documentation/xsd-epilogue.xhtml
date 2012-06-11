@@ -1,0 +1,417 @@
+  <h1>NAMING CONVENTION</h1>
+
+  <p>The compiler can be instructed to use a particular naming
+     convention in the generated code. A number of widely-used
+     conventions can be selected using the <code><b>--type-naming</b></code>
+     and <code><b>--function-naming</b></code> options. A custom
+     naming convention can be achieved using the
+     <code><b>--type-regex</b></code>,
+     <code><b>--accessor-regex</b></code>,
+     <code><b>--one-accessor-regex</b></code>,
+     <code><b>--opt-accessor-regex</b></code>,
+     <code><b>--seq-accessor-regex</b></code>,
+     <code><b>--modifier-regex</b></code>,
+     <code><b>--one-modifier-regex</b></code>,
+     <code><b>--opt-modifier-regex</b></code>,
+     <code><b>--seq-modifier-regex</b></code>,
+     <code><b>--parser-regex</b></code>,
+     <code><b>--serializer-regex</b></code>,
+     <code><b>--enumerator-regex</b></code>, and
+     <code><b>--element-type-regex</b></code> options.
+  </p>
+
+  <p>The <code><b>--type-naming</b></code> option specifies the
+     convention that should be used for naming C++ types. Possible
+     values for this option are <code><b>knr</b></code> (default),
+     <code><b>ucc</b></code>, and <code><b>java</b></code>. The
+     <code><b>knr</b></code> value (stands for K&amp;R) signifies
+     the standard, lower-case naming convention with the underscore
+     used as a word delimiter, for example: <code>foo</code>,
+     <code>foo_bar</code>. The <code><b>ucc</b></code> (stands
+     for upper-camel-case) and
+     <code><b>java</b></code> values a synonyms for the same
+     naming convention where the first letter of each word in the
+     name is capitalized, for example: <code>Foo</code>,
+     <code>FooBar</code>.</p>
+
+  <p>Similarly, the <code><b>--function-naming</b></code> option
+     specifies the convention that should be used for naming C++
+     functions. Possible values for this option are <code><b>knr</b></code>
+     (default), <code><b>lcc</b></code>, and <code><b>java</b></code>. The
+     <code><b>knr</b></code> value (stands for K&amp;R) signifies
+     the standard, lower-case naming convention with the underscore
+     used as a word delimiter, for example: <code>foo()</code>,
+     <code>foo_bar()</code>. The <code><b>lcc</b></code> value
+     (stands for lower-camel-case) signifies a naming convention
+     where the first letter of each word except the first is
+     capitalized, for example: <code>foo()</code>, <code>fooBar()</code>.
+     The <code><b>java</b></code> naming convention is similar to
+     the lower-camel-case one except that accessor functions are prefixed
+     with <code>get</code>, modifier functions are prefixed
+     with <code>set</code>, parsing functions are prefixed
+     with <code>parse</code>, and serialization functions are
+     prefixed with <code>serialize</code>, for example:
+     <code>getFoo()</code>, <code>setFooBar()</code>,
+     <code>parseRoot()</code>, <code>serializeRoot()</code>.</p>
+
+  <p>Note that the naming conventions specified with the
+     <code><b>--type-naming</b></code> and
+     <code><b>--function-naming</b></code> options perform only limited
+     transformations on the names that come from the schema in the
+     form of type, attribute, and element names. In other words, to
+     get consistent results, your schemas should follow a similar
+     naming convention as the one you would like to have in the
+     generated code. Alternatively, you can use the
+     <code><b>--*-regex</b></code> options (discussed below)
+     to perform further transformations on the names that come from
+     the schema.</p>
+
+  <p>The
+     <code><b>--type-regex</b></code>,
+     <code><b>--accessor-regex</b></code>,
+     <code><b>--one-accessor-regex</b></code>,
+     <code><b>--opt-accessor-regex</b></code>,
+     <code><b>--seq-accessor-regex</b></code>,
+     <code><b>--modifier-regex</b></code>,
+     <code><b>--one-modifier-regex</b></code>,
+     <code><b>--opt-modifier-regex</b></code>,
+     <code><b>--seq-modifier-regex</b></code>,
+     <code><b>--parser-regex</b></code>,
+     <code><b>--serializer-regex</b></code>,
+     <code><b>--enumerator-regex</b></code>, and
+     <code><b>--element-type-regex</b></code> options allow you to
+     specify extra regular expressions for each name category in
+     addition to the predefined set that is added depending on
+     the <code><b>--type-naming</b></code> and
+     <code><b>--function-naming</b></code> options. Expressions
+     that are provided with the <code><b>--*-regex</b></code>
+     options are evaluated prior to any predefined expressions.
+     This allows you to selectively override some or all of the
+     predefined transformations. When debugging your own expressions,
+     it is often useful to see which expressions match which names.
+     The <code><b>--name-regex-trace</b></code> option allows you
+     to trace the process of applying regular expressions to
+     names.</p>
+
+  <p>The value for the <code><b>--*-regex</b></code> options should be
+     a perl-like regular expression in the form
+     <code><b>/</b><i>pattern</i><b>/</b><i>replacement</i><b>/</b></code>.
+     Any character can be used as a delimiter instead of <code><b>/</b></code>.
+     Escaping of the delimiter character in <code><i>pattern</i></code> or
+     <code><i>replacement</i></code> is not supported.
+     All the regular expressions for each category are pushed into a
+     category-specific stack with the last specified expression
+     considered first. The first match that succeeds is used. For the
+     <code><b>--one-accessor-regex</b></code> (accessors with cardinality one),
+     <code><b>--opt-accessor-regex</b></code> (accessors with cardinality optional), and
+     <code><b>--seq-accessor-regex</b></code> (accessors with cardinality sequence)
+     categories the  <code><b>--accessor-regex</b></code> expressions are
+     used as a fallback. For the
+     <code><b>--one-modifier-regex</b></code>,
+     <code><b>--opt-modifier-regex</b></code>, and
+     <code><b>--seq-modifier-regex</b></code>
+     categories the  <code><b>--modifier-regex</b></code> expressions are
+     used as a fallback. For the <code><b>--element-type-regex</b></code>
+     category the <code><b>--type-regex</b></code> expressions are
+     used as a fallback.</p>
+
+  <p>The type name expressions (<code><b>--type-regex</b></code>)
+     are evaluated on the name string that has the following
+     format:</p>
+
+  <p><code>[<i>namespace</i> ]<i>name</i>[,<i>name</i>][,<i>name</i>][,<i>name</i>]</code></p>
+
+  <p>The element type name expressions
+     (<code><b>--element-type-regex</b></code>), effective only when
+     the <code><b>--generate-element-type</b></code> option is specified,
+     are evaluated on the name string that has the following
+     format:</p>
+
+  <p><code><i>namespace</i> <i>name</i></code></p>
+
+  <p>In the type name format the <code><i>namespace</i></code> part
+     followed by a space is only present for global type names. For
+     global types and elements defined in schemas without a target
+     namespace, the <code><i>namespace</i></code> part is empty but
+     the space is still present. In the type name format after the
+     initial <code><i>name</i></code> component, up to three additional
+     <code><i>name</i></code> components can be present, separated
+     by commas. For example:</p>
+
+  <p><code><b>http://example.com/hello type</b></code></p>
+  <p><code><b>foo</b></code></p>
+  <p><code><b>foo,iterator</b></code></p>
+  <p><code><b>foo,const,iterator</b></code></p>
+
+  <p>The following set of predefined regular expressions is used to
+     transform type names when the upper-camel-case naming convention
+     is selected:</p>
+
+  <p><code><b>/(?:[^ ]* )?([^,]+)/\u$1/</b></code></p>
+  <p><code><b>/(?:[^ ]* )?([^,]+),([^,]+)/\u$1\u$2/</b></code></p>
+  <p><code><b>/(?:[^ ]* )?([^,]+),([^,]+),([^,]+)/\u$1\u$2\u$3/</b></code></p>
+  <p><code><b>/(?:[^ ]* )?([^,]+),([^,]+),([^,]+),([^,]+)/\u$1\u$2\u$3\u$4/</b></code></p>
+
+  <p>The accessor and modifier expressions
+     (<code><b>--*accessor-regex</b></code> and
+     <code><b>--*modifier-regex</b></code>) are evaluated on the name string
+     that has the following format:</p>
+
+  <p><code><i>name</i>[,<i>name</i>][,<i>name</i>]</code></p>
+
+  <p>After the initial <code><i>name</i></code> component, up to two
+     additional <code><i>name</i></code> components can be present,
+     separated by commas. For example:</p>
+
+  <p><code><b>foo</b></code></p>
+  <p><code><b>dom,document</b></code></p>
+  <p><code><b>foo,default,value</b></code></p>
+
+  <p>The following set of predefined regular expressions is used to
+     transform accessor names when the <code><b>java</b></code> naming
+     convention is selected:</p>
+
+  <p><code><b>/([^,]+)/get\u$1/</b></code></p>
+  <p><code><b>/([^,]+),([^,]+)/get\u$1\u$2/</b></code></p>
+  <p><code><b>/([^,]+),([^,]+),([^,]+)/get\u$1\u$2\u$3/</b></code></p>
+
+  <p>For the parser, serializer, and enumerator categories, the
+     corresponding regular expressions are evaluated on local names of
+     elements and on enumeration values, respectively. For example, the
+     following predefined regular expression is used to transform parsing
+     function names when the <code><b>java</b></code> naming convention
+     is selected:</p>
+
+  <p><code><b>/(.+)/parse\u$1/</b></code></p>
+
+  <p>See also the REGEX AND SHELL QUOTING section below.</p>
+
+  <h1>TYPE MAP</h1>
+
+  <p>Type map files are used in C++/Parser to define a mapping between
+     XML Schema and C++ types. The compiler uses this information
+     to determine the return types of <code><b>post_*</b></code>
+     functions in parser skeletons corresponding to XML Schema
+     types as well as argument types for callbacks corresponding
+     to elements and attributes of these types.</p>
+
+  <p>The compiler has a set of predefined mapping rules that map
+     built-in XML Schema types to suitable C++ types (discussed
+     below) and all other types to <code><b>void</b></code>.
+     By providing your own type maps you can override these predefined
+     rules. The format of the type map file is presented below:
+  </p>
+
+  <pre>
+namespace &lt;schema-namespace> [&lt;cxx-namespace>]
+{
+  (include &lt;file-name>;)*
+  ([type] &lt;schema-type> &lt;cxx-ret-type> [&lt;cxx-arg-type>];)*
+}
+  </pre>
+
+  <p>Both <code><i>&lt;schema-namespace></i></code> and
+     <code><i>&lt;schema-type></i></code> are regex patterns while
+     <code><i>&lt;cxx-namespace></i></code>,
+     <code><i>&lt;cxx-ret-type></i></code>, and
+     <code><i>&lt;cxx-arg-type></i></code> are regex pattern
+     substitutions. All names can be optionally enclosed in
+     <code><b>" "</b></code>, for example, to include white-spaces.</p>
+
+  <p><code><i>&lt;schema-namespace></i></code> determines XML
+     Schema namespace. Optional <code><i>&lt;cxx-namespace></i></code>
+     is prefixed to every C++ type name in this namespace declaration.
+     <code><i>&lt;cxx-ret-type></i></code> is a C++ type name that is
+     used as a return type for the <code><b>post_*</b></code> functions.
+     Optional <code><i>&lt;cxx-arg-type></i></code> is an argument
+     type for callback functions corresponding to elements and attributes
+     of this type. If
+     <code><i>&lt;cxx-arg-type></i></code> is not specified, it defaults
+     to <code><i>&lt;cxx-ret-type></i></code> if <code><i>&lt;cxx-ret-type></i></code>
+     ends with <code><b>*</b></code> or <code><b>&amp;</b></code> (that is,
+     it is a pointer or a reference) and
+     <code><b>const</b>&nbsp;<i>&lt;cxx-ret-type></i><b>&amp;</b></code>
+     otherwise.
+     <code><i>&lt;file-name></i></code> is a file name either in the
+     <code><b>" "</b></code> or <code><b>&lt; ></b></code> format
+     and is added with the <code><b>#include</b></code> directive to
+     the generated code.</p>
+
+  <p>The <code><b>#</b></code> character starts a comment that ends
+     with a new line or end of file. To specify a name that contains
+     <code><b>#</b></code> enclose it in <code><b>" "</b></code>.
+     For example:</p>
+
+  <pre>
+namespace http://www.example.com/xmlns/my my
+{
+  include "my.hxx";
+
+  # Pass apples by value.
+  #
+  apple apple;
+
+  # Pass oranges as pointers.
+  #
+  orange orange_t*;
+}
+  </pre>
+
+  <p>In the example above, for the
+     <code><b>http://www.example.com/xmlns/my#orange</b></code>
+     XML Schema type, the <code><b>my::orange_t*</b></code> C++ type will
+     be used as both return and argument types.</p>
+
+  <p>Several namespace declarations can be specified in a single
+     file. The namespace declaration can also be completely
+     omitted to map types in a schema without a namespace. For
+     instance:</p>
+
+  <pre>
+include "my.hxx";
+apple apple;
+
+namespace http://www.example.com/xmlns/my
+{
+  orange "const orange_t*";
+}
+  </pre>
+
+  <p>The compiler has a number of predefined mapping rules that can be
+     presented as the following map files. The string-based XML Schema
+     built-in types are mapped to either <code><b>std::string</b></code>
+     or <code><b>std::wstring</b></code> depending on the character type
+     selected with the <code><b>--char-type</b></code> option
+     (<code><b>char</b></code> by default).</p>
+
+  <pre>
+namespace http://www.w3.org/2001/XMLSchema
+{
+  boolean bool bool;
+
+  byte "signed char" "signed char";
+  unsignedByte "unsigned char" "unsigned char";
+
+  short short short;
+  unsignedShort "unsigned short" "unsigned short";
+
+  int int int;
+  unsignedInt "unsigned int" "unsigned int";
+
+  long "long long" "long long";
+  unsignedLong "unsigned long long" "unsigned long long";
+
+  integer "long long" "long long";
+
+  negativeInteger "long long" "long long";
+  nonPositiveInteger "long long" "long long";
+
+  positiveInteger "unsigned long long" "unsigned long long";
+  nonNegativeInteger "unsigned long long" "unsigned long long";
+
+  float float float;
+  double double double;
+  decimal double double;
+
+  string std::string;
+  normalizedString std::string;
+  token std::string;
+  Name std::string;
+  NMTOKEN std::string;
+  NCName std::string;
+  ID std::string;
+  IDREF std::string;
+  language std::string;
+  anyURI std::string;
+
+  NMTOKENS xml_schema::string_sequence;
+  IDREFS xml_schema::string_sequence;
+
+  QName xml_schema::qname;
+
+  base64Binary std::auto_ptr&lt;xml_schema::buffer>
+               std::auto_ptr&lt;xml_schema::buffer>;
+  hexBinary std::auto_ptr&lt;xml_schema::buffer>
+            std::auto_ptr&lt;xml_schema::buffer>;
+
+  date xml_schema::date;
+  dateTime xml_schema::date_time;
+  duration xml_schema::duration;
+  gDay xml_schema::gday;
+  gMonth xml_schema::gmonth;
+  gMonthDay xml_schema::gmonth_day;
+  gYear xml_schema::gyear;
+  gYearMonth xml_schema::gyear_month;
+  time xml_schema::time;
+}
+  </pre>
+
+  <p>The last predefined rule maps anything that wasn't mapped by
+     previous rules to <code><b>void</b></code>:</p>
+
+  <pre>
+namespace .*
+{
+  .* void void;
+}
+  </pre>
+
+
+  <p>When you provide your own type maps with the
+     <code><b>--type-map</b></code> option, they are evaluated first.
+     This allows you to selectively override predefined rules.</p>
+
+  <h1>REGEX AND SHELL QUOTING</h1>
+
+  <p>When entering a regular expression argument in the shell
+     command line it is often necessary to use quoting (enclosing
+     the argument in <code><b>"&nbsp;"</b></code> or
+     <code><b>'&nbsp;'</b></code>) in order to prevent the shell
+     from interpreting certain characters, for example, spaces as
+     argument separators and <code><b>$</b></code> as variable
+     expansions.</p>
+
+  <p>Unfortunately it is hard to achieve this in a manner that is
+     portable across POSIX shells, such as those found on
+     GNU/Linux and UNIX, and Windows shell. For example, if you
+     use <code><b>"&nbsp;"</b></code> for quoting you will get a
+     wrong result with POSIX shells if your expression contains
+     <code><b>$</b></code>. The standard way of dealing with this
+     on POSIX systems is to use <code><b>'&nbsp;'</b></code> instead.
+     Unfortunately, Windows shell does not remove <code><b>'&nbsp;'</b></code>
+     from arguments when they are passed to applications. As a result you
+     may have to use <code><b>'&nbsp;'</b></code> for POSIX and
+     <code><b>"&nbsp;"</b></code> for Windows (<code><b>$</b></code> is
+     not treated as a special character on Windows).</p>
+
+  <p>Alternatively, you can save regular expression options into
+     a file, one option per line, and use this file with the
+     <code><b>--options-file</b></code> option. With this approach
+     you don't need to worry about shell quoting.</p>
+
+  <h1>DIAGNOSTICS</h1>
+
+  <p>If the input file is not a valid W3C XML Schema definition,
+    <code><b>xsd</b></code> will issue diagnostic messages to STDERR
+    and exit with non-zero exit code.</p>
+
+  <h1>BUGS</h1>
+
+  <p>Send bug reports to the
+     <a href="mailto:xsd-users@codesynthesis.com">xsd-users@codesynthesis.com</a> mailing list.</p>
+
+  </div>
+  <div id="footer">
+    &copy;2005-2011 <a href="http://codesynthesis.com">CODE SYNTHESIS TOOLS CC</a>
+
+    <div id="terms">
+      Permission is granted to copy, distribute and/or modify this
+      document under the terms of the
+      <a href="http://codesynthesis.com/licenses/fdl-1.2.txt">GNU Free
+      Documentation License, version 1.2</a>; with no Invariant Sections,
+      no Front-Cover Texts and no Back-Cover Texts.
+    </div>
+  </div>
+</div>
+</body>
+</html>
