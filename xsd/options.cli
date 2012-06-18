@@ -127,7 +127,7 @@ class options = 0
      start with capital letters. This could be useful when your naming
      convention requires type names to start with capital letters:
 
-      \cb{%.* .* (.+/)*(.+)%\\u$2%}
+     \cb{%.* .* (.+/)*(.+)%\\u$2%}
 
      See also the REGEX AND SHELL QUOTING section below."
   };
