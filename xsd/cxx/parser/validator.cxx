@@ -25,10 +25,10 @@ namespace CXX
       public:
         ValidationContext (SemanticGraph::Schema& root,
                            SemanticGraph::Path const& path,
-                           CLI::Options const& options,
+                           Parser::options const& ops,
                            const WarningSet& disabled_warnings,
                            Boolean& valid_)
-            : Context (std::wcerr, root, path, options, 0, 0, 0, 0),
+            : Context (std::wcerr, root, path, ops, 0, 0, 0, 0),
               disabled_warnings_ (disabled_warnings),
               disabled_warnings_all_ (false),
               valid (valid_),
@@ -335,7 +335,7 @@ namespace CXX
             return;
 
           if (e.substitutes_p () &&
-              !options.value<CLI::generate_polymorphic> () &&
+              !options.generate_polymorphic () &&
               !subst_group_warning_issued)
           {
             subst_group_warning_issued = true;
@@ -434,7 +434,7 @@ namespace CXX
                     << "automatically name them"
                     << endl;
 
-              if (!options.value<CLI::show_anonymous> ())
+              if (!options.show_anonymous ())
                 wcerr << t.file ()
                       << ": info: use --show-anonymous option to see these "
                       << "types" << endl;
@@ -453,7 +453,7 @@ namespace CXX
 
           if (traverse_common (e))
           {
-            if (options.value<CLI::show_anonymous> ())
+            if (options.show_anonymous ())
             {
               wcerr << e.file () << ":" << e.line () << ":" << e.column ()
                     << ": error: element '" << xpath (e) << "' "
@@ -469,7 +469,7 @@ namespace CXX
         {
           if (traverse_common (a))
           {
-            if (options.value<CLI::show_anonymous> ())
+            if (options.show_anonymous ())
             {
               wcerr << a.file () << ":" << a.line () << ":" << a.column ()
                     << ": error: attribute '" << xpath (a) << "' "
@@ -506,16 +506,16 @@ namespace CXX
           if (!valid)
             return;
 
-          if (options.value<CLI::root_element_first> ())
+          if (options.root_element_first ())
           {
             if (element_ == 0)
               element_ = &e;
           }
-          else if (options.value<CLI::root_element_last> ())
+          else if (options.root_element_last ())
           {
             element_ = &e;
           }
-          else if (String name = options.value<CLI::root_element> ())
+          else if (String name = options.root_element ())
           {
             if (e.name () == name)
               element_ = &e;
@@ -551,39 +551,39 @@ namespace CXX
     }
 
     Boolean Validator::
-    validate (CLI::Options const& options,
+    validate (options const& ops,
               SemanticGraph::Schema& root,
               SemanticGraph::Path const& path,
               Boolean gen_driver,
               const WarningSet& disabled_warnings)
     {
       Boolean valid (true);
-      ValidationContext ctx (root, path, options, disabled_warnings, valid);
+      ValidationContext ctx (root, path, ops, disabled_warnings, valid);
 
       //
       //
-      if (options.value<CLI::char_type> () != "char" &&
-          options.value<CLI::char_type> () != "wchar_t" &&
+      if (ops.char_type () != "char" &&
+          ops.char_type () != "wchar_t" &&
           !ctx.is_disabled ("P003"))
       {
         wcerr << "warning P003: unknown base character type '" <<
-          options.value<CLI::char_type> ().c_str () << "'" << endl;
+          ops.char_type ().c_str () << "'" << endl;
       }
 
       //
       //
-      if (options.value<CLI::xml_parser> () != "xerces" &&
-          options.value<CLI::xml_parser> () != "expat" &&
+      if (ops.xml_parser () != "xerces" &&
+          ops.xml_parser () != "expat" &&
           !ctx.is_disabled ("P004"))
       {
         wcerr << "warning P004: unknown underlying XML parser '" <<
-          options.value<CLI::xml_parser> ().c_str () << "'" << endl;
+          ops.xml_parser ().c_str () << "'" << endl;
       }
 
       //
       //
-      if (options.value<CLI::xml_parser> () == "expat" &&
-          options.value<CLI::char_type> () == "wchar_t")
+      if (ops.xml_parser () == "expat" &&
+          ops.char_type () == "wchar_t")
       {
         wcerr << "error: using expat with wchar_t is not supported"
               << endl;
@@ -593,9 +593,9 @@ namespace CXX
 
       //
       //
-      if (options.value<CLI::xml_parser> () == "expat" &&
-          !options.value<CLI::char_encoding> ().empty () &&
-          options.value<CLI::char_encoding> () != "utf8")
+      if (ops.xml_parser () == "expat" &&
+          !ops.char_encoding ().empty () &&
+          ops.char_encoding () != "utf8")
       {
         wcerr << "error: using expat with character encoding other than "
               << "utf8 is not supported"
@@ -606,8 +606,7 @@ namespace CXX
 
       //
       //
-      if (options.value<CLI::generate_validation> () &&
-          options.value<CLI::suppress_validation> ())
+      if (ops.generate_validation () && ops.suppress_validation ())
       {
         wcerr << "error: mutually exclusive options specified: "
               << "--generate-validation and --suppress-validation"
@@ -618,8 +617,7 @@ namespace CXX
 
       //
       //
-      if (options.value<CLI::generate_noop_impl> () &&
-          options.value<CLI::generate_print_impl> ())
+      if (ops.generate_noop_impl () && ops.generate_print_impl ())
       {
         wcerr << "error: mutually exclusive options specified: "
               << "--generate-noop-impl and --generate-print-impl"
@@ -631,9 +629,9 @@ namespace CXX
       //
       //
       {
-        Boolean ref (options.value<CLI::root_element_first> ());
-        Boolean rel (options.value<CLI::root_element_last> ());
-        Boolean re (options.value<CLI::root_element> ());
+        Boolean ref (ops.root_element_first ());
+        Boolean rel (ops.root_element_last ());
+        Boolean re (ops.root_element ());
 
         if ((ref && rel) || (ref && re) || (rel && re))
         {
@@ -648,8 +646,8 @@ namespace CXX
 
       //
       //
-      Boolean import_maps (options.value<CLI::import_maps> ());
-      Boolean export_maps (options.value<CLI::export_maps> ());
+      Boolean import_maps (ops.import_maps ());
+      Boolean export_maps (ops.export_maps ());
 
       if (import_maps && export_maps)
       {

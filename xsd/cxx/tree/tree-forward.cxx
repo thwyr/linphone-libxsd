@@ -139,7 +139,7 @@ namespace CXX
     Void
     generate_forward (Context& ctx)
     {
-      NarrowString xml_schema (ctx.options.value<CLI::extern_xml_schema> ());
+      NarrowString xml_schema (ctx.options.extern_xml_schema ());
 
       // Inlcude or Emit fundamental types.
       //
@@ -164,21 +164,21 @@ namespace CXX
                << "#include <xsd/cxx/tree/types.hxx>" << endl
                << endl;
 
-        if (!ctx.options.value<CLI::suppress_parsing> () ||
-            ctx.options.value<CLI::generate_serialization> ())
+        if (!ctx.options.suppress_parsing () ||
+            ctx.options.generate_serialization ())
         {
           ctx.os << "#include <xsd/cxx/xml/error-handler.hxx>" << endl
                  << endl;
         }
 
-        if (!ctx.options.value<CLI::suppress_parsing> () ||
-            ctx.options.value<CLI::generate_serialization> ())
+        if (!ctx.options.suppress_parsing () ||
+            ctx.options.generate_serialization ())
         {
           ctx.os << "#include <xsd/cxx/xml/dom/auto-ptr.hxx>" << endl
                  << endl;
         }
 
-        Boolean element_map (ctx.options.value<CLI::generate_element_map> ());
+        Boolean element_map (ctx.options.generate_element_map ());
 
         if (element_map)
           ctx.os << "#include <xsd/cxx/tree/element-map.hxx>" << endl
@@ -188,7 +188,7 @@ namespace CXX
         // later in the individual generators for each feature because
         // those headers provide implementation for the fundamental types.
         //
-        if (!ctx.options.value<CLI::suppress_parsing> ())
+        if (!ctx.options.suppress_parsing ())
         {
           ctx.os << "#include <xsd/cxx/tree/parsing.hxx>" << endl;
 
@@ -210,7 +210,7 @@ namespace CXX
           ctx.os << endl;
         }
 
-        if (ctx.options.value<CLI::generate_serialization> ())
+        if (ctx.options.generate_serialization ())
         {
           ctx.os << "#include <xsd/cxx/xml/dom/serialization-header.hxx>" << endl
                  << "#include <xsd/cxx/tree/serialization.hxx>" << endl;
@@ -233,18 +233,17 @@ namespace CXX
           ctx.os << endl;
         }
 
-        if (ctx.options.value<CLI::generate_ostream> ())
+        if (ctx.options.generate_ostream ())
         {
           ctx.os << "#include <xsd/cxx/tree/std-ostream-operators.hxx>" << endl
                  << endl;
         }
 
-        typedef Containers::Vector<NarrowString> Streams;
-
-        Streams const& ist (ctx.options.value<CLI::generate_insertion> ());
+        NarrowStrings const& ist (ctx.options.generate_insertion ());
         if (!ist.empty ())
         {
-          for (Streams::ConstIterator i (ist.begin ()); i != ist.end (); ++i)
+          for (NarrowStrings::const_iterator i (ist.begin ()); i != ist.end ();
+               ++i)
           {
             if (*i == "ACE_OutputCDR")
               ctx.os << "#include <xsd/cxx/tree/ace-cdr-stream-insertion.hxx>"
@@ -258,10 +257,11 @@ namespace CXX
                  << endl;
         }
 
-        Streams const& est (ctx.options.value<CLI::generate_extraction> ());
+        NarrowStrings const& est (ctx.options.generate_extraction ());
         if (!est.empty ())
         {
-          for (Streams::ConstIterator i (est.begin ()); i != est.end (); ++i)
+          for (NarrowStrings::const_iterator i (est.begin ()); i != est.end ();
+               ++i)
           {
             if (*i == "ACE_InputCDR")
               ctx.os << "#include <xsd/cxx/tree/ace-cdr-stream-extraction.hxx>"
@@ -288,7 +288,7 @@ namespace CXX
 
       // First emit header includes.
       //
-      if (ctx.options.value<CLI::generate_forward> ())
+      if (ctx.options.generate_forward ())
       {
         Traversal::Schema schema;
         Includes includes (ctx, Includes::forward);

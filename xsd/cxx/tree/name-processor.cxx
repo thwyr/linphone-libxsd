@@ -36,7 +36,7 @@ namespace CXX
       public:
         struct Failed {};
 
-        Context (CLI::Options const& options,
+        Context (Tree::options const& ops,
                  Counts const& counts,
                  Boolean generate_xml_schema,
                  SemanticGraph::Schema& root,
@@ -45,7 +45,7 @@ namespace CXX
             : Tree::Context (std::wcerr,
                              root,
                              path,
-                             options,
+                             ops,
                              counts,
                              generate_xml_schema,
                              &map,
@@ -54,7 +54,7 @@ namespace CXX
                              0),
               global_type_names (global_type_names_),
               global_element_names (global_element_names_),
-              detach (options.value<CLI::generate_detach> ()),
+              detach (ops.generate_detach ()),
               type_regex (type_regex_),
               accessor_regex (accessor_regex_),
               one_accessor_regex (one_accessor_regex_),
@@ -71,8 +71,8 @@ namespace CXX
         {
           typedef Containers::Vector<NarrowString> Vector;
 
-          NarrowString tn (options.value<CLI::type_naming> ());
-          NarrowString fn (options.value<CLI::function_naming> ());
+          NarrowString tn (options.type_naming ());
+          NarrowString fn (options.function_naming ());
 
 
           // Type name regex.
@@ -116,9 +116,7 @@ namespace CXX
 
             }
 
-            compile_regex (options.value<CLI::type_regex> (),
-                           type_regex,
-                           "type");
+            compile_regex (options.type_regex (), type_regex, "type");
           }
 
           // Accessor name regex.
@@ -149,23 +147,22 @@ namespace CXX
               accessor_regex.push_back ("/([^,]+)/get\\u$1/");
             }
 
-            compile_regex (options.value<CLI::accessor_regex> (),
+            compile_regex (options.accessor_regex (),
                            accessor_regex,
                            "accessor");
 
-            compile_regex (options.value<CLI::one_accessor_regex> (),
+            compile_regex (options.one_accessor_regex (),
                            one_accessor_regex,
                            "one accessor");
 
-            compile_regex (options.value<CLI::opt_accessor_regex> (),
+            compile_regex (options.opt_accessor_regex (),
                            opt_accessor_regex,
                            "optional accessor");
 
-            compile_regex (options.value<CLI::seq_accessor_regex> (),
+            compile_regex (options.seq_accessor_regex (),
                            seq_accessor_regex,
                            "sequence accessor");
           }
-
 
           // Modifier name regex.
           //
@@ -190,23 +187,22 @@ namespace CXX
               modifier_regex.push_back ("/detach,([^,]+)/detach\\u$1/");
             }
 
-            compile_regex (options.value<CLI::modifier_regex> (),
+            compile_regex (options.modifier_regex (),
                            modifier_regex,
                            "modifier");
 
-            compile_regex (options.value<CLI::one_modifier_regex> (),
+            compile_regex (options.one_modifier_regex (),
                            one_modifier_regex,
                            "one modifier");
 
-            compile_regex (options.value<CLI::opt_modifier_regex> (),
+            compile_regex (options.opt_modifier_regex (),
                            opt_modifier_regex,
                            "optional modifier");
 
-            compile_regex (options.value<CLI::seq_modifier_regex> (),
+            compile_regex (options.seq_modifier_regex (),
                            seq_modifier_regex,
                            "sequence modifier");
           }
-
 
           // Parser name regex.
           //
@@ -222,9 +218,7 @@ namespace CXX
               parser_regex.push_back ("/(.+)/parse\\u$1/");
             }
 
-            compile_regex (options.value<CLI::parser_regex> (),
-                           parser_regex,
-                           "parser");
+            compile_regex (options.parser_regex (), parser_regex, "parser");
           }
 
           // Serializer name regex.
@@ -241,7 +235,7 @@ namespace CXX
               serializer_regex.push_back ("/(.+)/serialize\\u$1/");
             }
 
-            compile_regex (options.value<CLI::serializer_regex> (),
+            compile_regex (options.serializer_regex (),
                            serializer_regex,
                            "serializer");
           }
@@ -253,14 +247,14 @@ namespace CXX
             //
             enumerator_regex.push_back ("/^$/empty/");
 
-            compile_regex (options.value<CLI::enumerator_regex> (),
+            compile_regex (options.enumerator_regex (),
                            enumerator_regex,
                            "enumerator");
           }
 
           // Element type regex.
           //
-          compile_regex (options.value<CLI::element_type_regex> (),
+          compile_regex (options.element_type_regex (),
                          element_type_regex,
                          "element_type");
         }
@@ -305,7 +299,7 @@ namespace CXX
                        RegexVector const& rv,
                        String const& id)
         {
-          Boolean trace (options.value<CLI::name_regex_trace> ());
+          Boolean trace (options.name_regex_trace ());
 
           if (trace)
             os << id << " name: '" << name << "'" << endl;
@@ -339,7 +333,7 @@ namespace CXX
                        RegexVector const& backup,
                        String const& id)
         {
-          Boolean trace (options.value<CLI::name_regex_trace> ());
+          Boolean trace (options.name_regex_trace ());
 
           if (trace)
             os << id << " name: '" << name << "'" << endl;
@@ -394,7 +388,7 @@ namespace CXX
                        String const& id)
         {
           String s (ns + L' ' + name);
-          Boolean trace (options.value<CLI::name_regex_trace> ());
+          Boolean trace (options.name_regex_trace ());
 
           if (trace)
             os << id << " name: '" << s << "'" << endl;
@@ -430,7 +424,7 @@ namespace CXX
                        String const& id)
         {
           String s (ns + L' ' + name);
-          Boolean trace (options.value<CLI::name_regex_trace> ());
+          Boolean trace (options.name_regex_trace ());
 
           if (trace)
             os << id << " name: '" << s << "'" << endl;
@@ -501,13 +495,12 @@ namespace CXX
 
       private:
         Void
-        compile_regex (Containers::Vector<NarrowString> const& sv,
+        compile_regex (NarrowStrings const& sv,
                        RegexVector& rv,
                        String const& id)
         {
-          typedef Containers::Vector<NarrowString> Vector;
-
-          for (Vector::ConstIterator i (sv.begin ()); i != sv.end (); ++i)
+          for (NarrowStrings::const_iterator i (sv.begin ()); i != sv.end ();
+               ++i)
           {
             try
             {
@@ -1154,7 +1147,7 @@ namespace CXX
 
           // Names for wildcards.
           //
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
           {
             Boolean has_wildcard (false);
             Any any (*this, member_set, stem_set, has_wildcard);
@@ -1271,7 +1264,7 @@ namespace CXX
           if (!generate_p (e))
             return;
 
-          if (options.value<CLI::generate_element_type> ())
+          if (options.generate_element_type ())
           {
             SemanticGraph::Context& ec (e.context ());
 
@@ -1387,7 +1380,7 @@ namespace CXX
             //
             String p;
 
-            if (!options.value<CLI::suppress_parsing> () && doc_root_p (e))
+            if (!options.suppress_parsing () && doc_root_p (e))
             {
               p = find_name (
                 escape (
@@ -1400,8 +1393,7 @@ namespace CXX
             //
             String s;
 
-            if (options.value<CLI::generate_serialization> () &&
-                doc_root_p (e))
+            if (options.generate_serialization () && doc_root_p (e))
             {
               s = find_name (
                 escape (
@@ -1887,13 +1879,13 @@ namespace CXX
           process_name (n, "buffer", "buffer");
           process_name (n, "time,zone", "time-zone");
 
-          if (options.value<CLI::generate_element_type> ())
+          if (options.generate_element_type ())
             process_name (n, "element,type", "element-type");
 
-          if (options.value<CLI::generate_element_map> ())
+          if (options.generate_element_map ())
             process_name (n, "element,map", "element-map");
 
-          if (options.value<CLI::generate_serialization> ())
+          if (options.generate_serialization ())
           {
             process_name (n, "namespace,info", "namespace-info");
             process_name (n, "namespace,infomap", "namespace-infomap");
@@ -1903,12 +1895,12 @@ namespace CXX
             process_name (n, "facet", "facet");
           }
 
-          if (!options.value<CLI::generate_insertion> ().empty ())
+          if (!options.generate_insertion ().empty ())
           {
             process_name (n, "ostream", "ostream");
           }
 
-          if (!options.value<CLI::generate_extraction> ().empty ())
+          if (!options.generate_extraction ().empty ())
           {
             process_name (n, "istream", "istream");
           }
@@ -1916,7 +1908,7 @@ namespace CXX
           process_name (n, "flags", "flags");
           process_name (n, "properties", "properties");
 
-          NarrowString fn (options.value<CLI::function_naming> ());
+          NarrowString fn (options.function_naming ());
 
           if (fn == "knr")
             n.context ().set ("tree-node-key", String ("tree_node_key"));
@@ -1944,8 +1936,8 @@ namespace CXX
           process_name (n, "error", "error");
           process_name (n, "diagnostics", "diagnostics");
 
-          if (!options.value<CLI::suppress_parsing> () ||
-              options.value<CLI::generate_serialization> ())
+          if (!options.suppress_parsing () ||
+              options.generate_serialization ())
           {
             process_name (n, "error,handler", "error-handler");
           }
@@ -2010,7 +2002,7 @@ namespace CXX
       };
 
       Boolean
-      process_impl (CLI::Options const& ops,
+      process_impl (options const& ops,
                     SemanticGraph::Schema& tu,
                     SemanticGraph::Path const& file,
                     StringLiteralMap const& map)
@@ -2137,7 +2129,7 @@ namespace CXX
     }
 
     Boolean NameProcessor::
-    process (CLI::Options const& ops,
+    process (options const& ops,
              SemanticGraph::Schema& tu,
              SemanticGraph::Path const& file,
              StringLiteralMap const& map)

@@ -255,7 +255,7 @@ namespace CXX
       };
 
       Void
-      process_impl (CLI::Options const& options,
+      process_impl (options const& ops,
                     XSDFrontend::SemanticGraph::Schema& tu,
                     Boolean gen_driver,
                     TypeMap::Namespaces& type_map)
@@ -281,8 +281,7 @@ namespace CXX
           // If --extern-xml-schema is specified, then we don't want
           // includes from the XML Schema type map.
           //
-          Boolean extern_xml_schema (
-            options.value<CLI::extern_xml_schema> ());
+          Boolean extern_xml_schema (ops.extern_xml_schema ());
 
           //
           //
@@ -314,7 +313,7 @@ namespace CXX
           // If we are generating the test driver, make sure the root
           // element type is processed.
           //
-          if (gen_driver && options.value<CLI::generate_test_driver> ())
+          if (gen_driver && ops.generate_test_driver ())
           {
             // Figure out the root element. Validator should have made sure
             // it is unique.
@@ -329,7 +328,7 @@ namespace CXX
               Traversal::Names schema_names;
               Traversal::Namespace ns;
               Traversal::Names ns_names;
-              RootElement root_element (options, root);
+              RootElement root_element (ops, root);
 
               schema >> schema_names >> ns >> ns_names >> root_element;
 
@@ -343,12 +342,12 @@ namespace CXX
     }
 
     Void TypeProcessor::
-    process (CLI::Options const& options,
+    process (options const& ops,
              XSDFrontend::SemanticGraph::Schema& s,
              Boolean gen_driver,
              TypeMap::Namespaces& tm)
     {
-      process_impl (options, s, gen_driver, tm);
+      process_impl (ops, s, gen_driver, tm);
     }
   }
 }

@@ -115,137 +115,12 @@ namespace CXX
     "//\n\n";
   }
 
-  namespace Tree
-  {
-    namespace CLI
-    {
-      extern Key char_type                = "char-type";
-      extern Key char_encoding            = "char-encoding";
-      extern Key output_dir               = "output-dir";
-      extern Key generate_polymorphic     = "generate-polymorphic";
-      extern Key polymorphic_type         = "polymorphic-type";
-      extern Key polymorphic_type_all     = "polymorphic-type-all";
-      extern Key generate_serialization   = "generate-serialization";
-      extern Key generate_inline          = "generate-inline";
-      extern Key generate_ostream         = "generate-ostream";
-      extern Key generate_doxygen         = "generate-doxygen";
-      extern Key generate_comparison      = "generate-comparison";
-      extern Key generate_default_ctor    = "generate-default-ctor";
-      extern Key generate_from_base_ctor  = "generate-from-base-ctor";
-      extern Key suppress_assignment      = "suppress-assignment";
-      extern Key generate_detach          = "generate-detach";
-      extern Key generate_wildcard        = "generate-wildcard";
-      extern Key generate_insertion       = "generate-insertion";
-      extern Key generate_extraction      = "generate-extraction";
-      extern Key generate_forward         = "generate-forward";
-      extern Key generate_xml_schema      = "generate-xml-schema";
-      extern Key extern_xml_schema        = "extern-xml-schema";
-      extern Key suppress_parsing         = "suppress-parsing";
-      extern Key generate_element_type    = "generate-element-type";
-      extern Key generate_element_map     = "generate-element-map";
-      extern Key generate_intellisense    = "generate-intellisense";
-      extern Key omit_default_attributes  = "omit-default-attributes";
-      extern Key namespace_map            = "namespace-map";
-      extern Key namespace_regex          = "namespace-regex";
-      extern Key namespace_regex_trace    = "namespace-regex-trace";
-      extern Key reserved_name            = "reserved-name";
-      extern Key type_naming              = "type-naming";
-      extern Key function_naming          = "function-naming";
-      extern Key type_regex               = "type-regex";
-      extern Key accessor_regex           = "accessor-regex";
-      extern Key one_accessor_regex       = "one-accessor-regex";
-      extern Key opt_accessor_regex       = "opt-accessor-regex";
-      extern Key seq_accessor_regex       = "seq-accessor-regex";
-      extern Key modifier_regex           = "modifier-regex";
-      extern Key one_modifier_regex       = "one-modifier-regex";
-      extern Key opt_modifier_regex       = "opt-modifier-regex";
-      extern Key seq_modifier_regex       = "seq-modifier-regex";
-      extern Key parser_regex             = "parser-regex";
-      extern Key serializer_regex         = "serializer-regex";
-      extern Key enumerator_regex         = "enumerator-regex";
-      extern Key element_type_regex       = "element-type-regex";
-      extern Key name_regex_trace         = "name-regex-trace";
-      extern Key include_with_brackets    = "include-with-brackets";
-      extern Key include_prefix           = "include-prefix";
-      extern Key include_regex            = "include-regex";
-      extern Key include_regex_trace      = "include-regex-trace";
-      extern Key guard_prefix             = "guard-prefix";
-      extern Key root_element_first       = "root-element-first";
-      extern Key root_element_last        = "root-element-last";
-      extern Key root_element_all         = "root-element-all";
-      extern Key root_element_none        = "root-element-none";
-      extern Key root_element             = "root-element";
-      extern Key custom_type              = "custom-type";
-      extern Key custom_type_regex        = "custom-type-regex";
-      extern Key hxx_suffix               = "hxx-suffix";
-      extern Key ixx_suffix               = "ixx-suffix";
-      extern Key cxx_suffix               = "cxx-suffix";
-      extern Key fwd_suffix               = "fwd-suffix";
-      extern Key hxx_regex                = "hxx-regex";
-      extern Key ixx_regex                = "ixx-regex";
-      extern Key cxx_regex                = "cxx-regex";
-      extern Key fwd_regex                = "fwd-regex";
-      extern Key hxx_prologue             = "hxx-prologue";
-      extern Key ixx_prologue             = "ixx-prologue";
-      extern Key cxx_prologue             = "cxx-prologue";
-      extern Key fwd_prologue             = "fwd-prologue";
-      extern Key prologue                 = "prologue";
-      extern Key hxx_epilogue             = "hxx-epilogue";
-      extern Key ixx_epilogue             = "ixx-epilogue";
-      extern Key cxx_epilogue             = "cxx-epilogue";
-      extern Key fwd_epilogue             = "fwd-epilogue";
-      extern Key epilogue                 = "epilogue";
-      extern Key hxx_prologue_file        = "hxx-prologue-file";
-      extern Key ixx_prologue_file        = "ixx-prologue-file";
-      extern Key cxx_prologue_file        = "cxx-prologue-file";
-      extern Key fwd_prologue_file        = "fwd-prologue-file";
-      extern Key prologue_file            = "prologue-file";
-      extern Key hxx_epilogue_file        = "hxx-epilogue-file";
-      extern Key ixx_epilogue_file        = "ixx-epilogue-file";
-      extern Key cxx_epilogue_file        = "cxx-epilogue-file";
-      extern Key fwd_epilogue_file        = "fwd-epilogue-file";
-      extern Key epilogue_file            = "epilogue-file";
-      extern Key parts                    = "parts";
-      extern Key parts_suffix             = "parts-suffix";
-      extern Key export_symbol            = "export-symbol";
-      extern Key export_xml_schema        = "export-xml-schema";
-      extern Key export_maps              = "export-maps";
-      extern Key import_maps              = "import-maps";
-      extern Key show_anonymous           = "show-anonymous";
-      extern Key show_sloc                = "show-sloc";
-      extern Key proprietary_license      = "proprietary-license";
-      extern Key disable_multi_import     = "disable-multi-import";
-    }
-  }
-
   Void Tree::Generator::
   usage ()
   {
     CXX::Tree::options::print_usage (wcout);
     CXX::options::print_usage (wcout);
   }
-
-  Tree::CLI::OptionsSpec Tree::Generator::
-  options_spec ()
-  {
-    CLI::OptionsSpec spec;
-
-    spec.option<CLI::char_type> ().default_value ("char");
-
-    spec.option<CLI::hxx_suffix> ().default_value (".hxx");
-    spec.option<CLI::ixx_suffix> ().default_value (".ixx");
-    spec.option<CLI::cxx_suffix> ().default_value (".cxx");
-    spec.option<CLI::fwd_suffix> ().default_value ("-fwd.hxx");
-
-    spec.option<CLI::type_naming> ().default_value ("knr");
-    spec.option<CLI::function_naming> ().default_value ("knr");
-
-    spec.option<CLI::parts> ().default_value (1);
-    spec.option<CLI::parts_suffix> ().default_value ("-");
-
-    return spec;
-  }
-
 
   namespace
   {
@@ -296,14 +171,13 @@ namespace CXX
 
     Void
     append (WideOutputFileStream& os,
-            Cult::Containers::Vector<NarrowString> const& primary,
-            Cult::Containers::Vector<NarrowString> const& def)
+            NarrowStrings const& primary,
+            NarrowStrings const& def)
     {
-      Cult::Containers::Vector<NarrowString> const& v (
-        primary.empty () ? def : primary);
+      NarrowStrings const& v (primary.empty () ? def : primary);
 
-      for (Containers::Vector<NarrowString>::ConstIterator
-             i (v.begin ()), e (v.end ()); i != e; ++i)
+      for (NarrowStrings::const_iterator i (v.begin ()), e (v.end ());
+           i != e; ++i)
       {
         os << i->c_str () << endl;
       }
@@ -312,7 +186,7 @@ namespace CXX
 
 
   UnsignedLong Tree::Generator::
-  generate (Tree::CLI::Options const& ops,
+  generate (Tree::options const& ops,
             Schema& schema,
             Path const& file_path,
             Boolean fpt,
@@ -334,10 +208,10 @@ namespace CXX
     {
       // Do option validation.
       //
-      if (ops.value<CLI::parts> () < 1)
+      if (ops.parts () < 1)
       {
         wcerr << "error: invalid value for option --parts: " <<
-          ops.value<CLI::parts> () << endl;
+          ops.parts () << endl;
         throw Failed ();
       }
 
@@ -379,8 +253,7 @@ namespace CXX
 
       // Process polymorphic types.
       //
-      if (ops.value<CLI::generate_polymorphic> () &&
-          !ops.value<CLI::polymorphic_type_all> ())
+      if (ops.generate_polymorphic () && !ops.polymorphic_type_all ())
       {
         PolymorphismProcessor proc;
         if (!proc.process (ops, schema, file_path, disabled_warnings))
@@ -389,11 +262,9 @@ namespace CXX
 
       // Parts.
       //
-      UnsignedLong parts (ops.value<CLI::parts> ());
-      UnsignedLong units (
-        counts.global_types + counts.generated_global_elements);
-
-      UnsignedLong units_per_part (units / parts);
+      size_t parts (ops.parts ());
+      size_t units (counts.global_types + counts.generated_global_elements);
+      size_t units_per_part (units / parts);
 
       if (parts != 1 && units_per_part < 1)
       {
@@ -401,14 +272,14 @@ namespace CXX
         throw Failed ();
       }
 
-      UnsignedLong complexity_per_part (counts.complexity_total / parts);
+      size_t complexity_per_part (counts.complexity_total / parts);
 
 
-      NarrowString parts_suffix (ops.value<CLI::parts_suffix> ());
+      NarrowString parts_suffix (ops.parts_suffix ());
 
       //
       //
-      Boolean generate_xml_schema (ops.value<CLI::generate_xml_schema> ());
+      Boolean generate_xml_schema (ops.generate_xml_schema ());
 
       // We could be compiling several schemas at once in which case
       // handling of the --generate-xml-schema option gets tricky: we
@@ -417,45 +288,41 @@ namespace CXX
       //
       if (generate_xml_schema)
       {
-        if (NarrowString name = ops.value<CLI::extern_xml_schema> ())
+        if (NarrowString name = ops.extern_xml_schema ())
         {
           if (file_path.native_file_string () != name)
             generate_xml_schema = false;
         }
       }
 
-      Boolean inline_ (ops.value<CLI::generate_inline> () &&
-                       !generate_xml_schema);
-
-      Boolean forward (ops.value<CLI::generate_forward> () &&
-                       !generate_xml_schema);
-
+      Boolean inline_ (ops.generate_inline () && !generate_xml_schema);
+      Boolean forward (ops.generate_forward () && !generate_xml_schema);
       Boolean source (!generate_xml_schema);
 
       // Generate code.
       //
       NarrowString name (file_path.leaf ());
 
-      NarrowString hxx_suffix (ops.value <CLI::hxx_suffix> ());
-      NarrowString ixx_suffix (ops.value <CLI::ixx_suffix> ());
-      NarrowString cxx_suffix (ops.value <CLI::cxx_suffix> ());
-      NarrowString fwd_suffix (ops.value <CLI::fwd_suffix> ());
+      NarrowString hxx_suffix (ops.hxx_suffix ());
+      NarrowString ixx_suffix (ops.ixx_suffix ());
+      NarrowString cxx_suffix (ops.cxx_suffix ());
+      NarrowString fwd_suffix (ops.fwd_suffix ());
 
-      Regex hxx_expr (ops.value <CLI::hxx_regex> ().empty ()
+      Regex hxx_expr (ops.hxx_regex ().empty ()
                       ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + hxx_suffix + "#"
-                      : ops.value <CLI::hxx_regex> ());
+                      : ops.hxx_regex ());
 
-      Regex ixx_expr (ops.value <CLI::ixx_regex> ().empty ()
+      Regex ixx_expr (ops.ixx_regex ().empty ()
                       ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + ixx_suffix + "#"
-                      : ops.value <CLI::ixx_regex> ());
+                      : ops.ixx_regex ());
 
-      Regex cxx_expr (ops.value <CLI::cxx_regex> ().empty ()
+      Regex cxx_expr (ops.cxx_regex ().empty ()
                       ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + cxx_suffix + "#"
-                      : ops.value <CLI::cxx_regex> ());
+                      : ops.cxx_regex ());
 
-      Regex fwd_expr (ops.value <CLI::fwd_regex> ().empty ()
+      Regex fwd_expr (ops.fwd_regex ().empty ()
                       ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + fwd_suffix + "#"
-                      : ops.value <CLI::fwd_regex> ());
+                      : ops.fwd_regex ());
 
       if (!hxx_expr.match (name))
       {
@@ -531,7 +398,7 @@ namespace CXX
 
       Path out_dir;
 
-      if (NarrowString dir = ops.value<CLI::output_dir> ())
+      if (NarrowString dir = ops.output_dir ())
       {
         try
         {
@@ -647,16 +514,14 @@ namespace CXX
       // Print copyright and license.
       //
       Char const* copyright (
-        ops.value<CLI::proprietary_license> ()
-        ? copyright_proprietary
-        : copyright_gpl);
+        ops.proprietary_license () ? copyright_proprietary : copyright_gpl);
 
       if (forward)
         fwd << copyright;
 
       hxx << copyright;
 
-      if (ops.value<CLI::generate_doxygen> ())
+      if (ops.generate_doxygen ())
       {
         // Use native path format.
         //
@@ -683,7 +548,7 @@ namespace CXX
       //
       WideInputFileStream prologue;
       {
-        NarrowString name (ops.value<CLI::prologue_file> ());
+        NarrowString name (ops.prologue_file ());
 
         if (name)
           open (prologue, name);
@@ -693,7 +558,7 @@ namespace CXX
       //
       WideInputFileStream epilogue;
       {
-        NarrowString name (ops.value<CLI::epilogue_file> ());
+        NarrowString name (ops.epilogue_file ());
 
         if (name)
           open (epilogue, name);
@@ -701,8 +566,8 @@ namespace CXX
 
       // SLOC counter.
       //
-      UnsignedLong sloc_total (0);
-      Boolean show_sloc (ops.value<CLI::show_sloc> ());
+      size_t sloc_total (0);
+      Boolean show_sloc (ops.show_sloc ());
 
       typedef
       compiler::ostream_filter<compiler::cxx_indenter, wchar_t>
@@ -715,7 +580,7 @@ namespace CXX
       //
       //
       Regex guard_expr ("/([a-z])([A-Z])/$1_$2/"); // Split words.
-      NarrowString guard_prefix (ops.value<CLI::guard_prefix> ());
+      NarrowString guard_prefix (ops.guard_prefix ());
 
       if (!guard_prefix)
         guard_prefix = file_path.branch_path ().native_directory_string ();
@@ -767,10 +632,8 @@ namespace CXX
         fwd << "// Begin prologue." << endl
             << "//" << endl;
 
-        append (fwd,
-                ops.value<CLI::fwd_prologue> (),
-                ops.value<CLI::prologue> ());
-        append (fwd, ops.value<CLI::fwd_prologue_file> (), prologue);
+        append (fwd, ops.fwd_prologue (), ops.prologue ());
+        append (fwd, ops.fwd_prologue_file (), prologue);
 
         fwd << "//" << endl
             << "// End prologue." << endl
@@ -813,10 +676,8 @@ namespace CXX
         fwd << "// Begin epilogue." << endl
             << "//" << endl;
 
-        append (fwd, ops.value<CLI::fwd_epilogue_file> (), epilogue);
-        append (fwd,
-                ops.value<CLI::fwd_epilogue> (),
-                ops.value<CLI::epilogue> ());
+        append (fwd, ops.fwd_epilogue_file (), epilogue);
+        append (fwd, ops.fwd_epilogue (), ops.epilogue ());
 
         fwd << "//" << endl
             << "// End epilogue." << endl
@@ -876,9 +737,8 @@ namespace CXX
         hxx << "// Begin prologue." << endl
             << "//" << endl;
 
-        append (
-          hxx, ops.value<CLI::hxx_prologue> (), ops.value<CLI::prologue> ());
-        append (hxx, ops.value<CLI::hxx_prologue_file> (), prologue);
+        append (hxx, ops.hxx_prologue (), ops.prologue ());
+        append (hxx, ops.hxx_prologue_file (), prologue);
 
         hxx << "//" << endl
             << "// End prologue." << endl
@@ -932,17 +792,16 @@ namespace CXX
 
           if (!generate_xml_schema)
           {
-            if (ops.value<CLI::generate_ostream> ())
+            if (ops.generate_ostream ())
               generate_stream_header (ctx);
 
-            if (!ops.value<CLI::generate_element_type> () &&
-                !ops.value<CLI::suppress_parsing> ())
+            if (!ops.generate_element_type () && !ops.suppress_parsing ())
               generate_parser_header (ctx);
 
-            if (ops.value<CLI::generate_serialization> ())
+            if (ops.generate_serialization ())
               generate_serialization_header (ctx);
 
-            if (!ops.value<CLI::generate_insertion> ().empty ())
+            if (!ops.generate_insertion ().empty ())
               generate_stream_insertion_header (ctx);
           }
         }
@@ -960,9 +819,8 @@ namespace CXX
         hxx << "// Begin epilogue." << endl
             << "//" << endl;
 
-        append (hxx, ops.value<CLI::hxx_epilogue_file> (), epilogue);
-        append (
-          hxx, ops.value<CLI::hxx_epilogue> (), ops.value<CLI::epilogue> ());
+        append (hxx, ops.hxx_epilogue_file (), epilogue);
+        append (hxx, ops.hxx_epilogue (), ops.epilogue ());
 
         hxx << "//" << endl
             << "// End epilogue." << endl
@@ -1012,9 +870,8 @@ namespace CXX
         ixx << "// Begin prologue." << endl
             << "//" << endl;
 
-        append (
-          ixx, ops.value<CLI::ixx_prologue> (), ops.value<CLI::prologue> ());
-        append (ixx, ops.value<CLI::ixx_prologue_file> (), prologue);
+        append (ixx, ops.ixx_prologue (), ops.prologue ());
+        append (ixx, ops.ixx_prologue_file (), prologue);
 
         ixx << "//" << endl
             << "// End prologue." << endl
@@ -1032,9 +889,8 @@ namespace CXX
         ixx << "// Begin epilogue." << endl
             << "//" << endl;
 
-        append (ixx, ops.value<CLI::ixx_epilogue_file> (), epilogue);
-        append (
-          ixx, ops.value<CLI::ixx_epilogue> (), ops.value<CLI::epilogue> ());
+        append (ixx, ops.ixx_epilogue_file (), epilogue);
+        append (ixx, ops.ixx_epilogue (), ops.epilogue ());
 
         ixx << "//" << endl
             << "// End epilogue." << endl
@@ -1052,17 +908,17 @@ namespace CXX
       //
       if (source)
       {
-        UnsignedLong first_unit (0); // First unit in the current part.
+        size_t first_unit (0); // First unit in the current part.
 
-        for (UnsignedLong part (0); part < parts; ++part)
+        for (size_t part (0); part < parts; ++part)
         {
           // Figure out the range of units for this part.
           //
-          UnsignedLong last_unit (first_unit);
+          size_t last_unit (first_unit);
 
           if (units != 0)
           {
-            UnsignedLong complexity (counts.complexity[last_unit]);
+            size_t complexity (counts.complexity[last_unit]);
 
             while (complexity < complexity_per_part)
             {
@@ -1075,7 +931,7 @@ namespace CXX
               // Check if the increase in complexity should be kept in this
               // part or moved to the next.
               //
-              UnsignedLong new_complexity (
+              size_t new_complexity (
                 complexity + counts.complexity[last_unit + 1]);
 
               if (new_complexity > complexity_per_part)
@@ -1099,8 +955,8 @@ namespace CXX
 
           //
           //
-          UnsignedLong first (first_unit);
-          UnsignedLong last (last_unit);
+          size_t first (first_unit);
+          size_t last (last_unit);
 
           first_unit = last_unit + 1;
 
@@ -1130,10 +986,8 @@ namespace CXX
           os << "// Begin prologue." << endl
              << "//" << endl;
 
-          append (os,
-                  ops.value<CLI::cxx_prologue> (),
-                  ops.value<CLI::prologue> ());
-          append (os, ops.value<CLI::cxx_prologue_file> (), prologue);
+          append (os, ops.cxx_prologue (), ops.prologue ());
+          append (os, ops.cxx_prologue_file (), prologue);
 
           os << "//" << endl
              << "// End prologue." << endl
@@ -1154,20 +1008,19 @@ namespace CXX
 
             generate_tree_source (ctx, first, last);
 
-            if (ops.value<CLI::generate_ostream> ())
+            if (ops.generate_ostream ())
               generate_stream_source (ctx, first, last);
 
-            if (!ops.value<CLI::generate_element_type> () &&
-                !ops.value<CLI::suppress_parsing> ())
+            if (!ops.generate_element_type () && !ops.suppress_parsing ())
               generate_parser_source (ctx, first, last);
 
-            if (ops.value<CLI::generate_serialization> ())
+            if (ops.generate_serialization ())
               generate_serialization_source (ctx, first, last);
 
-            if (!ops.value<CLI::generate_extraction> ().empty ())
+            if (!ops.generate_extraction ().empty ())
               generate_stream_extraction_source (ctx);
 
-            if (!ops.value<CLI::generate_insertion> ().empty ())
+            if (!ops.generate_insertion ().empty ())
               generate_stream_insertion_source (ctx);
           }
 
@@ -1176,10 +1029,8 @@ namespace CXX
           os << "// Begin epilogue." << endl
              << "//" << endl;
 
-          append (os, ops.value<CLI::cxx_epilogue_file> (), epilogue);
-          append (os,
-                  ops.value<CLI::cxx_epilogue> (),
-                  ops.value<CLI::epilogue> ());
+          append (os, ops.cxx_epilogue_file (), epilogue);
+          append (os, ops.cxx_epilogue (), ops.epilogue ());
 
           os << "//" << endl
              << "// End epilogue." << endl

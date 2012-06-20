@@ -666,7 +666,7 @@ namespace CXX
       Char const* pass_two_key = "cxx-tree-polymorphism-processor-seen-two";
 
       Boolean
-      process_impl (CLI::Options const& ops,
+      process_impl (options const& ops,
                     SemanticGraph::Schema& tu,
                     SemanticGraph::Path const&,
                     const WarningSet& disabled_warnings)
@@ -676,8 +676,8 @@ namespace CXX
         // Prepare a set of polymorphic types.
         //
 
-        TypeSet poly_types (ops.value<CLI::polymorphic_type> ().begin (),
-                            ops.value<CLI::polymorphic_type> ().end ());
+        TypeSet poly_types (ops.polymorphic_type ().begin (),
+                            ops.polymorphic_type ().end ());
 
         // Root schema in the file-per-type mode is just a bunch
         // of includes without a namespace.
@@ -780,7 +780,7 @@ namespace CXX
     }
 
     Boolean PolymorphismProcessor::
-    process (CLI::Options const& ops,
+    process (options const& ops,
              SemanticGraph::Schema& tu,
              SemanticGraph::Path const& file,
              const WarningSet& disabled_warnings)

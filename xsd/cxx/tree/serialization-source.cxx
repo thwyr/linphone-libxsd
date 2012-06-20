@@ -617,8 +617,7 @@ namespace CXX
           {
             // Make sure we serialize required fixed attributes.
             //
-            if (a.optional_p () &&
-                options.value<CLI::omit_default_attributes> ())
+            if (a.optional_p () && options.omit_default_attributes ())
             {
               os << "if (i." << aname << " () != " << scope <<
                 "::" << edefault_value (a) << " ())";
@@ -735,7 +734,7 @@ namespace CXX
           // Serialize anyAttribute content first so that is gets
           // overriden by schema-defined attributes.
           //
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
           {
             AnyAttribute any_attribute (*this, name);
             Traversal::Names names (any_attribute);
@@ -752,7 +751,7 @@ namespace CXX
             names >> element;
             names >> attribute;
 
-            if (options.value<CLI::generate_wildcard> ())
+            if (options.generate_wildcard ())
               names >> any;
 
             Complex::names (c, names);
@@ -889,7 +888,7 @@ namespace CXX
         ElementType (Context& c)
             : GlobalElementBase (c),
               Context (c),
-              element_map_ (c.options.value<CLI::generate_element_map> ())
+              element_map_ (c.options.generate_element_map ())
         {
         }
 
@@ -1246,7 +1245,7 @@ namespace CXX
                                    UnsignedLong first,
                                    UnsignedLong last)
     {
-      Boolean elemen_type (ctx.options.value<CLI::generate_element_type> ());
+      Boolean elemen_type (ctx.options.generate_element_type ());
 
       if (!elemen_type)
         ctx.os << "#include <ostream>" << endl
@@ -1260,8 +1259,8 @@ namespace CXX
         ctx.os << "#include <xsd/cxx/tree/type-serializer-map.hxx>" << endl
                << endl;
 
-        Boolean import_maps (ctx.options.value<CLI::import_maps> ());
-        Boolean export_maps (ctx.options.value<CLI::export_maps> ());
+        Boolean import_maps (ctx.options.import_maps ());
+        Boolean export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {

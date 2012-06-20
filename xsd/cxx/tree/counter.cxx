@@ -99,7 +99,7 @@ namespace CXX
 
           names >> member;
 
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
             names >> any;
 
           Complex::names (c, names);
@@ -188,22 +188,22 @@ namespace CXX
 
             if (doc_root_p (*last_))
             {
-              if (options.value<CLI::generate_element_type> ())
+              if (options.generate_element_type ())
               {
                 complexity += 1; // For c-tors and d-tor.
 
-                if (!options.value<CLI::suppress_parsing> ())
+                if (!options.suppress_parsing ())
                   complexity += 1;
 
-                if (options.value<CLI::generate_serialization> ())
+                if (options.generate_serialization ())
                   complexity += 1;
               }
               else
               {
-                if (!options.value<CLI::suppress_parsing> ())
+                if (!options.suppress_parsing ())
                   complexity += 6; // 13 parsing functions.
 
-                if (options.value<CLI::generate_serialization> ())
+                if (options.generate_serialization ())
                   complexity += 4; // 8 serialization functions.
               }
             }
@@ -236,12 +236,12 @@ namespace CXX
     }
 
     Counts Counter::
-    count (CLI::Options const& options,
+    count (options const& ops,
            SemanticGraph::Schema& tu,
            SemanticGraph::Path const& path)
     {
       Counts counts;
-      Context ctx (std::wcerr, tu, path, options, counts, false, 0, 0, 0, 0);
+      Context ctx (std::wcerr, tu, path, ops, counts, false, 0, 0, 0, 0);
 
       Traversal::Schema schema;
       Sources sources;

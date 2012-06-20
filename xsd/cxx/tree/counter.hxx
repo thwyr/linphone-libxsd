@@ -7,7 +7,7 @@
 #define CXX_TREE_COUNTER_HXX
 
 #include <cxx/tree/elements.hxx>
-#include <cxx/tree/cli.hxx>
+#include <cxx/tree/options.hxx>
 
 namespace CXX
 {
@@ -19,7 +19,7 @@ namespace CXX
       Counter (); // Dummy ctor, helps with long symbols on HP-UX.
 
       Counts
-      count (CLI::Options const&,
+      count (options const&,
              SemanticGraph::Schema&,
              SemanticGraph::Path const&);
     };

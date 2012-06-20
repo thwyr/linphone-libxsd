@@ -36,12 +36,6 @@ namespace CXX
 
       // Features.
       //
-      bool --generate-inline
-      {
-        "Generate simple functions inline. This option triggers creation
-         of the inline file."
-      };
-
       bool --generate-validation
       {
         "Generate validation code. The validation code (\"perfect parser\")

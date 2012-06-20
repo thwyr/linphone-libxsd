@@ -39,7 +39,7 @@ namespace CXX
              << "//" << endl
              << endl;
 
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             SemanticGraph::Type& item_type (l.argumented ().type ());
             String base (L"::xsd::cxx::tree::list< " +
@@ -114,7 +114,7 @@ namespace CXX
             // If this type is anonymous but substitutes, then it will
             // be registered as part of the substitution registration.
             //
-            if (!anonymous_p (l) && !options.value<CLI::suppress_parsing> ())
+            if (!anonymous_p (l) && !options.suppress_parsing ())
             {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
@@ -126,7 +126,7 @@ namespace CXX
             }
 
             if ((!anonymous_p (l) || anonymous_substitutes_p (l)) &&
-                options.value<CLI::generate_comparison> ())
+                options.generate_comparison ())
             {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
@@ -175,7 +175,7 @@ namespace CXX
              << "//" << endl
              << endl;
 
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             // c-tor (xercesc::DOMElement)
             //
@@ -229,7 +229,7 @@ namespace CXX
             // If this type is anonymous but substitutes, then it will
             // be registered as part of the substitution registration.
             //
-            if (!anonymous_p (u) && !options.value<CLI::suppress_parsing> ())
+            if (!anonymous_p (u) && !options.suppress_parsing ())
             {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
@@ -241,7 +241,7 @@ namespace CXX
             }
 
             if ((!anonymous_p (u) || anonymous_substitutes_p (u)) &&
-                options.value<CLI::generate_comparison> ())
+                options.generate_comparison ())
             {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
@@ -375,7 +375,7 @@ namespace CXX
              << "//" << endl
              << endl;
 
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             // c-tor (xercesc::DOMElement)
             //
@@ -529,7 +529,7 @@ namespace CXX
             // If this type is anonymous but substitutes, then it will
             // be registered as part of the substitution registration.
             //
-            if (!anonymous_p (e) && !options.value<CLI::suppress_parsing> ())
+            if (!anonymous_p (e) && !options.suppress_parsing ())
             {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
@@ -541,7 +541,7 @@ namespace CXX
             }
 
             if ((!anonymous_p (e) || anonymous_substitutes_p (e)) &&
-                options.value<CLI::generate_comparison> ())
+                options.generate_comparison ())
             {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
@@ -1327,7 +1327,7 @@ namespace CXX
           virtual Void
           traverse (SemanticGraph::Any& a)
           {
-            if (!options.value<CLI::generate_wildcard> ())
+            if (!options.generate_wildcard ())
               return;
 
             if (min (a) == 1 && max (a) == 1)
@@ -1822,14 +1822,14 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::Any&)
         {
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
             generate_ = true;
         }
 
         virtual Void
         traverse (SemanticGraph::AnyAttribute&)
         {
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
             generate_ = true;
         }
 
@@ -2036,7 +2036,7 @@ namespace CXX
         virtual Void
         traverse (SemanticGraph::AnyAttribute&)
         {
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
             has_at_ = true;
         }
 
@@ -2148,7 +2148,7 @@ namespace CXX
               comparison_member_ (c),
               facet_array_ (c)
         {
-          Boolean gen_wildcard (options.value<CLI::generate_wildcard> ());
+          Boolean gen_wildcard (options.generate_wildcard ());
 
           inherits_member_ >> member_name_;
 
@@ -2291,7 +2291,7 @@ namespace CXX
 
           // default c-tor
           //
-          if (options.value<CLI::generate_default_ctor> ())
+          if (options.generate_default_ctor ())
           {
             Boolean generate (false);
             {
@@ -2324,7 +2324,7 @@ namespace CXX
 
           // c-tor (base, all-non-optional-members)
           //
-          if (options.value<CLI::generate_from_base_ctor> ())
+          if (options.generate_from_base_ctor ())
           {
             Boolean generate (false);
             {
@@ -2843,7 +2843,7 @@ namespace CXX
 
             names >> copy_member;
 
-            if (options.value<CLI::generate_wildcard> ())
+            if (options.generate_wildcard ())
               names >> copy_any;
 
             Complex::names (c, names);
@@ -2862,11 +2862,11 @@ namespace CXX
           Boolean ha (has<Traversal::Attribute> (c));
           Boolean haa (has<Traversal::AnyAttribute> (c));
 
-          Boolean gen_wildcard (options.value<CLI::generate_wildcard> ());
+          Boolean gen_wildcard (options.generate_wildcard ());
 
           //
           //
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             // c-tor (xercesc::DOMElement)
             //
@@ -3051,7 +3051,7 @@ namespace CXX
 
           // operator=
           //
-          if (!options.value<CLI::suppress_assignment> () &&
+          if (!options.suppress_assignment () &&
               (he || ha || (gen_wildcard && (hae || haa))))
           {
             os << name << "& " << name << "::" << endl
@@ -3090,7 +3090,7 @@ namespace CXX
             // If this type is anonymous but substitutes, then it will
             // be registered as part of the substitution registration.
             //
-            if (!anonymous_p (c) && !options.value<CLI::suppress_parsing> ())
+            if (!anonymous_p (c) && !options.suppress_parsing ())
             {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
@@ -3102,7 +3102,7 @@ namespace CXX
             }
 
             if ((!anonymous_p (c) || anonymous_substitutes_p (c)) &&
-                options.value<CLI::generate_comparison> ())
+                options.generate_comparison ())
             {
               os << "static" << endl
                  << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
@@ -3114,7 +3114,7 @@ namespace CXX
 
           // Comparison operators.
           //
-          if (options.value<CLI::generate_comparison> () &&
+          if (options.generate_comparison () &&
               (he || ha || !c.inherits_p () ||
                ((hae || haa) && gen_wildcard)))
           {
@@ -3212,8 +3212,8 @@ namespace CXX
         GlobalElement (Context& c)
             : GlobalElementBase (c),
               Context (c),
-              element_type_ (c.options.value<CLI::generate_element_type> ()),
-              element_map_ (c.options.value<CLI::generate_element_map> ()),
+              element_type_ (c.options.generate_element_type ()),
+              element_map_ (c.options.generate_element_map ()),
               type_name_ (c)
         {
           belongs_ >> type_name_;
@@ -3273,7 +3273,7 @@ namespace CXX
 
             // default c-tor
             //
-            if (options.value<CLI::generate_default_ctor> ())
+            if (options.generate_default_ctor ())
             {
               os << name << "::" << endl
                  << name << " ()" << endl
@@ -3308,7 +3308,7 @@ namespace CXX
             String const& name_member (ec.get<String> ("element-name-member"));
             String const& ns_member (ec.get<String> ("element-ns-member"));
 
-            Boolean parsing (!options.value<CLI::suppress_parsing> ());
+            Boolean parsing (!options.suppress_parsing ());
             if (parsing)
             {
               String const& tr (etraits (e));
@@ -3409,7 +3409,7 @@ namespace CXX
           }
 
           if (polymorphic && e.substitutes_p () &&
-              !options.value<CLI::suppress_parsing> ())
+              !options.suppress_parsing ())
           {
             String const& name (ename (e));
             Type& r (e.substitutes ().root ());
@@ -3444,20 +3444,20 @@ namespace CXX
                           UnsignedLong first,
                           UnsignedLong last)
     {
-      if (ctx.options.value<CLI::generate_wildcard> ())
+      if (ctx.options.generate_wildcard ())
       {
         ctx.os << "#include <xsd/cxx/xml/dom/wildcard-source.hxx>" << endl
                << endl;
       }
 
-      if (!ctx.options.value<CLI::suppress_parsing> ())
+      if (!ctx.options.suppress_parsing ())
         ctx.os << "#include <xsd/cxx/xml/dom/parsing-source.hxx>" << endl
                << endl;
 
       if (ctx.polymorphic)
       {
-        Boolean parsing (!ctx.options.value<CLI::suppress_parsing> ());
-        Boolean comparison (ctx.options.value<CLI::generate_comparison> ());
+        Boolean parsing (!ctx.options.suppress_parsing ());
+        Boolean comparison (ctx.options.generate_comparison ());
 
         if (parsing)
           ctx.os << "#include <xsd/cxx/tree/type-factory-map.hxx>" << endl
@@ -3469,8 +3469,8 @@ namespace CXX
 
         if (parsing || comparison)
         {
-          Boolean import_maps (ctx.options.value<CLI::import_maps> ());
-          Boolean export_maps (ctx.options.value<CLI::export_maps> ());
+          Boolean import_maps (ctx.options.import_maps ());
+          Boolean export_maps (ctx.options.export_maps ());
 
           if (import_maps || export_maps)
           {

@@ -4,7 +4,8 @@
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
 #include <vector>
-#include <memory> // std::auto_ptr
+#include <memory>  // std::auto_ptr
+#include <cstddef> // std::size_t
 #include <iostream>
 
 #include <boost/filesystem/fstream.hpp>
@@ -20,18 +21,15 @@
 #include <cult/containers/map.hxx>
 #include <cult/containers/vector.hxx>
 
-#include <cult/cli/exceptions.hxx>
-#include <cult/cli/file-arguments.hxx>
-#include <cult/cli/options.hxx>
-#include <cult/cli/options-spec.hxx>
-#include <cult/cli/options-parser.hxx>
-
 #include <xsd-frontend/parser.hxx>
 #include <xsd-frontend/transformations/anonymous.hxx>
 #include <xsd-frontend/transformations/enum-synthesis.cxx>
 #include <xsd-frontend/transformations/restriction.hxx>
 #include <xsd-frontend/transformations/schema-per-type.hxx>
 #include <xsd-frontend/transformations/simplifier.hxx>
+
+#include <cxx/tree/options.hxx>
+#include <cxx/parser/options.hxx>
 
 #include <cxx/tree/generator.hxx>
 #include <cxx/parser/generator.hxx>
@@ -40,93 +38,17 @@
 #include <processing/inheritance/processor.hxx>
 
 #include <xsd.hxx>
+#include <types.hxx>
 #include <options.hxx>
 
 #include "../libxsd/xsd/cxx/version.hxx"
 
 using namespace Cult::Types;
 
-typedef Cult::Containers::Vector<NarrowString> NarrowStrings;
-
 namespace SemanticGraph = XSDFrontend::SemanticGraph;
 namespace Transformations = XSDFrontend::Transformations;
 
 using namespace std;
-
-namespace CLI
-{
-  using namespace Cult::CLI;
-
-  typedef Char const Key[];
-
-  extern Key help                = "help";
-  extern Key version             = "version";
-  extern Key proprietary_license = "proprietary-license";
-
-  typedef Cult::CLI::Options
-  <
-    help,                Boolean,
-    version,             Boolean,
-    proprietary_license, Boolean
-  >
-  HelpOptions;
-
-  struct HelpOptionsSpec: Cult::CLI::OptionsSpec<HelpOptions> {};
-
-
-  extern Key disable_warning         = "disable-warning";
-  extern Key sloc_limit              = "sloc-limit";
-  extern Key morph_anonymous         = "morph-anonymous";
-  extern Key preserve_anonymous      = "preserve-anonymous";
-  extern Key anonymous_regex         = "anonymous-regex";
-  extern Key anonymous_regex_trace   = "anonymous-regex-trace";
-  extern Key location_map            = "location-map";
-  extern Key location_regex          = "location-regex";
-  extern Key location_regex_trace    = "location-regex-trace";
-  extern Key custom_literals         = "custom-literals";
-  extern Key file_per_type           = "file-per-type";
-  extern Key type_file_regex         = "type-file-regex";
-  extern Key type_file_regex_trace   = "type-file-regex-trace";
-  extern Key schema_file_regex       = "schema-file-regex";
-  extern Key schema_file_regex_trace = "schema-file-regex-trace";
-  extern Key fat_type_file           = "fat-type-file";
-  extern Key file_list               = "file-list";
-  extern Key file_list_prologue      = "file-list-prologue";
-  extern Key file_list_epilogue      = "file-list-epilogue";
-  extern Key file_list_delim         = "file-list-delim";
-  extern Key disable_multi_import    = "disable-multi-import"; // Undocumented.
-  extern Key disable_full_check      = "disable-full-check";   // Undocumented.
-
-
-  typedef Cult::CLI::Options
-  <
-    disable_warning,         Cult::Containers::Vector<NarrowString>,
-    sloc_limit,              UnsignedLong,
-    morph_anonymous,         Boolean,
-    preserve_anonymous,      Boolean,
-    anonymous_regex,         NarrowStrings,
-    anonymous_regex_trace,   Boolean,
-    location_map,            NarrowStrings,
-    location_regex,          NarrowStrings,
-    location_regex_trace,    Boolean,
-    custom_literals,         NarrowString,
-    file_per_type,           Boolean,
-    type_file_regex,         NarrowStrings,
-    type_file_regex_trace,   Boolean,
-    schema_file_regex,       NarrowStrings,
-    schema_file_regex_trace, Boolean,
-    fat_type_file,           Boolean,
-    file_list,               NarrowString,
-    file_list_prologue,      NarrowString,
-    file_list_epilogue,      NarrowString,
-    file_list_delim,         NarrowString,
-    disable_multi_import,    Boolean,
-    disable_full_check,      Boolean
-  >
-  CommonOptions;
-
-  struct CommonOptionsSpec: Cult::CLI::OptionsSpec<CommonOptions> {};
-}
 
 //
 //
@@ -242,20 +164,14 @@ main (Int argc, Char* argv[])
 
   try
   {
-    CLI::FileArguments args (argc, argv, "--options-file");
-
-    CLI::HelpOptions help_options (
-      CLI::parse (CLI::HelpOptionsSpec (), args, CLI::UnknownMode::stop));
+    cli::argv_file_scanner args (argc, argv, "--options-file");
+    help_options help_ops (args, cli::unknown_mode::stop);
 
     NarrowString cmd;
+    if (args.more ())
+      cmd = args.next ();
 
-    if (args.size () > 1)
-    {
-      cmd = args[1];
-      args.erase (1);
-    }
-
-    if (help_options.value<CLI::version> () || cmd == "version")
+    if (help_ops.version () || cmd == "version")
     {
       std::wostream& o (wcout);
 
@@ -263,17 +179,15 @@ main (Int argc, Char* argv[])
         XSD_STR_VERSION << endl
         << "Copyright (c) 2005-2011 Code Synthesis Tools CC" << endl;
 
-      if (!help_options.value<CLI::proprietary_license> () &&
-          cmd == "version")
+      if (!help_ops.proprietary_license () && cmd == "version")
       {
         // Parse the options after the command to detect trailing
         // --proprietary-license.
         //
-        help_options = CLI::parse (
-          CLI::HelpOptionsSpec (), args, CLI::UnknownMode::stop);
+        help_ops = help_options (args, cli::unknown_mode::stop);
       }
 
-      if (help_options.value<CLI::proprietary_license> ())
+      if (help_ops.proprietary_license ())
       {
         o << "The compiler was invoked in the Proprietary License mode. You "
           << "should have\nreceived a proprietary license from Code Synthesis "
@@ -289,17 +203,17 @@ main (Int argc, Char* argv[])
       return 0;
     }
 
-    if (help_options.value<CLI::help> () || cmd == "help")
+    if (help_ops.help () || cmd == "help")
     {
       std::wostream& o (wcout);
 
-      if (cmd == "help" && args.size () > 1)
+      if (cmd == "help" && args.more ())
       {
-        NarrowString arg (args[1]);
+        NarrowString arg (args.next ());
 
         if (arg == "cxx-tree")
         {
-          o << "Usage: " << args[0] << " cxx-tree [options] file [file ...]"
+          o << "Usage: " << argv[0] << " cxx-tree [options] file [file ...]"
             << endl
             << "Options:" << endl;
 
@@ -307,7 +221,7 @@ main (Int argc, Char* argv[])
         }
         else if (arg == "cxx-parser")
         {
-          o << "Usage: " << args[0] << " cxx-parser [options] file [file ...]"
+          o << "Usage: " << argv[0] << " cxx-parser [options] file [file ...]"
             << endl
             << "Options:" << endl;
 
@@ -316,7 +230,7 @@ main (Int argc, Char* argv[])
         else
         {
           o << "error: unknown command '" << arg.c_str () << "'" << endl
-            << "info: try '" << args[0] << " help' for the list of commands"
+            << "info: try '" << argv[0] << " help' for the list of commands"
             << endl;
 
           return 1;
@@ -328,7 +242,7 @@ main (Int argc, Char* argv[])
       }
       else
       {
-        o << "Usage: " << args[0] << " <cmd> ..." << endl
+        o << "Usage: " << argv[0] << " <cmd> ..." << endl
           << "Commands:" << endl;
 
         o << "  help            Print usage information and exit. Use\n"
@@ -351,7 +265,7 @@ main (Int argc, Char* argv[])
     if (cmd.empty ())
     {
       e << "error: no command specified" << endl
-        << "info: try '" << args[0] << " help' for usage information" << endl;
+        << "info: try '" << argv[0] << " help' for usage information" << endl;
 
       return 1;
     }
@@ -359,7 +273,7 @@ main (Int argc, Char* argv[])
     if (cmd != "cxx-tree" && cmd != "cxx-parser")
     {
       e << "error: unknown command '" << cmd.c_str () << "'" << endl
-        << "info: try '" << args[0] << " help' for the list of commands"
+        << "info: try '" << argv[0] << " help' for the list of commands"
         << endl;
 
       return 1;
@@ -368,81 +282,57 @@ main (Int argc, Char* argv[])
     // We need to parse command line options before we can get to
     // the arguments.
     //
-    CLI::CommonOptionsSpec common_spec;
-    common_spec.option<CLI::file_list_delim> ().default_value ("\n");
+    auto_ptr<CXX::Tree::options> tree_ops (
+      cmd == "cxx-tree" ? new CXX::Tree::options (args) : 0);
 
-    CLI::CommonOptions common_ops (
-      CLI::parse (
-        common_spec,
-        args,
-        CLI::UnknownMode::skip,
-        CLI::UnknownMode::skip));
+    auto_ptr<CXX::Parser::options> parser_ops (
+      cmd == "cxx-parser" ? new CXX::Parser::options (args) : 0);
 
+    CXX::options& common_ops (
+      cmd == "cxx-tree"
+      ? static_cast<CXX::options&> (*tree_ops)
+      : static_cast<CXX::options&> (*parser_ops));
+
+    // Disabled warnings.
+    //
     WarningSet disabled_w;
     {
-      typedef Cult::Containers::Vector<NarrowString> Warnings;
-      Warnings const& w (common_ops.value<CLI::disable_warning> ());
+      NarrowStrings const& w (common_ops.disable_warning ());
 
-      for (Warnings::ConstIterator i (w.begin ()); i != w.end (); ++i)
+      for (NarrowStrings::const_iterator i (w.begin ()); i != w.end (); ++i)
         disabled_w.insert (*i);
     }
 
     Boolean disabled_w_all (disabled_w.find ("all") != disabled_w.end ());
 
-    if (common_ops.value<CLI::morph_anonymous> () &&
-        !disabled_w_all && disabled_w.find ("D001") == disabled_w.end ())
+    if (common_ops.morph_anonymous () &&
+        !disabled_w_all &&
+        disabled_w.find ("D001") == disabled_w.end ())
     {
       e << "warning D001: the --morph-anonymous option is on by default and "
         << "no longer required"
         << endl;
     }
 
-    Evptr<CXX::Tree::CLI::Options> tree_ops;
-    Evptr<CXX::Parser::CLI::Options> parser_ops;
+    // Collect all the files to compile in a vector.
+    //
+    NarrowStrings files;
 
-    Boolean show_sloc (false);
+    while (args.more ())
+      files.push_back (args.next ());
 
-    if (cmd == "cxx-tree")
-    {
-      tree_ops = new CXX::Tree::CLI::Options (
-        CLI::parse (CXX::Tree::Generator::options_spec (), args));
-
-      tree_ops->value<CXX::Tree::CLI::disable_multi_import> () =
-        common_ops.value<CLI::disable_multi_import> ();
-
-      show_sloc = tree_ops->value<CXX::Tree::CLI::show_sloc> ();
-    }
-    else if (cmd == "cxx-parser")
-    {
-      parser_ops = new CXX::Parser::CLI::Options (
-        CLI::parse (CXX::Parser::Generator::options_spec (), args));
-
-      show_sloc = parser_ops->value<CXX::Parser::CLI::show_sloc> ();
-    }
-
-
-    if (args.size () < 2)
+    if (files.empty ())
     {
       e << "error: no input file specified" << endl;
       return 1;
     }
 
-    Boolean fpt (common_ops.value<CLI::file_per_type> ());
+    Boolean fpt (common_ops.file_per_type ());
 
     if (cmd == "cxx-tree" || cmd == "cxx-parser")
     {
-      Boolean gen (false), use (false);
-
-      if (cmd == "cxx-tree")
-      {
-        gen = tree_ops->value<CXX::Tree::CLI::generate_xml_schema> ();
-        use = tree_ops->value<CXX::Tree::CLI::extern_xml_schema> ();
-      }
-      else if (cmd == "cxx-parser")
-      {
-        gen = parser_ops->value<CXX::Parser::CLI::generate_xml_schema> ();
-        use = parser_ops->value<CXX::Parser::CLI::extern_xml_schema> ();
-      }
+      bool gen (common_ops.generate_xml_schema ());
+      bool use (common_ops.extern_xml_schema ());
 
       // Things get complicated when we are compiling several schemas at
       // once (non-file-per-type mode) and use the --generate-xml-schema/
@@ -453,7 +343,7 @@ main (Int argc, Char* argv[])
       //
       if (!fpt)
       {
-        if (args.size () > 2 && gen && !use)
+        if (files.size () > 1 && gen && !use)
         {
           e << "error: --extern-xml-schema is required when compiling more "
             << "than one schema and --generate-xml-schema is specified"
@@ -462,7 +352,7 @@ main (Int argc, Char* argv[])
           return 1;
         }
 
-        if (args.size () == 2 && gen && use)
+        if (files.size () == 1 && gen && use)
         {
           e << "error: --generate-xml-schema and --extern-xml-schema are "
             << "mutually exclusive when compiling a single schema" << endl;
@@ -500,22 +390,22 @@ main (Int argc, Char* argv[])
     //
     FileList file_list;
     AutoUnlinks unlinks;
-    UnsignedLong sloc (0);
+    size_t sloc (0);
 
     LocationTranslator loc_translator (
-      common_ops.value<CLI::location_map> (),
-      common_ops.value<CLI::location_regex> (),
-      common_ops.value<CLI::location_regex_trace> ());
+      common_ops.location_map (),
+      common_ops.location_regex (),
+      common_ops.location_regex_trace ());
 
     AnonymousNameTranslator anon_translator (
-      common_ops.value<CLI::anonymous_regex> (),
-      common_ops.value<CLI::anonymous_regex_trace> ());
+      common_ops.anonymous_regex (),
+      common_ops.anonymous_regex_trace ());
 
     // Load custom string literals, if any.
     //
     CXX::StringLiteralMap string_literal_map;
 
-    if (NarrowString file = common_ops.value<CLI::custom_literals> ())
+    if (NarrowString file = common_ops.custom_literals ())
     {
       XercesInitializer xerces_init;
 
@@ -532,7 +422,7 @@ main (Int argc, Char* argv[])
       // File-per-schema compilation mode.
       //
 
-      for (Size i (1); i < args.size (); ++i)
+      for (Size i (0); i < files.size (); ++i)
       {
         // Parse schema.
         //
@@ -540,11 +430,11 @@ main (Int argc, Char* argv[])
 
         try
         {
-          tu = SemanticGraph::Path (args[i], boost::filesystem::native);
+          tu = SemanticGraph::Path (files[i], boost::filesystem::native);
         }
         catch (SemanticGraph::InvalidPath const&)
         {
-          e << "error: '" << args[i] << "' is not a valid "
+          e << "error: '" << files[i].c_str () << "' is not a valid "
             << "filesystem path" << endl;
 
           return 1;
@@ -552,8 +442,8 @@ main (Int argc, Char* argv[])
 
         XSDFrontend::Parser parser (
           cmd != "cxx-tree",
-          !common_ops.value<CLI::disable_multi_import> (),
-          !common_ops.value<CLI::disable_full_check> (),
+          !common_ops.disable_multi_import (),
+          !common_ops.disable_full_check (),
           loc_translator,
           disabled_w);
 
@@ -567,36 +457,14 @@ main (Int argc, Char* argv[])
           // will need to rely on the presence of the --extern-xml-schema
           // to tell us which (fake) schema file corresponds to XML Schema.
           //
-          Boolean gen_xml_schema (false);
+          bool gen_xml_schema (common_ops.generate_xml_schema ());
 
-          if (cmd == "cxx-tree")
+          if (gen_xml_schema)
           {
-            gen_xml_schema =
-              tree_ops->value<CXX::Tree::CLI::generate_xml_schema> ();
-
-            if (gen_xml_schema)
+            if (NarrowString name = common_ops.extern_xml_schema ())
             {
-              if (NarrowString name =
-                  tree_ops->value<CXX::Tree::CLI::extern_xml_schema> ())
-              {
-                if (tu.native_file_string () != name)
-                  gen_xml_schema = false;
-              }
-            }
-          }
-          else if (cmd == "cxx-parser")
-          {
-            gen_xml_schema =
-              parser_ops->value<CXX::Parser::CLI::generate_xml_schema> ();
-
-            if (gen_xml_schema)
-            {
-              if (NarrowString name =
-                  parser_ops->value<CXX::Parser::CLI::extern_xml_schema> ())
-              {
-                if (tu.native_file_string () != name)
-                  gen_xml_schema = false;
-              }
+              if (tu.native_file_string () != name)
+                gen_xml_schema = false;
             }
           }
 
@@ -610,7 +478,7 @@ main (Int argc, Char* argv[])
 
         // Morph anonymous types.
         //
-        if (!common_ops.value<CLI::preserve_anonymous> ())
+        if (!common_ops.preserve_anonymous ())
         {
           try
           {
@@ -727,16 +595,16 @@ main (Int argc, Char* argv[])
       //
       SemanticGraph::Paths paths;
 
-      for (Size i (1); i < args.size (); ++i)
+      for (Size i (0); i < files.size (); ++i)
       {
         try
         {
           paths.push_back (
-            SemanticGraph::Path (args[i], boost::filesystem::native));
+            SemanticGraph::Path (files[i], boost::filesystem::native));
         }
         catch (SemanticGraph::InvalidPath const&)
         {
-          e << "error: '" << args[i] << "' is not a valid "
+          e << "error: '" << files[i].c_str () << "' is not a valid "
             << "filesystem path" << endl;
 
           return 1;
@@ -745,7 +613,7 @@ main (Int argc, Char* argv[])
 
       if (cmd == "cxx-parser" &&
           paths.size () > 1 &&
-          parser_ops->value<CXX::Parser::CLI::generate_test_driver> ())
+          parser_ops->generate_test_driver ())
       {
         e << "info: generating test driver for the first schema only: '" <<
           paths[0] << "'" << endl;
@@ -753,8 +621,8 @@ main (Int argc, Char* argv[])
 
       XSDFrontend::Parser parser (
         cmd != "cxx-tree",
-        !common_ops.value<CLI::disable_multi_import> (),
-        !common_ops.value<CLI::disable_full_check> (),
+        !common_ops.disable_multi_import (),
+        !common_ops.disable_full_check (),
         loc_translator,
         disabled_w);
 
@@ -762,7 +630,7 @@ main (Int argc, Char* argv[])
 
       // Morph anonymous types.
       //
-      if (!common_ops.value<CLI::preserve_anonymous> ())
+      if (!common_ops.preserve_anonymous ())
       {
         try
         {
@@ -819,14 +687,14 @@ main (Int argc, Char* argv[])
       typedef std::vector<SemanticGraph::Schema*> Schemas;
 
       SchemaPerTypeTranslator type_translator (
-        common_ops.value<CLI::type_file_regex> (),
-        common_ops.value<CLI::type_file_regex_trace> (),
-        common_ops.value<CLI::schema_file_regex> (),
-        common_ops.value<CLI::schema_file_regex_trace> ());
+        common_ops.type_file_regex (),
+        common_ops.type_file_regex_trace (),
+        common_ops.schema_file_regex (),
+        common_ops.schema_file_regex_trace ());
 
       Transformations::SchemaPerType trans (
         type_translator,
-        common_ops.value<CLI::fat_type_file> ());
+        common_ops.fat_type_file ());
 
       Schemas schemas (trans.transform (*schema));
 
@@ -891,7 +759,7 @@ main (Int argc, Char* argv[])
 
     // See if we need to produce the file list.
     //
-    if (NarrowString fl = common_ops.value<CLI::file_list> ())
+    if (NarrowString fl = common_ops.file_list ())
     {
       typedef boost::filesystem::ofstream OutputFileStream;
 
@@ -908,10 +776,10 @@ main (Int argc, Char* argv[])
           return 1;
         }
 
-        NarrowString d (common_ops.value<CLI::file_list_delim> ());
+        NarrowString d (common_ops.file_list_delim ());
         expand_nl (d);
 
-        if (NarrowString p = common_ops.value<CLI::file_list_prologue> ())
+        if (NarrowString p = common_ops.file_list_prologue ())
         {
           expand_nl (p);
           ofs << p;
@@ -926,7 +794,7 @@ main (Int argc, Char* argv[])
             ofs << d;
         }
 
-        if (NarrowString e = common_ops.value<CLI::file_list_epilogue> ())
+        if (NarrowString e = common_ops.file_list_epilogue ())
         {
           expand_nl (e);
           ofs << e;
@@ -940,10 +808,10 @@ main (Int argc, Char* argv[])
       }
     }
 
-    if (show_sloc)
+    if (common_ops.show_sloc ())
       e << "total: " << sloc << endl;
 
-    if (UnsignedLong sloc_limit = common_ops.value<CLI::sloc_limit> ())
+    if (size_t sloc_limit = common_ops.sloc_limit ())
     {
       if (sloc_limit < sloc)
       {
@@ -978,26 +846,10 @@ main (Int argc, Char* argv[])
   {
     // Diagnostic has already been issued.
   }
-  catch (CLI::UnexpectedOption const& e)
+  catch (cli::exception const& ex)
   {
-    wcerr << "error: unknown option '" << e.option ().c_str () << "'" << endl
-          << "info: try '" << argv[0] << " help' for usage information"
-          << endl;
-  }
-  catch (CLI::OptionFormat const& e)
-  {
-    wcerr << "error: value for option '" << e.option ().c_str ()
-          << "' is invalid or missing" << endl
-          << "info: try '" << argv[0] << " help' for usage information"
-          << endl;
-  }
-  catch (CLI::OptionFile const& e)
-  {
-    if (e.value ())
-      wcerr << "error: " << e.value ().c_str () << ": "
-            << e.description ().c_str () << endl;
-    else
-      wcerr << "error: missing --options-file argument" << endl;
+    wcerr << ex << endl;
+    wcerr << "try '" << argv[0] << " help' for usage information" << endl;
   }
 
   return 1;
@@ -1014,7 +866,7 @@ LocationTranslator (NarrowStrings const& map,
 {
   // Map.
   //
-  for (NarrowStrings::ConstIterator i (map.begin ()); i != map.end (); ++i)
+  for (NarrowStrings::const_iterator i (map.begin ()); i != map.end (); ++i)
   {
     // Split the string in two parts at the last '='.
     //
@@ -1033,7 +885,7 @@ LocationTranslator (NarrowStrings const& map,
 
   // Regex.
   //
-  for (NarrowStrings::ConstIterator i (regex.begin ()); i != regex.end (); ++i)
+  for (NarrowStrings::const_iterator i (regex.begin ()); i != regex.end (); ++i)
   {
     try
     {
@@ -1109,7 +961,7 @@ AnonymousNameTranslator::
 AnonymousNameTranslator (NarrowStrings const& regex, Boolean trace)
     : trace_ (trace)
 {
-  for (NarrowStrings::ConstIterator i (regex.begin ()); i != regex.end (); ++i)
+  for (NarrowStrings::const_iterator i (regex.begin ()); i != regex.end (); ++i)
   {
     try
     {
@@ -1171,7 +1023,7 @@ SchemaPerTypeTranslator (NarrowStrings const& type_regex,
                          Boolean schema_trace)
     : type_trace_ (type_trace), schema_trace_ (schema_trace)
 {
-  for (NarrowStrings::ConstIterator i (type_regex.begin ());
+  for (NarrowStrings::const_iterator i (type_regex.begin ());
        i != type_regex.end (); ++i)
   {
     try
@@ -1187,7 +1039,7 @@ SchemaPerTypeTranslator (NarrowStrings const& type_regex,
     }
   }
 
-  for (NarrowStrings::ConstIterator i (schema_regex.begin ());
+  for (NarrowStrings::const_iterator i (schema_regex.begin ());
        i != schema_regex.end (); ++i)
   {
     try

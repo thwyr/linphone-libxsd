@@ -80,7 +80,7 @@ namespace CXX
       FundamentalNamespace (Context& c)
           : DocumentedNamespace (c),
             Context (c),
-            export_ (c.options.value<CLI::export_xml_schema> () && type_exp)
+            export_ (c.options.export_xml_schema () && type_exp)
       {
         *this >> names_ >> *this;
 
@@ -720,11 +720,11 @@ namespace CXX
       {
         SemanticGraph::Context& c (xs_ns ().context());
 
-        Boolean parsing (!options.value<CLI::suppress_parsing> ());
-        Boolean serialization (options.value<CLI::generate_serialization> ());
-        Boolean element_map (options.value<CLI::generate_element_map> ());
+        Boolean parsing (!options.suppress_parsing ());
+        Boolean serialization (options.generate_serialization ());
+        Boolean element_map (options.generate_element_map ());
 
-        if (options.value<CLI::generate_element_type> ())
+        if (options.generate_element_type ())
         {
           if (doxygen)
             os << "/**" << endl
@@ -838,7 +838,7 @@ namespace CXX
         //@@ Can't change names of ostream/istream since they are
         //   templates.
         //
-        if (!options.value<CLI::generate_insertion> ().empty ())
+        if (!options.generate_insertion ().empty ())
         {
           if (doxygen)
             os << "/**" << endl
@@ -852,7 +852,7 @@ namespace CXX
              << endl;
         }
 
-        if (!options.value<CLI::generate_extraction> ().empty ())
+        if (!options.generate_extraction ().empty ())
         {
           if (doxygen)
             os << "/**" << endl
@@ -1050,7 +1050,7 @@ namespace CXX
             L"::xsd::cxx::tree::no_prefix_mapping< " + char_type + L" >");
         }
 
-        if (options.value<CLI::generate_polymorphic> ())
+        if (options.generate_polymorphic ())
         {
           if (parsing || serialization)
           {

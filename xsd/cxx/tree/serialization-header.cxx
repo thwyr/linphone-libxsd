@@ -536,7 +536,7 @@ namespace CXX
     Void
     generate_serialization_header (Context& ctx)
     {
-      Boolean elemen_type (ctx.options.value<CLI::generate_element_type> ());
+      Boolean elemen_type (ctx.options.generate_element_type ());
 
       if (!elemen_type)
         ctx.os << "#include <iosfwd>" << endl

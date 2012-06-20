@@ -1294,7 +1294,7 @@ namespace CXX
       NarrowString extern_xml_schema;
 
       if (!generate_xml_schema)
-        extern_xml_schema = ctx.options.value<CLI::extern_xml_schema> ();
+        extern_xml_schema = ctx.options.extern_xml_schema ();
 
       if (extern_xml_schema)
       {

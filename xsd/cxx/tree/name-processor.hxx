@@ -7,6 +7,7 @@
 #define CXX_TREE_NAME_PROCESSOR_HXX
 
 #include <cxx/tree/elements.hxx>
+#include <cxx/tree/options.hxx>
 
 namespace CXX
 {
@@ -20,7 +21,7 @@ namespace CXX
       NameProcessor (); // Dummy ctor, helps with long symbols on HP-UX.
 
       Boolean
-      process (CLI::Options const&,
+      process (options const&,
                XSDFrontend::SemanticGraph::Schema&,
                XSDFrontend::SemanticGraph::Path const& file,
                StringLiteralMap const&);

@@ -37,29 +37,14 @@ namespace CXX
     Context (std::wostream& o,
              SemanticGraph::Schema& root,
              SemanticGraph::Path const& path,
-             CLI::Options const& ops,
+             options_type const& ops,
              Counts const& counts_,
              Boolean generate_xml_schema__,
              StringLiteralMap const* map,
              Regex const* fe,
              Regex const* he,
              Regex const* ie)
-        : CXX::Context (o,
-                        root,
-                        path,
-                        map,
-                        ops.value<CLI::char_type> (),
-                        ops.value<CLI::char_encoding> (),
-                        ops.value<CLI::include_with_brackets> (),
-                        ops.value<CLI::include_prefix> (),
-                        ops.value<CLI::export_symbol> (),
-                        ops.value<CLI::namespace_map> (),
-                        ops.value<CLI::namespace_regex> (),
-                        ops.value<CLI::namespace_regex_trace> (),
-                        ops.value<CLI::include_regex> (),
-                        ops.value<CLI::include_regex_trace> (),
-                        ops.value<CLI::generate_inline> (),
-                        ops.value<CLI::reserved_name> ()),
+        : CXX::Context (o, root, path, ops, map),
           options (ops),
           counts (counts_),
           any_type (any_type_),
@@ -84,9 +69,9 @@ namespace CXX
           as_decimal_type (as_decimal_type_),
           generate_xml_schema (generate_xml_schema_),
           doxygen (doxygen_),
-          polymorphic (ops.value<CLI::generate_polymorphic> ()),
-          polymorphic_all (ops.value<CLI::polymorphic_type_all> ()),
-          detach (ops.value<CLI::generate_detach> ()),
+          polymorphic (ops.generate_polymorphic ()),
+          polymorphic_all (ops.polymorphic_type_all ()),
+          detach (ops.generate_detach ()),
           fwd_expr (fe),
           hxx_expr (he),
           ixx_expr (ie),
@@ -96,7 +81,7 @@ namespace CXX
           qname_type_ (L"::xsd::cxx::xml::qualified_name< " + char_type + L" >"),
           parser_type_ (L"::xsd::cxx::xml::dom::parser< " + char_type + L" >"),
           generate_xml_schema_ (generate_xml_schema__),
-          doxygen_ (ops.value<CLI::generate_doxygen> ()),
+          doxygen_ (ops.generate_doxygen ()),
           ns_scope_stack (ns_scope_stack_),
           cxx_uq_id_expr_ (L"^[a-zA-Z_]\\w*$"),
           cxx_uq_id_expr (cxx_uq_id_expr_)
@@ -118,13 +103,12 @@ namespace CXX
         container = xs_name + L"::" + xsc.get<String> ("container");
         flags_type = xs_name + L"::" + xsc.get<String> ("flags");
 
-        if (ops.value<CLI::generate_element_type> ())
+        if (ops.generate_element_type ())
           element_type = xs_name + L"::" + xsc.get<String> ("element-type");
 
         properties_type = xs_name + L"::" + xsc.get<String> ("properties");
 
-        if (!ops.value<CLI::suppress_parsing> () ||
-            ops.value<CLI::generate_serialization> ())
+        if (!ops.suppress_parsing () || ops.generate_serialization ())
         {
           error_handler_type = xs_name + L"::" +
             xsc.get<String> ("error-handler");
@@ -134,7 +118,7 @@ namespace CXX
         dom_node_key_ = xs_name + L"::dom::" +
           xsc.get<String> ("tree-node-key");
 
-        if (ops.value<CLI::generate_serialization> ())
+        if (ops.generate_serialization ())
         {
           as_double_type_ = xs_name + L"::" +
             xsc.get<String> ("as-double");
@@ -152,17 +136,17 @@ namespace CXX
         // istream and ostream are templates and for now use the same
         // names regardless of the naming convention.
         //
-        if (!ops.value<CLI::generate_extraction> ().empty ())
+        if (!ops.generate_extraction ().empty ())
           istream_type = xs_name + L"::istream";
 
-        if (!ops.value<CLI::generate_insertion> ().empty ())
+        if (!ops.generate_insertion ().empty ())
           ostream_type = xs_name + L"::ostream";
       }
 
       // Xerces-C++ namespace. IntelliSense for some reason does not like
       // it fully-qualified (maybe because it's a namespace alias).
       //
-      if (ops.value<CLI::generate_intellisense> ())
+      if (ops.generate_intellisense ())
         xerces_ns = "xercesc";
       else
         xerces_ns = "::xercesc";
@@ -178,14 +162,14 @@ namespace CXX
 
       // Custom type mapping.
       //
-      typedef Containers::Vector<NarrowString> Vector;
 
       // Direct custom type mapping.
       //
       {
-        Vector const& v (ops.value<CLI::custom_type> ());
+        NarrowStrings const& v (ops.custom_type ());
 
-        for (Vector::ConstIterator i (v.begin ()), e (v.end ()); i != e; ++i)
+        for (NarrowStrings::const_iterator i (v.begin ()),
+               e (v.end ()); i != e; ++i)
         {
           String s (*i);
 
@@ -237,9 +221,10 @@ namespace CXX
       // Regex custom type mapping.
       //
       {
-        Vector const& v (ops.value<CLI::custom_type_regex> ());
+        NarrowStrings const& v (ops.custom_type_regex ());
 
-        for (Vector::ConstIterator i (v.begin ()), e (v.end ()); i != e; ++i)
+        for (NarrowStrings::const_iterator i (v.begin ()),
+               e (v.end ()); i != e; ++i)
         {
           String s (*i);
 
@@ -701,7 +686,7 @@ namespace CXX
     Void GenerateDefaultCtor::
     traverse (SemanticGraph::Any& a)
     {
-      if (options.value<CLI::generate_wildcard> () &&
+      if (options.generate_wildcard () &&
           min (a) == 1 && max (a) == 1)
         generate_ = true;
     }
@@ -782,7 +767,7 @@ namespace CXX
     Void GenerateFromBaseCtor::Traverser::
     traverse (SemanticGraph::Any& a)
     {
-      if (options.value<CLI::generate_wildcard> () &&
+      if (options.generate_wildcard () &&
           min (a) == 1 && max (a) == 1)
         generate_ = true;
     }
@@ -848,7 +833,7 @@ namespace CXX
     Void FromBaseCtorArg::
     traverse (SemanticGraph::Any& a)
     {
-      if (!options.value<CLI::generate_wildcard> ())
+      if (!options.generate_wildcard ())
         return;
 
       if (min (a) == 1 && max (a) == 1)
@@ -992,7 +977,7 @@ namespace CXX
     Void CtorArgs::
     traverse (SemanticGraph::Any& a)
     {
-      if (!options.value<CLI::generate_wildcard> ())
+      if (!options.generate_wildcard ())
         return;
 
       if (min (a) == 1 && max (a) == 1)
@@ -1081,7 +1066,7 @@ namespace CXX
     Void CtorArgsWithoutBase::
     traverse (SemanticGraph::Any& a)
     {
-      if (!options.value<CLI::generate_wildcard> ())
+      if (!options.generate_wildcard ())
         return;
 
       if (min (a) == 1 && max (a) == 1)
@@ -1170,9 +1155,9 @@ namespace CXX
       // If we are not generating element types nor parsing/serialization
       // code then we won't generate anything from it.
       //
-      if (!ctx_.options.value<CLI::generate_element_type> () &&
-          ctx_.options.value<CLI::suppress_parsing> () &&
-          !ctx_.options.value<CLI::generate_serialization> ())
+      if (!ctx_.options.generate_element_type () &&
+          ctx_.options.suppress_parsing () &&
+          !ctx_.options.generate_serialization ())
         return false;
 
       return true;
@@ -1181,33 +1166,33 @@ namespace CXX
     Boolean GlobalElementBase::
     doc_root_p (SemanticGraph::Element& e)
     {
-      if (!ctx_.options.value<CLI::root_element_first> () &&
-          !ctx_.options.value<CLI::root_element_last> () &&
-          !ctx_.options.value<CLI::root_element_all> () &&
-          !ctx_.options.value<CLI::root_element_none> () &&
-          ctx_.options.value<CLI::root_element> ().empty ())
+      if (!ctx_.options.root_element_first () &&
+          !ctx_.options.root_element_last () &&
+          !ctx_.options.root_element_all () &&
+          !ctx_.options.root_element_none () &&
+          ctx_.options.root_element ().empty ())
         return true; // By default treat them all.
 
-      if (ctx_.options.value<CLI::root_element_none> ())
+      if (ctx_.options.root_element_none ())
         return false;
 
-      if (ctx_.options.value<CLI::root_element_all> ())
+      if (ctx_.options.root_element_all ())
         return true;
 
-      if (ctx_.options.value<CLI::root_element_first> () &&
+      if (ctx_.options.root_element_first () &&
           e.context ().count ("first") != 0)
         return true;
 
-      if (ctx_.options.value<CLI::root_element_last> () &&
+      if (ctx_.options.root_element_last () &&
           e.context ().count ("last") != 0)
         return true;
 
-      typedef Cult::Containers::Vector<NarrowString> Names;
-      Names const& names (ctx_.options.value<CLI::root_element> ());
+      NarrowStrings const& names (ctx_.options.root_element ());
 
       // Hopefully nobody will specify more than a handful of names ;-).
       //
-      for (Names::ConstIterator i (names.begin ()); i != names.end (); ++i)
+      for (NarrowStrings::const_iterator i (names.begin ());
+           i != names.end (); ++i)
       {
         String name (*i);
 

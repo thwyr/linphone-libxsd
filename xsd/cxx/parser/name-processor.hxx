@@ -9,7 +9,7 @@
 #include <xsd-frontend/semantic-graph.hxx>
 
 #include <cxx/elements.hxx>
-#include <cxx/parser/cli.hxx>
+#include <cxx/parser/options.hxx>
 
 namespace CXX
 {
@@ -23,7 +23,7 @@ namespace CXX
       NameProcessor (); // Dummy ctor, helps with long symbols on HP-UX.
 
       Void
-      process (CLI::Options const& ops,
+      process (options const&,
                XSDFrontend::SemanticGraph::Schema&,
                XSDFrontend::SemanticGraph::Path const& file,
                StringLiteralMap const& map);

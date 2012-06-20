@@ -12,7 +12,7 @@
 
 #include <type-map/type-map.hxx>
 
-#include <cxx/parser/cli.hxx>
+#include <cxx/parser/options.hxx>
 
 namespace CXX
 {
@@ -26,7 +26,7 @@ namespace CXX
       TypeProcessor (); // Dummy ctor, helps with long symbols on HP-UX.
 
       Void
-      process (CLI::Options const& options,
+      process (options const&,
                XSDFrontend::SemanticGraph::Schema&,
                Boolean gen_driver,
                TypeMap::Namespaces&);

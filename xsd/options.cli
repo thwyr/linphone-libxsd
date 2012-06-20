@@ -70,7 +70,7 @@ class options = 0
      license instead of the GPL."
   };
 
-  std::vector<Cult::Types::NarrowString> --custom-literals
+  Cult::Types::NarrowString --custom-literals
   {
     "<file>",
     "Load custom XML string to C++ literal mappings from <file>. This

@@ -423,8 +423,8 @@ namespace CXX
         ctx.os << "#include <xsd/cxx/tree/std-ostream-map.hxx>" << endl
                << endl;
 
-        Boolean import_maps (ctx.options.value<CLI::import_maps> ());
-        Boolean export_maps (ctx.options.value<CLI::export_maps> ());
+        Boolean import_maps (ctx.options.import_maps ());
+        Boolean export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {

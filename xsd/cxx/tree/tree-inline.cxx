@@ -123,7 +123,7 @@ namespace CXX
              << "//" << endl
              << endl;
 
-          if (options.value<CLI::generate_default_ctor> ())
+          if (options.generate_default_ctor ())
           {
             // c-tor ()
             //
@@ -276,7 +276,7 @@ namespace CXX
 
           // default c-tor
           //
-          if (options.value<CLI::generate_default_ctor> ())
+          if (options.generate_default_ctor ())
           {
             os << inl
                << name << "::" <<  endl
@@ -883,7 +883,7 @@ namespace CXX
           Member member (*this, name);
           Traversal::Names names;
 
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
             names >> any;
 
           names >> member;
@@ -1012,7 +1012,7 @@ namespace CXX
     {
       // Generate includes.
       //
-      if (ctx.options.value<CLI::generate_inline> ())
+      if (ctx.options.generate_inline ())
       {
         Traversal::Schema schema;
         Includes includes (ctx, Includes::inline_);
@@ -1053,7 +1053,7 @@ namespace CXX
       names >> complex;
       names >> enumeration;
 
-      if (ctx.options.value<CLI::generate_element_type> ())
+      if (ctx.options.generate_element_type ())
         names >> element;
 
       schema.dispatch (ctx.schema_root);

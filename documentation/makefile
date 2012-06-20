@@ -49,22 +49,22 @@ $(out_base)/xsd.xhtml: $(src_base)/xsd-prologue.xhtml      \
 #
 	$(call message,cli-html $$1,$(cli) $(cli_options) --generate-html \
 --stdout --suppress-undocumented --exclude-base --class CXX::options \
---class options --html-prologue $(src_base)/xsd-prologue.xhtml \
+--class options --html-prologue-file $(src_base)/xsd-prologue.xhtml \
 $$1 >$@, $(src_root)/xsd/cxx/options.cli)
 
 # C++/Tree options.
 #
 	$(call message,cli-html $$1,$(cli) $(cli_options) --generate-html \
 --stdout --suppress-undocumented --exclude-base \
---html-prologue $(src_base)/xsd-tree-header.xhtml \
+--html-prologue-file $(src_base)/xsd-tree-header.xhtml \
 $$1 >>$@, $(src_root)/xsd/cxx/tree/options.cli)
 
 # C++/Parser options.
 #
 	$(call message,cli-html $$1,$(cli) $(cli_options) --generate-html \
 --stdout --suppress-undocumented --exclude-base \
---html-prologue $(src_base)/xsd-parser-header.xhtml \
---html-epilogue $(src_base)/xsd-epilogue.xhtml \
+--html-prologue-file $(src_base)/xsd-parser-header.xhtml \
+--html-epilogue-file $(src_base)/xsd-epilogue.xhtml \
 $$1 >>$@, $(src_root)/xsd/cxx/parser/options.cli)
 
 # MAN
@@ -78,22 +78,22 @@ $(out_base)/xsd.1: $(src_base)/xsd-prologue.1      \
 #
 	$(call message,cli-man $$1,$(cli) $(cli_options) --generate-man \
 --stdout --suppress-undocumented --exclude-base --class CXX::options \
---class options --man-prologue $(src_base)/xsd-prologue.1 \
+--class options --man-prologue-file $(src_base)/xsd-prologue.1 \
 $$1 >$@, $(src_root)/xsd/cxx/options.cli)
 
 # C++/Tree options.
 #
 	$(call message,cli-man $$1,$(cli) $(cli_options) --generate-man \
 --stdout --suppress-undocumented --exclude-base \
---man-prologue $(src_base)/xsd-tree-header.1 \
+--man-prologue-file $(src_base)/xsd-tree-header.1 \
 $$1 >>$@, $(src_root)/xsd/cxx/tree/options.cli)
 
 # C++/Parser options.
 #
 	$(call message,cli-man $$1,$(cli) $(cli_options) --generate-man \
 --stdout --suppress-undocumented --exclude-base \
---man-prologue $(src_base)/xsd-parser-header.1 \
---man-epilogue $(src_base)/xsd-epilogue.1 \
+--man-prologue-file $(src_base)/xsd-parser-header.1 \
+--man-epilogue-file $(src_base)/xsd-epilogue.1 \
 $$1 >>$@, $(src_root)/xsd/cxx/parser/options.cli)
 
 

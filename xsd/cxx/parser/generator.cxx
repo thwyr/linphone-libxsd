@@ -124,99 +124,12 @@ namespace CXX
     "//\n\n";
   }
 
-  namespace Parser
-  {
-    namespace CLI
-    {
-      extern Key type_map                 = "type-map";
-      extern Key char_type                = "char-type";
-      extern Key char_encoding            = "char-encoding";
-      extern Key output_dir               = "output-dir";
-      extern Key xml_parser               = "xml-parser";
-      extern Key generate_inline          = "generate-inline";
-      extern Key generate_validation      = "generate-validation";
-      extern Key suppress_validation      = "suppress-validation";
-      extern Key generate_polymorphic     = "generate-polymorphic";
-      extern Key generate_noop_impl       = "generate-noop-impl";
-      extern Key generate_print_impl      = "generate-print-impl";
-      extern Key generate_test_driver     = "generate-test-driver";
-      extern Key force_overwrite          = "force-overwrite";
-      extern Key root_element_first       = "root-element-first";
-      extern Key root_element_last        = "root-element-last";
-      extern Key root_element             = "root-element";
-      extern Key generate_xml_schema      = "generate-xml-schema";
-      extern Key extern_xml_schema        = "extern-xml-schema";
-      extern Key skel_type_suffix         = "skel-type-suffix";
-      extern Key skel_file_suffix         = "skel-file-suffix";
-      extern Key impl_type_suffix         = "impl-type-suffix";
-      extern Key impl_file_suffix         = "impl-file-suffix";
-      extern Key namespace_map            = "namespace-map";
-      extern Key namespace_regex          = "namespace-regex";
-      extern Key namespace_regex_trace    = "namespace-regex-trace";
-      extern Key reserved_name            = "reserved-name";
-      extern Key include_with_brackets    = "include-with-brackets";
-      extern Key include_prefix           = "include-prefix";
-      extern Key include_regex            = "include-regex";
-      extern Key include_regex_trace      = "include-regex-trace";
-      extern Key guard_prefix             = "guard-prefix";
-      extern Key hxx_suffix               = "hxx-suffix";
-      extern Key ixx_suffix               = "ixx-suffix";
-      extern Key cxx_suffix               = "cxx-suffix";
-      extern Key hxx_regex                = "hxx-regex";
-      extern Key ixx_regex                = "ixx-regex";
-      extern Key cxx_regex                = "cxx-regex";
-      extern Key hxx_prologue             = "hxx-prologue";
-      extern Key ixx_prologue             = "ixx-prologue";
-      extern Key cxx_prologue             = "cxx-prologue";
-      extern Key prologue                 = "prologue";
-      extern Key hxx_epilogue             = "hxx-epilogue";
-      extern Key ixx_epilogue             = "ixx-epilogue";
-      extern Key cxx_epilogue             = "cxx-epilogue";
-      extern Key epilogue                 = "epilogue";
-      extern Key hxx_prologue_file        = "hxx-prologue-file";
-      extern Key ixx_prologue_file        = "ixx-prologue-file";
-      extern Key cxx_prologue_file        = "cxx-prologue-file";
-      extern Key prologue_file            = "prologue-file";
-      extern Key hxx_epilogue_file        = "hxx-epilogue-file";
-      extern Key ixx_epilogue_file        = "ixx-epilogue-file";
-      extern Key cxx_epilogue_file        = "cxx-epilogue-file";
-      extern Key epilogue_file            = "epilogue-file";
-      extern Key export_symbol            = "export-symbol";
-      extern Key export_maps              = "export-maps";
-      extern Key import_maps              = "import-maps";
-      extern Key show_anonymous           = "show-anonymous";
-      extern Key show_sloc                = "show-sloc";
-      extern Key proprietary_license      = "proprietary-license";
-    }
-  }
-
   Void Parser::Generator::
   usage ()
   {
     CXX::Parser::options::print_usage (wcout);
     CXX::options::print_usage (wcout);
   }
-
-  Parser::CLI::OptionsSpec Parser::Generator::
-  options_spec ()
-  {
-    CLI::OptionsSpec spec;
-
-    spec.option<CLI::char_type> ().default_value ("char");
-    spec.option<CLI::xml_parser> ().default_value ("xerces");
-
-    spec.option<CLI::skel_file_suffix> ().default_value ("-pskel");
-    spec.option<CLI::skel_type_suffix> ().default_value ("_pskel");
-    spec.option<CLI::impl_file_suffix> ().default_value ("-pimpl");
-    spec.option<CLI::impl_type_suffix> ().default_value ("_pimpl");
-
-    spec.option<CLI::hxx_suffix> ().default_value (".hxx");
-    spec.option<CLI::ixx_suffix> ().default_value (".ixx");
-    spec.option<CLI::cxx_suffix> ().default_value (".cxx");
-
-    return spec;
-  }
-
 
   namespace
   {
@@ -268,14 +181,13 @@ namespace CXX
 
     Void
     append (WideOutputFileStream& os,
-            Cult::Containers::Vector<NarrowString> const& primary,
-            Cult::Containers::Vector<NarrowString> const& def)
+            NarrowStrings const& primary,
+            NarrowStrings const& def)
     {
-      Cult::Containers::Vector<NarrowString> const& v (
-        primary.empty () ? def : primary);
+      NarrowStrings const& v (primary.empty () ? def : primary);
 
-      for (Containers::Vector<NarrowString>::ConstIterator
-             i (v.begin ()), e (v.end ()); i != e; ++i)
+      for (NarrowStrings::const_iterator i (v.begin ()), e (v.end ());
+           i != e; ++i)
       {
         os << i->c_str () << endl;
       }
@@ -284,7 +196,7 @@ namespace CXX
 
 
   UnsignedLong Parser::Generator::
-  generate (Parser::CLI::Options const& ops,
+  generate (Parser::options const& ops,
             Schema& schema,
             Path const& file_path,
             Boolean fpt,
@@ -300,7 +212,7 @@ namespace CXX
 
     try
     {
-      Boolean generate_xml_schema (ops.value<CLI::generate_xml_schema> ());
+      Boolean generate_xml_schema (ops.generate_xml_schema ());
 
       // We could be compiling several schemas at once in which case
       // handling of the --generate-xml-schema option gets tricky: we
@@ -309,7 +221,7 @@ namespace CXX
       //
       if (generate_xml_schema)
       {
-        if (NarrowString name = ops.value<CLI::extern_xml_schema> ())
+        if (NarrowString name = ops.extern_xml_schema ())
         {
           if (file_path.native_file_string () != name)
             generate_xml_schema = false;
@@ -317,11 +229,11 @@ namespace CXX
       }
 
       Boolean impl (!generate_xml_schema &&
-                    (ops.value<CLI::generate_noop_impl> () ||
-                     ops.value<CLI::generate_print_impl> ()));
+                    (ops.generate_noop_impl () ||
+                     ops.generate_print_impl ()));
 
       Boolean driver (gen_driver && !generate_xml_schema &&
-                      ops.value<CLI::generate_test_driver> ());
+                      ops.generate_test_driver ());
 
       // Evaluate the graph for possibility of generating something useful.
       //
@@ -339,9 +251,9 @@ namespace CXX
         proc.process (ops, schema, file_path, string_literal_map);
       }
 
-      Boolean validation ((ops.value<CLI::xml_parser> () == "expat" ||
-                           ops.value<CLI::generate_validation> ()) &&
-                          !ops.value<CLI::suppress_validation> ());
+      Boolean validation ((ops.xml_parser () == "expat" ||
+                           ops.generate_validation ()) &&
+                          !ops.suppress_validation ());
 
       // Compute state machine info.
       //
@@ -356,11 +268,11 @@ namespace CXX
       TypeMap::Namespaces type_map;
       {
         using namespace TypeMap;
-        typedef Containers::Vector<NarrowString> Files;
 
-        Files const& files (ops.value<CLI::type_map> ());
+        NarrowStrings const& files (ops.type_map ());
 
-        for (Files::ConstIterator f (files.begin ()); f != files.end (); ++f )
+        for (NarrowStrings::const_iterator f (files.begin ());
+             f != files.end (); ++f )
         {
           NarrowInputFileStream ifs;
           open (ifs, *f);
@@ -377,7 +289,7 @@ namespace CXX
 
         // String-based types.
         //
-        String char_type (ops.value<CLI::char_type> ());
+        String char_type (ops.char_type ());
         String string_type;
 
         if (char_type == L"char")
@@ -481,35 +393,33 @@ namespace CXX
 
       //
       //
-      Boolean inline_ (ops.value<CLI::generate_inline> () &&
-                       !generate_xml_schema);
-
+      Boolean inline_ (ops.generate_inline () && !generate_xml_schema);
       Boolean source (!generate_xml_schema);
 
       // Generate code.
       //
       NarrowString name (file_path.leaf ());
-      NarrowString skel_suffix (ops.value <CLI::skel_file_suffix> ());
-      NarrowString impl_suffix (ops.value <CLI::impl_file_suffix> ());
+      NarrowString skel_suffix (ops.skel_file_suffix ());
+      NarrowString impl_suffix (ops.impl_file_suffix ());
 
-      NarrowString hxx_suffix (ops.value <CLI::hxx_suffix> ());
-      NarrowString ixx_suffix (ops.value <CLI::ixx_suffix> ());
-      NarrowString cxx_suffix (ops.value <CLI::cxx_suffix> ());
+      NarrowString hxx_suffix (ops.hxx_suffix ());
+      NarrowString ixx_suffix (ops.ixx_suffix ());
+      NarrowString cxx_suffix (ops.cxx_suffix ());
 
       Regex hxx_expr (
-        ops.value <CLI::hxx_regex> ().empty ()
+        ops.hxx_regex ().empty ()
         ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + skel_suffix + hxx_suffix + "#"
-        : ops.value <CLI::hxx_regex> ());
+        : ops.hxx_regex ());
 
       Regex ixx_expr (
-        ops.value <CLI::ixx_regex> ().empty ()
+        ops.ixx_regex ().empty ()
         ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + skel_suffix + ixx_suffix + "#"
-        : ops.value <CLI::ixx_regex> ());
+        : ops.ixx_regex ());
 
       Regex cxx_expr (
-        ops.value <CLI::cxx_regex> ().empty ()
+        ops.cxx_regex ().empty ()
         ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + skel_suffix + cxx_suffix + "#"
-        : ops.value <CLI::cxx_regex> ());
+        : ops.cxx_regex ());
 
 
       Regex hxx_impl_expr;
@@ -611,7 +521,7 @@ namespace CXX
 
       Path out_dir;
 
-      if (NarrowString dir = ops.value<CLI::output_dir> ())
+      if (NarrowString dir = ops.output_dir ())
       {
         try
         {
@@ -659,7 +569,7 @@ namespace CXX
 
       if (impl)
       {
-        if (!ops.value<CLI::force_overwrite> ())
+        if (!ops.force_overwrite ())
         {
           WideInputFileStream tmp (hxx_impl_path, ios_base::in);
 
@@ -685,7 +595,7 @@ namespace CXX
         unlinks.add (hxx_impl_path);
         file_list.push_back (hxx_impl_path.native_file_string ());
 
-        if (!ops.value<CLI::force_overwrite> ())
+        if (!ops.force_overwrite ())
         {
           WideInputFileStream tmp (cxx_impl_path, ios_base::in);
 
@@ -714,7 +624,7 @@ namespace CXX
 
       if (driver)
       {
-        if (!ops.value<CLI::force_overwrite> ())
+        if (!ops.force_overwrite ())
         {
           WideInputFileStream tmp (cxx_driver_path, ios_base::in);
 
@@ -788,9 +698,7 @@ namespace CXX
       // Print copyright and license.
       //
       Char const* copyright (
-        ops.value<CLI::proprietary_license> ()
-        ? copyright_proprietary
-        : copyright_gpl);
+        ops.proprietary_license () ? copyright_proprietary : copyright_gpl);
 
       hxx << copyright;
 
@@ -813,7 +721,7 @@ namespace CXX
       //
       WideInputFileStream prologue;
       {
-        NarrowString name (ops.value<CLI::prologue_file> ());
+        NarrowString name (ops.prologue_file ());
 
         if (name)
           open (prologue, name);
@@ -823,7 +731,7 @@ namespace CXX
       //
       WideInputFileStream epilogue;
       {
-        NarrowString name (ops.value<CLI::epilogue_file> ());
+        NarrowString name (ops.epilogue_file ());
 
         if (name)
           open (epilogue, name);
@@ -831,8 +739,8 @@ namespace CXX
 
       // SLOC counter.
       //
-      UnsignedLong sloc_total (0);
-      Boolean show_sloc (ops.value<CLI::show_sloc> ());
+      size_t sloc_total (0);
+      Boolean show_sloc (ops.show_sloc ());
 
       typedef
       compiler::ostream_filter<compiler::cxx_indenter, wchar_t>
@@ -846,7 +754,7 @@ namespace CXX
       //
       Regex guard_expr ("/([a-z])([A-Z])/$1_$2/"); // Split words.
 
-      NarrowString guard_prefix (ops.value<CLI::guard_prefix> ());
+      NarrowString guard_prefix (ops.guard_prefix ());
 
       if (!guard_prefix)
         guard_prefix = file_path.branch_path ().native_directory_string ();
@@ -893,9 +801,8 @@ namespace CXX
         hxx << "// Begin prologue." << endl
             << "//" << endl;
 
-        append (
-          hxx, ops.value<CLI::hxx_prologue> (), ops.value<CLI::prologue> ());
-        append (hxx, ops.value<CLI::hxx_prologue_file> (), prologue);
+        append (hxx, ops.hxx_prologue (), ops.prologue ());
+        append (hxx, ops.hxx_prologue_file (), prologue);
 
         hxx << "//" << endl
             << "// End prologue." << endl
@@ -920,9 +827,8 @@ namespace CXX
         hxx << "// Begin epilogue." << endl
             << "//" << endl;
 
-        append (hxx, ops.value<CLI::hxx_epilogue_file> (), epilogue);
-        append (
-          hxx, ops.value<CLI::hxx_epilogue> (), ops.value<CLI::epilogue> ());
+        append (hxx, ops.hxx_epilogue_file (), epilogue);
+        append (hxx, ops.hxx_epilogue (), ops.epilogue ());
 
         hxx << "//" << endl
             << "// End epilogue." << endl
@@ -960,9 +866,8 @@ namespace CXX
         ixx << "// Begin prologue." << endl
             << "//" << endl;
 
-        append (
-          ixx, ops.value<CLI::ixx_prologue> (), ops.value<CLI::prologue> ());
-        append (ixx, ops.value<CLI::ixx_prologue_file> (), prologue);
+        append (ixx, ops.ixx_prologue (), ops.prologue ());
+        append (ixx, ops.ixx_prologue_file (), prologue);
 
         ixx << "//" << endl
             << "// End prologue." << endl
@@ -980,9 +885,8 @@ namespace CXX
         ixx << "// Begin epilogue." << endl
             << "//" << endl;
 
-        append (ixx, ops.value<CLI::ixx_epilogue_file> (), epilogue);
-        append (
-          ixx, ops.value<CLI::ixx_epilogue> (), ops.value<CLI::epilogue> ());
+        append (ixx, ops.ixx_epilogue_file (), epilogue);
+        append (ixx, ops.ixx_epilogue (), ops.epilogue ());
 
         ixx << "//" << endl
             << "// End epilogue." << endl
@@ -1015,9 +919,8 @@ namespace CXX
         cxx << "// Begin prologue." << endl
             << "//" << endl;
 
-        append (
-          cxx, ops.value<CLI::cxx_prologue> (), ops.value<CLI::prologue> ());
-        append (cxx, ops.value<CLI::cxx_prologue_file> (), prologue);
+        append (cxx, ops.cxx_prologue (), ops.prologue ());
+        append (cxx, ops.cxx_prologue_file (), prologue);
 
         cxx << "//" << endl
             << "// End prologue." << endl
@@ -1049,9 +952,8 @@ namespace CXX
         cxx << "// Begin epilogue." << endl
             << "//" << endl;
 
-        append (cxx, ops.value<CLI::cxx_epilogue_file> (), epilogue);
-        append (
-          cxx, ops.value<CLI::cxx_epilogue> (), ops.value<CLI::epilogue> ());
+        append (cxx, ops.cxx_epilogue_file (), epilogue);
+        append (cxx, ops.cxx_epilogue (), ops.epilogue ());
 
         cxx << "//" << endl
             << "// End epilogue." << endl

@@ -56,7 +56,7 @@ namespace CXX
              << "::xsd::cxx::xml::dom::parse< " << char_type << " > (" << endl
              << "u, h, p, f";
 
-          if (options.value<CLI::disable_multi_import> ())
+          if (options.disable_multi_import ())
             os << " | ::xsd::cxx::xml::dom::no_muliple_imports";
 
             os << "));"
@@ -86,7 +86,7 @@ namespace CXX
              << "::xsd::cxx::xml::dom::parse< " << char_type << " > (" << endl
              << "u, h, p, f";
 
-          if (options.value<CLI::disable_multi_import> ())
+          if (options.disable_multi_import ())
             os << " | ::xsd::cxx::xml::dom::no_muliple_imports";
 
           os << "));"
@@ -112,7 +112,7 @@ namespace CXX
              << "::xsd::cxx::xml::dom::parse< " << char_type << " > (" << endl
              << "u, h, p, f";
 
-          if (options.value<CLI::disable_multi_import> ())
+          if (options.disable_multi_import ())
             os << " | ::xsd::cxx::xml::dom::no_muliple_imports";
 
           os << "));"
@@ -222,7 +222,7 @@ namespace CXX
              << "::xsd::cxx::xml::dom::parse< " << char_type << " > (" << endl
              << "i, h, p, f";
 
-          if (options.value<CLI::disable_multi_import> ())
+          if (options.disable_multi_import ())
             os << " | ::xsd::cxx::xml::dom::no_muliple_imports";
 
           os << "));"
@@ -248,7 +248,7 @@ namespace CXX
              << "::xsd::cxx::xml::dom::parse< " << char_type << " > (" << endl
              << "i, h, p, f";
 
-          if (options.value<CLI::disable_multi_import> ())
+          if (options.disable_multi_import ())
             os << " | ::xsd::cxx::xml::dom::no_muliple_imports";
 
           os << "));"
@@ -275,7 +275,7 @@ namespace CXX
              << "::xsd::cxx::xml::dom::parse< " << char_type << " > (" << endl
              << "i, h, p, f";
 
-          if (options.value<CLI::disable_multi_import> ())
+          if (options.disable_multi_import ())
             os << " | ::xsd::cxx::xml::dom::no_muliple_imports";
 
           os << "));"

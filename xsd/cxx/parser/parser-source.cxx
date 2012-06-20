@@ -846,8 +846,8 @@ namespace CXX
         else
           ctx.os << endl;
 
-        Boolean import_maps (ctx.options.value<CLI::import_maps> ());
-        Boolean export_maps (ctx.options.value<CLI::export_maps> ());
+        Boolean import_maps (ctx.options.import_maps ());
+        Boolean export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {
@@ -920,7 +920,7 @@ namespace CXX
       // Emit "weak" header includes that are used in the file-per-type
       // compilation model.
       //
-      if (ctx.options.value<CLI::generate_inline> ())
+      if (ctx.options.generate_inline ())
       {
         Traversal::Schema schema;
         Includes includes (ctx, Includes::source);

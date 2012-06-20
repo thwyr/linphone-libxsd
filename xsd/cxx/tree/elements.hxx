@@ -14,10 +14,11 @@
 #include <cult/containers/deque.hxx>
 #include <cult/containers/vector.hxx>
 
+#include <types.hxx>
+
 #include <cxx/elements.hxx>
 
-#include <cxx/tree/cli.hxx>
-
+#include <cxx/tree/options.hxx>
 
 namespace CXX
 {
@@ -77,6 +78,8 @@ namespace CXX
       typedef cutl::re::regexsub Regex;
       typedef cutl::re::wregex WideRegexPat;
 
+      typedef Tree::options options_type;
+
       struct DirectCustomTypeMapInfo
       {
         DirectCustomTypeMapInfo (String const& t = L"",
@@ -115,7 +118,7 @@ namespace CXX
       Context (std::wostream& o,
                SemanticGraph::Schema& root,
                SemanticGraph::Path const& path,
-               CLI::Options const& ops,
+               options_type const& ops,
                Counts const& counts_,
                Boolean generate_xml_schema,
                StringLiteralMap const*,
@@ -400,7 +403,7 @@ namespace CXX
       write_rogue_text (WideChar const* s, Size size, Boolean rogue);
 
     public:
-      CLI::Options const& options;
+      options_type const& options;
       Counts const& counts;
       String& any_type;
       String& any_simple_type;
@@ -1847,7 +1850,7 @@ namespace CXX
       Includes (Context& c, Type type)
           : ctx_ (c),
             type_ (type),
-            forward_ (c.options.value<CLI::generate_forward> ()),
+            forward_ (c.options.generate_forward ()),
             namespace_ (c),
             type_forward_ (c)
       {

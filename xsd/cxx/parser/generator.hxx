@@ -10,16 +10,13 @@
 
 #include <cult/containers/vector.hxx>
 
-#include <cult/cli/options.hxx>
-#include <cult/cli/options-spec.hxx>
-
 #include <xsd-frontend/semantic-graph/elements.hxx> // Path
 #include <xsd-frontend/semantic-graph/schema.hxx>
 
 #include <xsd.hxx>
 
 #include <cxx/literal-map.hxx>
-#include <cxx/parser/cli.hxx>
+#include <cxx/parser/options.hxx>
 
 namespace CXX
 {
@@ -33,13 +30,10 @@ namespace CXX
       static Void
       usage ();
 
-      static CLI::OptionsSpec
-      options_spec ();
-
       struct Failed {};
 
       static UnsignedLong
-      generate (CLI::Options const& options,
+      generate (options const&,
                 XSDFrontend::SemanticGraph::Schema&,
                 XSDFrontend::SemanticGraph::Path const& file,
                 Boolean file_per_type,

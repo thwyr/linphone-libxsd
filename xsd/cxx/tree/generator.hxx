@@ -14,7 +14,7 @@
 #include <xsd.hxx>
 
 #include <cxx/literal-map.hxx>
-#include <cxx/tree/cli.hxx>
+#include <cxx/tree/options.hxx>
 
 namespace CXX
 {
@@ -28,13 +28,10 @@ namespace CXX
       static Void
       usage ();
 
-      static CLI::OptionsSpec
-      options_spec ();
-
       struct Failed {};
 
       static UnsignedLong
-      generate (CLI::Options const& options,
+      generate (options const&,
                 XSDFrontend::SemanticGraph::Schema&,
                 XSDFrontend::SemanticGraph::Path const& file,
                 Boolean file_per_type,

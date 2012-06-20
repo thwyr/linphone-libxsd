@@ -16,8 +16,6 @@ namespace CXX
   {
     namespace
     {
-      typedef Containers::Vector<NarrowString> Streams;
-
       // List mapping.
       //
       struct List: Traversal::List, Context
@@ -142,8 +140,9 @@ namespace CXX
 
           // c-tor (istream&)
           //
-          Streams const& st (options.value<CLI::generate_extraction> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_extraction ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             if (doxygen)
             {
@@ -167,7 +166,7 @@ namespace CXX
                << endl;
           }
 
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             // c-tor (xercesc::DOMElement)
             //
@@ -353,7 +352,7 @@ namespace CXX
              << "public:" << endl
              << endl;
 
-          if (options.value<CLI::generate_default_ctor> ())
+          if (options.generate_default_ctor ())
           {
             // c-tor ()
             //
@@ -400,8 +399,9 @@ namespace CXX
 
           // c-tor (istream&)
           //
-          Streams const& st (options.value<CLI::generate_extraction> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_extraction ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             if (doxygen)
             {
@@ -425,7 +425,7 @@ namespace CXX
                << endl;
           }
 
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             // c-tor (xercesc::DOMElement)
             //
@@ -688,7 +688,7 @@ namespace CXX
 
           // default c-tor
           //
-          if (options.value<CLI::generate_default_ctor> ())
+          if (options.generate_default_ctor ())
           {
             if (doxygen)
             {
@@ -808,8 +808,9 @@ namespace CXX
 
           // c-tor (istream&)
           //
-          Streams const& st (options.value<CLI::generate_extraction> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_extraction ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             if (doxygen)
             {
@@ -833,7 +834,7 @@ namespace CXX
                << endl;
           }
 
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             // c-tor (xercesc::DOMElement)
             //
@@ -1849,7 +1850,7 @@ namespace CXX
           if (max (m) != 1)
           {
             String const& container (econtainer (m));
-            Boolean isense (options.value<CLI::generate_intellisense> ());
+            Boolean isense (options.generate_intellisense ());
 
             // sequence
             //
@@ -2269,11 +2270,11 @@ namespace CXX
           inherits_member_ >> member_name_;
 
           names_ >> member_;
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
             names_ >> any_;
 
           names_data_ >> data_member_;
-          if (options.value<CLI::generate_wildcard> ())
+          if (options.generate_wildcard ())
             names_data_ >> data_any_;
         }
 
@@ -2293,7 +2294,7 @@ namespace CXX
           Boolean hae (has<Traversal::Any> (c));
           Boolean haa (has<Traversal::AnyAttribute> (c));
 
-          Boolean gen_wildcard (options.value<CLI::generate_wildcard> ());
+          Boolean gen_wildcard (options.generate_wildcard ());
 
           Boolean simple (true);
           {
@@ -2426,7 +2427,7 @@ namespace CXX
 
           // default c-tor
           //
-          if (options.value<CLI::generate_default_ctor> ())
+          if (options.generate_default_ctor ())
           {
             // c-tor (ultimate-base, all-non-optional-members) will become
             // default c-tor if our inheritance hierarchy has no required
@@ -2460,7 +2461,7 @@ namespace CXX
 
           // c-tor (base, all-non-optional-members)
           //
-          if (options.value<CLI::generate_from_base_ctor> ())
+          if (options.generate_from_base_ctor ())
           {
             // c-tor (base, all-non-optional-members) will be equivalent to
             // c-tor (ultimate-base, all-non-optional-members) unless our
@@ -2826,8 +2827,9 @@ namespace CXX
 
           // c-tor (istream&)
           //
-          Streams const& st (options.value<CLI::generate_extraction> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_extraction ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             if (doxygen)
             {
@@ -2852,7 +2854,7 @@ namespace CXX
           }
 
 
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             // c-tor (xercesc::DOMElement)
             //
@@ -2975,7 +2977,7 @@ namespace CXX
 
           if (!simple)
           {
-            if (options.value<CLI::suppress_assignment> ())
+            if (options.suppress_assignment ())
             {
               priv = true;
               os << "private:" << endl;
@@ -3049,7 +3051,7 @@ namespace CXX
                  << "//@cond" << endl
                  << endl;
 
-            if (!options.value<CLI::suppress_parsing> ())
+            if (!options.suppress_parsing ())
             {
               // parse (xercesc::DOMElement)
               //
@@ -3068,7 +3070,8 @@ namespace CXX
             //
             if (has_members)
             {
-              for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+              for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+                   ++i)
               {
                 os << "void" << endl
                    << unclash (name, "parse") << " (" <<
@@ -3100,7 +3103,7 @@ namespace CXX
 
           // Comparison operators.
           //
-          if (options.value<CLI::generate_comparison> () &&
+          if (options.generate_comparison () &&
               (has_members || !c.inherits_p () ||
                ((hae || haa) && gen_wildcard)))
           {
@@ -3406,7 +3409,7 @@ namespace CXX
 
           // default c-tor
           //
-          if (options.value<CLI::generate_default_ctor> ())
+          if (options.generate_default_ctor ())
           {
             if (doxygen)
             {
@@ -3466,7 +3469,7 @@ namespace CXX
                << endl;
           }
 
-          if (!options.value<CLI::suppress_parsing> ())
+          if (!options.suppress_parsing ())
           {
             // c-tor (xercesc::DOMElement)
             //
@@ -3674,21 +3677,21 @@ namespace CXX
                << "#include <xsd/cxx/tree/types.hxx>" << endl
                << endl;
 
-        if (!ctx.options.value<CLI::suppress_parsing> () ||
-            ctx.options.value<CLI::generate_serialization> ())
+        if (!ctx.options.suppress_parsing () ||
+            ctx.options.generate_serialization ())
         {
           ctx.os << "#include <xsd/cxx/xml/error-handler.hxx>" << endl
                  << endl;
         }
 
-        if (!ctx.options.value<CLI::suppress_parsing> () ||
-            ctx.options.value<CLI::generate_serialization> ())
+        if (!ctx.options.suppress_parsing () ||
+            ctx.options.generate_serialization ())
         {
           ctx.os << "#include <xsd/cxx/xml/dom/auto-ptr.hxx>" << endl
                  << endl;
         }
 
-        Boolean element_map (ctx.options.value<CLI::generate_element_map> ());
+        Boolean element_map (ctx.options.generate_element_map ());
 
         if (element_map)
           ctx.os << "#include <xsd/cxx/tree/element-map.hxx>" << endl
@@ -3698,7 +3701,7 @@ namespace CXX
         // later in the individual generators for each feature because
         // those headers provide implementation for the fundamental types.
         //
-        if (!ctx.options.value<CLI::suppress_parsing> ())
+        if (!ctx.options.suppress_parsing ())
         {
           ctx.os << "#include <xsd/cxx/tree/parsing.hxx>" << endl;
 
@@ -3719,7 +3722,7 @@ namespace CXX
           ctx.os << endl;
         }
 
-        if (ctx.options.value<CLI::generate_serialization> ())
+        if (ctx.options.generate_serialization ())
         {
           ctx.os << "#include <xsd/cxx/xml/dom/serialization-header.hxx>" << endl
                  << "#include <xsd/cxx/tree/serialization.hxx>" << endl;
@@ -3741,16 +3744,17 @@ namespace CXX
           ctx.os << endl;
         }
 
-        if (ctx.options.value<CLI::generate_ostream> ())
+        if (ctx.options.generate_ostream ())
         {
           ctx.os << "#include <xsd/cxx/tree/std-ostream-operators.hxx>" << endl
                  << endl;
         }
 
-        Streams const& ist (ctx.options.value<CLI::generate_insertion> ());
+        NarrowStrings const& ist (ctx.options.generate_insertion ());
         if (!ist.empty ())
         {
-          for (Streams::ConstIterator i (ist.begin ()); i != ist.end (); ++i)
+          for (NarrowStrings::const_iterator i (ist.begin ()); i != ist.end ();
+               ++i)
           {
             if (*i == "ACE_OutputCDR")
               ctx.os << "#include <xsd/cxx/tree/ace-cdr-stream-insertion.hxx>"
@@ -3764,10 +3768,11 @@ namespace CXX
                  << endl;
         }
 
-        Streams const& est (ctx.options.value<CLI::generate_extraction> ());
+        NarrowStrings const& est (ctx.options.generate_extraction ());
         if (!est.empty ())
         {
-          for (Streams::ConstIterator i (est.begin ()); i != est.end (); ++i)
+          for (NarrowStrings::const_iterator i (est.begin ()); i != est.end ();
+               ++i)
           {
             if (*i == "ACE_InputCDR")
               ctx.os << "#include <xsd/cxx/tree/ace-cdr-stream-extraction.hxx>"
@@ -3795,7 +3800,7 @@ namespace CXX
       }
       else
       {
-        Boolean inline_ (ctx.options.value<CLI::generate_inline> ());
+        Boolean inline_ (ctx.options.generate_inline ());
 
         ctx.os << "#include <memory>    // std::auto_ptr" << endl
                << "#include <limits>    // std::numeric_limits" << endl
@@ -3815,23 +3820,23 @@ namespace CXX
                << "#include <xsd/cxx/tree/list.hxx>" << endl
                << endl;
 
-        if (!ctx.options.value<CLI::suppress_parsing> ())
+        if (!ctx.options.suppress_parsing ())
         {
           ctx.os << "#include <xsd/cxx/xml/dom/parsing-header.hxx>" << endl
                  << endl;
         }
 
-        if (ctx.options.value<CLI::generate_wildcard> ())
+        if (ctx.options.generate_wildcard ())
         {
-          if (ctx.options.value<CLI::suppress_parsing> () ||
-              !ctx.options.value<CLI::generate_serialization> ())
+          if (ctx.options.suppress_parsing () ||
+              !ctx.options.generate_serialization ())
             ctx.os << "#include <xsd/cxx/xml/dom/auto-ptr.hxx>" << endl;
 
           ctx.os << "#include <xsd/cxx/tree/containers-wildcard.hxx>" << endl
                  << endl;
         }
 
-        if (!ctx.options.value<CLI::generate_extraction> ().empty ())
+        if (!ctx.options.generate_extraction ().empty ())
           ctx.os << "#include <xsd/cxx/tree/istream-fwd.hxx>" << endl
                  << endl;
 
@@ -3888,7 +3893,7 @@ namespace CXX
           names >> complex;
           names >> enumeration;
 
-          if (ctx.options.value<CLI::generate_element_type> ())
+          if (ctx.options.generate_element_type ())
             names >> element;
 
           schema.dispatch (ctx.schema_root);

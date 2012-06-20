@@ -48,6 +48,12 @@ namespace CXX
       "Write generated files to <dir> instead of the current directory."
     };
 
+    bool --generate-inline
+    {
+      "Generate simple functions inline. This option triggers creation of
+       the inline file."
+    };
+
     // Extern XML Schema.
     //
     bool --generate-xml-schema

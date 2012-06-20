@@ -7,7 +7,7 @@
 #define CXX_PARSER_VALIDATOR_HXX
 
 #include <cxx/parser/elements.hxx>
-#include <cxx/parser/cli.hxx>
+#include <cxx/parser/options.hxx>
 
 #include <xsd.hxx>
 
@@ -23,7 +23,7 @@ namespace CXX
       Validator (); // Dummy ctor, helps with long symbols on HP-UX.
 
       Boolean
-      validate (CLI::Options const& options,
+      validate (options const&,
                 SemanticGraph::Schema&,
                 SemanticGraph::Path const& tu,
                 Boolean gen_driver,

@@ -32,35 +32,20 @@ namespace CXX
       class Context: public CXX::Context
       {
       public:
-        Context (CLI::Options const& ops,
+        Context (Parser::options const& ops,
                  SemanticGraph::Schema& root,
                  SemanticGraph::Path const& path,
                  StringLiteralMap const* map)
-            : CXX::Context (std::wcerr,
-                            root,
-                            path,
-                            map,
-                            ops.value<CLI::char_type> (),
-                            ops.value<CLI::char_encoding> (),
-                            ops.value<CLI::include_with_brackets> (),
-                            ops.value<CLI::include_prefix> (),
-                            ops.value<CLI::export_symbol> (),
-                            ops.value<CLI::namespace_map> (),
-                            ops.value<CLI::namespace_regex> (),
-                            ops.value<CLI::namespace_regex_trace> (),
-                            ops.value<CLI::include_regex> (),
-                            ops.value<CLI::include_regex_trace> (),
-                            ops.value<CLI::generate_inline> (),
-                            ops.value<CLI::reserved_name> ()),
-              skel_suffix_ (ops.value<CLI::skel_type_suffix> ()),
-              impl_suffix_ (ops.value<CLI::impl_type_suffix> ()),
-              impl (ops.value<CLI::generate_noop_impl> () ||
-                    ops.value<CLI::generate_print_impl> () ||
-                    ops.value<CLI::generate_test_driver> ()),
+            : CXX::Context (std::wcerr, root, path, ops, map),
+              skel_suffix_ (ops.skel_type_suffix ()),
+              impl_suffix_ (ops.impl_type_suffix ()),
+              impl (ops.generate_noop_impl () ||
+                    ops.generate_print_impl () ||
+                    ops.generate_test_driver ()),
               skel_suffix (skel_suffix_),
               impl_suffix (impl_suffix_),
               global_type_names (global_type_names_),
-              polymorphic (ops.value<CLI::generate_polymorphic> ())
+              polymorphic (ops.generate_polymorphic ())
         {
         }
 
@@ -1088,7 +1073,7 @@ namespace CXX
       };
 
       Void
-      process_impl (CLI::Options const& ops,
+      process_impl (options const& ops,
                     SemanticGraph::Schema& tu,
                     SemanticGraph::Path const& file,
                     StringLiteralMap const& map)
@@ -1184,7 +1169,7 @@ namespace CXX
     }
 
     Void NameProcessor::
-    process (CLI::Options const& ops,
+    process (options const& ops,
              SemanticGraph::Schema& tu,
              SemanticGraph::Path const& file,
              StringLiteralMap const& map)

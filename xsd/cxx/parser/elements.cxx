@@ -42,27 +42,12 @@ namespace CXX
     Context (std::wostream& o,
              SemanticGraph::Schema& root,
              SemanticGraph::Path const& path,
-             CLI::Options const& ops,
+             options_type const& ops,
              StringLiteralMap const* map,
              Regex const* he,
              Regex const* ie,
              Regex const* hie)
-        : CXX::Context (o,
-                        root,
-                        path,
-                        map,
-                        ops.value<CLI::char_type> (),
-                        ops.value<CLI::char_encoding> (),
-                        ops.value<CLI::include_with_brackets> (),
-                        ops.value<CLI::include_prefix> (),
-                        ops.value<CLI::export_symbol> (),
-                        ops.value<CLI::namespace_map> (),
-                        ops.value<CLI::namespace_regex> (),
-                        ops.value<CLI::namespace_regex_trace> (),
-                        ops.value<CLI::include_regex> (),
-                        ops.value<CLI::include_regex_trace> (),
-                        ops.value<CLI::generate_inline> (),
-                        ops.value<CLI::reserved_name> ()),
+        : CXX::Context (o, root, path, ops, map),
           options (ops),
           xml_parser (xml_parser_),
           simple_base (simple_base_),
@@ -77,11 +62,11 @@ namespace CXX
           hxx_expr (he),
           ixx_expr (ie),
           hxx_impl_expr (hie),
-          xml_parser_ (ops.value<CLI::xml_parser> ()),
-          validation_ ((ops.value<CLI::xml_parser> () == "expat" ||
-                        ops.value<CLI::generate_validation> ()) &&
-                       !ops.value<CLI::suppress_validation> ()),
-          polymorphic_ (ops.value<CLI::generate_polymorphic> ())
+          xml_parser_ (ops.xml_parser ()),
+          validation_ ((ops.xml_parser () == "expat" ||
+                        ops.generate_validation ()) &&
+                       !ops.suppress_validation ()),
+          polymorphic_ (ops.generate_polymorphic ())
     {
       if (char_type == L"char")
         std_string_type = L"::std::string";

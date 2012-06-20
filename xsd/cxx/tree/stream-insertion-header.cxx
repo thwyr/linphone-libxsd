@@ -14,8 +14,6 @@ namespace CXX
   {
     namespace
     {
-      typedef Containers::Vector<NarrowString> Streams;
-
       struct List: Traversal::List, Context
       {
         List (Context& c)
@@ -34,8 +32,9 @@ namespace CXX
           if (renamed_type (l, name) && !name)
             return;
 
-          Streams const& st (options.value<CLI::generate_insertion> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_insertion ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream_type (ostream_type + L"< " + String (*i) + L" >");
 
@@ -67,8 +66,9 @@ namespace CXX
           if (renamed_type (u, name) && !name)
             return;
 
-          Streams const& st (options.value<CLI::generate_insertion> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_insertion ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream_type (ostream_type + L"< " + String (*i) + L" >");
 
@@ -100,8 +100,9 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
-          Streams const& st (options.value<CLI::generate_insertion> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_insertion ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream_type (ostream_type + L"< " + String (*i) + L" >");
 
@@ -132,8 +133,9 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
-          Streams const& st (options.value<CLI::generate_insertion> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_insertion ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream_type (ostream_type + L"< " + String (*i) + L" >");
 

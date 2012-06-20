@@ -46,19 +46,12 @@ namespace CXX
         "Indicate that all types should be treated as polymorphic."
       };
 
-
       // Features.
       //
       bool --generate-serialization
       {
         "Generate serialization functions. Serialization functions convert
          the object model back to XML."
-      };
-
-      bool --generate-inline
-      {
-        "Generate simple functions inline. This option triggers creation of
-         the inline file."
       };
 
       bool --generate-ostream

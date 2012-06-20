@@ -7,7 +7,7 @@
 #define CXX_TREE_VALIDATOR_HXX
 
 #include <cxx/tree/elements.hxx>
-#include <cxx/tree/cli.hxx>
+#include <cxx/tree/options.hxx>
 
 #include <xsd.hxx>
 
@@ -21,7 +21,7 @@ namespace CXX
       Validator (); // Dummy ctor, helps with long symbols on HP-UX.
 
       Boolean
-      validate (CLI::Options const& options,
+      validate (options const&,
                 SemanticGraph::Schema&,
                 SemanticGraph::Path const& tu,
                 const WarningSet& disabled_warnings,

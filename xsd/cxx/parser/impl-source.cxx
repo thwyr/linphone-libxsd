@@ -57,7 +57,7 @@ namespace CXX
             os << arg_type (base) << " v (" << post_name (base) << " ());"
                << endl;
 
-            if (options.value<CLI::generate_print_impl> ())
+            if (options.generate_print_impl ())
             {
               PrintCall t (*this, e.name (), "v");
               t.dispatch (base);
@@ -126,7 +126,7 @@ namespace CXX
 
           if (arg != L"void")
           {
-            if (options.value<CLI::generate_print_impl> ())
+            if (options.generate_print_impl ())
             {
               PrintCall t (*this, type.name (), item);
               t.dispatch (type);
@@ -186,7 +186,7 @@ namespace CXX
              << "_characters (const " << string_type << "& s)"
              << "{";
 
-          if (options.value<CLI::generate_print_impl> ())
+          if (options.generate_print_impl ())
             os << cout_inst << " << " << strlit (u.name () + L": ") <<
               " << s << std::endl;";
           else
@@ -244,7 +244,7 @@ namespace CXX
 
           if (arg != L"void")
           {
-            if (options.value<CLI::generate_print_impl> ())
+            if (options.generate_print_impl ())
             {
               PrintCall t (*this, m.name (), name);
               t.dispatch (m.type ());
@@ -314,7 +314,7 @@ namespace CXX
               os << arg_type (base) << " v (" << post_name (base) << " ());"
                  << endl;
 
-              if (options.value<CLI::generate_print_impl> ())
+              if (options.generate_print_impl ())
               {
                 PrintCall t (*this, c.name (), "v");
                 t.dispatch (base);
@@ -357,7 +357,7 @@ namespace CXX
     Void
     generate_impl_source (Context& ctx)
     {
-      if (ctx.options.value<CLI::generate_print_impl> ())
+      if (ctx.options.generate_print_impl ())
         ctx.os << "#include <iostream>" << endl
                << endl;
 

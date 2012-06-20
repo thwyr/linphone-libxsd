@@ -125,7 +125,8 @@ $(gen): cli_options +=         \
 --suppress-undocumented        \
 --generate-file-scanner        \
 --include-with-brackets        \
---option-length 28
+--option-length 28             \
+--cxx-prologue '\#include <options-parser.hxx>'
 
 #--include-prefix xsd
 #--guard-prefix XSD

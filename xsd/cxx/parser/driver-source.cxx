@@ -751,7 +751,7 @@ namespace CXX
           root_p << "." << post << " ());"
            << endl;
 
-        if (ctx.options.value<CLI::generate_print_impl> ())
+        if (ctx.options.generate_print_impl ())
         {
           PrintCall t (ctx, root->name (), "v");
           t.dispatch (root_type);

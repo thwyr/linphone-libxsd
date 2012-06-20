@@ -27,7 +27,7 @@ namespace CXX
       public:
         ValidationContext (SemanticGraph::Schema& root,
                            SemanticGraph::Path const& path,
-                           CLI::Options const& options,
+                           Tree::options const& ops,
                            const WarningSet& disabled_warnings,
                            Counts const& counts,
                            Boolean generate_xml_schema,
@@ -35,7 +35,7 @@ namespace CXX
             : Context (std::wcerr,
                        root,
                        path,
-                       options,
+                       ops,
                        counts,
                        generate_xml_schema,
                        0,
@@ -461,7 +461,7 @@ namespace CXX
                     << "automatically name them"
                     << endl;
 
-              if (!options.value<CLI::show_anonymous> ())
+              if (!options.show_anonymous ())
                 wcerr << t.file ()
                       << ": info: use --show-anonymous option to see these "
                       << "types" << endl;
@@ -480,7 +480,7 @@ namespace CXX
 
           if (traverse_common (e))
           {
-            if (options.value<CLI::show_anonymous> ())
+            if (options.show_anonymous ())
             {
               wcerr << e.file () << ":" << e.line () << ":" << e.column ()
                     << ": error: element '" << xpath (e) << "' "
@@ -496,7 +496,7 @@ namespace CXX
         {
           if (traverse_common (a))
           {
-            if (options.value<CLI::show_anonymous> ())
+            if (options.show_anonymous ())
             {
               wcerr << a.file () << ":" << a.line () << ":" << a.column ()
                     << ": error: attribute '" << xpath (a) << "' "
@@ -528,7 +528,7 @@ namespace CXX
     }
 
     Boolean Validator::
-    validate (CLI::Options const& options,
+    validate (options const& ops,
               SemanticGraph::Schema& schema,
               SemanticGraph::Path const& path,
               const WarningSet& disabled_warnings,
@@ -536,12 +536,12 @@ namespace CXX
     {
       Boolean valid (true);
       ValidationContext ctx (
-        schema, path, options, disabled_warnings, counts, false, valid);
+        schema, path, ops, disabled_warnings, counts, false, valid);
 
       //
       //
-      Boolean import_maps (options.value<CLI::import_maps> ());
-      Boolean export_maps (options.value<CLI::export_maps> ());
+      Boolean import_maps (ops.import_maps ());
+      Boolean export_maps (ops.export_maps ());
 
       if (import_maps && export_maps)
       {
@@ -569,17 +569,17 @@ namespace CXX
 
       //
       //
-      if (options.value<CLI::char_type> () != "char" &&
-          options.value<CLI::char_type> () != "wchar_t" &&
+      if (ops.char_type () != "char" &&
+          ops.char_type () != "wchar_t" &&
           !ctx.is_disabled ("T003"))
       {
         wcerr << "warning T003: unknown base character type '" <<
-          options.value<CLI::char_type> ().c_str () << "'" << endl;
+          ops.char_type ().c_str () << "'" << endl;
       }
 
       //
       //
-      NarrowString tn (options.value<CLI::type_naming> ());
+      NarrowString tn (ops.type_naming ());
 
       if (tn != "knr" && tn != "ucc" && tn != "java")
       {
@@ -589,7 +589,7 @@ namespace CXX
         return false;
       }
 
-      NarrowString fn (options.value<CLI::function_naming> ());
+      NarrowString fn (ops.function_naming ());
 
       if (fn != "knr" && fn != "lcc" && fn != "java")
       {
@@ -601,11 +601,11 @@ namespace CXX
 
       //
       //
-      Boolean element_type (options.value<CLI::generate_element_type> ());
-      Boolean par (!options.value<CLI::suppress_parsing> ());
-      Boolean ser (options.value<CLI::generate_serialization> ());
+      Boolean element_type (ops.generate_element_type ());
+      Boolean par (!ops.suppress_parsing ());
+      Boolean ser (ops.generate_serialization ());
 
-      if (options.value<CLI::generate_element_map> ())
+      if (ops.generate_element_map ())
       {
         if (!element_type)
         {
@@ -631,11 +631,11 @@ namespace CXX
 
       if (counts.global_elements > 1 &&
           (element_type || par || ser) &&
-          !options.value<CLI::root_element_first> () &&
-          !options.value<CLI::root_element_last> () &&
-          !options.value<CLI::root_element_all> () &&
-          !options.value<CLI::root_element_none> () &&
-          options.value<CLI::root_element> ().empty () &&
+          !ops.root_element_first () &&
+          !ops.root_element_last () &&
+          !ops.root_element_all () &&
+          !ops.root_element_none () &&
+          ops.root_element ().empty () &&
           !ctx.is_disabled ("T004"))
       {
         wcerr << schema.file () << ": warning T004: generating ";

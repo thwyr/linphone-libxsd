@@ -14,8 +14,6 @@ namespace CXX
   {
     namespace
     {
-      typedef Containers::Vector<NarrowString> Streams;
-
       struct List: Traversal::List, Context
       {
         List (Context& c)
@@ -46,8 +44,9 @@ namespace CXX
           base += L" >";
 
           UnsignedLong n (0);
-          Streams const& st (options.value<CLI::generate_insertion> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_insertion ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream_type ("::xsd::cxx::tree::ostream< " + *i + " >");
 
@@ -116,8 +115,9 @@ namespace CXX
           String const& base (xs_string_type);
 
           UnsignedLong n (0);
-          Streams const& st (options.value<CLI::generate_insertion> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_insertion ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream_type ("::xsd::cxx::tree::ostream< " + *i + " >");
 
@@ -193,8 +193,9 @@ namespace CXX
             value = evalue (e);
 
           UnsignedLong n (0);
-          Streams const& st (options.value<CLI::generate_insertion> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_insertion ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream_type ("::xsd::cxx::tree::ostream< " + *i + " >");
 
@@ -406,8 +407,9 @@ namespace CXX
           Boolean has_body (has<Traversal::Member> (c) || c.inherits_p ());
 
           UnsignedLong n (0);
-          Streams const& st (options.value<CLI::generate_insertion> ());
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          NarrowStrings const& st (options.generate_insertion ());
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream_type ("::xsd::cxx::tree::ostream< " + *i + " >");
 
@@ -474,13 +476,13 @@ namespace CXX
     {
       if (ctx.polymorphic)
       {
-        Streams const& st (ctx.options.value<CLI::generate_insertion> ());
+        NarrowStrings const& st (ctx.options.generate_insertion ());
 
         ctx.os << "#include <xsd/cxx/tree/stream-insertion-map.hxx>" << endl
                << endl;
 
-        Boolean import_maps (ctx.options.value<CLI::import_maps> ());
-        Boolean export_maps (ctx.options.value<CLI::export_maps> ());
+        Boolean import_maps (ctx.options.import_maps ());
+        Boolean export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {
@@ -493,7 +495,8 @@ namespace CXX
                  << "namespace tree"
                  << "{";
 
-          for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+          for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+               ++i)
           {
             String stream (*i);
 
@@ -531,7 +534,8 @@ namespace CXX
                << "{";
 
         UnsignedLong n (0);
-        for (Streams::ConstIterator i (st.begin ()); i != st.end (); ++i)
+        for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
+             ++i)
         {
           String stream (*i);
 
