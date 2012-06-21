@@ -8,6 +8,7 @@
 #include <boost/filesystem/fstream.hpp>
 
 #include <cutl/re.hxx>
+#include <cutl/shared-ptr.hxx>
 
 #include <cult/containers/set.hxx>
 #include <cult/containers/vector.hxx>
@@ -202,7 +203,7 @@ namespace CXX
     using Cult::Containers::Vector;
 
     typedef Vector<Path> Paths;
-    typedef Vector<Evptr<WideOutputFileStream> > WideOutputFileStreams;
+    typedef Vector<shared_ptr<WideOutputFileStream> > WideOutputFileStreams;
 
     try
     {
@@ -495,8 +496,8 @@ namespace CXX
         for (Paths::Iterator i (cxx_paths.begin ());
              i != cxx_paths.end (); ++i)
         {
-          Evptr<WideOutputFileStream> s (
-            new WideOutputFileStream (*i, ios_base::out));
+          shared_ptr<WideOutputFileStream> s (
+            new (shared) WideOutputFileStream (*i, ios_base::out));
 
           if (!s->is_open ())
           {
