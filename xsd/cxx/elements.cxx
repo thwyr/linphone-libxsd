@@ -5,7 +5,6 @@
 
 #include <cxx/elements.hxx>
 
-#include <vector>
 #include <cctype>    // std::toupper
 #include <memory>
 #include <sstream>
@@ -14,8 +13,6 @@
 
 using std::wcerr;
 using std::endl;
-
-typedef std::vector<NarrowString> NarrowStrings;
 
 namespace CXX
 {
