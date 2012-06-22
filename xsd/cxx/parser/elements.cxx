@@ -129,7 +129,7 @@ namespace CXX
     {
     }
 
-    Boolean Context::
+    bool Context::
     anonymous (SemanticGraph::Type& t)
     {
       return t.context ().count ("anonymous");
@@ -179,20 +179,20 @@ namespace CXX
 
     // Includes
     //
-    Void TypeForward::
+    void TypeForward::
     traverse (SemanticGraph::Type& t)
     {
       os << "class " << t.context ().get<String> (name_key_) << ";";
     }
 
-    Void Includes::
+    void Includes::
     traverse_ (SemanticGraph::Uses& u)
     {
       // Support for weak (forward) inclusion used in the file-per-type
       // compilation model.
       //
       SemanticGraph::Schema& s (u.schema ());
-      Boolean weak (u.context ().count ("weak"));
+      bool weak (u.context ().count ("weak"));
 
       if (weak && (type_ == header || type_ == impl_header))
       {

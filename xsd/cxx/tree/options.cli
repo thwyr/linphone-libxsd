@@ -3,11 +3,9 @@
 // copyright : Copyright (c) 2005-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-include <vector>;
-include <string>;
 include <cstddef>; // std::size_t
 
-include <cult/types.hxx>; // NarrowString
+include <types.hxx>; // NarrowString, NarrowStrings
 
 include <cxx/options.cli>;
 
@@ -27,7 +25,7 @@ namespace CXX
          hierarchies are polymorphic."
       };
 
-      std::vector<Cult::Types::NarrowString> --polymorphic-type
+      NarrowStrings --polymorphic-type
       {
         "<type>",
         "Indicate that <type> is a root of a polymorphic type hierarchy. The
@@ -113,7 +111,7 @@ namespace CXX
          this option."
       };
 
-      std::vector<Cult::Types::NarrowString> --generate-insertion
+      NarrowStrings --generate-insertion
       {
         "<os>",
         "Generate data representation stream insertion operators for the <os>
@@ -125,7 +123,7 @@ namespace CXX
          declarations."
       };
 
-      std::vector<Cult::Types::NarrowString> --generate-extraction
+      NarrowStrings --generate-extraction
       {
         "<is>",
         "Generate data representation stream extraction constructors for the
@@ -181,7 +179,7 @@ namespace CXX
 
       // Naming.
       //
-      Cult::Types::NarrowString --type-naming = "knr"
+      NarrowString --type-naming = "knr"
       {
         "<style>",
         "Specify the type naming convention that should be used in the
@@ -190,7 +188,7 @@ namespace CXX
          information."
       };
 
-      Cult::Types::NarrowString --function-naming = "knr"
+      NarrowString --function-naming = "knr"
       {
         "<style>",
         "Specify the function naming convention that should be used in the
@@ -199,7 +197,7 @@ namespace CXX
          information."
       };
 
-      std::vector<Cult::Types::NarrowString> --type-regex
+      NarrowStrings --type-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -207,7 +205,7 @@ namespace CXX
          section below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --accessor-regex
+      NarrowStrings --accessor-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -215,7 +213,7 @@ namespace CXX
          names. See the NAMING CONVENTION section below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --one-accessor-regex
+      NarrowStrings --one-accessor-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -224,7 +222,7 @@ namespace CXX
          below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --opt-accessor-regex
+      NarrowStrings --opt-accessor-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -233,7 +231,7 @@ namespace CXX
          below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --seq-accessor-regex
+      NarrowStrings --seq-accessor-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -242,7 +240,7 @@ namespace CXX
          below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --modifier-regex
+      NarrowStrings --modifier-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -250,7 +248,7 @@ namespace CXX
          names. See the NAMING CONVENTION section below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --one-modifier-regex
+      NarrowStrings --one-modifier-regex
 
       {
         "<regex>",
@@ -260,7 +258,7 @@ namespace CXX
          for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --opt-modifier-regex
+      NarrowStrings --opt-modifier-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -269,7 +267,7 @@ namespace CXX
          below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --seq-modifier-regex
+      NarrowStrings --seq-modifier-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -278,7 +276,7 @@ namespace CXX
          below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --parser-regex
+      NarrowStrings --parser-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -286,7 +284,7 @@ namespace CXX
          NAMING CONVENTION section below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --serializer-regex
+      NarrowStrings --serializer-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -294,7 +292,7 @@ namespace CXX
          the NAMING CONVENTION section below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --enumerator-regex
+      NarrowStrings --enumerator-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -302,7 +300,7 @@ namespace CXX
          NAMING CONVENTION section below for more information."
       };
 
-      std::vector<Cult::Types::NarrowString> --element-type-regex
+      NarrowStrings --element-type-regex
       {
         "<regex>",
         "Add <regex> to the list of regular expressions used to translate
@@ -345,7 +343,7 @@ namespace CXX
          global elements are considered document roots."
       };
 
-      std::vector<Cult::Types::NarrowString> --root-element
+      NarrowStrings --root-element
       {
         "<element>",
         "Treat only <element> as a document root. Repeat this option to
@@ -354,7 +352,7 @@ namespace CXX
 
       // Custom type.
       //
-      std::vector<Cult::Types::NarrowString> --custom-type
+      NarrowStrings --custom-type
       {
         "<map>",
         "Use a custom C++ type instead of the generated class. The <map>
@@ -367,7 +365,7 @@ namespace CXX
          still generated but with that name."
       };
 
-      std::vector<Cult::Types::NarrowString> --custom-type-regex
+      NarrowStrings --custom-type-regex
       {
         "<regex>",
         "Use custom C++ types instead of the generated classes. The <regex>
@@ -397,7 +395,7 @@ namespace CXX
          to insufficient memory)."
       };
 
-      Cult::Types::NarrowString --parts-suffix = "-"
+      NarrowString --parts-suffix = "-"
       {
         "<suffix>",
         "Use <suffix> instead of the default '\cb{-}' to separate the file

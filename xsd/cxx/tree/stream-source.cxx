@@ -21,7 +21,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -89,7 +89,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -135,7 +135,7 @@ namespace CXX
           inherits_base_ >> base_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -146,13 +146,13 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (e);
           }
 
-          Boolean enum_based (false);
+          bool enum_based (false);
           if (string_based)
           {
             SemanticGraph::Enumeration* be (0);
@@ -217,7 +217,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (skip (e))
@@ -232,7 +232,7 @@ namespace CXX
           // dynamically-type with xsi:type.
           //
           SemanticGraph::Type& t (e.type ());
-          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
+          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           // aCC cannot handle an inline call to std_ostream_map_instance.
           //
@@ -310,7 +310,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& aname (eaname (a));
@@ -340,7 +340,7 @@ namespace CXX
           inherits_ >> base_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -353,7 +353,7 @@ namespace CXX
 
           //
           //
-          Boolean has_body (has<Traversal::Member> (c) || c.inherits_p ());
+          bool has_body (has<Traversal::Member> (c) || c.inherits_p ());
 
           os << std_ostream_type << "&" << endl
              << "operator<< (" << std_ostream_type << "& o, " <<
@@ -408,10 +408,8 @@ namespace CXX
       };
     }
 
-    Void
-    generate_stream_source (Context& ctx,
-                            UnsignedLong first,
-                            UnsignedLong last)
+    void
+    generate_stream_source (Context& ctx, size_t first, size_t last)
     {
       String c (ctx.char_type);
 
@@ -423,8 +421,8 @@ namespace CXX
         ctx.os << "#include <xsd/cxx/tree/std-ostream-map.hxx>" << endl
                << endl;
 
-        Boolean import_maps (ctx.options.import_maps ());
-        Boolean export_maps (ctx.options.export_maps ());
+        bool import_maps (ctx.options.import_maps ());
+        bool export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {

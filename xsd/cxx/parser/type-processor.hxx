@@ -6,9 +6,9 @@
 #ifndef CXX_PARSER_TYPE_PROCESSOR_HXX
 #define CXX_PARSER_TYPE_PROCESSOR_HXX
 
-#include <cult/types.hxx>
-
 #include <xsd-frontend/semantic-graph.hxx>
+
+#include <types.hxx>
 
 #include <type-map/type-map.hxx>
 
@@ -18,17 +18,15 @@ namespace CXX
 {
   namespace Parser
   {
-    using namespace Cult::Types;
-
     class TypeProcessor
     {
     public:
       TypeProcessor (); // Dummy ctor, helps with long symbols on HP-UX.
 
-      Void
+      void
       process (options const&,
                XSDFrontend::SemanticGraph::Schema&,
-               Boolean gen_driver,
+               bool gen_driver,
                TypeMap::Namespaces&);
     };
   }

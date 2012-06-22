@@ -12,7 +12,7 @@ namespace CXX
 {
   namespace Tree
   {
-    Void
+    void
     generate_stream_insertion_header (Context&);
   }
 }

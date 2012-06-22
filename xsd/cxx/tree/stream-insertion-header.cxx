@@ -21,7 +21,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -55,7 +55,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -89,7 +89,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -122,7 +122,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -149,7 +149,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_stream_insertion_header (Context& ctx)
     {
       String c (ctx.char_type);

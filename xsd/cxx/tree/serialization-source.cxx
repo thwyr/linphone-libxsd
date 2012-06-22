@@ -42,7 +42,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -133,7 +133,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -204,7 +204,7 @@ namespace CXX
           inherits_base_ >> base_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -290,7 +290,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (skip (e))
@@ -307,7 +307,7 @@ namespace CXX
           // dynamically-type with xsi:type.
           //
           SemanticGraph::Type& t (e.type ());
-          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
+          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           os << "// " << comment (e.name ()) << endl
              << "//" << endl;
@@ -514,7 +514,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& aname (eaname (a));
@@ -572,7 +572,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& aname (eaname (a));
@@ -665,7 +665,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& aname (eaname (a));
@@ -702,7 +702,7 @@ namespace CXX
           inherits_ >> base_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -760,7 +760,7 @@ namespace CXX
           os << "}";
 
 
-          Boolean simple (true);
+          bool simple (true);
           {
             IsSimpleType t (simple);
             t.dispatch (c);
@@ -768,7 +768,7 @@ namespace CXX
 
           if (simple)
           {
-            Boolean hb (c.inherits_p ());
+            bool hb (c.inherits_p ());
 
             // operator<< (xercesc::DOMAttr)
             //
@@ -849,7 +849,7 @@ namespace CXX
           belongs_ >> type_name_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (polymorphic && e.substitutes_p ())
@@ -892,7 +892,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (doc_root_p (e))
@@ -928,7 +928,7 @@ namespace CXX
         }
 
       private:
-        Boolean element_map_;
+        bool element_map_;
       };
 
       struct ElementFunction: Traversal::Element,
@@ -940,7 +940,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (!doc_root_p (e))
@@ -961,7 +961,7 @@ namespace CXX
           // If this element's type is anonymous then we don't need to do
           // anything.
           //
-          Boolean poly (polymorphic &&
+          bool poly (polymorphic &&
                         polymorphic_p (type) &&
                         !anonymous_p (type));
 
@@ -1240,12 +1240,10 @@ namespace CXX
       };
     }
 
-    Void
-    generate_serialization_source (Context& ctx,
-                                   UnsignedLong first,
-                                   UnsignedLong last)
+    void
+    generate_serialization_source (Context& ctx, size_t first, size_t last)
     {
-      Boolean elemen_type (ctx.options.generate_element_type ());
+      bool elemen_type (ctx.options.generate_element_type ());
 
       if (!elemen_type)
         ctx.os << "#include <ostream>" << endl
@@ -1259,8 +1257,8 @@ namespace CXX
         ctx.os << "#include <xsd/cxx/tree/type-serializer-map.hxx>" << endl
                << endl;
 
-        Boolean import_maps (ctx.options.import_maps ());
-        Boolean export_maps (ctx.options.export_maps ());
+        bool import_maps (ctx.options.import_maps ());
+        bool export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {

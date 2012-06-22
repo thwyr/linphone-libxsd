@@ -6,6 +6,8 @@
 #ifndef CXX_TREE_NAME_PROCESSOR_HXX
 #define CXX_TREE_NAME_PROCESSOR_HXX
 
+#include <types.hxx>
+
 #include <cxx/tree/elements.hxx>
 #include <cxx/tree/options.hxx>
 
@@ -13,14 +15,12 @@ namespace CXX
 {
   namespace Tree
   {
-    using namespace Cult::Types;
-
     class NameProcessor
     {
     public:
       NameProcessor (); // Dummy ctor, helps with long symbols on HP-UX.
 
-      Boolean
+      bool
       process (options const&,
                XSDFrontend::SemanticGraph::Schema&,
                XSDFrontend::SemanticGraph::Path const& file,

@@ -11,14 +11,14 @@ namespace CXX
   {
     // Context
     //
-    Void Context::
+    void Context::
     update_ns_scope () // Keeping this function first helps HP-UX
     {                  // (long symbols).
       ns_scope.clear ();
 
-      Boolean first (true);
+      bool first (true);
 
-      for (NamespaceStack::Iterator i (ns_scope_stack.begin ());
+      for (NamespaceStack::iterator i (ns_scope_stack.begin ());
            i != ns_scope_stack.end ();
            ++i)
       {
@@ -39,7 +39,7 @@ namespace CXX
              SemanticGraph::Path const& path,
              options_type const& ops,
              Counts const& counts_,
-             Boolean generate_xml_schema__,
+             bool generate_xml_schema__,
              StringLiteralMap const* map,
              Regex const* fe,
              Regex const* he,
@@ -178,7 +178,7 @@ namespace CXX
 
           // Split the string in two parts at the last '='.
           //
-          Size pos (s.rfind ('='));
+          size_t pos (s.rfind ('='));
 
           // If no delimiter found then both type and base are empty.
           //
@@ -231,11 +231,11 @@ namespace CXX
           if (s.empty ())
             throw InvalidCustomTypeMapping (s, "mapping string is empty");
 
-          WideChar delimiter (s[0]);
+          wchar_t delimiter (s[0]);
 
           // First get pattern.
           //
-          Size pos (s.find (delimiter, 1));
+          size_t pos (s.find (delimiter, 1));
 
           if (pos == String::npos)
             throw InvalidCustomTypeMapping (
@@ -363,7 +363,7 @@ namespace CXX
     {
     }
 
-    Boolean Context::
+    bool Context::
     custom_type (SemanticGraph::Type const& t, String& r) const
     {
       String const& name (t.name ());
@@ -371,7 +371,7 @@ namespace CXX
       // First search the direct mapping.
       //
       {
-        DirectCustomTypeMap::ConstIterator i (
+        DirectCustomTypeMap::const_iterator i (
           direct_custom_type_map.find (name));
 
         if (i != direct_custom_type_map.end ())
@@ -384,7 +384,7 @@ namespace CXX
 
       // Second search the regex mapping.
       //
-      for (RegexCustomTypeMap::ConstIterator
+      for (RegexCustomTypeMap::const_iterator
              i (regex_custom_type_map.begin ()),
              e (regex_custom_type_map.end ());
            i != e; ++i)
@@ -422,7 +422,7 @@ namespace CXX
       return r;
     }
 
-    Boolean Context::
+    bool Context::
     renamed_type (SemanticGraph::Type const& t, String& r) const
     {
       String const& name (t.name ());
@@ -430,7 +430,7 @@ namespace CXX
       // First search the direct mapping.
       //
       {
-        DirectCustomTypeMap::ConstIterator i (
+        DirectCustomTypeMap::const_iterator i (
           direct_custom_type_map.find (name));
 
         if (i != direct_custom_type_map.end ())
@@ -443,7 +443,7 @@ namespace CXX
 
       // Second search the regex mapping.
       //
-      for (RegexCustomTypeMap::ConstIterator
+      for (RegexCustomTypeMap::const_iterator
              i (regex_custom_type_map.begin ()),
              e (regex_custom_type_map.end ());
            i != e; ++i)
@@ -464,17 +464,17 @@ namespace CXX
       return false;
     }
 
-    Void Context::
+    void Context::
     write_annotation (SemanticGraph::Annotation& a)
     {
       String const& doc (a.documentation ());
-      WideChar const* s (doc.c_str ());
-      Size size (doc.size ());
+      wchar_t const* s (doc.c_str ());
+      size_t size (doc.size ());
 
       // Remove leading and trailing whitespaces.
       //
-      while (*s == WideChar (0x20) || *s == WideChar (0x0A) ||
-             *s == WideChar (0x0D) || *s == WideChar (0x09))
+      while (*s == wchar_t (0x20) || *s == wchar_t (0x0A) ||
+             *s == wchar_t (0x0D) || *s == wchar_t (0x09))
       {
         s++;
         size--;
@@ -482,11 +482,11 @@ namespace CXX
 
       if (size != 0)
       {
-        WideChar const* e (s + size - 1);
+        wchar_t const* e (s + size - 1);
 
         while (e > s &&
-               (*e == WideChar (0x20) || *e == WideChar (0x0A) ||
-                *e == WideChar (0x0D) || *e == WideChar (0x09)))
+               (*e == wchar_t (0x20) || *e == wchar_t (0x0A) ||
+                *e == wchar_t (0x0D) || *e == wchar_t (0x09)))
           --e;
 
         size = s <= e ? e - s + 1 : 0;
@@ -499,15 +499,15 @@ namespace CXX
         // Go over the data, forcing newline after 80 chars and adding
         // ' * ' after each new line.
         //
-        WideChar const* last_space (0);
-        WideChar const* b (s);
-        WideChar const* e (s);
-        Boolean after_newline (false);
-        Boolean rogue (false);
+        wchar_t const* last_space (0);
+        wchar_t const* b (s);
+        wchar_t const* e (s);
+        bool after_newline (false);
+        bool rogue (false);
 
         for (; e < s + size; ++e)
         {
-          UnsignedLong u (unicode_char (e)); // May advance e.
+          unsigned int u (unicode_char (e)); // May advance e.
 
           // We are going to treat \v and \f as rogue here even though
           // they can be present in C++ source code.
@@ -564,16 +564,16 @@ namespace CXX
       }
     }
 
-    Void Context::
-    write_rogue_text (WideChar const* s, Size size, Boolean rogue)
+    void Context::
+    write_rogue_text (wchar_t const* s, size_t size, bool rogue)
     {
       if (!rogue)
         os.write (s, size);
       else
       {
-        for (WideChar const* p (s); p < s + size; ++p)
+        for (wchar_t const* p (s); p < s + size; ++p)
         {
-          UnsignedLong u (unicode_char (p)); // May advance p.
+          unsigned int u (unicode_char (p)); // May advance p.
 
           // We are going to treat \v and \f as rogue here even though
           // they can be present in C++ source code.
@@ -581,12 +581,12 @@ namespace CXX
           if (u > 127 || (u < 32 && u != '\t' && u != '\n'))
             os.put ('?');
           else
-            os.put (static_cast<WideChar> (u));
+            os.put (static_cast<wchar_t> (u));
         }
       }
     }
 
-    Boolean Context::
+    bool Context::
     polymorphic_p (SemanticGraph::Type& t)
     {
       // IDREF templates cannot be polymorphic.
@@ -598,16 +598,16 @@ namespace CXX
 
       if (polymorphic_all)
       {
-        Boolean fund (false);
+        bool fund (false);
         IsFundamentalType test (fund);
         test.dispatch (t);
         return !fund;
       }
       else
-        return t.context ().get<Boolean> ("polymorphic");
+        return t.context ().get<bool> ("polymorphic");
     }
 
-    Boolean Context::
+    bool Context::
     anonymous_substitutes_p (SemanticGraph::Type& t)
     {
       // IDREF templates cannot match.
@@ -636,14 +636,14 @@ namespace CXX
     // GenerateDefautCtor
     //
     GenerateDefaultCtor::
-    GenerateDefaultCtor (Context& c, Boolean& generate, Boolean no_base)
+    GenerateDefaultCtor (Context& c, bool& generate, bool no_base)
         : Context (c), generate_ (generate), no_base_ (no_base)
     {
       *this >> inherits_ >> *this;
       *this >> names_ >> *this;
     }
 
-    Void GenerateDefaultCtor::
+    void GenerateDefaultCtor::
     traverse (SemanticGraph::Complex& c)
     {
       // Make sure we figure out if we have any required members before
@@ -655,35 +655,35 @@ namespace CXX
         Complex::inherits (c, inherits_);
     }
 
-    Void GenerateDefaultCtor::
+    void GenerateDefaultCtor::
     traverse (SemanticGraph::Type&)
     {
       if (!no_base_)
         generate_ = true;
     }
 
-    Void GenerateDefaultCtor::
+    void GenerateDefaultCtor::
     traverse (SemanticGraph::Enumeration&)
     {
       if (!no_base_)
         generate_ = true;
     }
 
-    Void GenerateDefaultCtor::
+    void GenerateDefaultCtor::
     traverse (SemanticGraph::Element& e)
     {
       if (!skip (e) && min (e) == 1 && max (e) == 1)
         generate_ = true;
     }
 
-    Void GenerateDefaultCtor::
+    void GenerateDefaultCtor::
     traverse (SemanticGraph::Attribute& a)
     {
       if (min (a) == 1 && !a.fixed_p ())
         generate_ = true;
     }
 
-    Void GenerateDefaultCtor::
+    void GenerateDefaultCtor::
     traverse (SemanticGraph::Any& a)
     {
       if (options.generate_wildcard () &&
@@ -695,7 +695,7 @@ namespace CXX
     // GenerateFromBaseCtor
     //
     GenerateFromBaseCtor::
-    GenerateFromBaseCtor (Context& c, Boolean& generate)
+    GenerateFromBaseCtor (Context& c, bool& generate)
         : generate_ (generate),
           custom_ (false),
           traverser_ (c, generate, custom_)
@@ -703,7 +703,7 @@ namespace CXX
       inherits_ >> traverser_;
     }
 
-    Void GenerateFromBaseCtor::
+    void GenerateFromBaseCtor::
     traverse (SemanticGraph::Complex& c)
     {
       inherits (c, inherits_);
@@ -721,14 +721,14 @@ namespace CXX
     }
 
     GenerateFromBaseCtor::Traverser::
-    Traverser (Context& c, Boolean& generate, Boolean& custom)
+    Traverser (Context& c, bool& generate, bool& custom)
         : Context (c), generate_ (generate), custom_ (custom)
     {
       *this >> inherits_ >> *this;
       *this >> names_ >> *this;
     }
 
-    Void GenerateFromBaseCtor::Traverser::
+    void GenerateFromBaseCtor::Traverser::
     traverse (SemanticGraph::Type& t)
     {
       if (!custom_)
@@ -738,7 +738,7 @@ namespace CXX
       }
     }
 
-    Void GenerateFromBaseCtor::Traverser::
+    void GenerateFromBaseCtor::Traverser::
     traverse (SemanticGraph::Complex& c)
     {
       names (c, names_);
@@ -750,21 +750,21 @@ namespace CXX
         traverse (static_cast<SemanticGraph::Type&> (c));
     }
 
-    Void GenerateFromBaseCtor::Traverser::
+    void GenerateFromBaseCtor::Traverser::
     traverse (SemanticGraph::Element& e)
     {
       if (!skip (e) && min (e) == 1 && max (e) == 1)
         generate_ = true;
     }
 
-    Void GenerateFromBaseCtor::Traverser::
+    void GenerateFromBaseCtor::Traverser::
     traverse (SemanticGraph::Attribute& a)
     {
       if (min (a) == 1 && !a.fixed_p ())
         generate_ = true;
     }
 
-    Void GenerateFromBaseCtor::Traverser::
+    void GenerateFromBaseCtor::Traverser::
     traverse (SemanticGraph::Any& a)
     {
       if (options.generate_wildcard () &&
@@ -776,10 +776,10 @@ namespace CXX
     //
     HasComplexPolyNonOptArgs::
     HasComplexPolyNonOptArgs (Context& c,
-                              Boolean base,
-                              Boolean& complex,
-                              Boolean& poly,
-                              Boolean& clash)
+                              bool base,
+                              bool& complex,
+                              bool& poly,
+                              bool& clash)
         : Context (c),
           complex_ (complex),
           poly_ (poly),
@@ -791,7 +791,7 @@ namespace CXX
       *this >> names_ >> *this;
     }
 
-    Void HasComplexPolyNonOptArgs::
+    void HasComplexPolyNonOptArgs::
     traverse (SemanticGraph::Complex& c)
     {
       // No optimizations: need to check every arg for clashes.
@@ -800,14 +800,14 @@ namespace CXX
       names (c, names_);
     }
 
-    Void HasComplexPolyNonOptArgs::
+    void HasComplexPolyNonOptArgs::
     traverse (SemanticGraph::Element& e)
     {
       if (!skip (e) && min (e) == 1 && max (e) == 1)
       {
-        Boolean poly (polymorphic && polymorphic_p (e.type ()));
+        bool poly (polymorphic && polymorphic_p (e.type ()));
 
-        Boolean simple (true);
+        bool simple (true);
         IsSimpleType t (simple);
         t.dispatch (e.type ());
 
@@ -825,12 +825,12 @@ namespace CXX
     // FromBaseCtorArg
     //
     FromBaseCtorArg::
-    FromBaseCtorArg (Context& c, ArgType at, Boolean arg)
+    FromBaseCtorArg (Context& c, ArgType at, bool arg)
         : Context (c), arg_type_ (at), arg_ (arg)
     {
     }
 
-    Void FromBaseCtorArg::
+    void FromBaseCtorArg::
     traverse (SemanticGraph::Any& a)
     {
       if (!options.generate_wildcard ())
@@ -848,7 +848,7 @@ namespace CXX
       }
     }
 
-    Void FromBaseCtorArg::
+    void FromBaseCtorArg::
     traverse (SemanticGraph::Element& e)
     {
       if (skip (e))
@@ -860,13 +860,13 @@ namespace CXX
 
         os << "," << endl;
 
-        Boolean auto_ptr (false);
+        bool auto_ptr (false);
 
         switch (arg_type_)
         {
         case arg_complex_auto_ptr:
           {
-            Boolean simple (true);
+            bool simple (true);
             IsSimpleType t (simple);
             t.dispatch (e.type ());
             auto_ptr = !simple;
@@ -891,7 +891,7 @@ namespace CXX
       }
     }
 
-    Void FromBaseCtorArg::
+    void FromBaseCtorArg::
     traverse (SemanticGraph::Attribute& a)
     {
       // Note that we are not going to include attributes with
@@ -936,7 +936,7 @@ namespace CXX
       *this >> names_ >> *this;
     }
 
-    Void CtorArgs::
+    void CtorArgs::
     traverse (SemanticGraph::Type& t)
     {
       os << comma () << "const ";
@@ -957,7 +957,7 @@ namespace CXX
       }
     }
 
-    Void CtorArgs::
+    void CtorArgs::
     traverse (SemanticGraph::Enumeration& e)
     {
       os << comma () << "const ";
@@ -974,7 +974,7 @@ namespace CXX
       }
     }
 
-    Void CtorArgs::
+    void CtorArgs::
     traverse (SemanticGraph::Any& a)
     {
       if (!options.generate_wildcard ())
@@ -989,7 +989,7 @@ namespace CXX
       }
     }
 
-    Void CtorArgs::
+    void CtorArgs::
     traverse (SemanticGraph::Element& e)
     {
       if (skip (e))
@@ -997,13 +997,13 @@ namespace CXX
 
       if (min (e) == 1 && max (e) == 1)
       {
-        Boolean auto_ptr (false);
+        bool auto_ptr (false);
 
         switch (arg_type_)
         {
         case arg_complex_auto_ptr:
           {
-            Boolean simple (true);
+            bool simple (true);
             IsSimpleType t (simple);
             t.dispatch (e.type ());
             auto_ptr = !simple;
@@ -1028,7 +1028,7 @@ namespace CXX
       }
     }
 
-    Void CtorArgs::
+    void CtorArgs::
     traverse (SemanticGraph::Attribute& a)
     {
       // Note that we are not going to include attributes with
@@ -1047,7 +1047,7 @@ namespace CXX
     String CtorArgs::
     comma ()
     {
-      Boolean tmp (first_);
+      bool tmp (first_);
       first_ = false;
       return tmp ? "" : ",\n";
     }
@@ -1056,14 +1056,14 @@ namespace CXX
     // CtorArgsWithoutBase
     //
     CtorArgsWithoutBase::
-    CtorArgsWithoutBase (Context& c, ArgType at, Boolean arg, Boolean first)
+    CtorArgsWithoutBase (Context& c, ArgType at, bool arg, bool first)
         : Context (c), arg_type_ (at), arg_ (arg), first_ (first)
     {
       *this >> inherits_ >> *this;
       *this >> names_ >> *this;
     }
 
-    Void CtorArgsWithoutBase::
+    void CtorArgsWithoutBase::
     traverse (SemanticGraph::Any& a)
     {
       if (!options.generate_wildcard ())
@@ -1078,7 +1078,7 @@ namespace CXX
       }
     }
 
-    Void CtorArgsWithoutBase::
+    void CtorArgsWithoutBase::
     traverse (SemanticGraph::Element& e)
     {
       if (skip (e))
@@ -1086,13 +1086,13 @@ namespace CXX
 
       if (min (e) == 1 && max (e) == 1)
       {
-        Boolean auto_ptr (false);
+        bool auto_ptr (false);
 
         switch (arg_type_)
         {
         case arg_complex_auto_ptr:
           {
-            Boolean simple (true);
+            bool simple (true);
             IsSimpleType t (simple);
             t.dispatch (e.type ());
             auto_ptr = !simple;
@@ -1117,7 +1117,7 @@ namespace CXX
       }
     }
 
-    Void CtorArgsWithoutBase::
+    void CtorArgsWithoutBase::
     traverse (SemanticGraph::Attribute& a)
     {
       // Note that we are not going to include attributes with
@@ -1136,14 +1136,14 @@ namespace CXX
     String CtorArgsWithoutBase::
     comma ()
     {
-      Boolean tmp (first_);
+      bool tmp (first_);
       first_ = false;
       return tmp ? "" : ",\n";
     }
 
     // GlobalElementBase
     //
-    Boolean GlobalElementBase::
+    bool GlobalElementBase::
     generate_p (SemanticGraph::Element& e)
     {
       if (e.substitutes_p () && ctx_.polymorphic)
@@ -1163,7 +1163,7 @@ namespace CXX
       return true;
     }
 
-    Boolean GlobalElementBase::
+    bool GlobalElementBase::
     doc_root_p (SemanticGraph::Element& e)
     {
       if (!ctx_.options.root_element_first () &&
@@ -1207,8 +1207,8 @@ namespace CXX
     //
     Namespace::
     Namespace (Context& c,
-               UnsignedLong first,
-               UnsignedLong last)
+               size_t first,
+               size_t last)
         : CXX::Namespace (c, *this),
           GlobalElementBase (c),
           ctx_ (c),
@@ -1218,7 +1218,7 @@ namespace CXX
     {
     }
 
-    Void Namespace::
+    void Namespace::
     traverse (Type& ns)
     {
       using SemanticGraph::Element;
@@ -1227,7 +1227,7 @@ namespace CXX
         CXX::Namespace::traverse (ns);
       else
       {
-        Boolean opened (false);
+        bool opened (false);
 
         for (Type::NamesIterator i (ns.names_begin ());
              i != ns.names_end (); ++i)
@@ -1257,13 +1257,13 @@ namespace CXX
       }
     }
 
-    Void Namespace::
-    enter (Type&, String const& name, Boolean)
+    void Namespace::
+    enter (Type&, String const& name, bool)
     {
       ctx_.enter_ns_scope (name);
     }
 
-    Void Namespace::
+    void Namespace::
     leave ()
     {
       ctx_.leave_ns_scope ();
@@ -1271,7 +1271,7 @@ namespace CXX
 
     // Includes
     //
-    Void TypeForward::
+    void TypeForward::
     traverse (SemanticGraph::Type& t)
     {
       String const& name (ename (t));
@@ -1293,14 +1293,14 @@ namespace CXX
         os << "class " << name << ";";
     }
 
-    Void Includes::
+    void Includes::
     traverse_ (SemanticGraph::Uses& u)
     {
       // Support for weak (forward) inclusion used in the file-per-type
       // compilation model.
       //
       Type t (type_);
-      Boolean weak (u.context ().count ("weak"));
+      bool weak (u.context ().count ("weak"));
       SemanticGraph::Schema& s (u.schema ());
 
       if (weak && t == header)

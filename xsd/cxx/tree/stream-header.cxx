@@ -21,7 +21,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -48,7 +48,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -75,7 +75,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -86,13 +86,13 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (e);
           }
 
-          Boolean enum_based (false);
+          bool enum_based (false);
           if (string_based)
           {
             SemanticGraph::Enumeration* be (0);
@@ -129,7 +129,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -149,7 +149,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_stream_header (Context& ctx)
     {
       String c (ctx.char_type);

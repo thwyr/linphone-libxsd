@@ -21,7 +21,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -67,7 +67,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -112,7 +112,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -156,7 +156,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -175,7 +175,7 @@ namespace CXX
             "const " << name << "&);"
              << endl;
 
-          Boolean simple (true);
+          bool simple (true);
           {
             IsSimpleType t (simple);
             t.dispatch (c);
@@ -211,7 +211,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (doc_root_p (e))
@@ -237,7 +237,7 @@ namespace CXX
         }
 
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (!doc_root_p (e))
@@ -533,10 +533,10 @@ namespace CXX
 
     }
 
-    Void
+    void
     generate_serialization_header (Context& ctx)
     {
-      Boolean elemen_type (ctx.options.generate_element_type ());
+      bool elemen_type (ctx.options.generate_element_type ());
 
       if (!elemen_type)
         ctx.os << "#include <iosfwd>" << endl

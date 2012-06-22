@@ -6,16 +6,13 @@
 #ifndef XSD_TYPE_MAP_PARSER_HXX
 #define XSD_TYPE_MAP_PARSER_HXX
 
-#include <cult/types.hxx>
+#include <types.hxx>
 
 #include <type-map/type-map.hxx>
 #include <type-map/lexer.hxx>
 
 namespace TypeMap
 {
-  using namespace Cult::Types;
-  typedef WideString String;
-
   class Parser
   {
   public:
@@ -23,17 +20,17 @@ namespace TypeMap
 
     // Merge parsed namespaces.
     //
-    Boolean
+    bool
     parse (Namespaces&);
 
   private:
-    Boolean
+    bool
     namespace_ (Namespaces&);
 
-    Boolean
+    bool
     include (Namespace&);
 
-    Boolean
+    bool
     type (Lexer::Token, Namespace&);
 
   private:

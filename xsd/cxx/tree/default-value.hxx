@@ -17,9 +17,9 @@ namespace CXX
   {
     struct IsLiteralValue: IsFundamentalType, Traversal::Complex
     {
-      IsLiteralValue (Boolean& r);
+      IsLiteralValue (bool& r);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Complex&);
 
     private:
@@ -57,64 +57,64 @@ namespace CXX
 
       // Handle inheritance.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Complex&);
 
       // Boolean.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Boolean&);
 
       // Integral types.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Byte&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::UnsignedByte&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Short&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::UnsignedShort&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Int&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::UnsignedInt&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Long&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::UnsignedLong&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Integer&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NonPositiveInteger&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NonNegativeInteger&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::PositiveInteger&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NegativeInteger&);
 
       // Floats.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Float&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Double&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Decimal&);
 
     private:
@@ -148,25 +148,25 @@ namespace CXX
       //
       InitKind (Kind& r);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::List&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Complex&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Base64Binary&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::HexBinary&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NameTokens&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::IdRefs&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Entities&);
 
     private:
@@ -218,136 +218,136 @@ namespace CXX
     {
       InitValue (Context&);
 
-      Void
+      void
       data (String const& data)
       {
         data_ = data;
         dispatch_count_ = 0;
       }
 
-      Void
+      void
       dispatch (SemanticGraph::Node& type, String const& value);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::List&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Union&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Complex&);
 
       // anyType & anySimpleType.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::AnyType&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::AnySimpleType&);
 
       // Strings.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::String&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NormalizedString&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Token&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NameToken&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NameTokens&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Name&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NCName&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Language&);
 
       // Qualified name.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::QName&);
 
       // ID/IDREF.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Id&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::IdRef&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::IdRefs&);
 
       // URI.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::AnyURI&);
 
       // Binary.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Base64Binary&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::HexBinary&);
 
       // Date/time.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Date&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::DateTime&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Duration&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Day&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Month&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::MonthDay&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Year&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::YearMonth&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Time&);
 
       // Entity.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Entity&);
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Entities&);
 
     private:
-      Void
+      void
       string_sequence_type (SemanticGraph::Type& element_type);
 
-      Void
-      time_zone (Size pos);
+      void
+      time_zone (size_t pos);
 
     private:
       String value_;
       String data_;
-      Size dispatch_count_;
+      size_t dispatch_count_;
       MemberTypeName type_name_;
       LiteralValue literal_value_;
     };

@@ -12,7 +12,7 @@ namespace CXX
 {
   namespace Tree
   {
-    Void
+    void
     generate_forward (Context&);
   }
 }

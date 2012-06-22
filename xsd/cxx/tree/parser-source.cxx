@@ -23,7 +23,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (!doc_root_p (e))
@@ -294,7 +294,7 @@ namespace CXX
           // DOM.
           //
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType test (fund);
             test.dispatch (t);
@@ -304,7 +304,7 @@ namespace CXX
           // If this element's type is anonymous then we don't need to do
           // anything.
           //
-          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
+          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           // const DOMDocument&
           //
@@ -517,10 +517,8 @@ namespace CXX
       };
     }
 
-    Void
-    generate_parser_source (Context& ctx,
-                            UnsignedLong first,
-                            UnsignedLong last)
+    void
+    generate_parser_source (Context& ctx, size_t first, size_t last)
     {
       ctx.os << "#include <istream>" << endl
              << "#include <xsd/cxx/xml/sax/std-input-source.hxx>" << endl

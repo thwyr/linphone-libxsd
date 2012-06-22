@@ -6,15 +6,13 @@
 #ifndef CXX_LITERAL_MAP_HXX
 #define CXX_LITERAL_MAP_HXX
 
-#include <cult/types.hxx>
-#include <cult/containers/map.hxx>
+#include <map>
+
+#include <types.hxx>
 
 namespace CXX
 {
-  using namespace Cult;
-  typedef WideString String;
-
-  typedef Cult::Containers::Map<String, String> StringLiteralMap;
+  typedef std::map<String, String> StringLiteralMap;
 
   bool
   read_literal_map (NarrowString const& file, StringLiteralMap& map);

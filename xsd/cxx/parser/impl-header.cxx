@@ -21,7 +21,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String const& name (eimpl (e));
@@ -51,7 +51,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String const& name (eimpl (l));
@@ -98,7 +98,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String const& name (eimpl (u));
@@ -130,7 +130,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m))
@@ -161,7 +161,7 @@ namespace CXX
           names_parser_callback_ >> parser_callback_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String const& name (eimpl (c));
@@ -202,7 +202,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_impl_header (Context& ctx)
     {
       Traversal::Schema schema;

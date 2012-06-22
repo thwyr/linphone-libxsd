@@ -23,7 +23,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (!doc_root_p (e))
@@ -449,7 +449,7 @@ namespace CXX
     }
 
 
-    Void
+    void
     generate_parser_header (Context& ctx)
     {
       ctx.os << "#include <iosfwd>" << endl

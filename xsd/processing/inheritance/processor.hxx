@@ -6,23 +6,21 @@
 #ifndef PROCESSING_INHERITANCE_PROCESSOR_HXX
 #define PROCESSING_INHERITANCE_PROCESSOR_HXX
 
-#include <cult/types.hxx>
-
 #include <xsd-frontend/semantic-graph/elements.hxx> // Path
 #include <xsd-frontend/semantic-graph/schema.hxx>
+
+#include <types.hxx>
 
 namespace Processing
 {
   namespace Inheritance
   {
-    using namespace Cult::Types;
-
     class Processor
     {
     public:
       struct Failed {};
 
-      Void
+      void
       process (XSDFrontend::SemanticGraph::Schema&,
                XSDFrontend::SemanticGraph::Path const& file);
     };

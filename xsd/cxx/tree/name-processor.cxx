@@ -3,17 +3,18 @@
 // copyright : Copyright (c) 2006-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
+#include <set>
+#include <map>
+#include <vector>
 #include <sstream>
 #include <iostream>
 
 #include <cutl/re.hxx>
 
-#include <cult/containers/set.hxx>
-#include <cult/containers/map.hxx>
-#include <cult/containers/vector.hxx>
-
 #include <cxx/tree/default-value.hxx>
 #include <cxx/tree/name-processor.hxx>
+
+using namespace std;
 
 namespace CXX
 {
@@ -29,7 +30,7 @@ namespace CXX
     {
       //
       //
-      typedef Cult::Containers::Set<String> NameSet;
+      typedef set<String> NameSet;
 
       class Context: public Tree::Context
       {
@@ -38,7 +39,7 @@ namespace CXX
 
         Context (Tree::options const& ops,
                  Counts const& counts,
-                 Boolean generate_xml_schema,
+                 bool generate_xml_schema,
                  SemanticGraph::Schema& root,
                  SemanticGraph::Path const& path,
                  StringLiteralMap const& map)
@@ -69,11 +70,8 @@ namespace CXX
               enumerator_regex (enumerator_regex_),
               element_type_regex (element_type_regex_)
         {
-          typedef Containers::Vector<NarrowString> Vector;
-
           NarrowString tn (options.type_naming ());
           NarrowString fn (options.function_naming ());
-
 
           // Type name regex.
           //
@@ -285,12 +283,12 @@ namespace CXX
         typedef cutl::re::wregexsub Regex;
         typedef cutl::re::wformat RegexFormat;
 
-        struct RegexVector: Cult::Containers::Vector<Regex>
+        struct RegexVector: vector<Regex>
         {
           void
           push_back (String const& r)
           {
-            Cult::Containers::Vector<Regex>::push_back (Regex (r));
+            vector<Regex>::push_back (Regex (r));
           }
         };
 
@@ -299,12 +297,12 @@ namespace CXX
                        RegexVector const& rv,
                        String const& id)
         {
-          Boolean trace (options.name_regex_trace ());
+          bool trace (options.name_regex_trace ());
 
           if (trace)
             os << id << " name: '" << name << "'" << endl;
 
-          for (RegexVector::ConstReverseIterator i (rv.rbegin ());
+          for (RegexVector::const_reverse_iterator i (rv.rbegin ());
                i != rv.rend (); ++i)
           {
             if (trace)
@@ -333,12 +331,12 @@ namespace CXX
                        RegexVector const& backup,
                        String const& id)
         {
-          Boolean trace (options.name_regex_trace ());
+          bool trace (options.name_regex_trace ());
 
           if (trace)
             os << id << " name: '" << name << "'" << endl;
 
-          for (RegexVector::ConstReverseIterator i (primary.rbegin ());
+          for (RegexVector::const_reverse_iterator i (primary.rbegin ());
                i != primary.rend (); ++i)
           {
             if (trace)
@@ -358,7 +356,7 @@ namespace CXX
               os << '-' << endl;
           }
 
-          for (RegexVector::ConstReverseIterator i (backup.rbegin ());
+          for (RegexVector::const_reverse_iterator i (backup.rbegin ());
                i != backup.rend (); ++i)
           {
             if (trace)
@@ -388,12 +386,12 @@ namespace CXX
                        String const& id)
         {
           String s (ns + L' ' + name);
-          Boolean trace (options.name_regex_trace ());
+          bool trace (options.name_regex_trace ());
 
           if (trace)
             os << id << " name: '" << s << "'" << endl;
 
-          for (RegexVector::ConstReverseIterator i (rv.rbegin ());
+          for (RegexVector::const_reverse_iterator i (rv.rbegin ());
                i != rv.rend (); ++i)
           {
             if (trace)
@@ -424,12 +422,12 @@ namespace CXX
                        String const& id)
         {
           String s (ns + L' ' + name);
-          Boolean trace (options.name_regex_trace ());
+          bool trace (options.name_regex_trace ());
 
           if (trace)
             os << id << " name: '" << s << "'" << endl;
 
-          for (RegexVector::ConstReverseIterator i (primary.rbegin ());
+          for (RegexVector::const_reverse_iterator i (primary.rbegin ());
                i != primary.rend (); ++i)
           {
             if (trace)
@@ -449,7 +447,7 @@ namespace CXX
               os << '-' << endl;
           }
 
-          for (RegexVector::ConstReverseIterator i (backup.rbegin ());
+          for (RegexVector::const_reverse_iterator i (backup.rbegin ());
                i != backup.rend (); ++i)
           {
             if (trace)
@@ -476,11 +474,11 @@ namespace CXX
         String
         find_name (String const& base_name,
                    NameSet& set,
-                   Boolean insert = true)
+                   bool insert = true)
         {
           String name (base_name);
 
-          for (UnsignedLong i (1); set.find (name) != set.end (); ++i)
+          for (size_t i (1); set.find (name) != set.end (); ++i)
           {
             std::wostringstream os;
             os << i;
@@ -494,7 +492,7 @@ namespace CXX
         }
 
       private:
-        Void
+        void
         compile_regex (NarrowStrings const& sv,
                        RegexVector& rv,
                        String const& id)
@@ -517,8 +515,8 @@ namespace CXX
         }
 
       private:
-        Cult::Containers::Map<String, NameSet> global_type_names_;
-        Cult::Containers::Map<String, NameSet> global_element_names_;
+        map<String, NameSet> global_type_names_;
+        map<String, NameSet> global_element_names_;
 
         RegexVector type_regex_;
         RegexVector accessor_regex_;
@@ -535,10 +533,10 @@ namespace CXX
         RegexVector element_type_regex_;
 
       public:
-        Cult::Containers::Map<String, NameSet>& global_type_names;
-        Cult::Containers::Map<String, NameSet>& global_element_names;
+        map<String, NameSet>& global_type_names;
+        map<String, NameSet>& global_element_names;
 
-        Boolean detach;
+        bool detach;
 
         RegexVector& type_regex;
         RegexVector& accessor_regex;
@@ -564,7 +562,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           // Process the name with enumerator name regex.
@@ -591,7 +589,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           // Use processed name.
@@ -631,7 +629,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (Tree::Context::skip (m))
@@ -658,19 +656,19 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (Tree::Context::skip (m))
             return;
 
-          UnsignedLong max (Tree::Context::max (m));
-          UnsignedLong min (Tree::Context::min (m));
+          size_t max (Tree::Context::max (m));
+          size_t min (Tree::Context::min (m));
 
           String const& s (m.context ().get<String> ("stem"));
           String const& b (m.context ().get<String> ("name"));
 
-          Boolean def_attr (m.default_p () &&
+          bool def_attr (m.default_p () &&
                             m.is_a<SemanticGraph::Attribute> ());
 
           // Accessors/modifiers. Note that we postpone inserting
@@ -810,7 +808,7 @@ namespace CXX
           //
           if (m.default_p ())
           {
-            Boolean simple (true);
+            bool simple (true);
 
             if (m.is_a<SemanticGraph::Element> ())
             {
@@ -827,7 +825,7 @@ namespace CXX
 
               m.context ().set ( "default-value", find_name (an, name_set_));
 
-              Boolean lit (false);
+              bool lit (false);
               {
                 IsLiteralValue test (lit);
                 test.dispatch (m.type ());
@@ -855,7 +853,7 @@ namespace CXX
         Any (Context& c,
              NameSet& name_set,
              NameSet& stem_set,
-             Boolean& has_wildcard)
+             bool& has_wildcard)
             : Context (c),
               name_set_ (name_set),
               stem_set_ (stem_set),
@@ -863,11 +861,11 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
-          UnsignedLong max (Tree::Context::max (a));
-          UnsignedLong min (Tree::Context::min (a));
+          size_t max (Tree::Context::max (a));
+          size_t min (Tree::Context::min (a));
 
           String s (find_name (L"any", stem_set_));
 
@@ -985,7 +983,7 @@ namespace CXX
             has_wildcard_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String s (find_name (L"any,attribute", stem_set_));
@@ -1051,7 +1049,7 @@ namespace CXX
       private:
         NameSet& name_set_;
         NameSet& stem_set_;
-        Boolean& has_wildcard_;
+        bool& has_wildcard_;
       };
 
       //
@@ -1063,7 +1061,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           SemanticGraph::Context& cc (c.context ());
@@ -1149,7 +1147,7 @@ namespace CXX
           //
           if (options.generate_wildcard ())
           {
-            Boolean has_wildcard (false);
+            bool has_wildcard (false);
             Any any (*this, member_set, stem_set, has_wildcard);
             Traversal::Names names (any);
             Complex::names (c, names);
@@ -1212,7 +1210,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Type& t)
         {
           // Process the name with type name regex.
@@ -1255,7 +1253,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           // First we need to figure out if we need to process this
@@ -1430,7 +1428,7 @@ namespace CXX
           if (type_set_.find (r) != type_set_.end ())
             r += L"_";
 
-          for (UnsignedLong i (1);
+          for (size_t i (1);
                element_set_.find (r) != element_set_.end () ||
                  type_set_.find (r) != type_set_.end (); ++i)
           {
@@ -1454,7 +1452,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& ns)
         {
           NameSet& type_set (global_type_names[ns.name ()]);
@@ -1475,7 +1473,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& ns)
         {
           String const& name (ns.name ());
@@ -1557,7 +1555,7 @@ namespace CXX
           *this >> names_ >> *this;
         }
 
-        Void
+        void
         process_name (SemanticGraph::Type& t, String const& name)
         {
           String r (
@@ -1567,10 +1565,10 @@ namespace CXX
           t.context ().set ("name", escape (r));
         }
 
-        Void
+        void
         process_name (SemanticGraph::Namespace& n,
                       String const& name,
-                      Char const* key)
+                      char const* key)
         {
           String r (process_regex (name, type_regex, L"type"));
           n.context ().set (key, escape (r));
@@ -1578,13 +1576,13 @@ namespace CXX
 
         // anyType and anySimpleType
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyType& t)
         {
           process_name (t, "type");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnySimpleType& t)
         {
           process_name (t, "simple,type");
@@ -1592,79 +1590,79 @@ namespace CXX
 
         // Integrals.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Byte& t)
         {
           process_name (t, "byte");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedByte& t)
         {
           process_name (t, "unsigned,byte");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Short& t)
         {
           process_name (t, "short");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedShort& t)
         {
           process_name (t, "unsigned,short");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Int& t)
         {
           process_name (t, "int");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedInt& t)
         {
           process_name (t, "unsigned,int");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Long& t)
         {
           process_name (t, "long");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedLong& t)
         {
           process_name (t, "unsigned,long");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Integer& t)
         {
           process_name (t, "integer");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NonPositiveInteger& t)
         {
           process_name (t, "non,positive,integer");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NonNegativeInteger& t)
         {
           process_name (t, "non,negative,integer");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::PositiveInteger& t)
         {
           process_name (t, "positive,integer");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NegativeInteger& t)
         {
           process_name (t, "negative,integer");
@@ -1672,7 +1670,7 @@ namespace CXX
 
         // Boolean.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Boolean& t)
         {
           process_name (t, "boolean");
@@ -1680,19 +1678,19 @@ namespace CXX
 
         // Floats.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Float& t)
         {
           process_name (t, "float");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Double& t)
         {
           process_name (t, "double");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Decimal& t)
         {
           process_name (t, "decimal");
@@ -1700,49 +1698,49 @@ namespace CXX
 
         // Strings.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::String& t)
         {
           process_name (t, "string");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NormalizedString& t)
         {
           process_name (t, "normalized,string");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Token& t)
         {
           process_name (t, "token");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NameToken& t)
         {
           process_name (t, "nmtoken");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NameTokens& t)
         {
           process_name (t, "nmtokens");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Name& t)
         {
           process_name (t, "name");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NCName& t)
         {
           process_name (t, "ncname");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Language& t)
         {
           process_name (t, "language");
@@ -1750,19 +1748,19 @@ namespace CXX
 
         // ID/IDREF.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Id& t)
         {
           process_name (t, "id");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::IdRef& t)
         {
           process_name (t, "idref");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::IdRefs& t)
         {
           process_name (t, "idrefs");
@@ -1771,7 +1769,7 @@ namespace CXX
 
         // URI.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::AnyURI& t)
         {
           process_name (t, "uri");
@@ -1779,7 +1777,7 @@ namespace CXX
 
         // Qualified name.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::QName& t)
         {
           process_name (t, "qname");
@@ -1787,13 +1785,13 @@ namespace CXX
 
         // Binary.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Base64Binary& t)
         {
           process_name (t, "base64,binary");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::HexBinary& t)
         {
           process_name (t, "hex,binary");
@@ -1802,55 +1800,55 @@ namespace CXX
 
         // Date/time.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Date& t)
         {
           process_name (t, "date");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::DateTime& t)
         {
           process_name (t, "date,time");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Duration& t)
         {
           process_name (t, "duration");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Day& t)
         {
           process_name (t, "gday");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Month& t)
         {
           process_name (t, "gmonth");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::MonthDay& t)
         {
           process_name (t, "gmonth,day");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Year& t)
         {
           process_name (t, "gyear");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::YearMonth& t)
         {
           process_name (t, "gyear,month");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Time& t)
         {
           process_name (t, "time");
@@ -1858,19 +1856,19 @@ namespace CXX
 
         // Entity.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Entity& t)
         {
           process_name (t, "entity");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Entities& t)
         {
           process_name (t, "entities");
         }
 
-        virtual Void
+        virtual void
         post (SemanticGraph::Namespace& n)
         {
           // Assign names to extra stuff in the XML Schema namespace.
@@ -1955,7 +1953,7 @@ namespace CXX
       //
       struct UsesPassOne: Traversal::Uses
       {
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           SemanticGraph::Schema& s (u.schema ());
@@ -1970,7 +1968,7 @@ namespace CXX
 
       struct UsesPassThree: Traversal::Uses
       {
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           SemanticGraph::Schema& s (u.schema ());
@@ -1988,7 +1986,7 @@ namespace CXX
       //
       struct Implies: Traversal::Implies
       {
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Implies& i)
         {
           SemanticGraph::Schema& s (i.schema ());
@@ -2001,7 +1999,7 @@ namespace CXX
         }
       };
 
-      Boolean
+      bool
       process_impl (options const& ops,
                     SemanticGraph::Schema& tu,
                     SemanticGraph::Path const& file,
@@ -2128,7 +2126,7 @@ namespace CXX
       }
     }
 
-    Boolean NameProcessor::
+    bool NameProcessor::
     process (options const& ops,
              SemanticGraph::Schema& tu,
              SemanticGraph::Path const& file,

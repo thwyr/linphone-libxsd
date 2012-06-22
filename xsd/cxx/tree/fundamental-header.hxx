@@ -6,8 +6,8 @@
 #ifndef CXX_TREE_FUNDAMENTAL_HEADER_HXX
 #define CXX_TREE_FUNDAMENTAL_HEADER_HXX
 
-#include <cult/containers/set.hxx>
-#include <cult/containers/vector.hxx>
+#include <set>
+#include <vector>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
@@ -88,13 +88,13 @@ namespace CXX
           xs_ns_ = ns_name (xs_ns ());
       }
 
-      Void
+      void
       gen_typedef (String const& name,
                    String const& type,
                    String const& arg1 = L"",
                    String const& arg2 = L"",
                    String const& arg3 = L"",
-                   Boolean export_type = true)
+                   bool export_type = true)
       {
         os << "typedef " << type;
 
@@ -225,7 +225,7 @@ namespace CXX
 
       // anyType and anySimpleType
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::AnyType& t)
       {
         os << "// anyType and anySimpleType." << endl
@@ -237,7 +237,7 @@ namespace CXX
         type_ = built_in_type (t, "::xsd::cxx::tree::type");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::AnySimpleType& t)
       {
         simple_type_ = built_in_type (
@@ -259,7 +259,7 @@ namespace CXX
 
       // Integrals.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Byte& t)
       {
         os << "// 8-bit" << endl
@@ -271,14 +271,14 @@ namespace CXX
         built_in_type (t, "signed char");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::UnsignedByte& t)
       {
         built_in_type (t, "unsigned char");
         os << endl;
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Short& t)
       {
         os << "// 16-bit" << endl
@@ -290,14 +290,14 @@ namespace CXX
         built_in_type (t, "short");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::UnsignedShort& t)
       {
         built_in_type (t, "unsigned short");
         os << endl;
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Int& t)
       {
         os << "// 32-bit" << endl
@@ -309,14 +309,14 @@ namespace CXX
         built_in_type (t, "int");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::UnsignedInt& t)
       {
         built_in_type (t, "unsigned int");
         os << endl;
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Long& t)
       {
         os << "// 64-bit" << endl
@@ -328,14 +328,14 @@ namespace CXX
         built_in_type (t, "long long");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::UnsignedLong& t)
       {
         built_in_type (t, "unsigned long long");
         os << endl;
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Integer& t)
       {
         os << "// Supposed to be arbitrary-length integral types." << endl
@@ -347,25 +347,25 @@ namespace CXX
         built_in_type (t, "long long");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NonPositiveInteger& t)
       {
         built_in_type (t, "long long");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NonNegativeInteger& t)
       {
         built_in_type (t, "unsigned long long");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::PositiveInteger& t)
       {
         built_in_type (t, "unsigned long long");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NegativeInteger& t)
       {
         built_in_type (t, "long long");
@@ -374,7 +374,7 @@ namespace CXX
 
       // Boolean.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Boolean& t)
       {
         os << "// Boolean." << endl
@@ -390,7 +390,7 @@ namespace CXX
 
       // Floats.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Float& t)
       {
         os << "// Floating-point types." << endl
@@ -402,13 +402,13 @@ namespace CXX
         built_in_type (t, "float");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Double& t)
       {
         double_ = built_in_type (t, "double");
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Decimal& t)
       {
         decimal_ = built_in_type (t, "double");
@@ -418,7 +418,7 @@ namespace CXX
 
       // Strings.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::String& t)
       {
         os << "// String types." << endl
@@ -431,7 +431,7 @@ namespace CXX
           t, L"::xsd::cxx::tree::string< " + char_type + L", ", simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NormalizedString& t)
       {
         norm_string_ = built_in_type (
@@ -440,21 +440,21 @@ namespace CXX
           string_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Token& t)
       {
         token_ = built_in_type (
           t, L"::xsd::cxx::tree::token< " + char_type + L", ", norm_string_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NameToken& t)
       {
         nmtoken_ = built_in_type (
           t, L"::xsd::cxx::tree::nmtoken< " + char_type + L", ", token_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NameTokens& t)
       {
         built_in_type (
@@ -464,21 +464,21 @@ namespace CXX
           nmtoken_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Name& t)
       {
         name_ = built_in_type (
           t, L"::xsd::cxx::tree::name< " + char_type + L", ", token_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::NCName& t)
       {
         ncname_ = built_in_type (
           t, L"::xsd::cxx::tree::ncname< " + char_type + L", ", name_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Language& t)
       {
         built_in_type (
@@ -489,7 +489,7 @@ namespace CXX
 
       // ID/IDREF.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Id& t)
       {
         os << "// ID/IDREF." << endl
@@ -502,14 +502,14 @@ namespace CXX
           t, L"::xsd::cxx::tree::id< " + char_type + L", ", ncname_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::IdRef& t)
       {
         idref_ = built_in_type (
           t, L"::xsd::cxx::tree::idref< " + char_type + L", ", ncname_, type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::IdRefs& t)
       {
         built_in_type (
@@ -524,7 +524,7 @@ namespace CXX
 
       // URI.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::AnyURI& t)
       {
         os << "// URI." << endl
@@ -541,7 +541,7 @@ namespace CXX
 
       // Qualified name.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::QName& t)
       {
         os << "// Qualified name." << endl
@@ -562,7 +562,7 @@ namespace CXX
 
       // Binary.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Base64Binary& t)
       {
         os << "// Binary." << endl
@@ -586,7 +586,7 @@ namespace CXX
           simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::HexBinary& t)
       {
         built_in_type (
@@ -600,7 +600,7 @@ namespace CXX
 
       // Date/time.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Date& t)
       {
         os << "// Date/time." << endl
@@ -622,7 +622,7 @@ namespace CXX
           t, L"::xsd::cxx::tree::date< " + char_type + L", ", simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::DateTime& t)
       {
         built_in_type (
@@ -631,7 +631,7 @@ namespace CXX
           simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Duration& t)
       {
         built_in_type (
@@ -640,21 +640,21 @@ namespace CXX
           simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Day& t)
       {
         built_in_type (
           t, L"::xsd::cxx::tree::gday< " + char_type + L", ", simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Month& t)
       {
         built_in_type (
           t, L"::xsd::cxx::tree::gmonth< " + char_type + L", ", simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::MonthDay& t)
       {
         built_in_type (
@@ -663,14 +663,14 @@ namespace CXX
           simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Year& t)
       {
         built_in_type (
           t, L"::xsd::cxx::tree::gyear< " + char_type + L", ", simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::YearMonth& t)
       {
         built_in_type (
@@ -679,7 +679,7 @@ namespace CXX
           simple_type_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Time& t)
       {
         built_in_type (
@@ -690,7 +690,7 @@ namespace CXX
 
       // Entity.
       //
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Entity& t)
       {
         os << "// Entity." << endl
@@ -703,7 +703,7 @@ namespace CXX
           t, L"::xsd::cxx::tree::entity< " + char_type + L", ", ncname_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Fundamental::Entities& t)
       {
         built_in_type (
@@ -715,14 +715,14 @@ namespace CXX
         os << endl;
       }
 
-      virtual Void
+      virtual void
       post (SemanticGraph::Namespace& n)
       {
         SemanticGraph::Context& c (xs_ns ().context());
 
-        Boolean parsing (!options.suppress_parsing ());
-        Boolean serialization (options.generate_serialization ());
-        Boolean element_map (options.generate_element_map ());
+        bool parsing (!options.suppress_parsing ());
+        bool serialization (options.generate_serialization ());
+        bool element_map (options.generate_element_map ());
 
         if (options.generate_element_type ())
         {
@@ -1228,7 +1228,7 @@ namespace CXX
         {
           StringSet ns_set;
 
-          for (StringList::ConstIterator i (exports_.begin ());
+          for (StringList::const_iterator i (exports_.begin ());
                i != exports_.end (); ++i)
           {
             String const& e (*i);
@@ -1245,14 +1245,14 @@ namespace CXX
              << "namespace cxx"
              << "{";
 
-          for (StringSet::ConstIterator i (ns_set.begin ());
+          for (StringSet::const_iterator i (ns_set.begin ());
                i != ns_set.end (); ++i)
           {
             String const& ns (*i);
             String prefix (L"::xsd::cxx::" + ns);
 
-            Size n (1);
-            for (Size b (0), e (ns.find (':')); ; n++)
+            size_t n (1);
+            for (size_t b (0), e (ns.find (':')); ; n++)
             {
               os << "namespace " << String (ns, b, e)
                  << "{";
@@ -1264,7 +1264,7 @@ namespace CXX
               e = ns.find (':', b);
             }
 
-            for (StringList::ConstIterator i (exports_.begin ());
+            for (StringList::const_iterator i (exports_.begin ());
                  i != exports_.end (); ++i)
             {
               String const& e (*i);
@@ -1289,10 +1289,10 @@ namespace CXX
       }
 
     private:
-      typedef Cult::Containers::Set<String> StringSet;
-      typedef Cult::Containers::Vector<String> StringList;
+      typedef std::set<String> StringSet;
+      typedef std::vector<String> StringList;
 
-      Boolean export_;
+      bool export_;
       StringList exports_;
       StringSet exports_set_;
       String xs_ns_;

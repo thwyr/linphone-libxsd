@@ -15,40 +15,40 @@ namespace CXX
     {
       struct Member: Traversal::Member
       {
-        Member (UnsignedLong& complexity)
+        Member (size_t& complexity)
             : complexity_ (complexity)
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type&)
         {
           complexity_++;
         }
 
-        UnsignedLong& complexity_;
+        size_t& complexity_;
       };
 
       struct Any: Traversal::Any, Traversal::AnyAttribute
       {
-        Any (UnsignedLong& complexity)
+        Any (size_t& complexity)
             : complexity_ (complexity)
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any&)
         {
           complexity_++;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute&)
         {
           complexity_++;
         }
 
-        UnsignedLong& complexity_;
+        size_t& complexity_;
       };
 
       struct TypeBase: Traversal::List,
@@ -57,27 +57,27 @@ namespace CXX
                        Traversal::Complex,
                        Context
       {
-        TypeBase (Context& c, UnsignedLong& complexity)
+        TypeBase (Context& c, size_t& complexity)
             : Context (c), complexity_ (complexity)
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::List&)
         {
           complexity_++;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Union&)
         {
           complexity_++;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Enumeration& e)
         {
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (e);
@@ -86,7 +86,7 @@ namespace CXX
           complexity_ += (string_based ? 1 : 2);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Complex& c)
         {
           complexity_++; // One for the type itself.
@@ -106,7 +106,7 @@ namespace CXX
         }
 
       private:
-        UnsignedLong& complexity_;
+        size_t& complexity_;
       };
 
 
@@ -120,12 +120,12 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Type& t)
         {
           counts_.global_types++;
 
-          UnsignedLong complexity (0);
+          size_t complexity (0);
           TypeBase type (*this, complexity);
           type.dispatch (t);
 
@@ -160,7 +160,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           // Check if the previous element we saw needs to be generated.
@@ -177,14 +177,14 @@ namespace CXX
         }
 
       private:
-        Void
+        void
         count_last ()
         {
           if (generate_p (*last_))
           {
             counts_.generated_global_elements++;
 
-            UnsignedLong complexity (0);
+            size_t complexity (0);
 
             if (doc_root_p (*last_))
             {

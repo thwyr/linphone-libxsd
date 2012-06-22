@@ -3,11 +3,9 @@
 // copyright : Copyright (c) 2005-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-include <vector>;
-include <string>;
 include <cstddef>; // std::size_t
 
-include <cult/types.hxx>; // NarrowString
+include <types.hxx>; // NarrowString, NarrowStrings
 
 include <options.cli>;
 
@@ -17,14 +15,14 @@ namespace CXX
   {
     // Character type and encoding.
     //
-    Cult::Types::NarrowString --char-type = "char"
+    NarrowString --char-type = "char"
     {
       "<type>",
       "Generate code using the provided character <type> instead of the
        default \cb{char}. Valid values are \cb{char} and \cb{wchar_t}."
     };
 
-    Cult::Types::NarrowString --char-encoding
+    NarrowString --char-encoding
     {
       "<enc>",
       "Specify the character encoding that should be used in the generated
@@ -42,7 +40,7 @@ namespace CXX
 
     // Output options.
     //
-    Cult::Types::NarrowString --output-dir
+    NarrowString --output-dir
     {
       "<dir>",
       "Write generated files to <dir> instead of the current directory."
@@ -71,7 +69,7 @@ namespace CXX
        generated files for other schemas."
      };
 
-    Cult::Types::NarrowString --extern-xml-schema
+    NarrowString --extern-xml-schema
     {
       "<file>",
       "Include a header file derived from <file> instead of generating the
@@ -83,7 +81,7 @@ namespace CXX
 
     // Namespace mapping.
     //
-    std::vector<Cult::Types::NarrowString> --namespace-map
+    NarrowStrings --namespace-map
     {
       "<xns>=<cns>",
       "Map XML Schema namespace <xns> to C++ namespace <cns>. Repeat
@@ -96,7 +94,7 @@ namespace CXX
        the \cb{foo::bar} C++ namespace."
     };
 
-    std::vector<Cult::Types::NarrowString> --namespace-regex
+    NarrowStrings --namespace-regex
     {
       "<regex>",
       "Add <regex> to the list of regular expressions used to translate XML
@@ -153,7 +151,7 @@ namespace CXX
 
     // Reserved names.
     //
-    std::vector<Cult::Types::NarrowString> --reserved-name
+    NarrowStrings --reserved-name
     {
       "<n>[=<r>]",
       "Add name <n> to the list of names that should not be used as
@@ -170,7 +168,7 @@ namespace CXX
        \cb{#include} directives."
     };
 
-    Cult::Types::NarrowString --include-prefix
+    NarrowString --include-prefix
     {
       "<prefix>",
       "Add <prefix> to generated \cb{#include} directive paths.
@@ -185,7 +183,7 @@ namespace CXX
        \cb{#include \"schemas/base.hxx\"}"
     };
 
-    std::vector<Cult::Types::NarrowString> --include-regex
+    NarrowStrings --include-regex
     {
       "<regex>",
       "Add <regex> to the list of regular expressions used to transform
@@ -214,7 +212,7 @@ namespace CXX
        regular expressions don't do what you expected them to do."
     };
 
-    Cult::Types::NarrowString --guard-prefix
+    NarrowString --guard-prefix
     {
       "<prefix>",
       "Add <prefix> to generated header inclusion guards. The prefix is
@@ -226,7 +224,7 @@ namespace CXX
 
     // File suffixes.
     //
-    Cult::Types::NarrowString --hxx-suffix = ".hxx"
+    NarrowString --hxx-suffix = ".hxx"
     {
       "<suffix>",
       "Use the provided <suffix> instead of the default \cb{.hxx} to
@@ -235,28 +233,28 @@ namespace CXX
        included/imported schemas."
     };
 
-    Cult::Types::NarrowString --ixx-suffix = ".ixx"
+    NarrowString --ixx-suffix = ".ixx"
     {
       "<suffix>",
       "Use the provided <suffix> instead of the default \cb{.ixx} to
        construct the name of the inline file."
     };
 
-    Cult::Types::NarrowString --cxx-suffix = ".cxx"
+    NarrowString --cxx-suffix = ".cxx"
     {
       "<suffix>",
       "Use the provided <suffix> instead of the default \cb{.cxx} to
        construct the name of the source file."
     };
 
-    Cult::Types::NarrowString --fwd-suffix = "-fwd.hxx"
+    NarrowString --fwd-suffix = "-fwd.hxx"
     {
       "<suffix>",
       "Use the provided <suffix> instead of the default \cb{-fwd.hxx} to
        construct the name of the forward declaration file."
     };
 
-    Cult::Types::NarrowString --hxx-regex
+    NarrowString --hxx-regex
     {
       "<regex>",
       "Use the provided expression to construct the name of the header file.
@@ -267,7 +265,7 @@ namespace CXX
        AND SHELL QUOTING section below."
     };
 
-    Cult::Types::NarrowString --ixx-regex
+    NarrowString --ixx-regex
     {
       "<regex>",
       "Use the provided expression to construct the name of the inline file.
@@ -276,7 +274,7 @@ namespace CXX
        SHELL QUOTING section below."
     };
 
-    Cult::Types::NarrowString --cxx-regex
+    NarrowString --cxx-regex
     {
       "<regex>",
       "Use the provided expression to construct the name of the source file.
@@ -285,7 +283,7 @@ namespace CXX
        SHELL QUOTING section below."
     };
 
-    Cult::Types::NarrowString --fwd-regex
+    NarrowString --fwd-regex
     {
       "<regex>",
       "Use the provided expression to construct the name of the forward
@@ -296,126 +294,126 @@ namespace CXX
 
     // Prologues/epilogues.
     //
-    std::vector<Cult::Types::NarrowString> --hxx-prologue
+    NarrowStrings --hxx-prologue
     {
       "<text>",
       "Insert <text> at the beginning of the header file."
     };
 
-    std::vector<Cult::Types::NarrowString> --ixx-prologue
+    NarrowStrings --ixx-prologue
     {
       "<text>",
       "Insert <text> at the beginning of the inline file."
     };
 
-    std::vector<Cult::Types::NarrowString> --cxx-prologue
+    NarrowStrings --cxx-prologue
     {
       "<text>",
       "Insert <text> at the beginning of the source file."
     };
 
-    std::vector<Cult::Types::NarrowString> --fwd-prologue
+    NarrowStrings --fwd-prologue
     {
       "<text>",
       "Insert <text> at the beginning of the forward declaration file."
     };
 
-    std::vector<Cult::Types::NarrowString> --prologue
+    NarrowStrings --prologue
     {
       "<text>",
       "Insert <text> at the beginning of each generated file for which
        there is no file-specific prologue."
     };
 
-    std::vector<Cult::Types::NarrowString> --hxx-epilogue
+    NarrowStrings --hxx-epilogue
     {
       "<text>",
       "Insert <text> at the end of the header file."
     };
 
-    std::vector<Cult::Types::NarrowString> --ixx-epilogue
+    NarrowStrings --ixx-epilogue
     {
       "<text>",
       "Insert <text> at the end of the inline file."
     };
 
-    std::vector<Cult::Types::NarrowString> --cxx-epilogue
+    NarrowStrings --cxx-epilogue
     {
       "<text>",
       "Insert <text> at the end of the source file."
     };
 
-    std::vector<Cult::Types::NarrowString> --fwd-epilogue
+    NarrowStrings --fwd-epilogue
     {
       "<text>",
       "Insert <text> at the end of the forward declaration file."
     };
 
-    std::vector<Cult::Types::NarrowString> --epilogue
+    NarrowStrings --epilogue
     {
       "<text>",
       "Insert <text> at the end of each generated file for which there
        is no file-specific epilogue."
     };
 
-    Cult::Types::NarrowString --hxx-prologue-file
+    NarrowString --hxx-prologue-file
     {
       "<file>",
       "Insert the content of the <file> at the beginning of the header file."
     };
 
-    Cult::Types::NarrowString --ixx-prologue-file
+    NarrowString --ixx-prologue-file
     {
       "<file>",
       "Insert the content of the <file> at the beginning of the inline file."
     };
 
-    Cult::Types::NarrowString --cxx-prologue-file
+    NarrowString --cxx-prologue-file
     {
       "<file>",
       "Insert the content of the <file> at the beginning of the source file."
     };
 
-    Cult::Types::NarrowString --fwd-prologue-file
+    NarrowString --fwd-prologue-file
     {
       "<file>",
       "Insert the content of the <file> at the beginning of the forward
        declaration file."
     };
 
-    Cult::Types::NarrowString --prologue-file
+    NarrowString --prologue-file
     {
       "<file>",
       "Insert the content of the <file> at the beginning of each generated
        file for which there is no file-specific prologue file."
     };
 
-    Cult::Types::NarrowString --hxx-epilogue-file
+    NarrowString --hxx-epilogue-file
     {
       "<file>",
       "Insert the content of the <file> at the end of the header file."
     };
 
-    Cult::Types::NarrowString --ixx-epilogue-file
+    NarrowString --ixx-epilogue-file
     {
       "<file>",
       "Insert the content of the <file> at the end of the inline file."
     };
 
-    Cult::Types::NarrowString --cxx-epilogue-file
+    NarrowString --cxx-epilogue-file
     {
       "<file>",
       "Insert the content of the <file> at the end of the source file."
     };
 
-    Cult::Types::NarrowString --fwd-epilogue-file
+    NarrowString --fwd-epilogue-file
     {
       "<file>",
       "Insert the content of the <file> at the end of the forward declaration
        file."
     };
 
-    Cult::Types::NarrowString --epilogue-file
+    NarrowString --epilogue-file
     {
       "<file>",
       "Insert the content of the <file> at the end of each generated file
@@ -424,7 +422,7 @@ namespace CXX
 
     // Export options.
     //
-    Cult::Types::NarrowString --export-symbol
+    NarrowString --export-symbol
     {
       "<symbol>",
       "Insert <symbol> in places where DLL export/import control statements

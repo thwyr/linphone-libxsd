@@ -12,7 +12,7 @@ namespace CXX
 {
   namespace Tree
   {
-    Void
+    void
     generate_serialization_header (Context&);
   }
 }

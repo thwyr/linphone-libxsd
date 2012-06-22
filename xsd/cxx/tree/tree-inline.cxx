@@ -22,7 +22,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -106,7 +106,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -182,7 +182,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Complex& c)
         {
           // This type should be ultimately string based.
@@ -196,7 +196,7 @@ namespace CXX
           os << ")";
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Type& t)
         {
           base_type_name_.dispatch (t);
@@ -217,7 +217,7 @@ namespace CXX
           inherits_member_ >> member_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -228,13 +228,13 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (e);
           }
 
-          Boolean enum_based (false);
+          bool enum_based (false);
           if (string_based)
           {
             SemanticGraph::Enumeration* be (0);
@@ -250,7 +250,7 @@ namespace CXX
 
           // Get to the ultimate base and see if is a fundamental type.
           //
-          Boolean fund_based (false);
+          bool fund_based (false);
           SemanticGraph::Type& ult_base (ultimate_base (e));
           {
             IsFundamentalType t (fund_based);
@@ -427,7 +427,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (skip (m))
@@ -437,13 +437,13 @@ namespace CXX
           String const& mname (emname (m));
           String const& member (emember (m));
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType t (fund);
             t.dispatch (m.type ());
           }
 
-          Boolean def_attr (m.default_p () &&
+          bool def_attr (m.default_p () &&
                             m.is_a<SemanticGraph::Attribute> ());
 
           if (max (m) != 1)
@@ -613,7 +613,7 @@ namespace CXX
           //
           if (m.default_p ())
           {
-            Boolean simple (true);
+            bool simple (true);
 
             if (m.is_a<SemanticGraph::Element> ())
             {
@@ -660,7 +660,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& aname (eaname (a));
@@ -810,7 +810,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& aname (eaname (a));
@@ -862,7 +862,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -924,13 +924,13 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (!doc_root_p (e))
             return;
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType test (fund);
             test.dispatch (e.type ());
@@ -1007,8 +1007,8 @@ namespace CXX
       };
     }
 
-    Void
-    generate_tree_inline (Context& ctx, UnsignedLong first, UnsignedLong last)
+    void
+    generate_tree_inline (Context& ctx, size_t first, size_t last)
     {
       // Generate includes.
       //

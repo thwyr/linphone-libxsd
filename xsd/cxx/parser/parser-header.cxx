@@ -3,10 +3,14 @@
 // copyright : Copyright (c) 2005-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
+#include <set>
+
 #include <cxx/parser/parser-header.hxx>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
+
+using namespace std;
 
 namespace CXX
 {
@@ -21,7 +25,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String const& name (ename (e));
@@ -41,7 +45,7 @@ namespace CXX
 
           String const& ret (ret_type (e));
 
-          Boolean same (ret == ret_type (base));
+          bool same (ret == ret_type (base));
 
           os << "virtual " << ret << endl
              << post_name (e) << " ()" <<
@@ -71,7 +75,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String const& name (ename (l));
@@ -173,7 +177,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String const& name (ename (u));
@@ -222,7 +226,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m)) return;
@@ -251,7 +255,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m))
@@ -281,7 +285,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m))
@@ -315,14 +319,13 @@ namespace CXX
         }
 
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::All& a)
         {
           if (!a.context().count ("comp-number"))
             return;
 
-          UnsignedLong state_count (
-            a.context().get<UnsignedLong> ("state-count"));
+          size_t state_count (a.context().get<size_t> ("state-count"));
 
           os << "void" << endl
              << "all_0 (unsigned long& state," << endl
@@ -337,13 +340,13 @@ namespace CXX
              << endl;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Choice& c)
         {
           if (!c.context().count ("comp-number"))
             return;
 
-          UnsignedLong n (c.context ().get<UnsignedLong> ("comp-number"));
+          size_t n (c.context ().get<size_t> ("comp-number"));
 
           os << "void" << endl
              << "choice_" << n << " (unsigned long& state," << endl
@@ -357,13 +360,13 @@ namespace CXX
           Traversal::Choice::traverse (c);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Sequence& s)
         {
           if (!s.context().count ("comp-number"))
             return;
 
-          UnsignedLong n (s.context ().get<UnsignedLong> ("comp-number"));
+          size_t n (s.context ().get<size_t> ("comp-number"));
 
           os << "void" << endl
              << "sequence_" << n << " (unsigned long& state," << endl
@@ -391,7 +394,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           if (!a.optional_p ())
@@ -418,7 +421,7 @@ namespace CXX
           names_attribute_validation_state_ >> attribute_validation_state_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String const& name (ename (c));
@@ -427,15 +430,15 @@ namespace CXX
           // generate parser callbacks, etc. since they are the same as in
           // the base. We only need the parsing/validation code.
           //
-          Boolean restriction (restriction_p (c));
+          bool restriction (restriction_p (c));
 
-          Boolean he (has<Traversal::Element> (c));
-          Boolean ha (has<Traversal::Attribute> (c));
+          bool he (has<Traversal::Element> (c));
+          bool ha (has<Traversal::Attribute> (c));
 
-          Boolean hae (has_particle<Traversal::Any> (c));
-          Boolean haa (has<Traversal::AnyAttribute> (c));
+          bool hae (has_particle<Traversal::Any> (c));
+          bool haa (has<Traversal::AnyAttribute> (c));
 
-          Boolean hra (false); // Has required attribute.
+          bool hra (false); // Has required attribute.
           if (ha)
           {
             RequiredAttributeTest test (hra);
@@ -471,7 +474,7 @@ namespace CXX
 
           String const& ret (ret_type (c));
 
-          Boolean same (c.inherits_p () &&
+          bool same (c.inherits_p () &&
                         ret == ret_type (c.inherits ().base ()));
 
           os << "virtual " << ret << endl
@@ -605,7 +608,7 @@ namespace CXX
 
           if (validation && (he || hae))
           {
-            UnsignedLong depth (c.context ().get<UnsignedLong> ("depth"));
+            size_t depth (c.context ().get<size_t> ("depth"));
 
             os << "protected:" << endl;
 
@@ -769,13 +772,13 @@ namespace CXX
 
         // anyType & anySimpleType.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyType& t)
         {
           gen_typedef (t, "void", "any_type_pskel", "any_type_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnySimpleType& t)
         {
           gen_typedef (t, "void",
@@ -784,7 +787,7 @@ namespace CXX
 
         // Boolean.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Boolean& t)
         {
           gen_typedef (t, "bool", "boolean_pskel", "boolean_pimpl");
@@ -792,72 +795,72 @@ namespace CXX
 
         // Integral types.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Byte& t)
         {
           gen_typedef (t, "signed char", "byte_pskel", "byte_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedByte& t)
         {
           gen_typedef (t, "unsigned char",
                        "unsigned_byte_pskel", "unsigned_byte_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Short& t)
         {
           gen_typedef (t, "short", "short_pskel", "short_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedShort& t)
         {
           gen_typedef (t, "unsigned short",
                        "unsigned_short_pskel", "unsigned_short_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Int& t)
         {
           gen_typedef (t, "int", "int_pskel", "int_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedInt& t)
         {
           gen_typedef (t, "unsigned int",
                        "unsigned_int_pskel", "unsigned_int_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Long& t)
         {
           gen_typedef (t, "long long", "long_pskel", "long_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedLong& t)
         {
           gen_typedef (t, "unsigned long long",
                        "unsigned_long_pskel", "unsigned_long_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Integer& t)
         {
           gen_typedef (t, "long long", "integer_pskel", "integer_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NegativeInteger& t)
         {
           gen_typedef (t, "long long",
                        "negative_integer_pskel", "negative_integer_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NonPositiveInteger& t)
         {
           gen_typedef (t, "long long",
@@ -865,14 +868,14 @@ namespace CXX
                        "non_positive_integer_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::PositiveInteger& t)
         {
           gen_typedef (t, "unsigned long long",
                        "positive_integer_pskel", "positive_integer_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NonNegativeInteger& t)
         {
           gen_typedef (t, "unsigned long long",
@@ -882,19 +885,19 @@ namespace CXX
 
         // Floats.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Float& t)
         {
           gen_typedef (t, "float", "float_pskel", "float_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Double& t)
         {
           gen_typedef (t, "double", "double_pskel", "double_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Decimal& t)
         {
           gen_typedef (t, "double", "decimal_pskel", "decimal_pimpl");
@@ -902,33 +905,33 @@ namespace CXX
 
         // Strings.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::String& t)
         {
           gen_typedef (t, string_type_, "string_pskel", "string_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NormalizedString& t)
         {
           gen_typedef (t, string_type_,
                        "normalized_string_pskel", "normalized_string_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Token& t)
         {
           gen_typedef (t, string_type_, "token_pskel", "token_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NameToken& t)
         {
           nmtoken_ = gen_typedef (t, string_type_,
                                   "nmtoken_pskel", "nmtoken_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NameTokens& t)
         {
           // NMTOKENS uses NMTOKEN implementation to parse individual items.
@@ -940,19 +943,19 @@ namespace CXX
                          "nmtokens_pskel", "nmtokens_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Name& t)
         {
           gen_typedef (t, string_type_, "name_pskel", "name_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NCName& t)
         {
           gen_typedef (t, string_type_, "ncname_pskel", "ncname_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Language& t)
         {
           gen_typedef (t, string_type_, "language_pskel", "language_pimpl");
@@ -960,7 +963,7 @@ namespace CXX
 
         // Qualified name.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::QName& t)
         {
           gen_typedef (t, xs_ns_ + L"::qname", "qname_pskel", "qname_pimpl");
@@ -968,19 +971,19 @@ namespace CXX
 
         // ID/IDREF.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Id& t)
         {
           gen_typedef (t, string_type_, "id_pskel", "id_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::IdRef& t)
         {
           idref_ = gen_typedef (t, string_type_, "idref_pskel", "idref_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::IdRefs& t)
         {
           // IDREFS uses IDREF implementation to parse individual items.
@@ -994,7 +997,7 @@ namespace CXX
 
         // URI.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::AnyURI& t)
         {
           gen_typedef (t, string_type_, "uri_pskel", "uri_pimpl");
@@ -1002,7 +1005,7 @@ namespace CXX
 
         // Binary.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Base64Binary& t)
         {
           String buffer (L"::std::auto_ptr< " + xs_ns_ + L"::buffer >");
@@ -1010,7 +1013,7 @@ namespace CXX
                        "base64_binary_pskel", "base64_binary_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::HexBinary& t)
         {
           String buffer (L"::std::auto_ptr< " + xs_ns_ + L"::buffer >");
@@ -1020,60 +1023,60 @@ namespace CXX
 
         // Date/time.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Date& t)
         {
           gen_typedef (t, xs_ns_ + L"::date", "date_pskel", "date_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::DateTime& t)
         {
           gen_typedef (t, xs_ns_ + L"::date_time",
                        "date_time_pskel", "date_time_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Duration& t)
         {
           gen_typedef (t, xs_ns_ + L"::duration",
                        "duration_pskel", "duration_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Day& t)
         {
           gen_typedef (t, xs_ns_ + L"::gday", "gday_pskel", "gday_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Month& t)
         {
           gen_typedef (t, xs_ns_ + L"::gmonth",
                        "gmonth_pskel", "gmonth_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::MonthDay& t)
         {
           gen_typedef (t, xs_ns_ + L"::gmonth_day",
                        "gmonth_day_pskel", "gmonth_day_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Year& t)
         {
           gen_typedef (t, xs_ns_ + L"::gyear", "gyear_pskel", "gyear_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::YearMonth& t)
         {
           gen_typedef (t, xs_ns_ + L"::gyear_month",
                        "gyear_month_pskel", "gyear_month_pimpl");
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Time& t)
         {
           gen_typedef (t, xs_ns_ + L"::time", "time_pskel", "time_pimpl");
@@ -1081,18 +1084,18 @@ namespace CXX
 
         // Entity.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Entity&)
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Entities&)
         {
         }
 
       private:
-        Boolean
+        bool
         gen_typedef (SemanticGraph::Type& t,
                      String const& type,
                      String const& pskel,
@@ -1119,8 +1122,8 @@ namespace CXX
         String impl_ns_;
         String string_type_;
 
-        Boolean idref_;
-        Boolean nmtoken_;
+        bool idref_;
+        bool nmtoken_;
       };
 
       struct FundNamespace: Namespace, Context
@@ -1257,8 +1260,8 @@ namespace CXX
       };
     }
 
-    Void
-    generate_parser_header (Context& ctx, Boolean generate_xml_schema)
+    void
+    generate_parser_header (Context& ctx, bool generate_xml_schema)
     {
       String c (ctx.char_type);
 
@@ -1307,12 +1310,12 @@ namespace CXX
         //
         if (ctx.schema_root.context ().count ("includes"))
         {
-          typedef Cult::Containers::Set<String> Includes;
+          typedef set<String> Includes;
 
           Includes const& is (
             ctx.schema_root.context ().get<Includes> ("includes"));
 
-          for (Includes::ConstReverseIterator i (is.rbegin ());
+          for (Includes::const_reverse_iterator i (is.rbegin ());
                i != is.rend (); ++i)
           {
             ctx.os << "#include " << *i << endl;
@@ -1356,12 +1359,12 @@ namespace CXX
         //
         if (ctx.schema_root.context ().count ("includes"))
         {
-          typedef Cult::Containers::Set<String> Includes;
+          typedef set<String> Includes;
 
           Includes const& is (
             ctx.schema_root.context ().get<Includes> ("includes"));
 
-          for (Includes::ConstReverseIterator i (is.rbegin ());
+          for (Includes::const_reverse_iterator i (is.rbegin ());
                i != is.rend (); ++i)
           {
             ctx.os << "#include " << *i << endl;

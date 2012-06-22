@@ -21,7 +21,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -43,7 +43,7 @@ namespace CXX
 
           base += L" >";
 
-          UnsignedLong n (0);
+          size_t n (0);
           NarrowStrings const& st (options.generate_extraction ());
           for (NarrowStrings::const_iterator i (st.begin ());
                i != st.end (); ++i)
@@ -102,7 +102,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -115,7 +115,7 @@ namespace CXX
 
           String const& base (xs_string_type);
 
-          UnsignedLong n (0);
+          size_t n (0);
           NarrowStrings const& st (options.generate_extraction ());
           for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
                ++i)
@@ -162,7 +162,7 @@ namespace CXX
           inherits_base_ >> base_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -173,13 +173,13 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (e);
           }
 
-          Boolean enum_based (false);
+          bool enum_based (false);
           if (string_based)
           {
             SemanticGraph::Enumeration* base_enum (0);
@@ -193,7 +193,7 @@ namespace CXX
           if (string_based)
             value = evalue (e);
 
-          UnsignedLong n (0);
+          size_t n (0);
           NarrowStrings const& st (options.generate_extraction ());
           for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
                ++i)
@@ -260,7 +260,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Member& m)
         {
           if (skip (m))
@@ -280,7 +280,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& member (emember (a));
@@ -292,7 +292,7 @@ namespace CXX
              << "  " << member << " (this->" << dom_doc << " ())";
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& member (emember (a));
@@ -312,7 +312,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (skip (e))
@@ -323,7 +323,7 @@ namespace CXX
           SemanticGraph::Type& t (e.type ());
           String type (etype (e));
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType traverser (fund);
             traverser.dispatch (t);
@@ -335,7 +335,7 @@ namespace CXX
           // from which makes it impossible to substitute or dynamically-
           // type with xsi:type.
           //
-          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
+          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           if (max (e) != 1)
           {
@@ -495,13 +495,13 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& member (emember (a));
           String type (etype (a));
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType traverser (fund);
             traverser.dispatch (a.type ());
@@ -565,7 +565,7 @@ namespace CXX
             names_ctor_member_ >> ctor_any_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -576,9 +576,9 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
-          Boolean has_members (has<Traversal::Member> (c));
+          bool has_members (has<Traversal::Member> (c));
 
-          Boolean facets (false);
+          bool facets (false);
           if (c.inherits_p ())
           {
             // See if we have any facets that we need to handle.
@@ -596,7 +596,7 @@ namespace CXX
             }
           }
 
-          UnsignedLong n (0);
+          size_t n (0);
           NarrowStrings const& st (options.generate_extraction ());
           for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
                ++i)
@@ -696,7 +696,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_stream_extraction_source (Context& ctx)
     {
       if (ctx.polymorphic)
@@ -706,8 +706,8 @@ namespace CXX
         ctx.os << "#include <xsd/cxx/tree/stream-extraction-map.hxx>" << endl
                << endl;
 
-        Boolean import_maps (ctx.options.import_maps ());
-        Boolean export_maps (ctx.options.export_maps ());
+        bool import_maps (ctx.options.import_maps ());
+        bool export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {
@@ -759,7 +759,7 @@ namespace CXX
         ctx.os << "namespace _xsd"
                << "{";
 
-        UnsignedLong n (0);
+        size_t n (0);
         for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
              ++i)
         {

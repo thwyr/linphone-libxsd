@@ -3,15 +3,18 @@
 // copyright : Copyright (c) 2006-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
+#include <set>
+#include <map>
+#include <sstream>
+#include <iostream>
+
 #include <cxx/parser/name-processor.hxx>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
 
-#include <cult/containers/set.hxx>
 
-#include <sstream>
-#include <iostream>
+using namespace std;
 
 namespace CXX
 {
@@ -27,7 +30,7 @@ namespace CXX
     {
       //
       //
-      typedef Cult::Containers::Set<String> NameSet;
+      typedef set<String> NameSet;
 
       class Context: public CXX::Context
       {
@@ -67,7 +70,7 @@ namespace CXX
           String base_name (escape (n));
           String name (base_name);
 
-          for (UnsignedLong i (1); set.find (name) != set.end (); ++i)
+          for (size_t i (1); set.find (name) != set.end (); ++i)
           {
             std::wostringstream os;
             os << i;
@@ -82,16 +85,16 @@ namespace CXX
         String const skel_suffix_;
         String const impl_suffix_;
 
-        Cult::Containers::Map<String, NameSet> global_type_names_;
+        map<String, NameSet> global_type_names_;
 
       public:
-        Boolean const impl;
+        bool const impl;
         String const& skel_suffix;
         String const& impl_suffix;
 
-        Cult::Containers::Map<String, NameSet>& global_type_names;
+        map<String, NameSet>& global_type_names;
 
-        Boolean polymorphic;
+        bool polymorphic;
       };
 
 
@@ -104,7 +107,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (Parser::Context::skip (m))
@@ -124,7 +127,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (Parser::Context::skip (m))
@@ -227,7 +230,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (Parser::Context::skip (m))
@@ -264,13 +267,13 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (Parser::Context::skip (m))
             return;
 
-          Boolean poly (polymorphic &&
+          bool poly (polymorphic &&
                         m.is_a<SemanticGraph::Element> () &&
                         !m.type ().context ().count ("anonymous"));
 
@@ -328,7 +331,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           SemanticGraph::Context& cc (c.context ());
@@ -350,7 +353,7 @@ namespace CXX
           // inheriting by restriction in which case we need to have
           // the same names as our base.
           //
-          Boolean restriction (false);
+          bool restriction (false);
 
           if (c.inherits_p ())
           {
@@ -443,7 +446,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Type& t)
         {
           SemanticGraph::Context& c (t.context ());
@@ -512,7 +515,7 @@ namespace CXX
             String base_name (escape (L"post_" + n));
             String post (base_name);
 
-            for (UnsignedLong i (1); set.find (post) != set.end (); ++i)
+            for (size_t i (1); set.find (post) != set.end (); ++i)
             {
               std::wostringstream os;
               os << i;
@@ -535,7 +538,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& ns)
         {
           NameSet& type_set (global_type_names[ns.name ()]);
@@ -613,7 +616,7 @@ namespace CXX
 
         // anyType & anySimpleType.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyType& t)
         {
           t.context ().set ("name", make_skel_name ("any_type"));
@@ -621,7 +624,7 @@ namespace CXX
           t.context ().set ("post", String ("post_any_type"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnySimpleType& t)
         {
           t.context ().set ("name", make_skel_name ("any_simple_type"));
@@ -631,7 +634,7 @@ namespace CXX
 
         // Boolean.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Boolean& t)
         {
           t.context ().set ("name", make_skel_name ("boolean"));
@@ -641,7 +644,7 @@ namespace CXX
 
         // Integral types.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Byte& t)
         {
           t.context ().set ("name", make_skel_name ("byte"));
@@ -649,7 +652,7 @@ namespace CXX
           t.context ().set ("post", String ("post_byte"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedByte& t)
         {
           t.context ().set ("name", make_skel_name ("unsigned_byte"));
@@ -657,7 +660,7 @@ namespace CXX
           t.context ().set ("post", String ("post_unsigned_byte"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Short& t)
         {
           t.context ().set ("name", make_skel_name ("short"));
@@ -665,7 +668,7 @@ namespace CXX
           t.context ().set ("post", String ("post_short"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedShort& t)
         {
           t.context ().set ("name", make_skel_name ("unsigned_short"));
@@ -673,7 +676,7 @@ namespace CXX
           t.context ().set ("post", String ("post_unsigned_short"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Int& t)
         {
           t.context ().set ("name", make_skel_name ("int"));
@@ -681,7 +684,7 @@ namespace CXX
           t.context ().set ("post", String ("post_int"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedInt& t)
         {
           t.context ().set ("name", make_skel_name ("unsigned_int"));
@@ -689,7 +692,7 @@ namespace CXX
           t.context ().set ("post", String ("post_unsigned_int"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Long& t)
         {
           t.context ().set ("name", make_skel_name ("long"));
@@ -697,7 +700,7 @@ namespace CXX
           t.context ().set ("post", String ("post_long"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::UnsignedLong& t)
         {
           t.context ().set ("name", make_skel_name ("unsigned_long"));
@@ -705,7 +708,7 @@ namespace CXX
           t.context ().set ("post", String ("post_unsigned_long"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Integer& t)
         {
           t.context ().set ("name", make_skel_name ("integer"));
@@ -713,7 +716,7 @@ namespace CXX
           t.context ().set ("post", String ("post_integer"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NonPositiveInteger& t)
         {
           t.context ().set ("name", make_skel_name ("non_positive_integer"));
@@ -721,7 +724,7 @@ namespace CXX
           t.context ().set ("post", String ("post_non_positive_integer"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NonNegativeInteger& t)
         {
           t.context ().set ("name", make_skel_name ("non_negative_integer"));
@@ -729,7 +732,7 @@ namespace CXX
           t.context ().set ("post", String ("post_non_negative_integer"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::PositiveInteger& t)
         {
           t.context ().set ("name", make_skel_name ("positive_integer"));
@@ -737,7 +740,7 @@ namespace CXX
           t.context ().set ("post", String ("post_positive_integer"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NegativeInteger& t)
         {
           t.context ().set ("name", make_skel_name ("negative_integer"));
@@ -747,7 +750,7 @@ namespace CXX
 
         // Floats.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Float& t)
         {
           t.context ().set ("name", make_skel_name ("float"));
@@ -755,7 +758,7 @@ namespace CXX
           t.context ().set ("post", String ("post_float"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Double& t)
         {
           t.context ().set ("name", make_skel_name ("double"));
@@ -763,7 +766,7 @@ namespace CXX
           t.context ().set ("post", String ("post_double"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Decimal& t)
         {
           t.context ().set ("name", make_skel_name ("decimal"));
@@ -773,7 +776,7 @@ namespace CXX
 
         // Strings.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::String& t)
         {
           t.context ().set ("name", make_skel_name ("string"));
@@ -781,7 +784,7 @@ namespace CXX
           t.context ().set ("post", String ("post_string"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NormalizedString& t)
         {
           t.context ().set ("name", make_skel_name ("normalized_string"));
@@ -789,7 +792,7 @@ namespace CXX
           t.context ().set ("post", String ("post_normalized_string"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Token& t)
         {
           t.context ().set ("name", make_skel_name ("token"));
@@ -797,7 +800,7 @@ namespace CXX
           t.context ().set ("post", String ("post_token"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NameToken& t)
         {
           t.context ().set ("name", make_skel_name ("nmtoken"));
@@ -805,7 +808,7 @@ namespace CXX
           t.context ().set ("post", String ("post_nmtoken"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NameTokens& t)
         {
           t.context ().set ("name", make_skel_name ("nmtokens"));
@@ -813,7 +816,7 @@ namespace CXX
           t.context ().set ("post", String ("post_nmtokens"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Name& t)
         {
           t.context ().set ("name", make_skel_name ("name"));
@@ -821,7 +824,7 @@ namespace CXX
           t.context ().set ("post", String ("post_name"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::NCName& t)
         {
           t.context ().set ("name", make_skel_name ("ncname"));
@@ -829,7 +832,7 @@ namespace CXX
           t.context ().set ("post", String ("post_ncname"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Language& t)
         {
           t.context ().set ("name", make_skel_name ("language"));
@@ -840,7 +843,7 @@ namespace CXX
 
         // Qualified name.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::QName& t)
         {
           t.context ().set ("name", make_skel_name ("qname"));
@@ -851,7 +854,7 @@ namespace CXX
 
         // ID/IDREF.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Id& t)
         {
           t.context ().set ("name", make_skel_name ("id"));
@@ -859,7 +862,7 @@ namespace CXX
           t.context ().set ("post", String ("post_id"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::IdRef& t)
         {
           t.context ().set ("name", make_skel_name ("idref"));
@@ -867,7 +870,7 @@ namespace CXX
           t.context ().set ("post", String ("post_idref"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::IdRefs& t)
         {
           t.context ().set ("name", make_skel_name ("idrefs"));
@@ -877,7 +880,7 @@ namespace CXX
 
         // URI.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::AnyURI& t)
         {
           t.context ().set ("name", make_skel_name ("uri"));
@@ -887,7 +890,7 @@ namespace CXX
 
         // Binary.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Base64Binary& t)
         {
           t.context ().set ("name", make_skel_name ("base64_binary"));
@@ -895,7 +898,7 @@ namespace CXX
           t.context ().set ("post", String ("post_base64_binary"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::HexBinary& t)
         {
           t.context ().set ("name", make_skel_name ("hex_binary"));
@@ -906,7 +909,7 @@ namespace CXX
 
         // Date/time.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Date& t)
         {
           t.context ().set ("name", make_skel_name ("date"));
@@ -914,7 +917,7 @@ namespace CXX
           t.context ().set ("post", String ("post_date"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::DateTime& t)
         {
           t.context ().set ("name", make_skel_name ("date_time"));
@@ -922,7 +925,7 @@ namespace CXX
           t.context ().set ("post", String ("post_date_time"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Duration& t)
         {
           t.context ().set ("name", make_skel_name ("duration"));
@@ -930,7 +933,7 @@ namespace CXX
           t.context ().set ("post", String ("post_duration"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Day& t)
         {
           t.context ().set ("name", make_skel_name ("gday"));
@@ -938,7 +941,7 @@ namespace CXX
           t.context ().set ("post", String ("post_gday"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Month& t)
         {
           t.context ().set ("name", make_skel_name ("gmonth"));
@@ -946,7 +949,7 @@ namespace CXX
           t.context ().set ("post", String ("post_gmonth"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::MonthDay& t)
         {
           t.context ().set ("name", make_skel_name ("gmonth_day"));
@@ -954,7 +957,7 @@ namespace CXX
           t.context ().set ("post", String ("post_gmonth_day"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Year& t)
         {
           t.context ().set ("name", make_skel_name ("gyear"));
@@ -962,7 +965,7 @@ namespace CXX
           t.context ().set ("post", String ("post_gyear"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::YearMonth& t)
         {
           t.context ().set ("name", make_skel_name ("gyear_month"));
@@ -970,7 +973,7 @@ namespace CXX
           t.context ().set ("post", String ("post_gyear_month"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Time& t)
         {
           t.context ().set ("name", make_skel_name ("time"));
@@ -980,7 +983,7 @@ namespace CXX
 
         // Entity.
         //
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Entity& t)
         {
           t.context ().set ("name", make_skel_name ("entity"));
@@ -988,7 +991,7 @@ namespace CXX
           t.context ().set ("post", String ("post_entity"));
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Entities& t)
         {
           t.context ().set ("name", make_skel_name ("entities"));
@@ -1017,7 +1020,7 @@ namespace CXX
                    Traversal::Includes,
                    Traversal::Imports
       {
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Sources& sr)
         {
           SemanticGraph::Schema& s (sr.schema ());
@@ -1029,7 +1032,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Includes& i)
         {
           SemanticGraph::Schema& s (i.schema ());
@@ -1041,7 +1044,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Imports& i)
         {
           SemanticGraph::Schema& s (i.schema ());
@@ -1059,7 +1062,7 @@ namespace CXX
       //
       struct Implies: Traversal::Implies
       {
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Implies& i)
         {
           SemanticGraph::Schema& s (i.schema ());
@@ -1072,7 +1075,7 @@ namespace CXX
         }
       };
 
-      Void
+      void
       process_impl (options const& ops,
                     SemanticGraph::Schema& tu,
                     SemanticGraph::Path const& file,
@@ -1168,7 +1171,7 @@ namespace CXX
       }
     }
 
-    Void NameProcessor::
+    void NameProcessor::
     process (options const& ops,
              SemanticGraph::Schema& tu,
              SemanticGraph::Path const& file,

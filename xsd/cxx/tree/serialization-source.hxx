@@ -12,10 +12,8 @@ namespace CXX
 {
   namespace Tree
   {
-    Void
-    generate_serialization_source (Context&,
-                                   UnsignedLong first,
-                                   UnsignedLong last);
+    void
+    generate_serialization_source (Context&, size_t first, size_t last);
   }
 }
 

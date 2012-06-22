@@ -26,7 +26,7 @@ namespace CXX
 
   namespace
   {
-    WideChar const* keywords[] = {
+    wchar_t const* keywords[] = {
       L"NULL",
       L"and",
       L"asm",
@@ -218,7 +218,7 @@ namespace CXX
 
       // Split the string in two parts at the last '='.
       //
-      Size pos (s.rfind ('='));
+      size_t pos (s.rfind ('='));
 
       if (pos == String::npos)
         throw InvalidNamespaceMapping (s, "delimiter ('=') not found");
@@ -251,7 +251,7 @@ namespace CXX
 
       // Split the string in two parts at '='.
       //
-      Size pos (s.find ('='));
+      size_t pos (s.find ('='));
 
       if (pos == String::npos)
         reserved_name_map_[s] = L"";
@@ -261,7 +261,7 @@ namespace CXX
 
     // Populate the keyword set.
     //
-    for (Size i (0); i < sizeof (keywords) / sizeof (char*); ++i)
+    for (size_t i (0); i < sizeof (keywords) / sizeof (char*); ++i)
       keyword_set_.insert (keywords[i]);
   }
 
@@ -275,7 +275,7 @@ namespace CXX
     using SemanticGraph::Sources;
 
     String tmp;
-    MapMapping::ConstIterator i (nsm_mapping.find (ns.name ()));
+    MapMapping::const_iterator i (nsm_mapping.find (ns.name ()));
 
     if (i != nsm_mapping.end ())
     {
@@ -322,7 +322,7 @@ namespace CXX
 
       // Check cache first
       //
-      MappingCache::ConstIterator i (ns_mapping_cache.find (pair));
+      MappingCache::const_iterator i (ns_mapping_cache.find (pair));
 
       if (i != ns_mapping_cache.end ())
       {
@@ -335,10 +335,10 @@ namespace CXX
         if (trace)
           wcerr << "namespace: '" << pair << "'" << endl;
 
-        Boolean found (false);
+        bool found (false);
         Regex colon (L"#/#::#");
 
-        for (RegexMapping::ConstReverseIterator e (nsr_mapping.rbegin ());
+        for (RegexMapping::const_reverse_iterator e (nsr_mapping.rbegin ());
              e != nsr_mapping.rend (); ++e)
         {
           if (trace)
@@ -482,7 +482,7 @@ namespace CXX
   }
 
   String Context::
-  fq_name (SemanticGraph::Nameable& n, Char const* name_key)
+  fq_name (SemanticGraph::Nameable& n, char const* name_key)
   {
     using namespace SemanticGraph;
 
@@ -534,17 +534,17 @@ namespace CXX
   escape (String const& name)
   {
     String r;
-    Size n (name.size ());
+    size_t n (name.size ());
 
     // In most common cases we will have that many chars.
     //
     r.reserve (n);
 
-    for (Size i (0); i < n; ++i)
+    for (size_t i (0); i < n; ++i)
     {
-      Boolean first (i == 0);
+      bool first (i == 0);
 
-      UnsignedLong u (unicode_char (name, i)); // May advance i.
+      unsigned int u (unicode_char (name, i)); // May advance i.
 
       if (first)
       {
@@ -560,7 +560,7 @@ namespace CXX
             u == '_'))
         r.push_back ('_');
       else
-        r.push_back (static_cast<WideChar> (u));
+        r.push_back (static_cast<wchar_t> (u));
     }
 
     if (r.empty ())
@@ -568,7 +568,7 @@ namespace CXX
 
     // Custom reserved words.
     //
-    ReservedNameMap::ConstIterator i (reserved_name_map.find (r));
+    ReservedNameMap::const_iterator i (reserved_name_map.find (r));
 
     if (i != reserved_name_map.end ())
     {
@@ -604,14 +604,14 @@ namespace CXX
   //
 
   String
-  charlit (UnsignedLong u)
+  charlit (unsigned int u)
   {
     String r ("\\x");
-    Boolean lead (true);
+    bool lead (true);
 
-    for (Long i (7); i >= 0; --i)
+    for (int i (7); i >= 0; --i)
     {
-      UnsignedLong x ((u >> (i * 4)) & 0x0F);
+      unsigned int x ((u >> (i * 4)) & 0x0F);
 
       if (lead)
       {
@@ -631,7 +631,7 @@ namespace CXX
   strlit_ascii (String const& str)
   {
     String r;
-    Size n (str.size ());
+    size_t n (str.size ());
 
     // In most common cases we will have that many chars.
     //
@@ -639,11 +639,11 @@ namespace CXX
 
     r += '"';
 
-    Boolean escape (false);
+    bool escape (false);
 
-    for (Size i (0); i < n; ++i)
+    for (size_t i (0); i < n; ++i)
     {
-      UnsignedLong u (Context::unicode_char (str, i)); // May advance i.
+      unsigned int u (Context::unicode_char (str, i)); // May advance i.
 
       // [128 - ]     - unrepresentable
       // 127          - \x7F
@@ -724,7 +724,7 @@ namespace CXX
           }
         default:
           {
-            r += static_cast<WideChar> (u);
+            r += static_cast<wchar_t> (u);
             break;
           }
         }
@@ -742,7 +742,7 @@ namespace CXX
     return r;
   }
 
-  const UnsignedLong utf8_first_char_mask[5] =
+  const unsigned int utf8_first_char_mask[5] =
   {
     0x00, 0x00, 0xC0, 0xE0, 0xF0
   };
@@ -751,7 +751,7 @@ namespace CXX
   strlit_utf8 (String const& str)
   {
     String r;
-    Size n (str.size ());
+    size_t n (str.size ());
 
     // In most common cases we will have that many chars.
     //
@@ -759,11 +759,11 @@ namespace CXX
 
     r += '"';
 
-    Boolean escape (false);
+    bool escape (false);
 
-    for (Size i (0); i < n; ++i)
+    for (size_t i (0); i < n; ++i)
     {
-      UnsignedLong u (Context::unicode_char (str, i)); // May advance i.
+      unsigned int u (Context::unicode_char (str, i)); // May advance i.
 
       // [128 - ]     - UTF-8
       // 127          - \x7F
@@ -844,15 +844,15 @@ namespace CXX
           }
         default:
           {
-            r += static_cast<WideChar> (u);
+            r += static_cast<wchar_t> (u);
             break;
           }
         }
       }
       else
       {
-        UnsignedLong count;
-        UnsignedLong tmp[4];
+        unsigned int count;
+        unsigned int tmp[4];
 
         if (u < 0x800)
           count = 2;
@@ -884,7 +884,7 @@ namespace CXX
           }
         }
 
-        for (UnsignedLong j (0); j < count; ++j)
+        for (unsigned int j (0); j < count; ++j)
           r += charlit (tmp[j]);
 
         escape = true;
@@ -900,7 +900,7 @@ namespace CXX
   strlit_iso8859_1 (String const& str)
   {
     String r;
-    Size n (str.size ());
+    size_t n (str.size ());
 
     // In most common cases we will have that many chars.
     //
@@ -908,11 +908,11 @@ namespace CXX
 
     r += '"';
 
-    Boolean escape (false);
+    bool escape (false);
 
-    for (Size i (0); i < n; ++i)
+    for (size_t i (0); i < n; ++i)
     {
-      UnsignedLong u (Context::unicode_char (str, i)); // May advance i.
+      unsigned int u (Context::unicode_char (str, i)); // May advance i.
 
       // [256 -    ]  - unrepresentable
       // [127 - 255]  - \xXX
@@ -993,7 +993,7 @@ namespace CXX
           }
         default:
           {
-            r += static_cast<WideChar> (u);
+            r += static_cast<wchar_t> (u);
             break;
           }
         }
@@ -1020,7 +1020,7 @@ namespace CXX
   strlit_utf32 (String const& str)
   {
     String r;
-    Size n (str.size ());
+    size_t n (str.size ());
 
     // In most common cases we will have that many chars.
     //
@@ -1028,11 +1028,11 @@ namespace CXX
 
     r += L"L\"";
 
-    Boolean escape (false);
+    bool escape (false);
 
-    for (Size i (0); i < n; ++i)
+    for (size_t i (0); i < n; ++i)
     {
-      UnsignedLong u (Context::unicode_char (str, i)); // May advance i.
+      unsigned int u (Context::unicode_char (str, i)); // May advance i.
 
       // [128 - ]     - \xUUUUUUUU
       // 127          - \x7F
@@ -1111,7 +1111,7 @@ namespace CXX
           }
         default:
           {
-            r += static_cast<WideChar> (u);
+            r += static_cast<wchar_t> (u);
             break;
           }
         }
@@ -1134,7 +1134,7 @@ namespace CXX
     // First see if we have a custom mapping.
     //
     assert (string_literal_map != 0);
-    StringLiteralMap::ConstIterator i (string_literal_map->find (str));
+    StringLiteralMap::const_iterator i (string_literal_map->find (str));
 
     if (i != string_literal_map->end ())
       return i->second;
@@ -1161,16 +1161,16 @@ namespace CXX
   {
     String r;
 
-    WideChar const* s (str.c_str ());
-    Size size (str.size ());
+    wchar_t const* s (str.c_str ());
+    size_t size (str.size ());
 
     // In most common cases we will have that many chars.
     //
     r.reserve (size);
 
-    for (WideChar const* p (s); p < s + size; ++p)
+    for (wchar_t const* p (s); p < s + size; ++p)
     {
-      UnsignedLong u (unicode_char (p)); // May advance p.
+      unsigned int u (unicode_char (p)); // May advance p.
 
       // We are going to treat \v, \f and \n as unrepresentable
       // here even though they can be present in C++ source code.
@@ -1178,7 +1178,7 @@ namespace CXX
       if (u > 127 || (u < 32 && u != '\t'))
         r += L'?';
       else
-        r += static_cast<WideChar> (u);
+        r += static_cast<wchar_t> (u);
     }
 
     return r;
@@ -1194,9 +1194,9 @@ namespace CXX
       wcerr << "include: '" << path << "'" << endl;
 
     String r;
-    Boolean found (false);
+    bool found (false);
 
-    for (RegexMapping::ConstReverseIterator e (include_mapping.rbegin ());
+    for (RegexMapping::const_reverse_iterator e (include_mapping.rbegin ());
          e != include_mapping.rend (); ++e)
     {
       if (trace)
@@ -1223,8 +1223,8 @@ namespace CXX
 
     if (!r.empty () && r[0] != L'"' && r[0] != L'<')
     {
-      WideChar op (options.include_with_brackets () ? L'<' : L'"');
-      WideChar cl (options.include_with_brackets () ? L'>' : L'"');
+      wchar_t op (options.include_with_brackets () ? L'<' : L'"');
+      wchar_t cl (options.include_with_brackets () ? L'>' : L'"');
       r = op + r + cl;
     }
 
@@ -1234,7 +1234,7 @@ namespace CXX
   // Namespace
   //
 
-  Void Namespace::
+  void Namespace::
   pre (Type& n)
   {
     String ns (ctx_.ns_name (n));
@@ -1268,7 +1268,7 @@ namespace CXX
     } while (true);
   }
 
-  Void Namespace::
+  void Namespace::
   post (Type& n)
   {
     String ns (ctx_.ns_name (n));

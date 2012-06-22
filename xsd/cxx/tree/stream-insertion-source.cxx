@@ -21,7 +21,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -43,7 +43,7 @@ namespace CXX
 
           base += L" >";
 
-          UnsignedLong n (0);
+          size_t n (0);
           NarrowStrings const& st (options.generate_insertion ());
           for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
                ++i)
@@ -101,7 +101,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -114,7 +114,7 @@ namespace CXX
 
           String const& base (xs_string_type);
 
-          UnsignedLong n (0);
+          size_t n (0);
           NarrowStrings const& st (options.generate_insertion ());
           for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
                ++i)
@@ -161,7 +161,7 @@ namespace CXX
           inherits_base_ >> base_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -172,13 +172,13 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (e);
           }
 
-          Boolean enum_based (false);
+          bool enum_based (false);
           if (string_based)
           {
             SemanticGraph::Enumeration* base_enum (0);
@@ -192,7 +192,7 @@ namespace CXX
           if (string_based)
             value = evalue (e);
 
-          UnsignedLong n (0);
+          size_t n (0);
           NarrowStrings const& st (options.generate_insertion ());
           for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
                ++i)
@@ -253,7 +253,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (skip (e)) return;
@@ -268,7 +268,7 @@ namespace CXX
           // from which makes it impossible to substitute or dynamically-
           // type with xsi:type.
           //
-          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
+          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           if (max (e) != 1)
           {
@@ -363,7 +363,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& aname (eaname (a));
@@ -393,7 +393,7 @@ namespace CXX
           inherits_ >> base_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -404,9 +404,9 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
-          Boolean has_body (has<Traversal::Member> (c) || c.inherits_p ());
+          bool has_body (has<Traversal::Member> (c) || c.inherits_p ());
 
-          UnsignedLong n (0);
+          size_t n (0);
           NarrowStrings const& st (options.generate_insertion ());
           for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
                ++i)
@@ -471,7 +471,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_stream_insertion_source (Context& ctx)
     {
       if (ctx.polymorphic)
@@ -481,8 +481,8 @@ namespace CXX
         ctx.os << "#include <xsd/cxx/tree/stream-insertion-map.hxx>" << endl
                << endl;
 
-        Boolean import_maps (ctx.options.import_maps ());
-        Boolean export_maps (ctx.options.export_maps ());
+        bool import_maps (ctx.options.import_maps ());
+        bool export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {
@@ -533,7 +533,7 @@ namespace CXX
         ctx.os << "namespace _xsd"
                << "{";
 
-        UnsignedLong n (0);
+        size_t n (0);
         for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
              ++i)
         {

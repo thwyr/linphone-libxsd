@@ -6,12 +6,11 @@
 #ifndef CXX_TREE_GENERATOR_HXX
 #define CXX_TREE_GENERATOR_HXX
 
-#include <cult/types.hxx>
-
 #include <xsd-frontend/semantic-graph/elements.hxx> // Path
 #include <xsd-frontend/semantic-graph/schema.hxx>
 
 #include <xsd.hxx>
+#include <types.hxx>
 
 #include <cxx/literal-map.hxx>
 #include <cxx/tree/options.hxx>
@@ -20,21 +19,19 @@ namespace CXX
 {
   namespace Tree
   {
-    using namespace Cult::Types;
-
     class Generator
     {
     public:
-      static Void
+      static void
       usage ();
 
       struct Failed {};
 
-      static UnsignedLong
+      static size_t
       generate (options const&,
                 XSDFrontend::SemanticGraph::Schema&,
                 XSDFrontend::SemanticGraph::Path const& file,
-                Boolean file_per_type,
+                bool file_per_type,
                 StringLiteralMap const&,
                 const WarningSet& disabled_warnings,
                 FileList& file_list,

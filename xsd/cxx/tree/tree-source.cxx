@@ -3,13 +3,16 @@
 // copyright : Copyright (c) 2005-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <cult/containers/list.hxx>
+#include <map>
+#include <list>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
 
 #include <cxx/tree/tree-source.hxx>
 #include <cxx/tree/default-value.hxx>
+
+using namespace std;
 
 namespace CXX
 {
@@ -24,7 +27,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -158,7 +161,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -264,7 +267,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           os << strlit (e.name ());
@@ -285,13 +288,13 @@ namespace CXX
         String name_;
       };
 
-      Boolean
+      bool
       operator< (LiteralInfo const& x, LiteralInfo const& y)
       {
         return x.value_ < y.value_;
       }
 
-      typedef Cult::Containers::List<LiteralInfo> LiteralInfoList;
+      typedef list<LiteralInfo> LiteralInfoList;
 
 
       // Populate LiteralInfoList
@@ -304,7 +307,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           list_.push_back (LiteralInfo (e.name (), ename (e)));
@@ -323,7 +326,7 @@ namespace CXX
           names_enumerator_literal_ >> enumerator_literal_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -334,14 +337,14 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (e);
           }
 
           SemanticGraph::Enumeration* be (0);
-          Boolean enum_based (false);
+          bool enum_based (false);
           if (string_based)
           {
             IsEnumBasedType t (be);
@@ -354,7 +357,7 @@ namespace CXX
           if (string_based)
             value = evalue (e);
 
-          UnsignedLong enum_count (0);
+          size_t enum_count (0);
 
           for (Type::NamesIterator i (e.names_begin ()), end (e.names_end ());
                i != end; ++i)
@@ -506,7 +509,7 @@ namespace CXX
 
             String fq_name (ns_scope + L"::" + name);
 
-            for (LiteralInfoList::Iterator
+            for (LiteralInfoList::iterator
                    b (l.begin ()), i (b), end (l.end ()); i != end; ++i)
             {
               if (i != b)
@@ -552,7 +555,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         comma (Type&)
         {
           os << "," << endl;
@@ -573,7 +576,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m))
@@ -584,7 +587,7 @@ namespace CXX
           if (m.default_p ())
           {
             SemanticGraph::Type& t (m.type ());
-            Boolean simple (true);
+            bool simple (true);
 
             if (m.is_a<SemanticGraph::Element> ())
             {
@@ -594,7 +597,7 @@ namespace CXX
 
             if (simple)
             {
-              Boolean lit (false);
+              bool lit (false);
               {
                 IsLiteralValue test (lit);
                 test.dispatch (t);
@@ -685,7 +688,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (skip (e))
@@ -698,7 +701,7 @@ namespace CXX
 
           SemanticGraph::Type& t (e.type ());
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType traverser (fund);
             traverser.dispatch (t);
@@ -710,7 +713,7 @@ namespace CXX
           // derived from which makes it impossible to substitute or
           // dynamically-type with xsi:type.
           //
-          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
+          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           os << "// " << comment (e.name ()) << endl
              << "//" << endl;
@@ -887,7 +890,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (skip (e))
@@ -917,7 +920,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& member (emember (a));
@@ -1054,7 +1057,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           if (max (a) == 1 && min (a) == 1)
@@ -1079,7 +1082,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& member (emember (a));
@@ -1099,7 +1102,7 @@ namespace CXX
                << "{";
           }
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType traverser (fund);
             traverser.dispatch (a.type ());
@@ -1133,7 +1136,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& member (emember (a));
@@ -1226,7 +1229,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& member (emember (a));
@@ -1270,21 +1273,21 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Type&)
         {
           if (base_arg_)
             os << base_arg_;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Enumeration&)
         {
           if (base_arg_)
             os << base_arg_;
         }
 
-        Void
+        void
         traverse (SemanticGraph::Complex& c)
         {
           Args args (*this, base_arg_);
@@ -1310,21 +1313,21 @@ namespace CXX
             *this >> names_ >> *this;
           }
 
-          virtual Void
+          virtual void
           traverse (SemanticGraph::Type&)
           {
             if (base_arg_)
               os << comma () << base_arg_;
           }
 
-          virtual Void
+          virtual void
           traverse (SemanticGraph::Enumeration&)
           {
             if (base_arg_)
               os << comma () << base_arg_;
           }
 
-          virtual Void
+          virtual void
           traverse (SemanticGraph::Any& a)
           {
             if (!options.generate_wildcard ())
@@ -1338,7 +1341,7 @@ namespace CXX
             }
           }
 
-          virtual Void
+          virtual void
           traverse (SemanticGraph::Element& e)
           {
             if (!skip (e) && min (e) == 1 && max (e) == 1)
@@ -1349,7 +1352,7 @@ namespace CXX
             }
           }
 
-          virtual Void
+          virtual void
           traverse (SemanticGraph::Attribute& a)
           {
             // Note that we are not including attributes with default
@@ -1369,14 +1372,14 @@ namespace CXX
           String
           comma ()
           {
-            Boolean tmp (first_);
+            bool tmp (first_);
             first_ = false;
             return tmp ? "" : ",\n";
           }
 
         private:
           String base_arg_;
-          Boolean first_;
+          bool first_;
 
           Traversal::Inherits inherits_;
           Traversal::Names names_;
@@ -1395,7 +1398,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Element& e)
         {
           if (skip (e))
@@ -1426,12 +1429,12 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Attribute& a)
         {
           String const& member (emember (a));
 
-          Boolean def (a.default_p ());
+          bool def (a.default_p ());
 
           if (min (a) == 0 && !def)
           {
@@ -1472,7 +1475,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& member (emember (a));
@@ -1504,7 +1507,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& dom_doc (
@@ -1524,7 +1527,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Member& m)
         {
           if (skip (m))
@@ -1550,7 +1553,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& member (emember (a));
@@ -1563,7 +1566,7 @@ namespace CXX
             arg_name << "." << member << ", this->" << dom_doc << " ())";
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& member (emember (a));
@@ -1587,7 +1590,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Member& m)
         {
           if (skip (m))
@@ -1607,14 +1610,14 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& member (emember (a));
           os << "this->" << member << " = x." << member << ";";
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& member (emember (a));
@@ -1632,7 +1635,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (skip (m))
@@ -1654,7 +1657,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& member (emember (a));
@@ -1666,7 +1669,7 @@ namespace CXX
              << "  " << member << " (this->" << dom_doc << " ())";
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& member (emember (a));
@@ -1691,7 +1694,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Element& e)
         {
           if (skip (e))
@@ -1703,7 +1706,7 @@ namespace CXX
              << "  " << member << " (this)";
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Attribute& a)
         {
           String const& member (emember (a));
@@ -1732,7 +1735,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& member (emember (a));
@@ -1744,7 +1747,7 @@ namespace CXX
              << "  " << member << " (this->" << dom_doc << " ())";
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& member (emember (a));
@@ -1771,39 +1774,39 @@ namespace CXX
       {
         // generate should initially be false.
         //
-        HasComparisonOperator (Context& c, Boolean& generate)
+        HasComparisonOperator (Context& c, bool& generate)
             : Context (c), generate_ (generate)
         {
           *this >> inherits_ >> *this;
           *this >> names_ >> *this;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Fundamental::Type&)
         {
           // All built-in types are comparable.
           generate_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::List&)
         {
           generate_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Union&)
         {
           generate_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Enumeration& e)
         {
           Traversal::Enumeration::inherits (e);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Complex& c)
         {
           Complex::names (c);
@@ -1812,21 +1815,21 @@ namespace CXX
             Complex::inherits (c);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Member& m)
         {
           if (!skip (m))
             generate_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any&)
         {
           if (options.generate_wildcard ())
             generate_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute&)
         {
           if (options.generate_wildcard ())
@@ -1834,7 +1837,7 @@ namespace CXX
         }
 
       private:
-        Boolean& generate_;
+        bool& generate_;
 
         Traversal::Inherits inherits_;
         Traversal::Names names_;
@@ -1851,7 +1854,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Element& e)
         {
           if (skip (e))
@@ -1866,7 +1869,7 @@ namespace CXX
           // dynamically-type with xsi:type.
           //
           SemanticGraph::Type& t (e.type ());
-          Boolean poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
+          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
           if (!poly)
           {
@@ -1942,7 +1945,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Attribute& a)
         {
           String const& aname (eaname (a));
@@ -1962,7 +1965,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& aname (eaname (a));
@@ -1978,7 +1981,7 @@ namespace CXX
              << endl;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& aname (eaname (a));
@@ -1999,14 +2002,14 @@ namespace CXX
                                Traversal::AnyAttribute,
                                Context
       {
-        HasParseFunction (Context& c, Boolean& has_el, Boolean& has_at)
+        HasParseFunction (Context& c, bool& has_el, bool& has_at)
             : Context (c), has_el_ (has_el), has_at_ (has_at)
         {
           *this >> names_ >> *this;
           *this >> inherits_ >> *this;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Complex& c)
         {
           names (c);
@@ -2015,25 +2018,25 @@ namespace CXX
             inherits (c);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Element&)
         {
           has_el_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any&)
         {
           has_el_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Attribute&)
         {
           has_at_ = true;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute&)
         {
           if (options.generate_wildcard ())
@@ -2041,8 +2044,8 @@ namespace CXX
         }
 
       private:
-        Boolean& has_el_;
-        Boolean& has_at_;
+        bool& has_el_;
+        bool& has_at_;
 
         Traversal::Names names_;
         Traversal::Inherits inherits_;
@@ -2057,14 +2060,14 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           Facets f;
           FacetCollector col (f);
           col.traverse (c);
 
-          for (Facets::ConstIterator i (f.begin ()); i != f.end (); ++i)
+          for (Facets::const_iterator i (f.begin ()); i != f.end (); ++i)
           {
             if (i->first == L"fractionDigits")
               os << "{::xsd::cxx::tree::facet::fraction_digits, " <<
@@ -2076,7 +2079,7 @@ namespace CXX
         }
 
       private:
-        typedef Cult::Containers::Map<String, String> Facets;
+        typedef map<String, String> Facets;
 
         struct FacetCollector: Traversal::Complex
         {
@@ -2086,7 +2089,7 @@ namespace CXX
             *this >> inherits_ >> *this;
           }
 
-          virtual Void
+          virtual void
           traverse (Type& c)
           {
             if (c.inherits_p ())
@@ -2148,7 +2151,7 @@ namespace CXX
               comparison_member_ (c),
               facet_array_ (c)
         {
-          Boolean gen_wildcard (options.generate_wildcard ());
+          bool gen_wildcard (options.generate_wildcard ());
 
           inherits_member_ >> member_name_;
 
@@ -2186,7 +2189,7 @@ namespace CXX
         }
 
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -2197,7 +2200,7 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (c);
@@ -2209,7 +2212,7 @@ namespace CXX
             t.dispatch (c);
           }
 
-          Boolean facets (false);
+          bool facets (false);
           String base; // base type name
           if (c.inherits_p ())
           {
@@ -2272,15 +2275,15 @@ namespace CXX
 
           // c-tors
           //
-          Boolean generate_no_base_ctor (false);
+          bool generate_no_base_ctor (false);
           {
             GenerateWithoutBaseCtor t (generate_no_base_ctor);
             t.traverse (c);
           }
 
-          Boolean has_complex_non_op_args (false);
-          Boolean has_poly_non_op_args (false);
-          Boolean complex_poly_args_clash (true);
+          bool has_complex_non_op_args (false);
+          bool has_poly_non_op_args (false);
+          bool complex_poly_args_clash (true);
           {
             HasComplexPolyNonOptArgs t (*this, true,
                                         has_complex_non_op_args,
@@ -2293,7 +2296,7 @@ namespace CXX
           //
           if (options.generate_default_ctor ())
           {
-            Boolean generate (false);
+            bool generate (false);
             {
               GenerateDefaultCtor t (*this, generate, generate_no_base_ctor);
               t.traverse (c);
@@ -2326,7 +2329,7 @@ namespace CXX
           //
           if (options.generate_from_base_ctor ())
           {
-            Boolean generate (false);
+            bool generate (false);
             {
               GenerateFromBaseCtor t (*this, generate);
               t.traverse (c);
@@ -2334,9 +2337,9 @@ namespace CXX
 
             if (generate)
             {
-              Boolean has_complex_non_op_args (false);
-              Boolean has_poly_non_op_args (false);
-              Boolean complex_poly_args_clash (true);
+              bool has_complex_non_op_args (false);
+              bool has_poly_non_op_args (false);
+              bool complex_poly_args_clash (true);
               {
                 HasComplexPolyNonOptArgs t (*this, false,
                                             has_complex_non_op_args,
@@ -2856,13 +2859,13 @@ namespace CXX
 
           //
           //
-          Boolean he (has<Traversal::Element> (c));
-          Boolean hae (has<Traversal::Any> (c));
+          bool he (has<Traversal::Element> (c));
+          bool hae (has<Traversal::Any> (c));
 
-          Boolean ha (has<Traversal::Attribute> (c));
-          Boolean haa (has<Traversal::AnyAttribute> (c));
+          bool ha (has<Traversal::Attribute> (c));
+          bool haa (has<Traversal::AnyAttribute> (c));
 
-          Boolean gen_wildcard (options.generate_wildcard ());
+          bool gen_wildcard (options.generate_wildcard ());
 
           //
           //
@@ -2897,7 +2900,7 @@ namespace CXX
               os << "this->_facet_table (_xsd_" << name << "_facet_table);"
                  << endl;
 
-            Boolean base_has_el (false), base_has_at (false);
+            bool base_has_el (false), base_has_at (false);
 
             // We are only interested in this information if we are
             // generating out own parse().
@@ -2925,7 +2928,7 @@ namespace CXX
 
             os << "}";
 
-            Boolean simple (true);
+            bool simple (true);
             {
               IsSimpleType t (simple);
               t.dispatch (c);
@@ -3118,7 +3121,7 @@ namespace CXX
               (he || ha || !c.inherits_p () ||
                ((hae || haa) && gen_wildcard)))
           {
-            Boolean base_comp (false);
+            bool base_comp (false);
 
             if (c.inherits_p ())
             {
@@ -3126,7 +3129,7 @@ namespace CXX
               test.dispatch (c.inherits ().base ());
             }
 
-            Boolean has_body (he || ha || base_comp ||
+            bool has_body (he || ha || base_comp ||
                               ((hae || haa) && gen_wildcard));
 
             os << "bool" << endl
@@ -3219,20 +3222,20 @@ namespace CXX
           belongs_ >> type_name_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (element_type_ && doc_root_p (e))
           {
             SemanticGraph::Type& t (e.type ());
 
-            Boolean fund (false);
+            bool fund (false);
             {
               IsFundamentalType test (fund);
               test.dispatch (t);
             }
 
-            Boolean simple (true);
+            bool simple (true);
             if (!fund)
             {
               IsSimpleType test (simple);
@@ -3308,7 +3311,7 @@ namespace CXX
             String const& name_member (ec.get<String> ("element-name-member"));
             String const& ns_member (ec.get<String> ("element-ns-member"));
 
-            Boolean parsing (!options.suppress_parsing ());
+            bool parsing (!options.suppress_parsing ());
             if (parsing)
             {
               String const& tr (etraits (e));
@@ -3432,17 +3435,15 @@ namespace CXX
         }
 
       private:
-        Boolean element_type_;
-        Boolean element_map_;
+        bool element_type_;
+        bool element_map_;
         Traversal::Belongs belongs_;
         MemberTypeName type_name_;
       };
     }
 
-    Void
-    generate_tree_source (Context& ctx,
-                          UnsignedLong first,
-                          UnsignedLong last)
+    void
+    generate_tree_source (Context& ctx, size_t first, size_t last)
     {
       if (ctx.options.generate_wildcard ())
       {
@@ -3456,8 +3457,8 @@ namespace CXX
 
       if (ctx.polymorphic)
       {
-        Boolean parsing (!ctx.options.suppress_parsing ());
-        Boolean comparison (ctx.options.generate_comparison ());
+        bool parsing (!ctx.options.suppress_parsing ());
+        bool comparison (ctx.options.generate_comparison ());
 
         if (parsing)
           ctx.os << "#include <xsd/cxx/tree/type-factory-map.hxx>" << endl
@@ -3469,8 +3470,8 @@ namespace CXX
 
         if (parsing || comparison)
         {
-          Boolean import_maps (ctx.options.import_maps ());
-          Boolean export_maps (ctx.options.export_maps ());
+          bool import_maps (ctx.options.import_maps ());
+          bool export_maps (ctx.options.export_maps ());
 
           if (import_maps || export_maps)
           {

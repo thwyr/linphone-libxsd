@@ -6,24 +6,21 @@
 #ifndef CXX_TREE_POLYMORPHISM_PROCESSOR_HXX
 #define CXX_TREE_POLYMORPHISM_PROCESSOR_HXX
 
-#include <cult/types.hxx>
-
 #include <xsd-frontend/semantic-graph.hxx>
 
-#include <cxx/tree/options.hxx>
-
 #include <xsd.hxx>
+#include <types.hxx>
+
+#include <cxx/tree/options.hxx>
 
 namespace CXX
 {
   namespace Tree
   {
-    using namespace Cult::Types;
-
     class PolymorphismProcessor
     {
     public:
-      Boolean
+      bool
       process (options const&,
                XSDFrontend::SemanticGraph::Schema&,
                XSDFrontend::SemanticGraph::Path const& file,

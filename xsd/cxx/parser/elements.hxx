@@ -54,7 +54,7 @@ namespace CXX
       Context (Context& c, std::wostream& o);
 
     public:
-      Boolean
+      bool
       restriction_p (SemanticGraph::Complex& c) const
       {
         if (c.inherits_p () &&
@@ -73,7 +73,7 @@ namespace CXX
       content (SemanticGraph::Complex&);
 
     public:
-      static Boolean
+      static bool
       anonymous (SemanticGraph::Type&);
 
     public:
@@ -110,8 +110,8 @@ namespace CXX
       String& cerr_inst;
       String& parser_map;
       String& std_string_type;
-      Boolean& validation;
-      Boolean& polymorphic;
+      bool& validation;
+      bool& polymorphic;
 
       Regex const* hxx_expr;
       Regex const* ixx_expr;
@@ -126,20 +126,20 @@ namespace CXX
       String cerr_inst_;
       String parser_map_;
       String std_string_type_;
-      Boolean validation_;
-      Boolean polymorphic_;
+      bool validation_;
+      bool polymorphic_;
     };
 
     //
     //
     struct RequiredAttributeTest: Traversal::Attribute
     {
-      RequiredAttributeTest (Boolean& result)
+      RequiredAttributeTest (bool& result)
           : result_ (result)
       {
       }
 
-      virtual Void
+      virtual void
       traverse (Type& a)
       {
         if (!result_ && !a.optional_p ())
@@ -147,7 +147,7 @@ namespace CXX
       }
 
     private:
-      Boolean& result_;
+      bool& result_;
     };
 
     //
@@ -157,14 +157,14 @@ namespace CXX
                             Traversal::Member,
                             Context
     {
-      ParserParamDecl (Context& c, Boolean name_arg)
+      ParserParamDecl (Context& c, bool name_arg)
           : Context (c), first_ (true), name_arg_ (name_arg)
       {
         inherits_ >> *this;
         names_ >> *this;
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Complex& c)
       {
         inherits (c, inherits_);
@@ -173,7 +173,7 @@ namespace CXX
           names (c, names_);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::List& l)
       {
         if (!first_)
@@ -189,7 +189,7 @@ namespace CXX
           os << " /* " << comment (l.name ()) << " item */";
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Member& m)
       {
         if (skip (m)) return;
@@ -211,8 +211,8 @@ namespace CXX
       Traversal::Inherits inherits_;
       Traversal::Names names_;
 
-      Boolean first_;
-      Boolean name_arg_;
+      bool first_;
+      bool name_arg_;
     };
 
 
@@ -220,16 +220,16 @@ namespace CXX
     //
     struct TypeForward: Traversal::Type, Context
     {
-      TypeForward (Context& c, Char const* name_key)
+      TypeForward (Context& c, char const* name_key)
           : Context (c), name_key_ (name_key)
       {
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Type& t);
 
     private:
-      Char const* name_key_;
+      char const* name_key_;
     };
 
     struct Includes: Traversal::Imports,
@@ -251,20 +251,20 @@ namespace CXX
         schema_ >> schema_names_ >> namespace_ >> names_ >> type_forward_;
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Imports& i)
       {
         traverse_ (i);
       }
 
-      virtual Void
+      virtual void
       traverse (SemanticGraph::Includes& i)
       {
         traverse_ (i);
       }
 
     private:
-      Void
+      void
       traverse_ (SemanticGraph::Uses&);
 
     private:
@@ -290,7 +290,7 @@ namespace CXX
       {
       }
 
-      virtual Void
+      virtual void
       traverse (Type& e)
       {
         if (options_.root_element_first ())

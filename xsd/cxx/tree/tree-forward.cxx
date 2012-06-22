@@ -22,7 +22,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String const& name (ename (l));
@@ -52,7 +52,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String const& name (ename (u));
@@ -82,7 +82,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String const& name (ename (e));
@@ -112,7 +112,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String const& name (ename (c));
@@ -136,7 +136,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_forward (Context& ctx)
     {
       NarrowString xml_schema (ctx.options.extern_xml_schema ());
@@ -178,7 +178,7 @@ namespace CXX
                  << endl;
         }
 
-        Boolean element_map (ctx.options.generate_element_map ());
+        bool element_map (ctx.options.generate_element_map ());
 
         if (element_map)
           ctx.os << "#include <xsd/cxx/tree/element-map.hxx>" << endl

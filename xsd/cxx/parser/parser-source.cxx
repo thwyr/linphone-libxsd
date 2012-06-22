@@ -21,7 +21,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String const& name (ename (e));
@@ -29,7 +29,7 @@ namespace CXX
 
           SemanticGraph::Type& base (e.inherits ().base ());
 
-          Boolean same (ret == ret_type (base));
+          bool same (ret == ret_type (base));
 
           if (same || ret == L"void" || polymorphic)
           {
@@ -79,7 +79,7 @@ namespace CXX
 
             if (validation)
             {
-              Boolean gen (!anonymous (e));
+              bool gen (!anonymous (e));
 
               // We normally don't need to enter anonymous types into
               // the inheritance map. The only exception is when an
@@ -131,7 +131,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String const& name (ename (l));
@@ -227,7 +227,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String const& name (ename (u));
@@ -282,13 +282,13 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
 	  if (skip (e))
             return;
 
-          Boolean poly (polymorphic && !anonymous (e.type ()));
+          bool poly (polymorphic && !anonymous (e.type ()));
 
           os << "if (";
 
@@ -384,13 +384,13 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
 	  if (skip (e))
             return;
 
-          Boolean poly (polymorphic && !anonymous (e.type ()));
+          bool poly (polymorphic && !anonymous (e.type ()));
           String const& name (ename (e));
 
           os << "if (";
@@ -468,7 +468,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           String const& name (ename (a));
@@ -519,7 +519,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m))
@@ -557,14 +557,14 @@ namespace CXX
           names_attribute_ >> attribute_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
-          Boolean he (has<Traversal::Element> (c));
-          Boolean ha (has<Traversal::Attribute> (c));
+          bool he (has<Traversal::Element> (c));
+          bool ha (has<Traversal::Attribute> (c));
 
           String const& ret (ret_type (c));
-          Boolean same (c.inherits_p () &&
+          bool same (c.inherits_p () &&
                         ret == ret_type (c.inherits ().base ()));
 
           String const& name (ename (c));
@@ -600,7 +600,7 @@ namespace CXX
 
             if (c.inherits_p () && validation)
             {
-              Boolean gen (!anonymous (c));
+              bool gen (!anonymous (c));
 
               // We normally don't need to enter anonymous types into
               // the inheritance map. The only exception is when an
@@ -679,7 +679,7 @@ namespace CXX
           // Don't use restriction_p here since we don't want special
           // treatment of anyType.
           //
-          Boolean restriction (
+          bool restriction (
             c.inherits_p () &&
             c.inherits ().is_a<SemanticGraph::Restricts> ());
 
@@ -806,7 +806,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (e.substitutes_p ())
@@ -833,7 +833,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_parser_source (Context& ctx)
     {
       if (ctx.polymorphic)
@@ -846,8 +846,8 @@ namespace CXX
         else
           ctx.os << endl;
 
-        Boolean import_maps (ctx.options.import_maps ());
-        Boolean export_maps (ctx.options.export_maps ());
+        bool import_maps (ctx.options.import_maps ());
+        bool export_maps (ctx.options.export_maps ());
 
         if (import_maps || export_maps)
         {

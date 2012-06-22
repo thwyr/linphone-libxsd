@@ -25,7 +25,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String name (ename (l));
@@ -317,7 +317,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           String name (ename (u));
@@ -551,7 +551,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (doxygen && e.annotated_p ())
@@ -579,7 +579,7 @@ namespace CXX
           names_ >> enumerator_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           String name (ename (e));
@@ -590,13 +590,13 @@ namespace CXX
           if (renamed_type (e, name) && !name)
             return;
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (e);
           }
 
-          Boolean enum_based (false);
+          bool enum_based (false);
           SemanticGraph::Enumeration* base_enum (0);
 
           if (string_based)
@@ -614,7 +614,7 @@ namespace CXX
 
           // Get to the ultimate base and see if is a fundamental type.
           //
-          Boolean fund_based (false);
+          bool fund_based (false);
           SemanticGraph::Type& ult_base (ultimate_base (e));
           {
             IsFundamentalType t (fund_based);
@@ -623,7 +623,7 @@ namespace CXX
 
           // Count enumerators.
           //
-          UnsignedLong enum_count (0);
+          size_t enum_count (0);
 
           for (Type::NamesIterator i (e.names_begin ()), end (e.names_end ());
                i != end; ++i)
@@ -1032,7 +1032,7 @@ namespace CXX
           os << "};";
         }
 
-        virtual Void
+        virtual void
         comma (Type&)
         {
           os << "," << endl;
@@ -1059,7 +1059,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (skip (m))
@@ -1070,13 +1070,13 @@ namespace CXX
           String kind (m.is_a<SemanticGraph::Element> ()
                        ? "element" : "attribute");
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType t (fund);
             t.dispatch (m.type ());
           }
 
-          Boolean def_attr (m.default_p () &&
+          bool def_attr (m.default_p () &&
                             m.is_a<SemanticGraph::Attribute> ());
 
           if (max (m) != 1)
@@ -1374,7 +1374,7 @@ namespace CXX
           //
           if (m.default_p ())
           {
-            Boolean simple (true);
+            bool simple (true);
 
             if (m.is_a<SemanticGraph::Element> ())
             {
@@ -1384,7 +1384,7 @@ namespace CXX
 
             if (simple)
             {
-              Boolean lit (false);
+              bool lit (false);
               {
                 IsLiteralValue test (lit);
                 test.dispatch (m.type ());
@@ -1426,7 +1426,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& aname (eaname (a));
@@ -1699,7 +1699,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& aname (eaname (a));
@@ -1779,16 +1779,16 @@ namespace CXX
           belongs_ >> type_name_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (skip (m))
             return;
 
           String const& type (etype (m));
-          Boolean el (m.is_a<SemanticGraph::Element> ());
+          bool el (m.is_a<SemanticGraph::Element> ());
 
-          Boolean def_attr (m.default_p () && !el);
+          bool def_attr (m.default_p () && !el);
 
           if (doxygen)
           {
@@ -1850,7 +1850,7 @@ namespace CXX
           if (max (m) != 1)
           {
             String const& container (econtainer (m));
-            Boolean isense (options.generate_intellisense ());
+            bool isense (options.generate_intellisense ());
 
             // sequence
             //
@@ -1968,7 +1968,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           if (doxygen)
@@ -2070,7 +2070,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           String const& container (econtainer (a));
@@ -2153,14 +2153,14 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
           if (skip (m)) return;
 
           String const& member (emember (m));
 
-          Boolean def_attr (m.default_p () &&
+          bool def_attr (m.default_p () &&
                             m.is_a<SemanticGraph::Attribute> ());
 
           if (max (m) != 1)
@@ -2187,7 +2187,7 @@ namespace CXX
           //
           if (m.default_p ())
           {
-            Boolean simple (true);
+            bool simple (true);
 
             if (m.is_a<SemanticGraph::Element> ())
             {
@@ -2197,7 +2197,7 @@ namespace CXX
 
             if (simple)
             {
-              Boolean lit (false);
+              bool lit (false);
               {
                 IsLiteralValue test (lit);
                 test.dispatch (m.type ());
@@ -2222,7 +2222,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           String const& member (emember (a));
@@ -2247,7 +2247,7 @@ namespace CXX
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::AnyAttribute& a)
         {
           os << econtainer (a) << " " << emember (a) << ";";
@@ -2278,7 +2278,7 @@ namespace CXX
             names_data_ >> data_any_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           String name (ename (c));
@@ -2289,20 +2289,20 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
-          Boolean has_members (has<Traversal::Member> (c));
+          bool has_members (has<Traversal::Member> (c));
 
-          Boolean hae (has<Traversal::Any> (c));
-          Boolean haa (has<Traversal::AnyAttribute> (c));
+          bool hae (has<Traversal::Any> (c));
+          bool haa (has<Traversal::AnyAttribute> (c));
 
-          Boolean gen_wildcard (options.generate_wildcard ());
+          bool gen_wildcard (options.generate_wildcard ());
 
-          Boolean simple (true);
+          bool simple (true);
           {
             IsSimpleType t (simple);
             t.dispatch (c);
           }
 
-          Boolean string_based (false);
+          bool string_based (false);
           {
             IsStringBasedType t (string_based);
             t.dispatch (c);
@@ -2408,15 +2408,15 @@ namespace CXX
                << "//" << endl;
           }
 
-          Boolean generate_no_base_ctor (false);
+          bool generate_no_base_ctor (false);
           {
             GenerateWithoutBaseCtor t (generate_no_base_ctor);
             t.traverse (c);
           }
 
-          Boolean has_complex_non_op_args (false);
-          Boolean has_poly_non_op_args (false);
-          Boolean complex_poly_args_clash (true);
+          bool has_complex_non_op_args (false);
+          bool has_poly_non_op_args (false);
+          bool complex_poly_args_clash (true);
           {
             HasComplexPolyNonOptArgs t (*this, true,
                                         has_complex_non_op_args,
@@ -2435,7 +2435,7 @@ namespace CXX
             // c-tor (all-non-optional-members) if we have no required
             // members.
             //
-            Boolean generate (false);
+            bool generate (false);
             {
               GenerateDefaultCtor t (*this, generate, generate_no_base_ctor);
               t.traverse (c);
@@ -2471,7 +2471,7 @@ namespace CXX
             // customized version may not necessarily be convertible to
             // the base without loss of information.
             //
-            Boolean generate (false);
+            bool generate (false);
             {
               GenerateFromBaseCtor t (*this, generate);
               t.traverse (c);
@@ -2479,9 +2479,9 @@ namespace CXX
 
             if (generate)
             {
-              Boolean has_complex_non_op_args (false);
-              Boolean has_poly_non_op_args (false);
-              Boolean complex_poly_args_clash (true);
+              bool has_complex_non_op_args (false);
+              bool has_poly_non_op_args (false);
+              bool complex_poly_args_clash (true);
               {
                 HasComplexPolyNonOptArgs t (*this, false,
                                             has_complex_non_op_args,
@@ -3147,7 +3147,7 @@ namespace CXX
           belongs_ >> type_name_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& e)
         {
           if (!doc_root_p (e))
@@ -3155,13 +3155,13 @@ namespace CXX
 
           SemanticGraph::Type& t (e.type ());
 
-          Boolean fund (false);
+          bool fund (false);
           {
             IsFundamentalType test (fund);
             test.dispatch (t);
           }
 
-          Boolean simple (true);
+          bool simple (true);
           if (!fund)
           {
             IsSimpleType test (simple);
@@ -3660,7 +3660,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_tree_header (Context& ctx)
     {
       if (ctx.generate_xml_schema)
@@ -3691,7 +3691,7 @@ namespace CXX
                  << endl;
         }
 
-        Boolean element_map (ctx.options.generate_element_map ());
+        bool element_map (ctx.options.generate_element_map ());
 
         if (element_map)
           ctx.os << "#include <xsd/cxx/tree/element-map.hxx>" << endl
@@ -3800,7 +3800,7 @@ namespace CXX
       }
       else
       {
-        Boolean inline_ (ctx.options.generate_inline ());
+        bool inline_ (ctx.options.generate_inline ());
 
         ctx.os << "#include <memory>    // std::auto_ptr" << endl
                << "#include <limits>    // std::numeric_limits" << endl

@@ -23,7 +23,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& l)
         {
           String const& name (ename (l));
@@ -75,7 +75,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m))
@@ -84,7 +84,7 @@ namespace CXX
           String const& scope (ename (m.scope ()));
           String const& parser (eparser (m));
 
-          Boolean poly (polymorphic &&
+          bool poly (polymorphic &&
                         m.is_a<SemanticGraph::Element> () &&
                         !anonymous (m.type ()));
 
@@ -117,7 +117,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m)) return;
@@ -138,7 +138,7 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (Type& m)
         {
 	  if (skip (m)) return;
@@ -159,14 +159,14 @@ namespace CXX
           }
         }
 
-        Boolean
+        bool
         comma () const
         {
           return !first_;
         }
 
       private:
-        Boolean first_;
+        bool first_;
       };
 
       struct ParserBaseSet: Traversal::Complex,
@@ -180,7 +180,7 @@ namespace CXX
           names_ >> member_;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Complex& c)
         {
           inherits (c, inherits_);
@@ -189,7 +189,7 @@ namespace CXX
             names (c, names_);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::List& l)
         {
           String const& name (ename (l));
@@ -212,14 +212,13 @@ namespace CXX
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::All& a)
         {
           if (!a.context().count ("comp-number"))
             return;
 
-          UnsignedLong state_count (
-            a.context().get<UnsignedLong> ("state-count"));
+          size_t state_count (a.context().get<size_t> ("state-count"));
 
           os << "," << endl
              << "  v_all_count_ (" << state_count << "UL, v_all_first_)";
@@ -242,15 +241,15 @@ namespace CXX
           names_parser_member_set_ >> parser_member_set_;
         }
 
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
-          Boolean he (has<Traversal::Element> (c));
-          Boolean ha (has<Traversal::Attribute> (c));
+          bool he (has<Traversal::Element> (c));
+          bool ha (has<Traversal::Attribute> (c));
 
-          Boolean hae (has_particle<Traversal::Any> (c));
+          bool hae (has_particle<Traversal::Any> (c));
 
-          Boolean hra (false); // Has required attribute.
+          bool hra (false); // Has required attribute.
           if (ha)
           {
             RequiredAttributeTest test (hra);
@@ -258,7 +257,7 @@ namespace CXX
             names (c, names_test);
           }
 
-          Boolean restriction (restriction_p (c));
+          bool restriction (restriction_p (c));
 
           if (!((!restriction && (he || ha)) ||
                 (validation && (he || hae || hra))))
@@ -305,7 +304,7 @@ namespace CXX
              << name << " ()" << endl
              << ": ";
 
-          Boolean comma (false);
+          bool comma (false);
 
           if (!restriction && (he || ha))
           {
@@ -364,7 +363,7 @@ namespace CXX
       };
     }
 
-    Void
+    void
     generate_parser_inline (Context& ctx)
     {
       // Emit "weak" header includes that are used in the file-per-type

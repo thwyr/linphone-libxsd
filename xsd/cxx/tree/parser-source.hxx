@@ -12,8 +12,8 @@ namespace CXX
 {
   namespace Tree
   {
-    Void
-    generate_parser_source (Context&, UnsignedLong first, UnsignedLong last);
+    void
+    generate_parser_source (Context&, size_t first, size_t last);
   }
 }
 

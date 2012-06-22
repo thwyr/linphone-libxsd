@@ -3,23 +3,21 @@
 // copyright : Copyright (c) 2006-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <processing/cardinality/processor.hxx>
-
-#include <elements.hxx>
+#include <map>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
 
-#include <cult/containers/map.hxx>
+#include <elements.hxx>
+
+#include <processing/cardinality/processor.hxx>
+
+using namespace std;
 
 namespace Processing
 {
-  using namespace Cult;
-
   namespace SemanticGraph = XSDFrontend::SemanticGraph;
   namespace Traversal = XSDFrontend::Traversal;
-
-  typedef WideString String;
 
   namespace Cardinality
   {
@@ -39,8 +37,7 @@ namespace Processing
         {
         }
 
-        ElementInfo (SemanticGraph::Element& e,
-                     UnsignedLong min_, UnsignedLong max_)
+        ElementInfo (SemanticGraph::Element& e, size_t min_, size_t max_)
             : min (min_), max (max_), e_ (&e)
         {
         }
@@ -53,13 +50,13 @@ namespace Processing
         }
 
       public:
-        UnsignedLong min, max;
+        size_t min, max;
 
       private:
         SemanticGraph::Element* e_;
       };
 
-      typedef Cult::Containers::Map<String, ElementInfo> ElementInfoMap;
+      typedef map<String, ElementInfo> ElementInfoMap;
 
       //
       //
@@ -75,8 +72,7 @@ namespace Processing
         {
         }
 
-        AnyInfo (SemanticGraph::Any& a,
-                 UnsignedLong min_, UnsignedLong max_)
+        AnyInfo (SemanticGraph::Any& a, size_t min_, size_t max_)
             : min (min_), max (max_), a_ (&a)
         {
         }
@@ -89,13 +85,13 @@ namespace Processing
         }
 
       public:
-        UnsignedLong min, max;
+        size_t min, max;
 
       private:
         SemanticGraph::Any* a_;
       };
 
-      typedef Cult::Containers::Map<String, AnyInfo> AnyInfoMap;
+      typedef map<String, AnyInfo> AnyInfoMap;
 
       //
       //
@@ -105,13 +101,13 @@ namespace Processing
                        Traversal::Element,
                        Traversal::Any
       {
-        virtual Void
+        virtual void
         traverse (SemanticGraph::All& a)
         {
           traverse_sequence (a);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Choice& c)
         {
           using SemanticGraph::Compositor;
@@ -135,13 +131,13 @@ namespace Processing
               // those that are we need to choose minimum between
               // the two for min and maximum for max.
               //
-              for (ElementInfoMap::Iterator i (el_map.begin ());
+              for (ElementInfoMap::iterator i (el_map.begin ());
                    i != el_map.end (); ++i)
               {
                 String const& name (i->first);
                 ElementInfo& ei (i->second);
 
-                ElementInfoMap::Iterator j (t.el_map.find (name));
+                ElementInfoMap::iterator j (t.el_map.find (name));
 
                 if (j == t.el_map.end ())
                   ei.min = 0;
@@ -156,13 +152,13 @@ namespace Processing
               // not in the map, we need to add to the map and set their
               // min to 0.
               //
-              for (ElementInfoMap::Iterator i (t.el_map.begin ());
+              for (ElementInfoMap::iterator i (t.el_map.begin ());
                    i != t.el_map.end (); ++i)
               {
                 String const& name (i->first);
                 ElementInfo& ei (i->second);
 
-                ElementInfoMap::Iterator j (el_map.find (name));
+                ElementInfoMap::iterator j (el_map.find (name));
 
                 if (j == el_map.end ())
                   el_map[name] = ElementInfo (ei.element (), 0, ei.max);
@@ -173,7 +169,7 @@ namespace Processing
             // we need to copy them from each arm of choice and set min to
             // 0.
             //
-            for (AnyInfoMap::Iterator i (t.any_map.begin ());
+            for (AnyInfoMap::iterator i (t.any_map.begin ());
                  i != t.any_map.end (); ++i)
             {
               String const& name (i->first);
@@ -187,19 +183,19 @@ namespace Processing
 
           // Choice's min and max.
           //
-          UnsignedLong cmin (c.min ()), cmax (c.max ());
+          size_t cmin (c.min ()), cmax (c.max ());
 
           // Iterate over elements and wildcards in the maps and multiply
           // their cardinality by cmin and cmax.
           //
-          for (ElementInfoMap::Iterator i (el_map.begin ());
+          for (ElementInfoMap::iterator i (el_map.begin ());
                i != el_map.end (); ++i)
           {
             i->second.min *= cmin;
             i->second.max *= cmax;
           }
 
-          for (AnyInfoMap::Iterator i (any_map.begin ());
+          for (AnyInfoMap::iterator i (any_map.begin ());
                i != any_map.end (); ++i)
           {
             i->second.min *= cmin; // Not really necessary since min == 0.
@@ -207,20 +203,20 @@ namespace Processing
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Sequence& s)
         {
           traverse_sequence (s);
         }
 
-        Void
+        void
         traverse_sequence (SemanticGraph::Compositor& c)
         {
           using SemanticGraph::Compositor;
 
           // Sequence's min and max.
           //
-          UnsignedLong smin (c.min ()), smax (c.max ());
+          size_t smin (c.min ()), smax (c.max ());
 
           // Go over all particles we contain and add them to the map.
           //
@@ -232,14 +228,14 @@ namespace Processing
 
             // Handle elements.
             //
-            for (ElementInfoMap::Iterator i (t.el_map.begin ());
+            for (ElementInfoMap::iterator i (t.el_map.begin ());
                  i != t.el_map.end (); ++i)
             {
               String const& name (i->first);
               ElementInfo& ei (i->second);
-              UnsignedLong min (ei.min * smin);
-              UnsignedLong max (ei.max * smax);
-              ElementInfoMap::Iterator j (el_map.find (name));
+              size_t min (ei.min * smin);
+              size_t max (ei.max * smax);
+              ElementInfoMap::iterator j (el_map.find (name));
 
               if (j != el_map.end ())
               {
@@ -255,13 +251,13 @@ namespace Processing
 
             // Handle wildcards.
             //
-            for (AnyInfoMap::Iterator i (t.any_map.begin ());
+            for (AnyInfoMap::iterator i (t.any_map.begin ());
                  i != t.any_map.end (); ++i)
             {
               String const& name (i->first);
               AnyInfo& ai (i->second);
-              UnsignedLong min (ai.min * smin);
-              UnsignedLong max (ai.max * smax);
+              size_t min (ai.min * smin);
+              size_t max (ai.max * smax);
 
               assert (any_map.find (name) == any_map.end ());
 
@@ -270,7 +266,7 @@ namespace Processing
           }
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Element& e)
         {
           SemanticGraph::ContainsParticle& cp (e.contained_particle ());
@@ -282,7 +278,7 @@ namespace Processing
           el_map[name] = ElementInfo (e, cp.min (), cp.max ());
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Any& a)
         {
           SemanticGraph::ContainsParticle& cp (a.contained_particle ());
@@ -300,7 +296,7 @@ namespace Processing
       //
       struct Complex: Traversal::Complex
       {
-        virtual Void
+        virtual void
         traverse (Type& c)
         {
           if (c.contains_compositor_p ())
@@ -308,7 +304,7 @@ namespace Processing
             Particle t;
             t.dispatch (c.contains_compositor ().compositor ());
 
-            for (ElementInfoMap::Iterator i (t.el_map.begin ());
+            for (ElementInfoMap::iterator i (t.el_map.begin ());
                  i != t.el_map.end (); ++i)
             {
               ElementInfo& ei (i->second);
@@ -318,7 +314,7 @@ namespace Processing
               ctx.set ("max", ei.max);
             }
 
-            for (AnyInfoMap::Iterator i (t.any_map.begin ());
+            for (AnyInfoMap::iterator i (t.any_map.begin ());
                  i != t.any_map.end (); ++i)
             {
               AnyInfo& ai (i->second);
@@ -340,7 +336,7 @@ namespace Processing
       //
       struct Attribute: Traversal::Attribute
       {
-        virtual Void
+        virtual void
         traverse (Type& a)
         {
           SemanticGraph::Context& ctx (a.context ());
@@ -355,7 +351,7 @@ namespace Processing
       //
       struct Uses: Traversal::Uses
       {
-        virtual Void
+        virtual void
         traverse (Type& u)
         {
           SemanticGraph::Schema& s (u.schema ());
@@ -369,7 +365,7 @@ namespace Processing
       };
     }
 
-    Void Processor::
+    void Processor::
     process (SemanticGraph::Schema& tu, SemanticGraph::Path const&)
     {
       Traversal::Schema schema;

@@ -12,8 +12,8 @@ namespace CXX
 {
   namespace Tree
   {
-    Void
-    generate_tree_inline (Context&, UnsignedLong first, UnsignedLong last);
+    void
+    generate_tree_inline (Context&, size_t first, size_t last);
   }
 }
 

@@ -3,6 +3,7 @@
 // copyright : Copyright (c) 2005-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
+#include <map>
 #include <vector>
 #include <memory>  // std::auto_ptr
 #include <cstddef> // std::size_t
@@ -13,13 +14,6 @@
 #include <xercesc/util/PlatformUtils.hpp>
 
 #include <cutl/re.hxx>
-
-#include <cult/types.hxx>
-
-#include <cult/trace/log.hxx>
-
-#include <cult/containers/map.hxx>
-#include <cult/containers/vector.hxx>
 
 #include <xsd-frontend/parser.hxx>
 #include <xsd-frontend/transformations/anonymous.hxx>
@@ -43,8 +37,6 @@
 
 #include "../libxsd/xsd/cxx/version.hxx"
 
-using namespace Cult::Types;
-
 namespace SemanticGraph = XSDFrontend::SemanticGraph;
 namespace Transformations = XSDFrontend::Transformations;
 
@@ -58,24 +50,24 @@ struct LocationTranslator: XSDFrontend::LocationTranslator
 
   LocationTranslator (NarrowStrings const& map,
                       NarrowStrings const& regex,
-                      Boolean trace);
+                      bool trace);
 
   virtual NarrowString
   translate (NarrowString const&);
 
 private:
-  typedef Cult::Containers::Map<NarrowString, NarrowString> Map;
+  typedef map<NarrowString, NarrowString> Map;
 
   typedef cutl::re::regexsub Regex;
   typedef cutl::re::format RegexFormat;
-  typedef Cult::Containers::Vector<Regex> RegexVector;
+  typedef vector<Regex> RegexVector;
 
-  typedef Cult::Containers::Map<NarrowString, NarrowString> Cache;
+  typedef map<NarrowString, NarrowString> Cache;
 
   Map map_;
   RegexVector regex_;
   Cache cache_;
-  Boolean trace_;
+  bool trace_;
 };
 
 //
@@ -84,21 +76,21 @@ struct AnonymousNameTranslator: Transformations::AnonymousNameTranslator
 {
   struct Failed {};
 
-  AnonymousNameTranslator (NarrowStrings const& regex, Boolean trace);
+  AnonymousNameTranslator (NarrowStrings const& regex, bool trace);
 
-  virtual WideString
-  translate (WideString const& file,
-             WideString const& ns,
-             WideString const& name,
-             WideString const& xpath);
+  virtual String
+  translate (String const& file,
+             String const& ns,
+             String const& name,
+             String const& xpath);
 
 private:
   typedef cutl::re::wregexsub Regex;
   typedef cutl::re::wformat RegexFormat;
-  typedef Cult::Containers::Vector<Regex> RegexVector;
+  typedef vector<Regex> RegexVector;
 
   RegexVector regex_;
-  Boolean trace_;
+  bool trace_;
 
 };
 
@@ -109,12 +101,12 @@ struct SchemaPerTypeTranslator: Transformations::SchemaPerTypeTranslator
   struct Failed {};
 
   SchemaPerTypeTranslator (NarrowStrings const& type_regex,
-                           Boolean type_trace,
+                           bool type_trace,
                            NarrowStrings const& schema_regex,
-                           Boolean schema_trace);
+                           bool schema_trace);
 
-  virtual WideString
-  translate_type (WideString const& ns, WideString const& name);
+  virtual String
+  translate_type (String const& ns, String const& name);
 
   virtual NarrowString
   translate_schema (NarrowString const& file);
@@ -122,17 +114,17 @@ struct SchemaPerTypeTranslator: Transformations::SchemaPerTypeTranslator
 private:
   typedef cutl::re::wregexsub TypeRegex;
   typedef cutl::re::wformat TypeRegexFormat;
-  typedef Cult::Containers::Vector<TypeRegex> TypeRegexVector;
+  typedef vector<TypeRegex> TypeRegexVector;
 
   TypeRegexVector type_regex_;
-  Boolean type_trace_;
+  bool type_trace_;
 
   typedef cutl::re::regexsub SchemaRegex;
   typedef cutl::re::format SchemaRegexFormat;
-  typedef Cult::Containers::Vector<SchemaRegex> SchemaRegexVector;
+  typedef vector<SchemaRegex> SchemaRegexVector;
 
   SchemaRegexVector schema_regex_;
-  Boolean schema_trace_;
+  bool schema_trace_;
 };
 
 //
@@ -152,15 +144,13 @@ struct XercesInitializer
 
 // Expand the \n escape sequence.
 //
-Void
+void
 expand_nl (NarrowString& s);
 
-Int
-main (Int argc, Char* argv[])
+int
+main (int argc, char* argv[])
 {
-  std::wostream& e (wcerr);
-
-  Cult::Trace::Log::instance ().level (0);
+  wostream& e (wcerr);
 
   try
   {
@@ -173,7 +163,7 @@ main (Int argc, Char* argv[])
 
     if (help_ops.version () || cmd == "version")
     {
-      std::wostream& o (wcout);
+      wostream& o (wcout);
 
       o << "CodeSynthesis XSD XML Schema to C++ compiler " <<
         XSD_STR_VERSION << endl
@@ -205,7 +195,7 @@ main (Int argc, Char* argv[])
 
     if (help_ops.help () || cmd == "help")
     {
-      std::wostream& o (wcout);
+      wostream& o (wcout);
 
       if (cmd == "help" && args.more ())
       {
@@ -303,7 +293,7 @@ main (Int argc, Char* argv[])
         disabled_w.insert (*i);
     }
 
-    Boolean disabled_w_all (disabled_w.find ("all") != disabled_w.end ());
+    bool disabled_w_all (disabled_w.find ("all") != disabled_w.end ());
 
     if (common_ops.morph_anonymous () &&
         !disabled_w_all &&
@@ -327,7 +317,7 @@ main (Int argc, Char* argv[])
       return 1;
     }
 
-    Boolean fpt (common_ops.file_per_type ());
+    bool fpt (common_ops.file_per_type ());
 
     if (cmd == "cxx-tree" || cmd == "cxx-parser")
     {
@@ -422,7 +412,7 @@ main (Int argc, Char* argv[])
       // File-per-schema compilation mode.
       //
 
-      for (Size i (0); i < files.size (); ++i)
+      for (size_t i (0); i < files.size (); ++i)
       {
         // Parse schema.
         //
@@ -595,7 +585,7 @@ main (Int argc, Char* argv[])
       //
       SemanticGraph::Paths paths;
 
-      for (Size i (0); i < files.size (); ++i)
+      for (size_t i (0); i < files.size (); ++i)
       {
         try
         {
@@ -684,7 +674,7 @@ main (Int argc, Char* argv[])
       // Rearrange the graph so that each type is in a seperate
       // schema file.
       //
-      typedef std::vector<SemanticGraph::Schema*> Schemas;
+      typedef vector<SemanticGraph::Schema*> Schemas;
 
       SchemaPerTypeTranslator type_translator (
         common_ops.type_file_regex (),
@@ -768,7 +758,7 @@ main (Int argc, Char* argv[])
         OutputFileStream ofs;
         SemanticGraph::Path path (fl);
 
-        ofs.open (fl, std::ios_base::out);
+        ofs.open (fl, ios_base::out);
 
         if (!ofs.is_open ())
         {
@@ -785,7 +775,7 @@ main (Int argc, Char* argv[])
           ofs << p;
         }
 
-        for (FileList::Iterator i (file_list.begin ()), e (file_list.end ());
+        for (FileList::iterator i (file_list.begin ()), e (file_list.end ());
              i != e;)
         {
           ofs << *i;
@@ -861,7 +851,7 @@ main (Int argc, Char* argv[])
 LocationTranslator::
 LocationTranslator (NarrowStrings const& map,
                     NarrowStrings const& regex,
-                    Boolean trace)
+                    bool trace)
     : trace_ (trace)
 {
   // Map.
@@ -870,7 +860,7 @@ LocationTranslator (NarrowStrings const& map,
   {
     // Split the string in two parts at the last '='.
     //
-    Size pos (i->rfind ('='));
+    size_t pos (i->rfind ('='));
 
     if (pos == NarrowString::npos)
     {
@@ -907,14 +897,14 @@ translate (NarrowString const& l)
 {
   // First check the cache.
   //
-  Cache::ConstIterator ci (cache_.find (l));
+  Cache::const_iterator ci (cache_.find (l));
 
   if (ci != cache_.end ())
     return ci->second;
 
   // Then check the direct map.
   //
-  Map::ConstIterator mi (map_.find (l));
+  Map::const_iterator mi (map_.find (l));
 
   if (mi != map_.end ())
   {
@@ -927,7 +917,7 @@ translate (NarrowString const& l)
   if (trace_)
     wcerr << "location: '" << l.c_str () << "'" << endl;
 
-  for (RegexVector::ReverseIterator i (regex_.rbegin ());
+  for (RegexVector::reverse_iterator i (regex_.rbegin ());
        i != regex_.rend (); ++i)
   {
     if (trace_)
@@ -958,14 +948,14 @@ translate (NarrowString const& l)
 //
 
 AnonymousNameTranslator::
-AnonymousNameTranslator (NarrowStrings const& regex, Boolean trace)
+AnonymousNameTranslator (NarrowStrings const& regex, bool trace)
     : trace_ (trace)
 {
   for (NarrowStrings::const_iterator i (regex.begin ()); i != regex.end (); ++i)
   {
     try
     {
-      regex_.push_back (Regex (WideString (*i)));
+      regex_.push_back (Regex (String (*i)));
     }
     catch (RegexFormat const& e)
     {
@@ -977,18 +967,18 @@ AnonymousNameTranslator (NarrowStrings const& regex, Boolean trace)
   }
 }
 
-WideString AnonymousNameTranslator::
-translate (WideString const& file,
-           WideString const& ns,
-           WideString const& name,
-           WideString const& xpath)
+String AnonymousNameTranslator::
+translate (String const& file,
+           String const& ns,
+           String const& name,
+           String const& xpath)
 {
-  WideString s (file + L' ' + ns + L' ' + xpath);
+  String s (file + L' ' + ns + L' ' + xpath);
 
   if (trace_)
     wcerr << "anonymous type: '" << s << "'" << endl;
 
-  for (RegexVector::ReverseIterator i (regex_.rbegin ());
+  for (RegexVector::reverse_iterator i (regex_.rbegin ());
        i != regex_.rend (); ++i)
   {
     if (trace_)
@@ -996,7 +986,7 @@ translate (WideString const& file,
 
     if (i->match (s))
     {
-      WideString r (i->replace (s));
+      String r (i->replace (s));
 
       if (trace_)
         wcerr << "'" << r << "' : +" << endl;
@@ -1018,9 +1008,9 @@ translate (WideString const& file,
 
 SchemaPerTypeTranslator::
 SchemaPerTypeTranslator (NarrowStrings const& type_regex,
-                         Boolean type_trace,
+                         bool type_trace,
                          NarrowStrings const& schema_regex,
-                         Boolean schema_trace)
+                         bool schema_trace)
     : type_trace_ (type_trace), schema_trace_ (schema_trace)
 {
   for (NarrowStrings::const_iterator i (type_regex.begin ());
@@ -1028,7 +1018,7 @@ SchemaPerTypeTranslator (NarrowStrings const& type_regex,
   {
     try
     {
-      type_regex_.push_back (TypeRegex (WideString (*i)));
+      type_regex_.push_back (TypeRegex (String (*i)));
     }
     catch (TypeRegexFormat const& e)
     {
@@ -1056,15 +1046,15 @@ SchemaPerTypeTranslator (NarrowStrings const& type_regex,
   }
 }
 
-WideString SchemaPerTypeTranslator::
-translate_type (WideString const& ns, WideString const& name)
+String SchemaPerTypeTranslator::
+translate_type (String const& ns, String const& name)
 {
-  WideString s (ns + L' ' + name);
+  String s (ns + L' ' + name);
 
   if (type_trace_)
     wcerr << "type: '" << s << "'" << endl;
 
-  for (TypeRegexVector::ReverseIterator i (type_regex_.rbegin ());
+  for (TypeRegexVector::reverse_iterator i (type_regex_.rbegin ());
        i != type_regex_.rend (); ++i)
   {
     if (type_trace_)
@@ -1072,7 +1062,7 @@ translate_type (WideString const& ns, WideString const& name)
 
     if (i->match (s))
     {
-      WideString r (i->replace (s));
+      String r (i->replace (s));
 
       if (type_trace_)
         wcerr << "'" << r << "' : +" << endl;
@@ -1095,7 +1085,7 @@ translate_schema (NarrowString const& file)
   if (schema_trace_)
     wcerr << "schema: '" << file.c_str () << "'" << endl;
 
-  for (SchemaRegexVector::ReverseIterator i (schema_regex_.rbegin ());
+  for (SchemaRegexVector::reverse_iterator i (schema_regex_.rbegin ());
        i != schema_regex_.rend (); ++i)
   {
     if (schema_trace_)
@@ -1122,10 +1112,10 @@ translate_schema (NarrowString const& file)
 
 //
 //
-Void
+void
 expand_nl (NarrowString& s)
 {
-  for (Size i (0); i < s.size ();)
+  for (size_t i (0); i < s.size ();)
   {
     if (s[i] == '\\' && (i + 1) < s.size () && s[i + 1] == 'n')
     {

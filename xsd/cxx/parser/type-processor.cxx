@@ -3,13 +3,15 @@
 // copyright : Copyright (c) 2006-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <cult/containers/set.hxx>
+#include <set>
 
 #include <cxx/parser/elements.hxx>
 #include <cxx/parser/type-processor.hxx>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>
+
+using namespace std;
 
 namespace CXX
 {
@@ -29,14 +31,14 @@ namespace CXX
       {
         Type (SemanticGraph::Schema& schema,
               TypeMap::Namespaces& type_map,
-              Boolean add_includes)
+              bool add_includes)
             : schema_ (schema),
               type_map_ (type_map),
               add_includes_ (add_includes)
         {
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Type& type)
         {
           using TypeMap::Namespace;
@@ -54,7 +56,7 @@ namespace CXX
           // match the type in order to add include directives to the
           // new root schema.
           //
-          Boolean set (true);
+          bool set (true);
 
           if (tc.count ("ret-type"))
           {
@@ -75,12 +77,12 @@ namespace CXX
 
           //std::wcerr << "traversing: " << ns_name << "#" << t_name << endl;
 
-          for (Namespaces::ConstIterator n (type_map_.begin ());
+          for (Namespaces::const_iterator n (type_map_.begin ());
                n != type_map_.end (); ++n)
           {
             // Check if the namespace matches.
             //
-            Boolean ns_match;
+            bool ns_match;
 
             if (!n->xsd_name ().empty ())
             {
@@ -143,7 +145,7 @@ namespace CXX
                         arg_type = ret_type;
                       else
                       {
-                        WideChar last (ret_type[ret_type.size () - 1]);
+                        wchar_t last (ret_type[ret_type.size () - 1]);
 
                         // If it is already a pointer or reference then use
                         // it as is.
@@ -170,7 +172,7 @@ namespace CXX
                   {
                     if (n->includes_begin () != n->includes_end ())
                     {
-                      typedef Cult::Containers::Set<String> Includes;
+                      typedef std::set<String> Includes;
 
                       if (!schema_.context ().count ("includes"))
                         schema_.context ().set ("includes", Includes ());
@@ -196,7 +198,7 @@ namespace CXX
       private:
         SemanticGraph::Schema& schema_;
         TypeMap::Namespaces& type_map_;
-        Boolean add_includes_;
+        bool add_includes_;
       };
 
 
@@ -209,7 +211,7 @@ namespace CXX
       {
         GlobalType (SemanticGraph::Schema& schema,
                     TypeMap::Namespaces& type_map,
-                    Boolean add_includes)
+                    bool add_includes)
             : type_ (schema, type_map, add_includes)
         {
           inherits_ >> type_;
@@ -217,20 +219,20 @@ namespace CXX
           argumented_ >> type_;
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Type& t)
         {
           type_.traverse (t);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::List& l)
         {
           type_.traverse (l);
           Traversal::List::argumented (l, argumented_);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Complex& c)
         {
           type_.traverse (c);
@@ -238,7 +240,7 @@ namespace CXX
           Complex::names (c, names_);
         }
 
-        virtual Void
+        virtual void
         traverse (SemanticGraph::Enumeration& e)
         {
           type_.traverse (e);
@@ -254,10 +256,10 @@ namespace CXX
         Traversal::Argumented argumented_;
       };
 
-      Void
+      void
       process_impl (options const& ops,
                     XSDFrontend::SemanticGraph::Schema& tu,
-                    Boolean gen_driver,
+                    bool gen_driver,
                     TypeMap::Namespaces& type_map)
       {
         if (tu.names_begin ()->named ().name () ==
@@ -281,7 +283,7 @@ namespace CXX
           // If --extern-xml-schema is specified, then we don't want
           // includes from the XML Schema type map.
           //
-          Boolean extern_xml_schema (ops.extern_xml_schema ());
+          bool extern_xml_schema (ops.extern_xml_schema ());
 
           //
           //
@@ -341,10 +343,10 @@ namespace CXX
       }
     }
 
-    Void TypeProcessor::
+    void TypeProcessor::
     process (options const& ops,
              XSDFrontend::SemanticGraph::Schema& s,
-             Boolean gen_driver,
+             bool gen_driver,
              TypeMap::Namespaces& tm)
     {
       process_impl (ops, s, gen_driver, tm);

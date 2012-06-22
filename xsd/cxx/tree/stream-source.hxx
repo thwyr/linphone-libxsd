@@ -12,10 +12,8 @@ namespace CXX
 {
   namespace Tree
   {
-    Void
-    generate_stream_source (Context&,
-                            UnsignedLong first,
-                            UnsignedLong last);
+    void
+    generate_stream_source (Context&, size_t first, size_t last);
   }
 }
 

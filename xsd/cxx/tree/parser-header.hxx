@@ -13,7 +13,7 @@ namespace CXX
 {
   namespace Tree
   {
-    Void
+    void
     generate_parser_header (Context&);
   }
 }

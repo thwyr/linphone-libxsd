@@ -45,7 +45,7 @@ namespace CXX
       locator_ = l;
     }
 
-    virtual Void
+    virtual void
     startElement (const XMLCh* const,
                   const XMLCh* const lname,
                   const XMLCh* const,
@@ -81,7 +81,7 @@ namespace CXX
       }
     }
 
-    virtual Void
+    virtual void
     endElement (const XMLCh* const,
                 const XMLCh* const lname,
                 const XMLCh* const)
@@ -116,10 +116,10 @@ namespace CXX
     }
 
 #if _XERCES_VERSION >= 30000
-    virtual Void
+    virtual void
     characters (const XMLCh* const s, const XMLSize_t length)
 #else
-    virtual Void
+    virtual void
     characters (const XMLCh* const s, const unsigned int length)
 #endif
     {
@@ -131,9 +131,9 @@ namespace CXX
         lit_ += str;
       else
       {
-        for (Size i (0); i < str.size (); ++i)
+        for (size_t i (0); i < str.size (); ++i)
         {
-          WideChar c (str[i]);
+          wchar_t c (str[i]);
 
           if (c != 0x20 && c != 0x0A && c != 0x0D && c != 0x09)
           {
@@ -149,30 +149,30 @@ namespace CXX
     //
     enum Severity {s_warning, s_error, s_fatal};
 
-    virtual Void
+    virtual void
     warning (const SAXParseException& e)
     {
       handle (e, s_warning);
     }
 
-    virtual Void
+    virtual void
     error (const SAXParseException& e)
     {
       handle (e, s_error);
     }
 
-    virtual Void
+    virtual void
     fatalError (const SAXParseException& e)
     {
       handle (e, s_fatal);
     }
 
-    virtual Void
+    virtual void
     resetErrors ()
     {
     }
 
-    Void
+    void
     handle (const SAXParseException& e, Severity s)
     {
       wcerr << file_ << ":";
@@ -243,8 +243,8 @@ namespace CXX
     String file_;
     StringLiteralMap& map_;
 
-    Boolean str_seen_;
-    Boolean lit_seen_;
+    bool str_seen_;
+    bool lit_seen_;
 
     String str_;
     String lit_;
