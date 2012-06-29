@@ -212,7 +212,7 @@ namespace CXX
     // Custom direct mapping.
     //
     for (NarrowStrings::const_iterator i (ops.namespace_map ().begin ()),
-           e (ops.namespace_regex ().end ()); i != e; ++i)
+           e (ops.namespace_map ().end ()); i != e; ++i)
     {
       String s (*i);
 
