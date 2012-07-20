@@ -6,6 +6,7 @@
 #include <cxx/tree/default-value.hxx>
 
 using std::hex;
+using std::dec;
 
 namespace CXX
 {
@@ -689,17 +690,21 @@ namespace CXX
             if (di % 9 == 0)
               os << endl;
 
+            os << hex;
+
             v = static_cast<unsigned char> ((b1 << 2) | (b2 >> 4));
             os.width (2);
-            os << "0x" << hex << v;
+            os << "0x" << v;
 
             v = static_cast<unsigned char> ((b2 << 4) | (b3 >> 2));
             os.width (2);
-            os << ", 0x" << hex << v;
+            os << ", 0x" << v;
 
             v = static_cast<unsigned char> ((b3 << 6) | b4);
             os.width (2);
-            os << ", 0x" << hex << v;
+            os << ", 0x" << v;
+
+            os << dec;
 
             di += 3;
           }
@@ -724,7 +729,7 @@ namespace CXX
               // Two pads. Last 4 bits in b2 should be zero.
               //
               v = static_cast<unsigned char> ((b1 << 2) | (b2 >> 4));
-              os << "0x" << hex << v;
+              os << "0x" << hex << v << dec;
               di++;
             }
             else
@@ -733,13 +738,17 @@ namespace CXX
               //
               b3 = base64_decode (e3);
 
+              os << hex;
+
               v = static_cast<unsigned char> ((b1 << 2) | (b2 >> 4));
               os.width (2);
-              os << "0x" << hex << v;
+              os << "0x" << v;
 
               v = static_cast<unsigned char> ((b2 << 4) | (b3 >> 2));
               os.width (2);
-              os << ", 0x" << hex << v;
+              os << ", 0x" << v;
+
+              os << dec;
 
               di += 2;
             }
@@ -751,17 +760,21 @@ namespace CXX
             b3 = base64_decode (e3);
             b4 = base64_decode (e4);
 
+            os << hex;
+
             v = static_cast<unsigned char> ((b1 << 2) | (b2 >> 4));
             os.width (2);
-            os << "0x" << hex << v;
+            os << "0x" << v;
 
             v = static_cast<unsigned char> ((b2 << 4) | (b3 >> 2));
             os.width (2);
-            os << ", 0x" << hex << v;
+            os << ", 0x" << v;
 
             v = static_cast<unsigned char> ((b3 << 6) | b4);
             os.width (2);
-            os << ", 0x" << hex << v;
+            os << ", 0x" << v;
+
+            os << dec;
 
             di += 3;
           }
@@ -835,7 +848,7 @@ namespace CXX
 
             unsigned short v = static_cast<unsigned char> ((h << 4) | l);
             os.width (2);
-            os << "0x" << hex << v;
+            os << "0x" << hex << v << dec;
           }
 
           os.fill (prev_fill);
