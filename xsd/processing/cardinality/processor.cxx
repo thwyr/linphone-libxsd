@@ -341,8 +341,8 @@ namespace Processing
         {
           SemanticGraph::Context& ctx (a.context ());
 
-          ctx.set ("min", a.optional_p () ? 0UL : 1UL);
-          ctx.set ("max", 1UL);
+          ctx.set ("min", size_t (a.optional_p () ? 0 : 1));
+          ctx.set ("max", size_t (1));
         }
       };
 
