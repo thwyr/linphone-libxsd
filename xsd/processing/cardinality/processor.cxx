@@ -144,7 +144,13 @@ namespace Processing
                 else
                 {
                   ei.min = j->second.min < ei.min ? j->second.min : ei.min;
-                  ei.max = j->second.max > ei.max ? j->second.max : ei.max;
+
+                  // Unbounded is encoded as 0.
+                  //
+                  if (j->second.max == 0 || ei.max == 0)
+                    ei.max = 0;
+                  else
+                    ei.max = j->second.max > ei.max ? j->second.max : ei.max;
                 }
               }
 
