@@ -16,6 +16,7 @@
 #include <cutl/compiler/sloc-counter.hxx>
 
 #include <xsd-frontend/semantic-graph.hxx>
+#include <xsd-frontend/generators/dependencies.hxx>
 
 #include <cxx/tree/generator.hxx>
 
@@ -290,6 +291,14 @@ namespace CXX
       bool inline_ (ops.generate_inline () && !generate_xml_schema);
       bool forward (ops.generate_forward () && !generate_xml_schema);
       bool source (!generate_xml_schema);
+      bool gen_dep (ops.generate_dep () && source);
+
+      if (gen_dep && fpt)
+      {
+        wcerr << "error: dependency generation not support in " <<
+          "file-per-type mode" << endl;
+        throw Failed ();
+      }
 
       // Generate code.
       //
@@ -299,6 +308,7 @@ namespace CXX
       NarrowString ixx_suffix (ops.ixx_suffix ());
       NarrowString cxx_suffix (ops.cxx_suffix ());
       NarrowString fwd_suffix (ops.fwd_suffix ());
+      NarrowString dep_suffix (ops.dep_suffix ());
 
       Regex hxx_expr (ops.hxx_regex ().empty ()
                       ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + hxx_suffix + "#"
@@ -315,6 +325,10 @@ namespace CXX
       Regex fwd_expr (ops.fwd_regex ().empty ()
                       ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + fwd_suffix + "#"
                       : ops.fwd_regex ());
+
+      Regex dep_expr (ops.dep_regex ().empty ()
+                      ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + dep_suffix + "#"
+                      : ops.dep_regex ());
 
       if (!hxx_expr.match (name))
       {
@@ -348,13 +362,23 @@ namespace CXX
         throw Failed ();
       }
 
+      if (gen_dep && !dep_expr.match (name))
+      {
+        wcerr << "error: dependency expression '" <<
+          dep_expr.regex ().str ().c_str () << "' does not match '" <<
+          name.c_str () << "'" << endl;
+        throw Failed ();
+      }
+
       NarrowString hxx_name (hxx_expr.replace (name));
       NarrowString ixx_name (inline_ ? ixx_expr.replace (name) : NarrowString ());
       NarrowString fwd_name (forward ? fwd_expr.replace (name) : NarrowString ());
+      NarrowString dep_name (gen_dep ? dep_expr.replace (name) : NarrowString ());
 
       Path hxx_path (hxx_name, boost::filesystem::native);
       Path ixx_path (ixx_name, boost::filesystem::native);
       Path fwd_path (fwd_name, boost::filesystem::native);
+      Path dep_path (dep_name, boost::filesystem::native);
       Paths cxx_paths;
 
       if (source)
@@ -420,6 +444,7 @@ namespace CXX
         hxx_path = out_dir / hxx_path;
         ixx_path = out_dir / ixx_path;
         fwd_path = out_dir / fwd_path;
+        dep_path = out_dir / dep_path;
 
         for (Paths::iterator i (cxx_paths.begin ());
              i != cxx_paths.end (); ++i)
@@ -431,8 +456,24 @@ namespace CXX
       WideOutputFileStream hxx (hxx_path, ios_base::out);
       WideOutputFileStream ixx;
       WideOutputFileStream fwd;
+      WideOutputFileStream dep;
       WideOutputFileStreams cxx;
 
+      // DEP
+      //
+      if (gen_dep)
+      {
+        dep.open (dep_path, ios_base::out);
+
+        if (!dep.is_open ())
+        {
+          wcerr << dep_path << ": error: unable to open in write mode" << endl;
+          throw Failed ();
+        }
+
+        unlinks.add (dep_path);
+        file_list.push_back (dep_path.native_file_string ());
+      }
 
       // FWD
       //
@@ -449,7 +490,6 @@ namespace CXX
         unlinks.add (fwd_path);
         file_list.push_back (fwd_path.native_file_string ());
       }
-
 
       // HXX
       //
@@ -579,6 +619,58 @@ namespace CXX
 
       if (guard_prefix)
         guard_prefix += '_';
+
+      // DEP
+      //
+      if (gen_dep)
+      {
+        NarrowString target;
+        NarrowStrings const& ts (ops.dep_target ());
+
+        if (!ts.empty ())
+        {
+          for (NarrowStrings::const_iterator i (ts.begin ());
+               i != ts.end (); ++i)
+            target += (target.empty () ? "" : " \\\n") + *i;
+        }
+        else
+        {
+          target = hxx_path.leaf ();
+
+          if (forward)
+            target += " \\\n" + fwd_path.leaf ();
+
+          if (inline_)
+            target += " \\\n" + ixx_path.leaf ();
+
+          for (Paths::iterator i (cxx_paths.begin ());
+               i != cxx_paths.end (); ++i)
+            target += " \\\n" + i->leaf ();
+
+          target += " \\\n" + dep_path.leaf ();
+        }
+
+        dep << target.c_str () << ':';
+
+        XSDFrontend::Generators::Dependencies gen;
+        Paths prq (gen.generate (schema, file_path));
+
+        for (Paths::iterator i (prq.begin ()); i != prq.end (); ++i)
+          dep << " \\" << endl
+              << "  " << i->string ();
+
+        dep << endl;
+
+        // If requested, generate phony rules for included/imported schemas
+        // but not the main file which is the first in the list.
+        //
+        if (ops.dep_phony () && prq.size () > 1)
+        {
+          for (Paths::iterator i (prq.begin () + 1); i != prq.end (); ++i)
+            dep << endl
+                << i->string () << ':' << endl;
+        }
+      }
 
       // FWD
       //

@@ -463,5 +463,58 @@ namespace CXX
        you would like to use the same generated code across multiple
        platforms."
     };
+
+    // Make dependency generation.
+    //
+    bool --generate-dep
+    {
+      "Generate \cb{make} dependency information. This option triggers the
+       creation of the \cb{.d} file containing the dependencies of the
+       generated files on the main schema file as well as all the schema
+       files that it includes/imports, transitively. This dependency file
+       is then normally included into the main \cb{makefile} to implement
+       automatic dependency tracking.
+
+       Note also that automatic dependency generation is not supported in
+       the file-per-type mode (\cb{--file-per-type}). In this case, all
+       the generated files are produced with a single compiler invocation
+       and depend on all the schemas. As a result, it is easier to establish
+       such a dependency manually, perhaps with the help of the
+       \cb{--file-list*} options."
+    };
+
+    bool --dep-phony
+    {
+      "Generate phony targets for included/imported schema files, causing
+       each to depend on nothing. Such dummy rules work around \cb{make}
+       errors caused by the removal of schema files without also updating
+       the dependency file to match."
+    };
+
+    NarrowStrings --dep-target
+    {
+      "<target>",
+      "Change the target of the dependency rule. By default it contains
+       all the generated C++ files as well as the dependency file itself,
+       without any directory prefixes. If you require multiple targets,
+       then you can specify them as a single, space-separated argument or
+       you can repeat this option multiple times."
+    };
+
+    NarrowString --dep-suffix = ".d"
+    {
+      "<suffix>",
+      "Use the provided <suffix> instead of the default \cb{.d} to
+       construct the name of the dependency file."
+    };
+
+    NarrowString --dep-regex
+    {
+      "<regex>",
+      "Use the provided expression to construct the name of the dependency
+       file. <regex> is a Perl-like regular expression in the form
+       \c{\b{/}\i{pattern}\b{/}\i{replacement}\b{/}}. See also the REGEX
+       AND SHELL QUOTING section below."
+    };
   };
 }
