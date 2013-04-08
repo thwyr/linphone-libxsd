@@ -635,19 +635,19 @@ namespace CXX
         }
         else
         {
-          target = hxx_path.leaf ();
+          target = hxx_path.native_file_string ();
 
           if (forward)
-            target += " \\\n" + fwd_path.leaf ();
+            target += " \\\n" + fwd_path.native_file_string ();
 
           if (inline_)
-            target += " \\\n" + ixx_path.leaf ();
+            target += " \\\n" + ixx_path.native_file_string ();
 
           for (Paths::iterator i (cxx_paths.begin ());
                i != cxx_paths.end (); ++i)
-            target += " \\\n" + i->leaf ();
+            target += " \\\n" + i->native_file_string ();
 
-          target += " \\\n" + dep_path.leaf ();
+          target += " \\\n" + dep_path.native_file_string ();
         }
 
         dep << target.c_str () << ':';
