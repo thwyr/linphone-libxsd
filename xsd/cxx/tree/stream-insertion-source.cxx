@@ -69,8 +69,8 @@ namespace CXX
 
               os << "static" << endl
                  << "const ::xsd::cxx::tree::stream_insertion_initializer< " <<
-                "0, " << i->c_str () << ", " <<
-                char_type << ", " << name << " >" << endl
+                poly_plate << ", " << i->c_str () << ", " << char_type <<
+                ", " << name << " >" << endl
                  << "_xsd_" << name << "_stream_insertion_init_" <<
                 n++ << " (" << endl
                  << strlit (l.name ()) << "," << endl
@@ -140,8 +140,8 @@ namespace CXX
 
               os << "static" << endl
                  << "const ::xsd::cxx::tree::stream_insertion_initializer< " <<
-                "0, " << i->c_str () << ", " <<
-                char_type << ", " << name << " >" << endl
+                poly_plate << ", " << i->c_str () << ", " << char_type <<
+                ", " << name << " >" << endl
                  << "_xsd_" << name << "_stream_insertion_init_" <<
                 n++ << " (" << endl
                  << strlit (u.name ()) << "," << endl
@@ -230,8 +230,8 @@ namespace CXX
 
               os << "static" << endl
                  << "const ::xsd::cxx::tree::stream_insertion_initializer< " <<
-                "0, " << i->c_str () << ", " <<
-                char_type << ", " << name << " >" << endl
+                poly_plate << ", " << i->c_str () << ", " << char_type <<
+                ", " << name << " >" << endl
                  << "_xsd_" << name << "_stream_insertion_init_" <<
                 n++ << " (" << endl
                  << strlit (e.name ()) << "," << endl
@@ -292,8 +292,9 @@ namespace CXX
                  << "if (!d)" << endl
                  << "s << *i;"
                  << "else" << endl
-                 << "::xsd::cxx::tree::stream_insertion_map_instance< 0, " <<
-                stream << ", " << char_type << " > ().insert (s, *i);";
+                 << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
+                poly_plate << ", " << stream << ", " << char_type <<
+                " > ().insert (s, *i);";
             }
             else
               os << "s << *i;";
@@ -319,8 +320,9 @@ namespace CXX
                  << "if (!d)" << endl
                  << "s << i;"
                  << "else" << endl
-                 << "::xsd::cxx::tree::stream_insertion_map_instance< 0, " <<
-                stream << ", " << char_type << " > ().insert (s, i);"
+                 << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
+                poly_plate << ", " << stream << ", " << char_type <<
+                " > ().insert (s, i);"
                  << "}";
             }
             else
@@ -342,8 +344,9 @@ namespace CXX
                  << "if (!d)" << endl
                  << "s << i;"
                  << "else" << endl
-                 << "::xsd::cxx::tree::stream_insertion_map_instance< 0, " <<
-                stream << ", " << char_type << " > ().insert (s, i);"
+                 << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
+                poly_plate << ", " << stream << ", " << char_type <<
+                " > ().insert (s, i);"
                  << "}";
             }
             else
@@ -454,8 +457,8 @@ namespace CXX
 
               os << "static" << endl
                  << "const ::xsd::cxx::tree::stream_insertion_initializer< " <<
-                "0, " << i->c_str () << ", " <<
-                char_type << ", " << name << " >" << endl
+                poly_plate << ", " << i->c_str () << ", " << char_type <<
+                ", " << name << " >" << endl
                  << "_xsd_" << name << "_stream_insertion_init_" <<
                 n++ << " (" << endl
                  << strlit (c.name ()) << "," << endl
@@ -504,22 +507,22 @@ namespace CXX
 
             if (export_maps)
               ctx.os << "template struct __declspec (dllexport) " <<
-                "stream_insertion_plate< 0, " << stream << ", " <<
-                ctx.char_type << " >;";
+                "stream_insertion_plate< " << ctx.poly_plate << ", " <<
+                stream << ", " << ctx.char_type << " >;";
 
             if (import_maps)
               ctx.os << "template struct __declspec (dllimport) " <<
-                "stream_insertion_plate< 0, " << stream << ", " <<
-                ctx.char_type << " >;";
+                "stream_insertion_plate< " << ctx.poly_plate << ", " <<
+                stream << ", " << ctx.char_type << " >;";
 
             ctx.os << "#elif defined(__GNUC__) && __GNUC__ >= 4" << endl
                    << "template struct __attribute__ ((visibility(\"default\"))) " <<
-              "stream_insertion_plate< 0, " << stream << ", " <<
-              ctx.char_type << " >;"
+              "stream_insertion_plate< " << ctx.poly_plate << ", " <<
+              stream << ", " << ctx.char_type << " >;"
                    << "#elif defined(XSD_MAP_VISIBILITY)" << endl
                    << "template struct XSD_MAP_VISIBILITY " <<
-              "stream_insertion_plate< 0, " << stream << ", " <<
-              ctx.char_type << " >;"
+              "stream_insertion_plate< " << ctx.poly_plate << ", " <<
+              stream << ", " << ctx.char_type << " >;"
                    << "#endif" << endl;
           }
 
@@ -540,8 +543,9 @@ namespace CXX
           String stream (*i);
 
           ctx.os << "static" << endl
-                 << "const ::xsd::cxx::tree::stream_insertion_plate< 0, " <<
-            stream << ", " << ctx.char_type << " >" << endl
+                 << "const ::xsd::cxx::tree::stream_insertion_plate< " <<
+            ctx.poly_plate << ", " << stream << ", " << ctx.char_type <<
+            " >" << endl
                  << "stream_insertion_plate_init_" << n++ << ";";
         }
 

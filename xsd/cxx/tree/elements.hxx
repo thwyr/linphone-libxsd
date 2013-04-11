@@ -424,6 +424,7 @@ namespace CXX
       bool& doxygen;
       bool polymorphic;
       bool polymorphic_all;
+      unsigned long poly_plate;
       bool detach;
 
       Regex const* fwd_expr;

@@ -61,8 +61,8 @@ namespace CXX
             String const& name (ename (l));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::std_ostream_initializer< 0, " <<
-              char_type << ", " << name << " >" << endl
+               << "const ::xsd::cxx::tree::std_ostream_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_std_ostream_init;"
                << endl;
           }
@@ -118,8 +118,8 @@ namespace CXX
             String const& name (ename (u));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::std_ostream_initializer< 0, " <<
-              char_type << ", " << name << " >" << endl
+               << "const ::xsd::cxx::tree::std_ostream_initializer< " <<
+              poly_plate << ", " << char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_std_ostream_init;"
                << endl;
           }
@@ -198,8 +198,8 @@ namespace CXX
             String const& name (ename (e));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::std_ostream_initializer< 0, " <<
-              char_type << ", " << name << " >" << endl
+               << "const ::xsd::cxx::tree::std_ostream_initializer< " <<
+              poly_plate << ", " << char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_std_ostream_init;"
                << endl;
           }
@@ -241,8 +241,8 @@ namespace CXX
             os << "{"
                << "::xsd::cxx::tree::std_ostream_map< " << char_type
                << " >& om (" << endl
-               << "::xsd::cxx::tree::std_ostream_map_instance< 0, " <<
-              char_type << " > ());"
+               << "::xsd::cxx::tree::std_ostream_map_instance< " <<
+              poly_plate << ", " << char_type << " > ());"
                << endl;
           }
 
@@ -395,8 +395,8 @@ namespace CXX
             String const& name (ename (c));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::std_ostream_initializer< 0, " <<
-              char_type << ", " << name << " >" << endl
+               << "const ::xsd::cxx::tree::std_ostream_initializer< " <<
+              poly_plate << ", " << char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_std_ostream_init;"
                << endl;
           }
@@ -438,19 +438,23 @@ namespace CXX
 
           if (export_maps)
             ctx.os << "template struct __declspec (dllexport) " <<
-              "std_ostream_plate< 0, " << ctx.char_type << " >;";
+              "std_ostream_plate< " << ctx.poly_plate << ", " <<
+              ctx.char_type << " >;";
 
           if (import_maps)
             ctx.os << "template struct __declspec (dllimport) " <<
-              "std_ostream_plate< 0, " << ctx.char_type << " >;";
+              "std_ostream_plate< " << ctx.poly_plate << ", " <<
+              ctx.char_type << " >;";
 
           ctx.os << "#elif defined(__GNUC__) && __GNUC__ >= 4" << endl
                  << "template struct __attribute__ ((visibility(\"default\"))) " <<
-            "std_ostream_plate< 0, " << ctx.char_type << " >;";
+            "std_ostream_plate< " << ctx.poly_plate << ", " << ctx.char_type <<
+            " >;";
 
           ctx.os << "#elif defined(XSD_MAP_VISIBILITY)" << endl
                  << "template struct XSD_MAP_VISIBILITY " <<
-            "std_ostream_plate< 0, " << ctx.char_type << " >;";
+            "std_ostream_plate< " << ctx.poly_plate << ", " << ctx.char_type <<
+            " >;";
 
           ctx.os << "#endif" << endl
                  << "}"  // tree
@@ -463,8 +467,8 @@ namespace CXX
         ctx.os << "namespace _xsd"
                << "{"
                << "static" << endl
-               << "const ::xsd::cxx::tree::std_ostream_plate< 0, " <<
-          ctx.char_type << " >" << endl
+               << "const ::xsd::cxx::tree::std_ostream_plate< " <<
+          ctx.poly_plate << ", " << ctx.char_type << " >" << endl
                << "std_ostream_plate_init;"
                << "}";
       }

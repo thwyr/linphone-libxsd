@@ -30,6 +30,10 @@ C++/Tree
     strings. This can be useful if your documents contain a large number
     of repetitive strings.
 
+  * New option, --polymorphic-plate, allows the creation of multiple
+    polymorphic map plates in the same application. For details, refer
+    to the XSD compiler command line manual (man pages).
+
   * To get the DOM association in the copy of an object model tree one
     now needs to explicitly pass the keep_dom flag as the second argument
     to the copy constructor or clone() function.

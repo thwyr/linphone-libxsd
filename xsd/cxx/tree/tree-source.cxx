@@ -120,8 +120,8 @@ namespace CXX
             if (!anonymous_p (l) && !options.suppress_parsing ())
             {
               os << "static" << endl
-                 << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
-                char_type << ", " << name << " >" << endl
+                 << "const ::xsd::cxx::tree::type_factory_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_type_factory_init (" << endl
                  << strlit (l.name ()) << "," << endl
                  << strlit (xml_ns_name (l)) << ");"
@@ -132,8 +132,8 @@ namespace CXX
                 options.generate_comparison ())
             {
               os << "static" << endl
-                 << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
-                char_type << ", " << name << " >" << endl
+                 << "const ::xsd::cxx::tree::comparison_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_comparison_init;"
                  << endl;
             }
@@ -235,8 +235,8 @@ namespace CXX
             if (!anonymous_p (u) && !options.suppress_parsing ())
             {
               os << "static" << endl
-                 << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
-                char_type << ", " << name << " >" << endl
+                 << "const ::xsd::cxx::tree::type_factory_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_type_factory_init (" << endl
                  << strlit (u.name ()) << "," << endl
                  << strlit (xml_ns_name (u)) << ");"
@@ -247,8 +247,8 @@ namespace CXX
                 options.generate_comparison ())
             {
               os << "static" << endl
-                 << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
-                char_type << ", " << name << " >" << endl
+                 << "const ::xsd::cxx::tree::comparison_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_comparison_init;"
                  << endl;
             }
@@ -535,8 +535,8 @@ namespace CXX
             if (!anonymous_p (e) && !options.suppress_parsing ())
             {
               os << "static" << endl
-                 << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
-                char_type << ", " << name << " >" << endl
+                 << "const ::xsd::cxx::tree::type_factory_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_type_factory_init (" << endl
                  << strlit (e.name ()) << "," << endl
                  << strlit (xml_ns_name (e)) << ");"
@@ -547,8 +547,8 @@ namespace CXX
                 options.generate_comparison ())
             {
               os << "static" << endl
-                 << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
-                char_type << ", " << name << " >" << endl
+                 << "const ::xsd::cxx::tree::comparison_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_comparison_init;"
                  << endl;
             }
@@ -725,8 +725,8 @@ namespace CXX
             os << "{"
                << "::xsd::cxx::tree::type_factory_map< " << char_type <<
               " >& tfm (" << endl
-               << "::xsd::cxx::tree::type_factory_map_instance< 0, " <<
-              char_type << " > ());"
+               << "::xsd::cxx::tree::type_factory_map_instance< " <<
+              poly_plate << ", " << char_type << " > ());"
                << endl
                << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "tfm.create (" << endl
@@ -1884,8 +1884,8 @@ namespace CXX
             os << "{"
                << "::xsd::cxx::tree::comparison_map< " << char_type
                << " >& cm (" << endl
-               << "::xsd::cxx::tree::comparison_map_instance< 0, " <<
-              char_type << " > ());"
+               << "::xsd::cxx::tree::comparison_map_instance< " <<
+              poly_plate << ", " << char_type << " > ());"
                << endl;
 
             if (max (e) != 1)
@@ -3096,8 +3096,8 @@ namespace CXX
             if (!anonymous_p (c) && !options.suppress_parsing ())
             {
               os << "static" << endl
-                 << "const ::xsd::cxx::tree::type_factory_initializer< 0, " <<
-                char_type << ", " << name << " >" << endl
+                 << "const ::xsd::cxx::tree::type_factory_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_type_factory_init (" << endl
                  << strlit (c.name ()) << "," << endl
                  << strlit (xml_ns_name (c)) << ");"
@@ -3108,8 +3108,8 @@ namespace CXX
                 options.generate_comparison ())
             {
               os << "static" << endl
-                 << "const ::xsd::cxx::tree::comparison_initializer< 0, " <<
-                char_type << ", " << name << " >" << endl
+                 << "const ::xsd::cxx::tree::comparison_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                  << "_xsd_" << name << "_comparison_init;"
                  << endl;
             }
@@ -3418,8 +3418,8 @@ namespace CXX
             Type& r (e.substitutes ().root ());
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::element_factory_initializer< 0, " <<
-              char_type << ", ";
+               << "const ::xsd::cxx::tree::element_factory_initializer< " <<
+              poly_plate << ", " << char_type << ", ";
 
             belongs (e, belongs_);
 
@@ -3487,39 +3487,47 @@ namespace CXX
 
             if (parsing && export_maps)
               ctx.os << "template struct __declspec (dllexport) " <<
-                "type_factory_plate< 0, " << ctx.char_type << " >;";
+                "type_factory_plate< " << ctx.poly_plate << ", " <<
+                ctx.char_type << " >;";
 
             if (parsing && import_maps)
               ctx.os << "template struct __declspec (dllimport) " <<
-                "type_factory_plate< 0, " << ctx.char_type << " >;";
+                "type_factory_plate< " << ctx.poly_plate << ", " <<
+                ctx.char_type << " >;";
 
             if (comparison && export_maps)
               ctx.os << "template struct __declspec (dllexport) " <<
-                "comparison_plate< 0, " << ctx.char_type << " >;";
+                "comparison_plate< " << ctx.poly_plate << ", " <<
+                ctx.char_type << " >;";
 
             if (comparison && import_maps)
               ctx.os << "template struct __declspec (dllimport) " <<
-                "comparison_plate< 0, " << ctx.char_type << " >;";
+                "comparison_plate< " << ctx.poly_plate << ", " <<
+                ctx.char_type << " >;";
 
             ctx.os << "#elif defined(__GNUC__) && __GNUC__ >= 4" << endl;
 
             if (parsing)
               ctx.os << "template struct __attribute__ ((visibility(\"default\"))) " <<
-                "type_factory_plate< 0, " << ctx.char_type << " >;";
+                "type_factory_plate< " << ctx.poly_plate << ", " <<
+                ctx.char_type << " >;";
 
             if (comparison)
               ctx.os << "template struct __attribute__ ((visibility(\"default\"))) " <<
-                "comparison_plate< 0, " << ctx.char_type << " >;";
+                "comparison_plate< " << ctx.poly_plate << ", " <<
+                ctx.char_type << " >;";
 
             ctx.os << "#elif defined(XSD_MAP_VISIBILITY)" << endl;
 
             if (parsing)
               ctx.os << "template struct XSD_MAP_VISIBILITY " <<
-                "type_factory_plate< 0, " << ctx.char_type << " >;";
+                "type_factory_plate< " << ctx.poly_plate << ", " <<
+                ctx.char_type << " >;";
 
             if (comparison)
               ctx.os << "template struct XSD_MAP_VISIBILITY " <<
-                "comparison_plate< 0, " << ctx.char_type << " >;";
+                "comparison_plate< " << ctx.poly_plate << ", " <<
+                ctx.char_type << " >;";
 
             ctx.os << "#endif" << endl
                    << "}"  // tree
@@ -3534,15 +3542,15 @@ namespace CXX
 
           if (parsing)
             ctx.os << "static" << endl
-                   << "const ::xsd::cxx::tree::type_factory_plate< 0, " <<
-              ctx.char_type << " >" << endl
+                   << "const ::xsd::cxx::tree::type_factory_plate< " <<
+              ctx.poly_plate << ", " << ctx.char_type << " >" << endl
                    << "type_factory_plate_init;"
                    << endl;
 
           if (comparison)
             ctx.os << "static" << endl
-                   << "const ::xsd::cxx::tree::comparison_plate< 0, " <<
-              ctx.char_type << " >" << endl
+                   << "const ::xsd::cxx::tree::comparison_plate< " <<
+              ctx.poly_plate << ", " << ctx.char_type << " >" << endl
                    << "comparison_plate_init;"
                    << endl;
 

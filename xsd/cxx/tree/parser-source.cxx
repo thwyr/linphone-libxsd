@@ -337,8 +337,8 @@ namespace CXX
             //
             os << "::xsd::cxx::tree::type_factory_map< " << char_type <<
               " >& tfm (" << endl
-               << "::xsd::cxx::tree::type_factory_map_instance< 0, " <<
-              char_type << " > ());"
+               << "::xsd::cxx::tree::type_factory_map_instance< " <<
+              poly_plate << ", " << char_type << " > ());"
                << endl
                << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "tfm.create (" << endl
@@ -435,8 +435,8 @@ namespace CXX
             //
             os << "::xsd::cxx::tree::type_factory_map< " << char_type <<
               " >& tfm (" << endl
-               << "::xsd::cxx::tree::type_factory_map_instance< 0, " <<
-              char_type << " > ());"
+               << "::xsd::cxx::tree::type_factory_map_instance< " <<
+              poly_plate << ", " << char_type << " > ());"
                << endl
                << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "tfm.create (" << endl

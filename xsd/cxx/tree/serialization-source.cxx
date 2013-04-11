@@ -102,8 +102,8 @@ namespace CXX
             String const& name (ename (l));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
-              char_type << ", " << name << " >" << endl
+               << "const ::xsd::cxx::tree::type_serializer_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_type_serializer_init (" << endl
                << strlit (l.name ()) << "," << endl
                << strlit (xml_ns_name (l)) << ");"
@@ -184,8 +184,8 @@ namespace CXX
             String const& name (ename (u));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
-              char_type << ", " << name << " >" << endl
+               << "const ::xsd::cxx::tree::type_serializer_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_type_serializer_init (" << endl
                << strlit (u.name ()) << "," << endl
                << strlit (xml_ns_name (u)) << ");"
@@ -268,8 +268,8 @@ namespace CXX
             String const& name (ename (e));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
-              char_type << ", " << name << " >" << endl
+               << "const ::xsd::cxx::tree::type_serializer_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_type_serializer_init (" << endl
                << strlit (e.name ()) << "," << endl
                << strlit (xml_ns_name (e)) << ");"
@@ -319,8 +319,8 @@ namespace CXX
             os << "{"
                << "::xsd::cxx::tree::type_serializer_map< " << char_type
                << " >& tsm (" << endl
-               << "::xsd::cxx::tree::type_serializer_map_instance< 0, " <<
-              char_type << " > ());"
+               << "::xsd::cxx::tree::type_serializer_map_instance< " <<
+              poly_plate << ", " << char_type << " > ());"
                << endl;
           }
 
@@ -821,8 +821,8 @@ namespace CXX
             String const& name (ename (c));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::type_serializer_initializer< 0, " <<
-              char_type << ", " << name << " >" << endl
+               << "const ::xsd::cxx::tree::type_serializer_initializer< " <<
+                poly_plate << ", " << char_type << ", " << name << " >" << endl
                << "_xsd_" << name << "_type_serializer_init (" << endl
                << strlit (c.name ()) << "," << endl
                << strlit (xml_ns_name (c)) << ");"
@@ -859,8 +859,8 @@ namespace CXX
             String const& name (ename (e));
 
             os << "static" << endl
-               << "const ::xsd::cxx::tree::element_serializer_initializer< 0, " <<
-              char_type << ", ";
+               << "const ::xsd::cxx::tree::element_serializer_initializer< " <<
+                poly_plate << ", " << char_type << ", ";
 
             belongs (e, belongs_);
 
@@ -1152,8 +1152,8 @@ namespace CXX
                << "{"
                << "::xsd::cxx::tree::type_serializer_map< " << char_type
                << " >& tsm (" << endl
-               << "::xsd::cxx::tree::type_serializer_map_instance< 0, " <<
-              char_type << " > ());"
+               << "::xsd::cxx::tree::type_serializer_map_instance< " <<
+                poly_plate << ", " << char_type << " > ());"
                << endl
                << "tsm.serialize (" << endl
                << strlit (e.name ()) << "," << endl
@@ -1196,8 +1196,8 @@ namespace CXX
                << "{"
                << "::xsd::cxx::tree::type_serializer_map< " << char_type
                << " >& tsm (" << endl
-               << "::xsd::cxx::tree::type_serializer_map_instance< 0, " <<
-              char_type << " > ());"
+               << "::xsd::cxx::tree::type_serializer_map_instance< " <<
+                poly_plate << ", " << char_type << " > ());"
                << endl
                << dom_auto_ptr << "< " << xerces_ns <<
               "::DOMDocument > r (" << endl
@@ -1274,19 +1274,23 @@ namespace CXX
 
           if (export_maps)
             ctx.os << "template struct __declspec (dllexport) " <<
-              "type_serializer_plate< 0, " << ctx.char_type << " >;";
+              "type_serializer_plate< " << ctx.poly_plate << ", " <<
+              ctx.char_type << " >;";
 
           if (import_maps)
             ctx.os << "template struct __declspec (dllimport) " <<
-              "type_serializer_plate< 0, " << ctx.char_type << " >;";
+              "type_serializer_plate< " << ctx.poly_plate << ", " <<
+              ctx.char_type << " >;";
 
           ctx.os << "#elif defined(__GNUC__) && __GNUC__ >= 4" << endl
                  << "template struct __attribute__ ((visibility(\"default\"))) " <<
-            "type_serializer_plate< 0, " << ctx.char_type << " >;";
+            "type_serializer_plate< " << ctx.poly_plate << ", " <<
+            ctx.char_type << " >;";
 
           ctx.os << "#elif defined(XSD_MAP_VISIBILITY)" << endl
                  << "template struct XSD_MAP_VISIBILITY " <<
-            "type_serializer_plate< 0, " << ctx.char_type << " >;";
+            "type_serializer_plate< " << ctx.poly_plate << ", " <<
+            ctx.char_type << " >;";
 
           ctx.os << "#endif" << endl
                  << "}"  // tree
@@ -1299,8 +1303,8 @@ namespace CXX
         ctx.os << "namespace _xsd"
                << "{"
                << "static" << endl
-               << "const ::xsd::cxx::tree::type_serializer_plate< 0, " <<
-          ctx.char_type << " >" << endl
+               << "const ::xsd::cxx::tree::type_serializer_plate< " <<
+                ctx.poly_plate << ", " << ctx.char_type << " >" << endl
                << "type_serializer_plate_init;"
                << "}";
       }

@@ -44,6 +44,14 @@ namespace CXX
         "Indicate that all types should be treated as polymorphic."
       };
 
+      unsigned long --polymorphic-plate = 0
+      {
+        "<num>",
+        "Specify the polymorphic map plate the generated code should register
+         on. This functionality is primarily useful to segregate multiple
+         schemas that define the same polymorphic types."
+      };
+
       // Features.
       //
       bool --generate-serialization
