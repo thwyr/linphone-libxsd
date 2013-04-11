@@ -16,9 +16,9 @@ C++/Tree
 
   * New option, --generate-dep, triggers the generation of the make
     dependency file (.d) for the generated C++ files. Other options
-    controlling dependency generation are: --dep-phony, --dep-target,
-    --dep-suffix, and --dep-regex. For details, refer to the XSD
-    compiler command line manual (man pages).
+    controlling dependency generation are: --generate-dep-only,
+    --dep-phony, --dep-target, --dep-suffix, and --dep-regex. For
+    details, refer to the XSD compiler command line manual (man pages).
 
   * Binary representation now stores string-based enumerations as integer
     values corresponding to C++ enumerators instead of string literals.

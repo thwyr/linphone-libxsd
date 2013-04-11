@@ -236,8 +236,11 @@ namespace CXX
           throw Failed ();
       }
 
+      bool gen_cxx (!ops.generate_dep_only ());
+
       // Process names.
       //
+      if (gen_cxx)
       {
         NameProcessor proc;
         if (!proc.process (ops, schema, file_path, string_literal_map))
@@ -246,7 +249,9 @@ namespace CXX
 
       // Process polymorphic types.
       //
-      if (ops.generate_polymorphic () && !ops.polymorphic_type_all ())
+      if (gen_cxx &&
+          ops.generate_polymorphic () &&
+          !ops.polymorphic_type_all ())
       {
         PolymorphismProcessor proc;
         if (!proc.process (ops, schema, file_path, disabled_warnings))
@@ -288,14 +293,23 @@ namespace CXX
         }
       }
 
+      bool header (true);
       bool inline_ (ops.generate_inline () && !generate_xml_schema);
       bool forward (ops.generate_forward () && !generate_xml_schema);
       bool source (!generate_xml_schema);
-      bool gen_dep (ops.generate_dep () && source);
+      bool gen_dep ((ops.generate_dep () || ops.generate_dep_only ()) &&
+                    !generate_xml_schema);
+
+      if (ops.generate_dep_only () && generate_xml_schema)
+      {
+        wcerr << "error: no dependency information can be generated for "
+          "XML Schema header" << endl;
+        throw Failed ();
+      }
 
       if (gen_dep && fpt)
       {
-        wcerr << "error: dependency generation not support in " <<
+        wcerr << "error: dependency generation not support in the " <<
           "file-per-type mode" << endl;
         throw Failed ();
       }
@@ -330,7 +344,7 @@ namespace CXX
                       ? "#^(.+?)(\\.[^./\\\\]+)?$#$1" + dep_suffix + "#"
                       : ops.dep_regex ());
 
-      if (!hxx_expr.match (name))
+      if (header && !hxx_expr.match (name))
       {
         wcerr << "error: header expression '" <<
           hxx_expr.regex ().str ().c_str () << "' does not match '" <<
@@ -370,7 +384,7 @@ namespace CXX
         throw Failed ();
       }
 
-      NarrowString hxx_name (hxx_expr.replace (name));
+      NarrowString hxx_name (header ? hxx_expr.replace (name) : NarrowString ());
       NarrowString ixx_name (inline_ ? ixx_expr.replace (name) : NarrowString ());
       NarrowString fwd_name (forward ? fwd_expr.replace (name) : NarrowString ());
       NarrowString dep_name (gen_dep ? dep_expr.replace (name) : NarrowString ());
@@ -453,7 +467,7 @@ namespace CXX
 
       //
       //
-      WideOutputFileStream hxx (hxx_path, ios_base::out);
+      WideOutputFileStream hxx;
       WideOutputFileStream ixx;
       WideOutputFileStream fwd;
       WideOutputFileStream dep;
@@ -477,7 +491,7 @@ namespace CXX
 
       // FWD
       //
-      if (forward)
+      if (gen_cxx && forward)
       {
         fwd.open (fwd_path, ios_base::out);
 
@@ -493,19 +507,23 @@ namespace CXX
 
       // HXX
       //
-      if (!hxx.is_open ())
+      if (gen_cxx && header)
       {
-        wcerr << hxx_path << ": error: unable to open in write mode" << endl;
-        throw Failed ();
+        hxx.open (hxx_path, ios_base::out);
+
+        if (!hxx.is_open ())
+        {
+          wcerr << hxx_path << ": error: unable to open in write mode" << endl;
+          throw Failed ();
+        }
+
+        unlinks.add (hxx_path);
+        file_list.push_back (hxx_path.native_file_string ());
       }
-
-      unlinks.add (hxx_path);
-      file_list.push_back (hxx_path.native_file_string ());
-
 
       // IXX
       //
-      if (inline_)
+      if (gen_cxx && inline_)
       {
         ixx.open (ixx_path, ios_base::out);
 
@@ -519,10 +537,9 @@ namespace CXX
         file_list.push_back (ixx_path.native_file_string ());
       }
 
-
       // CXX
       //
-      if (source)
+      if (gen_cxx && source)
       {
         for (Paths::iterator i (cxx_paths.begin ());
              i != cxx_paths.end (); ++i)
@@ -542,16 +559,16 @@ namespace CXX
         }
       }
 
-
       // Print copyright and license.
       //
       char const* copyright (
         ops.proprietary_license () ? copyright_proprietary : copyright_gpl);
 
-      if (forward)
-        fwd << copyright;
+      if (gen_cxx && header)
+        hxx << copyright;
 
-      hxx << copyright;
+      if (gen_cxx && forward)
+        fwd << copyright;
 
       if (ops.generate_doxygen ())
       {
@@ -565,10 +582,10 @@ namespace CXX
 
       }
 
-      if (inline_)
+      if (gen_cxx && inline_)
         ixx << copyright;
 
-      if (source)
+      if (gen_cxx && source)
       {
         for (WideOutputFileStreams::iterator i (cxx.begin ());
              i != cxx.end (); ++i)
@@ -674,7 +691,7 @@ namespace CXX
 
       // FWD
       //
-      if (forward)
+      if (gen_cxx && forward)
       {
         Context ctx (fwd,
                      schema,
@@ -780,6 +797,7 @@ namespace CXX
 
       // HXX
       //
+      if (gen_cxx && header)
       {
         Context ctx (hxx,
                      schema,
@@ -924,7 +942,7 @@ namespace CXX
 
       // IXX
       //
-      if (inline_)
+      if (gen_cxx && inline_)
       {
         Context ctx (ixx,
                      schema,
@@ -990,7 +1008,7 @@ namespace CXX
 
       // CXX
       //
-      if (source)
+      if (gen_cxx && source)
       {
         size_t first_unit (0); // First unit in the current part.
 

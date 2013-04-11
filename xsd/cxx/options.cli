@@ -483,6 +483,11 @@ namespace CXX
        \cb{--file-list*} options."
     };
 
+    bool --generate-dep-only
+    {
+      "Generate \cb{make} dependency information only."
+    };
+
     bool --dep-phony
     {
       "Generate phony targets for included/imported schema files, causing
