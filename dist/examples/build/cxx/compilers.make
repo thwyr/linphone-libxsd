@@ -43,13 +43,13 @@ endif
 # Clang
 #
 ifeq ($(cxx_id),)
-ifeq ($(shell echo '$(cxx_sign)' | sed -e 's/^.* clang .*$$//'),)
+ifeq ($(shell echo '$(cxx_sign)' | sed -e 's/^.*clang.*$$//'),)
 cxx_id := clang
 endif
 endif
 
 ifeq ($(cxx_id),)
-ifeq ($(shell echo '$(cxx_sign)' | sed -e 's/^.* Clang .*$$//'),)
+ifeq ($(shell echo '$(cxx_sign)' | sed -e 's/^.*Clang.*$$//'),)
 cxx_id := clang
 endif
 endif
