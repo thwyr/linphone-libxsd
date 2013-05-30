@@ -11,8 +11,7 @@ Compiler Prerequisites
     - libbackend-elements  >= 1.7.2   http://kolpackov.net/projects/libbackend-elements/
     - libcult              >= 1.4.6   http://kolpackov.net/projects/libcult/
     - libxerces-c          >= 2.6.0   http://xerces.apache.org/xerces-c/
-    - libboost_filesystem  >= 1.33.1  http://boost.org
-    - libboost_regex       >= 1.33.1  http://boost.org
+
 
 Generated Code Prerequisites
 

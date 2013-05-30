@@ -8,6 +8,7 @@
 
 #include <set>
 #include <vector>
+#include <algorithm>
 
 #include <xsd-frontend/semantic-graph.hxx>
 #include <xsd-frontend/traversal.hxx>

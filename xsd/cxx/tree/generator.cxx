@@ -4,9 +4,9 @@
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
 #include <vector>
+#include <algorithm>
 #include <iostream>
-
-#include <boost/filesystem/fstream.hpp>
+#include <fstream>
 
 #include <cutl/re.hxx>
 #include <cutl/shared-ptr.hxx>
@@ -55,13 +55,8 @@ using namespace XSDFrontend::SemanticGraph;
 
 //
 //
-typedef
-boost::filesystem::wifstream
-WideInputFileStream;
-
-typedef
-boost::filesystem::wofstream
-WideOutputFileStream;
+typedef std::wifstream WideInputFileStream;
+typedef std::wofstream WideOutputFileStream;
 
 namespace CXX
 {
@@ -126,8 +121,9 @@ namespace CXX
     {
       try
       {
-        Path fs_path (path, boost::filesystem::native);
-        ifs.open (fs_path, std::ios_base::in | std::ios_base::binary);
+        Path fs_path (path);
+        ifs.open (fs_path.string ().c_str (),
+                  std::ios_base::in | std::ios_base::binary);
 
         if (!ifs.is_open ())
         {
@@ -288,7 +284,7 @@ namespace CXX
       {
         if (NarrowString name = ops.extern_xml_schema ())
         {
-          if (file_path.native_file_string () != name)
+          if (file_path.string () != name)
             generate_xml_schema = false;
         }
       }
@@ -316,7 +312,7 @@ namespace CXX
 
       // Generate code.
       //
-      NarrowString name (file_path.leaf ());
+      NarrowString name (file_path.leaf ().string ());
 
       NarrowString hxx_suffix (ops.hxx_suffix ());
       NarrowString ixx_suffix (ops.ixx_suffix ());
@@ -389,10 +385,10 @@ namespace CXX
       NarrowString fwd_name (forward ? fwd_expr.replace (name) : NarrowString ());
       NarrowString dep_name (gen_dep ? dep_expr.replace (name) : NarrowString ());
 
-      Path hxx_path (hxx_name, boost::filesystem::native);
-      Path ixx_path (ixx_name, boost::filesystem::native);
-      Path fwd_path (fwd_name, boost::filesystem::native);
-      Path dep_path (dep_name, boost::filesystem::native);
+      Path hxx_path (hxx_name);
+      Path ixx_path (ixx_name);
+      Path fwd_path (fwd_name);
+      Path dep_path (dep_name);
       Paths cxx_paths;
 
       if (source)
@@ -417,13 +413,11 @@ namespace CXX
               throw Failed ();
             }
 
-            cxx_paths.push_back (
-              Path (cxx_expr.replace (part_name), boost::filesystem::native));
+            cxx_paths.push_back (Path (cxx_expr.replace (part_name)));
           }
         }
         else
-          cxx_paths.push_back (
-            Path (cxx_expr.replace (name), boost::filesystem::native));
+          cxx_paths.push_back (Path (cxx_expr.replace (name)));
       }
 
       Path out_dir;
@@ -432,7 +426,7 @@ namespace CXX
       {
         try
         {
-          out_dir = Path (dir, boost::filesystem::native);
+          out_dir = Path (dir);
         }
         catch (InvalidPath const&)
         {
@@ -447,7 +441,7 @@ namespace CXX
         // unless the user added the directory so that we propagate this
         // to the output files.
         //
-        Path fpt_dir (file_path.branch_path ());
+        Path fpt_dir (file_path.directory ());
 
         if (!fpt_dir.empty ())
           out_dir /= fpt_dir;
@@ -477,7 +471,7 @@ namespace CXX
       //
       if (gen_dep)
       {
-        dep.open (dep_path, ios_base::out);
+        dep.open (dep_path.string ().c_str (), ios_base::out);
 
         if (!dep.is_open ())
         {
@@ -486,14 +480,14 @@ namespace CXX
         }
 
         unlinks.add (dep_path);
-        file_list.push_back (dep_path.native_file_string ());
+        file_list.push_back (dep_path.string ());
       }
 
       // FWD
       //
       if (gen_cxx && forward)
       {
-        fwd.open (fwd_path, ios_base::out);
+        fwd.open (fwd_path.string ().c_str (), ios_base::out);
 
         if (!fwd.is_open ())
         {
@@ -502,14 +496,14 @@ namespace CXX
         }
 
         unlinks.add (fwd_path);
-        file_list.push_back (fwd_path.native_file_string ());
+        file_list.push_back (fwd_path.string ());
       }
 
       // HXX
       //
       if (gen_cxx && header)
       {
-        hxx.open (hxx_path, ios_base::out);
+        hxx.open (hxx_path.string ().c_str (), ios_base::out);
 
         if (!hxx.is_open ())
         {
@@ -518,14 +512,14 @@ namespace CXX
         }
 
         unlinks.add (hxx_path);
-        file_list.push_back (hxx_path.native_file_string ());
+        file_list.push_back (hxx_path.string ());
       }
 
       // IXX
       //
       if (gen_cxx && inline_)
       {
-        ixx.open (ixx_path, ios_base::out);
+        ixx.open (ixx_path.string ().c_str (), ios_base::out);
 
         if (!ixx.is_open ())
         {
@@ -534,7 +528,7 @@ namespace CXX
         }
 
         unlinks.add (ixx_path);
-        file_list.push_back (ixx_path.native_file_string ());
+        file_list.push_back (ixx_path.string ());
       }
 
       // CXX
@@ -545,7 +539,8 @@ namespace CXX
              i != cxx_paths.end (); ++i)
         {
           shared_ptr<WideOutputFileStream> s (
-            new (shared) WideOutputFileStream (*i, ios_base::out));
+            new (shared) WideOutputFileStream (
+              i->string ().c_str (), ios_base::out));
 
           if (!s->is_open ())
           {
@@ -554,7 +549,7 @@ namespace CXX
           }
 
           unlinks.add (*i);
-          file_list.push_back (i->native_file_string ());
+          file_list.push_back (i->string ());
           cxx.push_back (s);
         }
       }
@@ -632,7 +627,7 @@ namespace CXX
       NarrowString guard_prefix (ops.guard_prefix ());
 
       if (!guard_prefix)
-        guard_prefix = file_path.branch_path ().native_directory_string ();
+        guard_prefix = file_path.directory ().string ();
 
       if (guard_prefix)
         guard_prefix += '_';
@@ -652,19 +647,19 @@ namespace CXX
         }
         else
         {
-          target = hxx_path.native_file_string ();
+          target = hxx_path.string ();
 
           if (forward)
-            target += " \\\n" + fwd_path.native_file_string ();
+            target += " \\\n" + fwd_path.string ();
 
           if (inline_)
-            target += " \\\n" + ixx_path.native_file_string ();
+            target += " \\\n" + ixx_path.string ();
 
           for (Paths::iterator i (cxx_paths.begin ());
                i != cxx_paths.end (); ++i)
-            target += " \\\n" + i->native_file_string ();
+            target += " \\\n" + i->string ();
 
-          target += " \\\n" + dep_path.native_file_string ();
+          target += " \\\n" + dep_path.string ();
         }
 
         dep << target.c_str () << ':';
@@ -674,7 +669,7 @@ namespace CXX
 
         for (Paths::iterator i (prq.begin ()); i != prq.end (); ++i)
           dep << " \\" << endl
-              << "  " << i->string ();
+              << "  " << *i;
 
         dep << endl;
 
@@ -685,7 +680,7 @@ namespace CXX
         {
           for (Paths::iterator i (prq.begin () + 1); i != prq.end (); ++i)
             dep << endl
-                << i->string () << ':' << endl;
+                << *i << ':' << endl;
         }
       }
 

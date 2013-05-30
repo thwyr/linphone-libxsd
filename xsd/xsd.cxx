@@ -8,8 +8,7 @@
 #include <memory>  // std::auto_ptr
 #include <cstddef> // std::size_t
 #include <iostream>
-
-#include <boost/filesystem/fstream.hpp>
+#include <fstream>
 
 #include <xercesc/util/PlatformUtils.hpp>
 
@@ -420,7 +419,7 @@ main (int argc, char* argv[])
 
         try
         {
-          tu = SemanticGraph::Path (files[i], boost::filesystem::native);
+          tu = SemanticGraph::Path (files[i]);
         }
         catch (SemanticGraph::InvalidPath const&)
         {
@@ -453,7 +452,7 @@ main (int argc, char* argv[])
           {
             if (NarrowString name = common_ops.extern_xml_schema ())
             {
-              if (tu.native_file_string () != name)
+              if (tu.string () != name)
                 gen_xml_schema = false;
             }
           }
@@ -589,8 +588,7 @@ main (int argc, char* argv[])
       {
         try
         {
-          paths.push_back (
-            SemanticGraph::Path (files[i], boost::filesystem::native));
+          paths.push_back (SemanticGraph::Path (files[i]));
         }
         catch (SemanticGraph::InvalidPath const&)
         {
@@ -625,7 +623,7 @@ main (int argc, char* argv[])
         try
         {
           Transformations::Anonymous trans (anon_translator);
-          trans.transform (*schema, "", false);
+          trans.transform (*schema, SemanticGraph::Path (), false);
         }
         catch (Transformations::Anonymous::Failed const&)
         {
@@ -638,7 +636,7 @@ main (int argc, char* argv[])
       if (cmd == "cxx-tree")
       {
         Transformations::EnumSynthesis trans;
-        trans.transform (*schema, "");
+        trans.transform (*schema, SemanticGraph::Path ());
       }
 
       // Simplify the schema graph.
@@ -646,7 +644,7 @@ main (int argc, char* argv[])
       if (cmd == "cxx-parser")
       {
         Transformations::Simplifier trans;
-        trans.transform (*schema, "");
+        trans.transform (*schema, SemanticGraph::Path ());
       }
 
       // Normalize and annotate complex content restrictions.
@@ -656,7 +654,7 @@ main (int argc, char* argv[])
         try
         {
           Transformations::Restriction trans;
-          trans.transform (*schema, "");
+          trans.transform (*schema, SemanticGraph::Path ());
         }
         catch (Transformations::Restriction::Failed const&)
         {
@@ -668,7 +666,7 @@ main (int argc, char* argv[])
       //
       {
         Processing::Cardinality::Processor proc;
-        proc.process (*schema, "");
+        proc.process (*schema, SemanticGraph::Path ());
       }
 
       // Rearrange the graph so that each type is in a seperate
@@ -751,14 +749,14 @@ main (int argc, char* argv[])
     //
     if (NarrowString fl = common_ops.file_list ())
     {
-      typedef boost::filesystem::ofstream OutputFileStream;
+      typedef std::ofstream OutputFileStream;
 
       try
       {
         OutputFileStream ofs;
         SemanticGraph::Path path (fl);
 
-        ofs.open (fl, ios_base::out);
+        ofs.open (path.string ().c_str (), ios_base::out);
 
         if (!ofs.is_open ())
         {
@@ -960,7 +958,7 @@ AnonymousNameTranslator (NarrowStrings const& regex, bool trace)
     catch (RegexFormat const& e)
     {
       wcerr << "error: invalid anonymous type regex: '" <<
-        e.regex () << "': " << e.description () << endl;
+        e.regex () << "': " << e.description ().c_str () << endl;
 
       throw Failed ();
     }
@@ -1023,7 +1021,7 @@ SchemaPerTypeTranslator (NarrowStrings const& type_regex,
     catch (TypeRegexFormat const& e)
     {
       wcerr << "error: invalid type file regex: '" <<
-        e.regex () << "': " << e.description () << endl;
+        e.regex () << "': " << e.description ().c_str () << endl;
 
       throw Failed ();
     }

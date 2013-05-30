@@ -86,10 +86,6 @@ $(call import,\
   l: cutl.l,cpp-options: cutl.l.cpp-options)
 
 $(call import,\
-  $(scf_root)/import/libboost/filesystem/stub.make,\
-  l: fs.l,cpp-options: fs.l.cpp-options)
-
-$(call import,\
   $(scf_root)/import/libxsd-frontend/stub.make,\
   l: xsd_fe.l,cpp-options: xsd_fe.l.cpp-options)
 
@@ -99,13 +95,12 @@ $(call import,\
 
 # Build.
 #
-$(xsd): $(cxx_obj) $(xsd_fe.l) $(cutl.l) $(fs.l) $(xerces_c.l)
+$(xsd): $(cxx_obj) $(xsd_fe.l) $(cutl.l) $(xerces_c.l)
 
 $(cxx_obj) $(cxx_od): cpp_options := -I$(src_base)
 $(cxx_obj) $(cxx_od):      \
   $(xsd_fe.l.cpp-options)  \
   $(cutl.l.cpp-options)    \
-  $(fs.l.cpp-options)      \
   $(xerces_c.l.cpp-options)
 
 genf := $(cli_tun:.cli=.hxx) $(cli_tun:.cli=.ixx) $(cli_tun:.cli=.cxx)
