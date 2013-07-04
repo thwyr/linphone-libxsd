@@ -120,10 +120,20 @@ namespace CXX
             os << "this->" << inst << "->" << post << " ();"
                << "this->" << name << " ();";
           else
-            os << arg_type (type) << " tmp (this->" << inst << "->" <<
-              post << " ());"
-               << "this->" << name << " (tmp);"
-               << endl;
+          {
+            // Don't create an lvalue in C++11 (think std::unique_ptr).
+            // In C++98 we do it for compatibility with older/broken
+            // compilers (e.g., IBM xlC that needs an lvalue to pass
+            // std::auto_ptr).
+            //
+            if (options.std () == cxx_version::cxx98)
+              os << arg_type (type) << " tmp (this->" << inst << "->" <<
+                post << " ());"
+                 << "this->" << name << " (tmp);";
+            else
+              os << "this->" << name << " (this->" << inst << "->" <<
+                post << " ());";
+          }
 
           os << "}";
 
