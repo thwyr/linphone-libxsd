@@ -1,5 +1,8 @@
 Version 4.0.0
 
+  * New option, --std, specifies the C++ standard that the generated code
+    should conform to. Valid values are c++98 (default) and c++11.
+
   * New option, --fat-type-file, triggers the generation of code
     corresponding to global elements into type files instead of schema
     files in the file-per-type mode. This option is primarily useful

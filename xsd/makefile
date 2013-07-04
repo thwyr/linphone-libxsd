@@ -8,7 +8,8 @@ include $(dir $(lastword $(MAKEFILE_LIST)))../build/bootstrap.make
 cxx_tun := xsd.cxx
 
 cxx_tun += cxx/elements.cxx                            \
-           cxx/literal-map.cxx
+           cxx/literal-map.cxx                         \
+           cxx/option-types.cxx
 
 cxx_tun += cxx/parser/elements.cxx                     \
            cxx/parser/validator.cxx                    \

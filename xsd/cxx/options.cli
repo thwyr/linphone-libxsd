@@ -7,12 +7,23 @@ include <cstddef>; // std::size_t
 
 include <types.hxx>; // NarrowString, NarrowStrings
 
+include <cxx/option-types.hxx>;
+
 include <options.cli>;
 
 namespace CXX
 {
   class options: ::options = 0
   {
+    // Language.
+    //
+    cxx_version --std = cxx_version::cxx98
+    {
+      "<version>",
+      "Specify the C++ standard that the generated code should conform to.
+       Valid values are \cb{c++98} (default) and \cb{c++11}."
+    };
+
     // Character type and encoding.
     //
     NarrowString --char-type = "char"
