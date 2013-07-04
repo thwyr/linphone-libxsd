@@ -29,6 +29,7 @@ main ()
     {
       Gender::Value v;
       v = Gender::female;
+      XSD_UNUSED (v);
     }
 
     // Anonymous type.
@@ -49,6 +50,8 @@ main ()
       //
       {
         Type::FooType* p = 0;
+        XSD_UNUSED (p);
+
         Type::FooOptional o;
 
         if (t.foo ().present ())
@@ -61,6 +64,7 @@ main ()
       //
       {
         Type::BarType* p = 0;
+        XSD_UNUSED (p);
 
         if (t.bar () != "bar")
           return 1;
@@ -72,6 +76,8 @@ main ()
       //
       {
         Type::BazType* p = 0;
+        XSD_UNUSED (p);
+
         Type::BazSequence s;
         Type::BazIterator i (s.begin ());
         Type::BazConstIterator ci (s.begin ());

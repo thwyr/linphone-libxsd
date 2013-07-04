@@ -7,6 +7,7 @@
 //
 
 #include <memory> // std::auto_ptr
+#include <cassert>
 #include <iostream>
 
 #include "test.hxx"
@@ -37,6 +38,11 @@ main (int argc, char* argv[])
     case top_bottom::bottom:
       {
         cout << "bottom" << endl;
+        break;
+      }
+    default: // Suppress warning.
+      {
+        assert (false);
         break;
       }
     }
