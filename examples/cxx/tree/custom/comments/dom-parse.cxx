@@ -39,9 +39,9 @@ parse (std::istream& is, const std::string& id, bool validate)
 
   DOMConfiguration* conf (parser->getDomConfig ());
 
-  // Discard comment nodes in the document.
+  // Preserve comment nodes in the document.
   //
-  conf->setParameter (XMLUni::fgDOMComments, false);
+  conf->setParameter (XMLUni::fgDOMComments, true);
 
   // Enable datatype normalization.
   //
@@ -92,7 +92,7 @@ parse (std::istream& is, const std::string& id, bool validate)
   xml::dom::auto_ptr<DOMBuilder> parser (
     impl->createDOMBuilder (DOMImplementationLS::MODE_SYNCHRONOUS, 0));
 
-  parser->setFeature (XMLUni::fgDOMComments, false);
+  parser->setFeature (XMLUni::fgDOMComments, true);
   parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
   parser->setFeature (XMLUni::fgDOMEntities, false);
   parser->setFeature (XMLUni::fgDOMNamespaces, true);
