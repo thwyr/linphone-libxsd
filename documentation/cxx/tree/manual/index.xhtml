@@ -5857,7 +5857,7 @@ XMLPlatformUtils::Initialize ();
      xml_schema::flags::dont_initialize);
 
   DOMNode* n = root->_node ();
-  assert (n->getNodeType () != DOMNode::ELEMENT_NODE);
+  assert (n->getNodeType () == DOMNode::ELEMENT_NODE);
   DOMElement* re = static_cast&lt;DOMElement*> (n);
 
   // Get the 'a' element. Note that it is not necessarily the
