@@ -79,7 +79,7 @@ namespace xsd
         //
         //
         template <typename C>
-        struct document: cxx::parser::document<C> // VC 7.1 likes it qualified
+        struct document: cxx::parser::document<C> // VC likes it qualified
         {
         public:
           document (parser_base<C>& root,
@@ -386,8 +386,8 @@ namespace xsd
           event_router (cxx::parser::document<C>&, bool polymorphic);
 
           // I know, some of those consts are stupid. But that's what
-          // Xerces folks put into their interfaces and VC 7.1 thinks
-          // there are different signatures if one strips this fluff off.
+          // Xerces folks put into their interfaces and VC thinks there
+          // are different signatures if one strips this fluff off.
           //
           virtual void
           setDocumentLocator (const xercesc::Locator* const);

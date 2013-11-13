@@ -31,9 +31,9 @@ namespace xsd
       transcode (const XMLCh* s, std::size_t length);
 
 
-      // For VC7.1 wchar_t and XMLCh are the same type so we cannot
-      // overload the transcode name. You should not use these functions
-      // anyway and instead use the xml::string class below.
+      // For VC wchar_t and XMLCh are the same type so we cannot overload
+      // the transcode name. You should not use these functions anyway and
+      // instead use the xml::string class below.
       //
       template <typename C>
       XMLCh*

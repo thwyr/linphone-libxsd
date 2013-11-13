@@ -81,7 +81,7 @@ namespace xsd
         //
         //
         template <typename C>
-        struct document: cxx::parser::document<C> // VC 7.1 likes it qualified
+        struct document: cxx::parser::document<C> // VC likes it qualified
         {
         public:
           document (parser_base<C>&,

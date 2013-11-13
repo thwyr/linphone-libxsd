@@ -1367,8 +1367,7 @@ namespace xsd
         }
 
         // The following extra conversion operators causes problems on
-        // some compilers (notably VC 7.1 and 9.0) and are disabled by
-        // default.
+        // some compilers (notably VC 9.0) and are disabled by default.
         //
 #ifdef XSD_TREE_EXTRA_FUND_CONV
         /**

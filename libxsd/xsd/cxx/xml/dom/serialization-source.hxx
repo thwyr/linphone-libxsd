@@ -103,8 +103,8 @@ namespace xsd
 
         public:
           // I know, some of those consts are stupid. But that's what
-          // Xerces folks put into their interfaces and VC-7.1 thinks
-          // there are different signatures if one strips this fluff off.
+          // Xerces folks put into their interfaces and VC thinks there
+          // are different signatures if one strips this fluff off.
           //
           virtual void
           writeChars (const XMLByte* const buf,
