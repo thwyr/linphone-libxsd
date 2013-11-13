@@ -38,8 +38,6 @@ serialize (std::ostream& os,
 
   xml::dom::ostream_format_target oft (os);
 
-#if _XERCES_VERSION >= 30000
-
   // Create a DOMSerializer.
   //
   xml::dom::auto_ptr<DOMLSSerializer> writer (
@@ -61,29 +59,6 @@ serialize (std::ostream& os,
   out->setByteStream (&oft);
 
   writer->write (&doc, out.get ());
-
-#else
-
-  // Create a DOMWriter.
-  //
-  xml::dom::auto_ptr<DOMWriter> writer (impl->createDOMWriter ());
-
-  // Set error handler.
-  //
-  writer->setErrorHandler (&ehp);
-
-  // Set encoding.
-  //
-  writer->setEncoding(xml::string (encoding).c_str ());
-
-  // Set some generally nice features.
-  //
-  writer->setFeature (XMLUni::fgDOMWRTDiscardDefaultContent, true);
-  writer->setFeature (XMLUni::fgDOMWRTFormatPrettyPrint, true);
-
-  writer->writeNode (&oft, doc);
-
-#endif
 
   eh.throw_if_failed<tree::serialization<char> > ();
 }

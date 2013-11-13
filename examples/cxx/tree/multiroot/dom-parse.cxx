@@ -30,10 +30,6 @@ parse (std::istream& is, const std::string& id, bool validate)
   DOMImplementation* impl (
     DOMImplementationRegistry::getDOMImplementation (ls_id));
 
-#if _XERCES_VERSION >= 30000
-
-  // Xerces-C++ 3.0.0 and later.
-  //
   xml::dom::auto_ptr<DOMLSParser> parser (
     impl->createLSParser (DOMImplementationLS::MODE_SYNCHRONOUS, 0));
 
@@ -85,39 +81,12 @@ parse (std::istream& is, const std::string& id, bool validate)
   xml::dom::bits::error_handler_proxy<char> ehp (eh);
   conf->setParameter (XMLUni::fgDOMErrorHandler, &ehp);
 
-#else // _XERCES_VERSION >= 30000
-
-  // Same as above but for Xerces-C++ 2 series.
-  //
-  xml::dom::auto_ptr<DOMBuilder> parser (
-    impl->createDOMBuilder (DOMImplementationLS::MODE_SYNCHRONOUS, 0));
-
-  parser->setFeature (XMLUni::fgDOMComments, false);
-  parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
-  parser->setFeature (XMLUni::fgDOMEntities, false);
-  parser->setFeature (XMLUni::fgDOMNamespaces, true);
-  parser->setFeature (XMLUni::fgDOMWhitespaceInElementContent, false);
-  parser->setFeature (XMLUni::fgDOMValidation, validate);
-  parser->setFeature (XMLUni::fgXercesSchema, validate);
-  parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-  parser->setFeature (XMLUni::fgXercesUserAdoptsDOMDocument, true);
-
-  tree::error_handler<char> eh;
-  xml::dom::bits::error_handler_proxy<char> ehp (eh);
-  parser->setErrorHandler (&ehp);
-
-#endif // _XERCES_VERSION >= 30000
-
   // Prepare input stream.
   //
   xml::sax::std_input_source isrc (is, id);
   Wrapper4InputSource wrap (&isrc, false);
 
-#if _XERCES_VERSION >= 30000
   xml::dom::auto_ptr<DOMDocument> doc (parser->parse (&wrap));
-#else
-  xml::dom::auto_ptr<DOMDocument> doc (parser->parse (wrap));
-#endif
 
   eh.throw_if_failed<tree::parsing<char> > ();
 

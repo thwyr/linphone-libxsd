@@ -528,14 +528,8 @@ namespace xsd
               xml::string (e.message ()).c_str (),
               id.c_str (),
               id.c_str (),
-#if _XERCES_VERSION >= 30000
               static_cast<XMLFileLoc> (e.line ()),
-              static_cast<XMLFileLoc> (e.column ())
-#else
-              static_cast<XMLSSize_t> (e.line ()),
-              static_cast<XMLSSize_t> (e.column ())
-#endif
-            );
+              static_cast<XMLFileLoc> (e.column ()));
 
             eh.fatalError (se);
           }
@@ -566,14 +560,8 @@ namespace xsd
               xml::string (e.message ()).c_str (),
               id.c_str (),
               id.c_str (),
-#if _XERCES_VERSION >= 30000
               static_cast<XMLFileLoc> (e.line ()),
-              static_cast<XMLFileLoc> (e.column ())
-#else
-              static_cast<XMLSSize_t> (e.line ()),
-              static_cast<XMLSSize_t> (e.column ())
-#endif
-            );
+              static_cast<XMLFileLoc> (e.column ()));
 
             eh.fatalError (se);
           }
@@ -796,11 +784,7 @@ namespace xsd
             }
           }
 
-#if _XERCES_VERSION >= 30000
           for (XMLSize_t i (0), end (attributes.getLength()); i < end; ++i)
-#else
-          for (unsigned int i (0), end (attributes.getLength()); i < end; ++i)
-#endif
           {
             const XMLCh* xns (attributes.getURI (i));
 
@@ -882,11 +866,7 @@ namespace xsd
 
         template <typename C>
         void event_router<C>::
-#if _XERCES_VERSION >= 30000
         characters (const XMLCh* const s, const XMLSize_t n)
-#else
-        characters (const XMLCh* const s, const unsigned int n)
-#endif
         {
           typedef std::basic_string<C> string;
 
@@ -963,16 +943,8 @@ namespace xsd
             if (id != 0)
               e.id (xml::transcode<C> (id));
 
-#if _XERCES_VERSION >= 30000
             e.line (static_cast<unsigned long> (loc_->getLineNumber ()));
             e.column (static_cast<unsigned long> (loc_->getColumnNumber ()));
-#else
-            XMLSSize_t l (loc_->getLineNumber ());
-            XMLSSize_t c (loc_->getColumnNumber ());
-
-            e.line (l == -1 ? 0 : static_cast<unsigned long> (l));
-            e.column (c == -1 ? 0: static_cast<unsigned long> (c));
-#endif
           }
         }
       }

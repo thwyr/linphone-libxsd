@@ -111,27 +111,14 @@ compressed_input_stream::
   inflateEnd (&zs_);
 }
 
-#if _XERCES_VERSION >= 30000
 XMLFilePos compressed_input_stream::
 curPos () const
 {
   return static_cast<XMLFilePos> (pos_);
 }
-#else
-unsigned int compressed_input_stream::
-curPos () const
-{
-  return static_cast<unsigned int> (pos_);
-}
-#endif
 
-#if _XERCES_VERSION >= 30000
 XMLSize_t compressed_input_stream::
 readBytes (XMLByte* const buf, const XMLSize_t size)
-#else
-unsigned int compressed_input_stream::
-readBytes (XMLByte* const buf, const unsigned int size)
-#endif
 {
   if (end_)
     return 0;
@@ -169,20 +156,14 @@ readBytes (XMLByte* const buf, const unsigned int size)
   size_t n (size - zs_.avail_out);
   pos_ += n;
 
-#if _XERCES_VERSION >= 30000
   return static_cast<XMLSize_t> (n);
-#else
-  return static_cast<unsigned int> (n);
-#endif
 }
 
-#if _XERCES_VERSION >= 30000
 const XMLCh* compressed_input_stream::
 getContentType () const
 {
   return 0;
 }
-#endif
 
 size_t compressed_input_stream::
 read ()

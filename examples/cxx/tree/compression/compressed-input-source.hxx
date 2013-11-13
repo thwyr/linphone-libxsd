@@ -96,7 +96,6 @@ public:
   virtual
   ~compressed_input_stream ();
 
-#if _XERCES_VERSION >= 30000
   virtual XMLFilePos
   curPos () const;
 
@@ -105,15 +104,6 @@ public:
 
   virtual const XMLCh*
   getContentType () const;
-
-#else
-
-  virtual unsigned int
-  readBytes (XMLByte* const buf, const unsigned int size);
-
-  virtual unsigned int
-  curPos () const;
-#endif
 
 private:
   std::size_t

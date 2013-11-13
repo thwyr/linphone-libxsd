@@ -16,27 +16,14 @@ grammar_input_stream (const XMLByte* data, std::size_t size)
 {
 }
 
-#if _XERCES_VERSION >= 30000
 XMLFilePos grammar_input_stream::
 curPos () const
 {
   return static_cast<XMLFilePos> (vpos_);
 }
-#else
-unsigned int grammar_input_stream::
-curPos () const
-{
-  return static_cast<unsigned int> (vpos_);
-}
-#endif
 
-#if _XERCES_VERSION >= 30000
 XMLSize_t grammar_input_stream::
 readBytes (XMLByte* const buf, const XMLSize_t size)
-#else
-unsigned int grammar_input_stream::
-readBytes (XMLByte* const buf, const unsigned int size)
-#endif
 {
   std::size_t i (0);
 
@@ -99,17 +86,11 @@ readBytes (XMLByte* const buf, const unsigned int size)
 
   vpos_ += i;
 
-#if _XERCES_VERSION >= 30000
   return static_cast<XMLSize_t> (i);
-#else
-  return static_cast<unsigned int> (i);
-#endif
 }
 
-#if _XERCES_VERSION >= 30000
 const XMLCh* grammar_input_stream::
 getContentType () const
 {
   return 0;
 }
-#endif

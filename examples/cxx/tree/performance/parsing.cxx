@@ -8,11 +8,7 @@
 #include <iostream>
 
 #include <xercesc/dom/DOM.hpp>
-#if _XERCES_VERSION >= 30000
-#  include <xercesc/dom/DOMLSParser.hpp>
-#else
-#  include <xercesc/dom/DOMBuilder.hpp>
-#endif
+#include <xercesc/dom/DOMLSParser.hpp>
 #include <xercesc/dom/DOMImplementation.hpp>
 #include <xercesc/dom/DOMImplementationRegistry.hpp>
 
@@ -67,8 +63,6 @@ parsing (const char* file, unsigned long iter, bool validate)
     xsd::cxx::tree::error_handler<char> eh;
     xsd::cxx::xml::dom::bits::error_handler_proxy<char> ehp (eh);
 
-#if _XERCES_VERSION >= 30000
-
     xml_schema::dom::auto_ptr<DOMLSParser> parser (
       impl->createLSParser (DOMImplementationLS::MODE_SYNCHRONOUS, 0));
 
@@ -122,48 +116,6 @@ parsing (const char* file, unsigned long iter, bool validate)
 
     conf->setParameter (XMLUni::fgXercesUserAdoptsDOMDocument, true);
 
-#else // _XERCES_VERSION >= 30000
-
-    // Same as above but for Xerces-C++ 2 series.
-    //
-    xml_schema::dom::auto_ptr<DOMBuilder> parser (
-      impl->createDOMBuilder(DOMImplementationLS::MODE_SYNCHRONOUS, 0));
-
-    parser->setFeature (XMLUni::fgDOMComments, false);
-    parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
-    parser->setFeature (XMLUni::fgDOMEntities, false);
-    parser->setFeature (XMLUni::fgDOMNamespaces, true);
-    parser->setFeature (XMLUni::fgDOMWhitespaceInElementContent, false);
-
-    parser->setErrorHandler (&ehp);
-
-    if (validate)
-    {
-      parser->setFeature (XMLUni::fgDOMValidation, true);
-      parser->setFeature (XMLUni::fgXercesSchema, true);
-      parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-
-      if (!parser->loadGrammar ("test.xsd", Grammar::SchemaGrammarType, true))
-      {
-        eh.handle ("test.xsd", 0, 0,
-                   xsd::cxx::tree::error_handler<char>::severity::fatal,
-                   "unable to load schema");
-      }
-
-      eh.throw_if_failed<xml_schema::parsing> ();
-      parser->setFeature (XMLUni::fgXercesUseCachedGrammarInParse, true);
-    }
-    else
-    {
-      parser->setFeature (XMLUni::fgDOMValidation, false);
-      parser->setFeature (XMLUni::fgXercesSchema, false);
-      parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-    }
-
-    parser->setFeature (XMLUni::fgXercesUserAdoptsDOMDocument, true);
-
-#endif
-
     // Create memory buffer input source.
     //
     MemBufInputSource is (
@@ -179,11 +131,7 @@ parsing (const char* file, unsigned long iter, bool validate)
     {
       // First parse XML to DOM reusing the parser we created above.
       //
-#if _XERCES_VERSION >= 30000
       xml_schema::dom::auto_ptr<DOMDocument> doc (parser->parse (&wis));
-#else
-      xml_schema::dom::auto_ptr<DOMDocument> doc (parser->parse (wis));
-#endif
       eh.throw_if_failed<xml_schema::parsing> ();
 
       // Then parse DOM to the object model.

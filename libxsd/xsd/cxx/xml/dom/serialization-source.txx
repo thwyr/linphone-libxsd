@@ -7,12 +7,9 @@
 #include <xercesc/util/XMLUniDefs.hpp> // chLatin_L, etc
 #include <xercesc/validators/schema/SchemaSymbols.hpp>
 
-#if _XERCES_VERSION >= 30000
-#  include <xercesc/dom/DOMLSOutput.hpp>
-#  include <xercesc/dom/DOMLSSerializer.hpp>
-#else
-#  include <xercesc/dom/DOMWriter.hpp>
-#endif
+#include <xercesc/dom/DOMLSOutput.hpp>
+#include <xercesc/dom/DOMLSSerializer.hpp>
+
 #include <xercesc/dom/DOMElement.hpp>
 #include <xercesc/dom/DOMImplementation.hpp>
 #include <xercesc/dom/DOMImplementationRegistry.hpp>
@@ -298,13 +295,9 @@ namespace xsd
           //
           using xercesc::DOMImplementationRegistry;
           using xercesc::DOMImplementation;
-#if _XERCES_VERSION >= 30000
           using xercesc::DOMLSSerializer;
           using xercesc::DOMConfiguration;
           using xercesc::DOMLSOutput;
-#else
-          using xercesc::DOMWriter;
-#endif
           using xercesc::XMLUni;
 
           const XMLCh ls[] = {xercesc::chLatin_L,
@@ -316,7 +309,6 @@ namespace xsd
 
           bits::error_handler_proxy<C> ehp (eh);
 
-#if _XERCES_VERSION >= 30000
           xml::dom::auto_ptr<DOMLSSerializer> writer (
             impl->createLSSerializer ());
 
@@ -345,33 +337,7 @@ namespace xsd
           out->setEncoding (xml::string (encoding).c_str ());
           out->setByteStream (&target);
 
-          bool r (writer->write (&doc, out.get ()));
-#else
-          xml::dom::auto_ptr<DOMWriter> writer (impl->createDOMWriter ());
-
-          writer->setErrorHandler (&ehp);
-          writer->setEncoding (xml::string (encoding).c_str ());
-
-          // Set some nice features if the serializer supports them.
-          //
-          if (writer->canSetFeature (
-                XMLUni::fgDOMWRTDiscardDefaultContent, true))
-            writer->setFeature (XMLUni::fgDOMWRTDiscardDefaultContent, true);
-
-          if (!(flags & dont_pretty_print) &&
-              writer->canSetFeature (XMLUni::fgDOMWRTFormatPrettyPrint, true))
-            writer->setFeature (XMLUni::fgDOMWRTFormatPrettyPrint, true);
-
-          // See if we need to write XML declaration.
-          //
-          if ((flags & no_xml_declaration) &&
-              writer->canSetFeature (XMLUni::fgDOMXMLDeclaration, false))
-            writer->setFeature (XMLUni::fgDOMXMLDeclaration, false);
-
-          bool r (writer->writeNode (&target, doc));
-#endif
-
-          if (!r || ehp.failed ())
+          if (!writer->write (&doc, out.get ()) || ehp.failed ())
             return false;
 
           return true;

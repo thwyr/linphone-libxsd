@@ -30,12 +30,18 @@
 #include <xercesc/dom/DOMDocument.hpp>
 #include <xercesc/dom/DOMNamedNodeMap.hpp>
 
+#include <xercesc/util/XercesVersion.hpp>
+
 #include <xsd/cxx/xml/elements.hxx> // xml::properties
 #include <xsd/cxx/xml/dom/auto-ptr.hxx> // dom::auto_ptr
 
 #include <xsd/cxx/tree/facet.hxx>
 #include <xsd/cxx/tree/exceptions.hxx>
 #include <xsd/cxx/tree/istream-fwd.hxx>
+
+#if _XERCES_VERSION < 30000
+#  error Xerces-C++ 2-series is not supported
+#endif
 
 namespace xsd
 {

@@ -33,12 +33,8 @@ namespace xsd
         prefix (const C* ns, xercesc::DOMElement& e, const C* hint)
         {
           string xns (ns);
-
-#if _XERCES_VERSION >= 30000
           const XMLCh* p (e.lookupPrefix (xns.c_str ()));
-#else
-          const XMLCh* p (e.lookupNamespacePrefix (xns.c_str (), false));
-#endif
+
           if (p != 0)
             return transcode<C> (p);
 

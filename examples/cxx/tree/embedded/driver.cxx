@@ -12,11 +12,7 @@
 #include <xercesc/validators/common/Grammar.hpp> // xercesc::Grammar
 #include <xercesc/framework/Wrapper4InputSource.hpp>
 
-#if _XERCES_VERSION >= 30000
-#  include <xercesc/framework/XMLGrammarPoolImpl.hpp>
-#else
-#  include <xercesc/internal/XMLGrammarPoolImpl.hpp>
-#endif
+#include <xercesc/framework/XMLGrammarPoolImpl.hpp>
 
 #include <xsd/cxx/xml/string.hxx>
 #include <xsd/cxx/xml/dom/auto-ptr.hxx>
@@ -86,10 +82,6 @@ main (int argc, char* argv[])
     DOMImplementation* impl (
       DOMImplementationRegistry::getDOMImplementation (ls_id));
 
-#if _XERCES_VERSION >= 30000
-
-    // Xerces-C++ 3.0.0 and later.
-    //
     xml::dom::auto_ptr<DOMLSParser> parser (
       impl->createLSParser (
         DOMImplementationLS::MODE_SYNCHRONOUS, 0, mm, gp.get ()));
@@ -150,32 +142,6 @@ main (int argc, char* argv[])
     xml::dom::bits::error_handler_proxy<char> ehp (eh);
     conf->setParameter (XMLUni::fgDOMErrorHandler, &ehp);
 
-#else // _XERCES_VERSION >= 30000
-
-    // Same as above but for Xerces-C++ 2 series.
-    //
-    xml::dom::auto_ptr<DOMBuilder> parser (
-      impl->createDOMBuilder(
-        DOMImplementationLS::MODE_SYNCHRONOUS, 0, mm, gp.get ()));
-
-
-    parser->setFeature (XMLUni::fgDOMComments, false);
-    parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
-    parser->setFeature (XMLUni::fgDOMEntities, false);
-    parser->setFeature (XMLUni::fgDOMNamespaces, true);
-    parser->setFeature (XMLUni::fgDOMWhitespaceInElementContent, false);
-    parser->setFeature (XMLUni::fgDOMValidation, true);
-    parser->setFeature (XMLUni::fgXercesSchema, true);
-    parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-    parser->setFeature (XMLUni::fgXercesUseCachedGrammarInParse, true);
-    parser->setFeature (XMLUni::fgXercesUserAdoptsDOMDocument, true);
-
-    tree::error_handler<char> eh;
-    xml::dom::bits::error_handler_proxy<char> ehp (eh);
-    parser->setErrorHandler (&ehp);
-
-#endif // _XERCES_VERSION >= 30000
-
     // Parse XML documents.
     //
     for (unsigned long i (0); i < 10; ++i)
@@ -191,11 +157,7 @@ main (int argc, char* argv[])
 
       // Parse XML to DOM.
       //
-#if _XERCES_VERSION >= 30000
       xml_schema::dom::auto_ptr<DOMDocument> doc (parser->parse (&wrap));
-#else
-      xml_schema::dom::auto_ptr<DOMDocument> doc (parser->parse (wrap));
-#endif
 
       eh.throw_if_failed<xml_schema::parsing> ();
 

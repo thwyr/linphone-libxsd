@@ -16,8 +16,6 @@ class grammar_input_stream: public xercesc::BinInputStream
 public :
   grammar_input_stream (const XMLByte* data, std::size_t size);
 
-#if _XERCES_VERSION >= 30000
-
   virtual XMLFilePos
   curPos () const;
 
@@ -26,16 +24,6 @@ public :
 
   virtual const XMLCh*
   getContentType () const;
-
-#else
-
-  virtual unsigned int
-  curPos () const;
-
-  virtual unsigned int
-  readBytes (XMLByte* const buf, const unsigned int size);
-
-#endif
 
 private :
   const XMLByte* data_;

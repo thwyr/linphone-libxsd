@@ -108,11 +108,7 @@ namespace xsd
           //
           virtual void
           writeChars (const XMLByte* const buf,
-#if _XERCES_VERSION >= 30000
                       const XMLSize_t size,
-#else
-                      const unsigned int size,
-#endif
                       xercesc::XMLFormatter* const)
           {
             // Ignore the write request if there was a stream failure and the

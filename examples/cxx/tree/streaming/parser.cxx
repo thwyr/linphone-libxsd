@@ -11,10 +11,7 @@
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 
 #include <xercesc/dom/DOM.hpp>
-
-#if _XERCES_VERSION >= 30000
-#  include <xercesc/dom/impl/DOMTextImpl.hpp>
-#endif
+#include <xercesc/dom/impl/DOMTextImpl.hpp>
 
 #include <xsd/cxx/auto-array.hxx>
 
@@ -59,12 +56,7 @@ private:
 
   virtual void
   characters (const XMLCh* const s,
-#if _XERCES_VERSION >= 30000
-              const XMLSize_t length
-#else
-              const unsigned int length
-#endif
-  );
+              const XMLSize_t length);
 
 private:
   // SAX parser.
@@ -101,7 +93,7 @@ parser_impl ()
 
   // Xerces-C++ 3.1.0 is the first version with working multi import
   // support. It also allows us to disable buffering in the parser
-  // so that the date is parsed and returned as soon as it is
+  // so that the data is parsed and returned as soon as it is
   // available.
   //
 #if _XERCES_VERSION >= 30100
@@ -214,11 +206,7 @@ startElement (const XMLCh* const uri,
 
   // Set attributes.
   //
-#if _XERCES_VERSION >= 30000
   for (XMLSize_t i (0), end (attr.getLength()); i < end; ++i)
-#else
-  for (unsigned int i (0), end (attr.getLength()); i < end; ++i)
-#endif
   {
     const XMLCh* qn (attr.getQName (i));
     const XMLCh* ns (attr.getURI (i));
@@ -247,7 +235,6 @@ endElement (const XMLCh* const /*uri*/,
     cur_ = static_cast<DOMElement*> (cur_->getParentNode ());
 }
 
-#if _XERCES_VERSION >= 30000
 void parser_impl::
 characters (const XMLCh* const s, const XMLSize_t length)
 {
@@ -262,23 +249,6 @@ characters (const XMLCh* const s, const XMLSize_t length)
     cur_->appendChild (t);
   }
 }
-#else
-void parser_impl::
-characters (const XMLCh* const s, const unsigned int length)
-{
-  // Ignore text content (presumably whitespaces) in the root element.
-  //
-  if (depth_ > 1)
-  {
-    // For Xerces-C++ 2-series we have to make copy.
-    //
-    xsd::cxx::auto_array<XMLCh> tmp (new XMLCh[length + 1]);
-    XMLString::copyNString (tmp.get (), s, length);
-    cur_->appendChild (doc_->createTextNode (tmp.get ()));
-  }
-}
-#endif
-
 
 //
 // parser

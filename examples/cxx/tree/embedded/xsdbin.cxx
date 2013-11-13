@@ -28,11 +28,7 @@
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
 
-#if _XERCES_VERSION >= 30000
-#  include <xercesc/framework/XMLGrammarPoolImpl.hpp>
-#else
-#  include <xercesc/internal/XMLGrammarPoolImpl.hpp>
-#endif
+#include <xercesc/framework/XMLGrammarPoolImpl.hpp>
 
 using namespace std;
 using namespace xercesc;
@@ -490,17 +486,9 @@ handle (const SAXParseException& e, severity s)
   char* id (XMLString::transcode (xid));
   char* msg (XMLString::transcode (e.getMessage ()));
 
-  cerr << id << ":";
-
-#if _XERCES_VERSION >= 30000
-  cerr << e.getLineNumber () << ":" << e.getColumnNumber () << " ";
-#else
-  XMLSSize_t l (e.getLineNumber ());
-  XMLSSize_t c (e.getColumnNumber ());
-  cerr << (l == -1 ? 0 : l) << ":" << (c == -1 ? 0 : c) << " ";
-#endif
-
-  cerr << (s == s_warning ? "warning: " : "error: ") << msg << endl;
+  cerr << id << ":"
+       << e.getLineNumber () << ":" << e.getColumnNumber () << " "
+       << (s == s_warning ? "warning: " : "error: ") << msg << endl;
 
   XMLString::release (&id);
   XMLString::release (&msg);

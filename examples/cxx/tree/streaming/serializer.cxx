@@ -47,12 +47,8 @@ private:
 private:
   // Serializer.
   //
-#if _XERCES_VERSION >= 30000
   xml::dom::auto_ptr<DOMLSOutput> out_;
   xml::dom::auto_ptr<DOMLSSerializer> serializer_;
-#else
-  xml::dom::auto_ptr<DOMWriter> serializer_;
-#endif
 
   auto_ptr<xml::dom::ostream_format_target> oft_;
 
@@ -73,7 +69,6 @@ serializer_impl ()
       dom_impl_ (*DOMImplementationRegistry::getDOMImplementation (ls)),
       doc_ (dom_impl_.createDocument ())
 {
-#if _XERCES_VERSION >= 30000
   serializer_.reset (dom_impl_.createLSSerializer ());
   DOMConfiguration* conf (serializer_->getDomConfig ());
 
@@ -81,14 +76,6 @@ serializer_impl ()
   conf->setParameter (XMLUni::fgDOMWRTDiscardDefaultContent, true);
   conf->setParameter (XMLUni::fgDOMWRTFormatPrettyPrint, true);
   conf->setParameter (XMLUni::fgDOMXMLDeclaration, false);
-#else
-  serializer_.reset (dom_impl_.createDOMWriter ());
-
-  serializer_->setErrorHandler (&error_proxy_);
-  serializer_->setFeature (XMLUni::fgDOMWRTDiscardDefaultContent, true);
-  serializer_->setFeature (XMLUni::fgDOMWRTFormatPrettyPrint, true);
-  serializer_->setFeature (XMLUni::fgDOMXMLDeclaration, false);
-#endif
 }
 
 void serializer_impl::
@@ -97,13 +84,9 @@ start (ostream& os, const string& encoding)
   error_handler_.reset ();
   oft_.reset (new xml::dom::ostream_format_target (os));
 
-#if _XERCES_VERSION >= 30000
   out_.reset (dom_impl_.createLSOutput ());
   out_->setEncoding (xml::string (encoding).c_str ());
   out_->setByteStream (oft_.get ());
-#else
-  serializer_->setEncoding (xml::string (encoding).c_str ());
-#endif
 }
 
 DOMElement* serializer_impl::
@@ -159,12 +142,7 @@ add_namespaces (DOMElement* e, const namespace_infomap& map)
 void serializer_impl::
 serialize (DOMElement& e)
 {
-#if _XERCES_VERSION >= 30000
   serializer_->write (&e, out_.get ());
-#else
-  serializer_->writeNode (oft_.get (), e);
-#endif
-
   error_handler_.throw_if_failed<tree::serialization<char> > ();
 }
 

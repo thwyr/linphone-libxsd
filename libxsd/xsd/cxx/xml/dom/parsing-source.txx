@@ -3,12 +3,9 @@
 // copyright : Copyright (c) 2005-2011 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#if _XERCES_VERSION >= 30000
-#  include <xercesc/dom/DOMLSParser.hpp>
-#  include <xercesc/dom/DOMLSException.hpp>
-#else
-#  include <xercesc/dom/DOMBuilder.hpp>
-#endif
+#include <xercesc/dom/DOMLSParser.hpp>
+#include <xercesc/dom/DOMLSException.hpp>
+
 #include <xercesc/dom/DOMNamedNodeMap.hpp>
 #include <xercesc/dom/DOMImplementation.hpp>
 #include <xercesc/dom/DOMImplementationRegistry.hpp>
@@ -94,12 +91,8 @@ namespace xsd
           using xercesc::DOMImplementationLS;
           using xercesc::DOMImplementation;
           using xercesc::DOMDocument;
-#if _XERCES_VERSION >= 30000
           using xercesc::DOMLSParser;
           using xercesc::DOMConfiguration;
-#else
-          using xercesc::DOMBuilder;
-#endif
 
           using xercesc::Wrapper4InputSource;
           using xercesc::XMLUni;
@@ -116,7 +109,6 @@ namespace xsd
           DOMImplementation* impl (
             DOMImplementationRegistry::getDOMImplementation (ls_id));
 
-#if _XERCES_VERSION >= 30000
           auto_ptr<DOMLSParser> parser (
             impl->createLSParser (DOMImplementationLS::MODE_SYNCHRONOUS, 0));
 
@@ -163,7 +155,6 @@ namespace xsd
             if (!(flags & no_muliple_imports))
               conf->setParameter (XMLUni::fgXercesHandleMultipleImports, true);
 #endif
-
             // This feature checks the schema grammar for additional
             // errors. We most likely do not need it when validating
             // instances (assuming the schema is valid).
@@ -214,64 +205,9 @@ namespace xsd
           bits::error_handler_proxy<C> ehp (eh);
           conf->setParameter (XMLUni::fgDOMErrorHandler, &ehp);
 
-#else // _XERCES_VERSION >= 30000
-
-          // Same as above but for Xerces-C++ 2 series.
-          //
-          auto_ptr<DOMBuilder> parser (
-            impl->createDOMBuilder (DOMImplementationLS::MODE_SYNCHRONOUS, 0));
-
-          parser->setFeature (XMLUni::fgDOMComments, false);
-          parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
-          parser->setFeature (XMLUni::fgDOMEntities, false);
-          parser->setFeature (XMLUni::fgDOMNamespaces, true);
-          parser->setFeature (XMLUni::fgDOMWhitespaceInElementContent, false);
-
-          if (flags & dont_validate)
-          {
-            parser->setFeature (XMLUni::fgDOMValidation, false);
-            parser->setFeature (XMLUni::fgXercesSchema, false);
-            parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-          }
-          else
-          {
-            parser->setFeature (XMLUni::fgDOMValidation, true);
-            parser->setFeature (XMLUni::fgXercesSchema, true);
-            parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-          }
-
-          parser->setFeature (XMLUni::fgXercesUserAdoptsDOMDocument, true);
-
-          if (!prop.schema_location ().empty ())
-          {
-            xml::string sl (prop.schema_location ());
-            const void* v (sl.c_str ());
-
-            parser->setProperty (
-              XMLUni::fgXercesSchemaExternalSchemaLocation,
-              const_cast<void*> (v));
-          }
-
-          if (!prop.no_namespace_schema_location ().empty ())
-          {
-            xml::string sl (prop.no_namespace_schema_location ());
-            const void* v (sl.c_str ());
-
-            parser->setProperty (
-              XMLUni::fgXercesSchemaExternalNoNameSpaceSchemaLocation,
-              const_cast<void*> (v));
-          }
-
-          bits::error_handler_proxy<C> ehp (eh);
-          parser->setErrorHandler (&ehp);
-
-#endif // _XERCES_VERSION >= 30000
-
           xercesc::Wrapper4InputSource wrap (&is, false);
 
-#if _XERCES_VERSION >= 30000
           auto_ptr<DOMDocument> doc;
-
           try
           {
             doc.reset (parser->parse (&wrap));
@@ -279,9 +215,7 @@ namespace xsd
           catch (const xercesc::DOMLSException&)
           {
           }
-#else
-          auto_ptr<DOMDocument> doc (parser->parse (wrap));
-#endif
+
           if (ehp.failed ())
             doc.reset ();
 
@@ -312,12 +246,8 @@ namespace xsd
           using xercesc::DOMImplementationLS;
           using xercesc::DOMImplementation;
           using xercesc::DOMDocument;
-#if _XERCES_VERSION >= 30000
           using xercesc::DOMLSParser;
           using xercesc::DOMConfiguration;
-#else
-          using xercesc::DOMBuilder;
-#endif
           using xercesc::XMLUni;
 
 
@@ -332,7 +262,6 @@ namespace xsd
           DOMImplementation* impl (
             DOMImplementationRegistry::getDOMImplementation (ls_id));
 
-#if _XERCES_VERSION >= 30000
           auto_ptr<DOMLSParser> parser (
             impl->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0));
 
@@ -430,63 +359,7 @@ namespace xsd
           bits::error_handler_proxy<C> ehp (eh);
           conf->setParameter (XMLUni::fgDOMErrorHandler, &ehp);
 
-#else // _XERCES_VERSION >= 30000
-
-          // Same as above but for Xerces-C++ 2 series.
-          //
-          auto_ptr<DOMBuilder> parser (
-            impl->createDOMBuilder(DOMImplementationLS::MODE_SYNCHRONOUS, 0));
-
-          parser->setFeature (XMLUni::fgDOMComments, false);
-          parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
-          parser->setFeature (XMLUni::fgDOMEntities, false);
-          parser->setFeature (XMLUni::fgDOMNamespaces, true);
-          parser->setFeature (XMLUni::fgDOMWhitespaceInElementContent, false);
-
-          if (flags & dont_validate)
-          {
-            parser->setFeature (XMLUni::fgDOMValidation, false);
-            parser->setFeature (XMLUni::fgXercesSchema, false);
-            parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-          }
-          else
-          {
-            parser->setFeature (XMLUni::fgDOMValidation, true);
-            parser->setFeature (XMLUni::fgXercesSchema, true);
-            parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-          }
-
-          parser->setFeature (XMLUni::fgXercesUserAdoptsDOMDocument, true);
-
-          if (!prop.schema_location ().empty ())
-          {
-            xml::string sl (prop.schema_location ());
-            const void* v (sl.c_str ());
-
-            parser->setProperty (
-              XMLUni::fgXercesSchemaExternalSchemaLocation,
-              const_cast<void*> (v));
-          }
-
-          if (!prop.no_namespace_schema_location ().empty ())
-          {
-            xml::string sl (prop.no_namespace_schema_location ());
-            const void* v (sl.c_str ());
-
-            parser->setProperty (
-              XMLUni::fgXercesSchemaExternalNoNameSpaceSchemaLocation,
-              const_cast<void*> (v));
-          }
-
-          bits::error_handler_proxy<C> ehp (eh);
-          parser->setErrorHandler (&ehp);
-
-#endif // _XERCES_VERSION >= 30000
-
-
-#if _XERCES_VERSION >= 30000
           auto_ptr<DOMDocument> doc;
-
           try
           {
             doc.reset (parser->parseURI (string (uri).c_str ()));
@@ -494,10 +367,6 @@ namespace xsd
           catch (const xercesc::DOMLSException&)
           {
           }
-#else
-          auto_ptr<DOMDocument> doc (
-            parser->parseURI (string (uri).c_str ()));
-#endif
 
           if (ehp.failed ())
             doc.reset ();

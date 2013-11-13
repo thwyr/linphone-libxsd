@@ -65,22 +65,11 @@ namespace xsd
             if (id == 0)
               id = e.getSystemId ();
 
-#if _XERCES_VERSION >= 30000
             eh_->handle (transcode<C> (id),
                          static_cast<unsigned long> (e.getLineNumber ()),
                          static_cast<unsigned long> (e.getColumnNumber ()),
                          s,
                          transcode<C> (e.getMessage ()));
-#else
-            XMLSSize_t l (e.getLineNumber ());
-            XMLSSize_t c (e.getColumnNumber ());
-
-            eh_->handle (transcode<C> (id),
-                         (l == -1 ? 0 : static_cast<unsigned long> (l)),
-                         (c == -1 ? 0 : static_cast<unsigned long> (c)),
-                         s,
-                         transcode<C> (e.getMessage ()));
-#endif
           }
         }
       }

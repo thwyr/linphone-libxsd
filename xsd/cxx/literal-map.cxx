@@ -9,7 +9,6 @@
 #include <iostream>
 
 #include <xercesc/util/XMLUni.hpp>
-#include <xercesc/util/XercesVersion.hpp>
 
 #include <xercesc/framework/LocalFileInputSource.hpp>
 
@@ -115,13 +114,8 @@ namespace CXX
         state_ = s_entry;
     }
 
-#if _XERCES_VERSION >= 30000
     virtual void
     characters (const XMLCh* const s, const XMLSize_t length)
-#else
-    virtual void
-    characters (const XMLCh* const s, const unsigned int length)
-#endif
     {
       String str (XML::transcode (s, length));
 
@@ -175,18 +169,11 @@ namespace CXX
     void
     handle (const SAXParseException& e, Severity s)
     {
-      wcerr << file_ << ":";
-
-#if _XERCES_VERSION >= 30000
-      wcerr << e.getLineNumber () << ":" << e.getColumnNumber () << ": ";
-#else
-      XMLSSize_t l (e.getLineNumber ());
-      XMLSSize_t c (e.getColumnNumber ());
-      wcerr << (l == -1 ? 0 : l) << ":" << (c == -1 ? 0 : c) << ": ";
-#endif
-
       String msg (XML::transcode (e.getMessage ()));
-      wcerr << (s == s_warning ? "warning: " : "error: ") << msg << endl;
+
+      wcerr << file_ << ":"
+            << e.getLineNumber () << ":" << e.getColumnNumber () << ": "
+            << (s == s_warning ? "warning: " : "error: ") << msg << endl;
 
       if (s != s_warning)
         throw Failed ();
@@ -195,37 +182,17 @@ namespace CXX
     size_t
     line () const
     {
-      size_t r (0);
-
-      if (locator_ != 0)
-      {
-#if _XERCES_VERSION >= 30000
-        r = static_cast<size_t> (locator_->getLineNumber ());
-#else
-        XMLSSize_t l (locator_->getLineNumber ());
-        r = l == -1 ? 0 : static_cast<size_t> (l);
-#endif
-      }
-
-      return r;
+      return locator_ != 0
+        ? static_cast<size_t> (locator_->getLineNumber ())
+        : 0;
     }
 
     size_t
     col () const
     {
-      size_t r (0);
-
-      if (locator_ != 0)
-      {
-#if _XERCES_VERSION >= 30000
-        r = static_cast<size_t> (locator_->getColumnNumber ());
-#else
-        XMLSSize_t c (locator_->getColumnNumber ());
-        r = c == -1 ? 0 : static_cast<size_t> (c);
-#endif
-      }
-
-      return r;
+      return locator_ != 0
+        ? static_cast<size_t> (locator_->getColumnNumber ())
+        : 0;
     }
 
   private:

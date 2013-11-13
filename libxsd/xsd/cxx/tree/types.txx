@@ -5,7 +5,6 @@
 
 #include <xercesc/util/Base64.hpp>
 #include <xercesc/util/XMLString.hpp>
-#include <xercesc/util/XercesVersion.hpp>
 
 #include <xsd/cxx/auto-array.hxx>
 
@@ -335,7 +334,6 @@ namespace xsd
         using xercesc::Base64;
         std::basic_string<C> str;
 
-#if _XERCES_VERSION >= 30000
         XMLSize_t n;
 
         xml::std_memory_manager mm;
@@ -359,31 +357,6 @@ namespace xsd
         {
           //@@ throw
         }
-#else
-        unsigned int n;
-
-        xml::std_memory_manager mm;
-        auto_array<XMLByte, xml::std_memory_manager> r (
-          Base64::encode (
-            reinterpret_cast<const XMLByte*> (this->data ()),
-            static_cast<unsigned int> (this->size ()),
-            &n,
-            &mm),
-	  mm);
-
-        if (r)
-        {
-          str.reserve (n + 1);
-          str.resize (n);
-
-          for (unsigned int i (0); i < n; ++i)
-            str[i] = C (r[i]);
-        }
-        else
-        {
-          //@@ throw
-        }
-#endif
 
         return str;
       }
@@ -397,23 +370,11 @@ namespace xsd
         using xercesc::Base64;
 
         xml::std_memory_manager mm;
-
-        // Xerces 2.6.0 and earlier do not have decodeToXMLByte which
-        // makes my life harder and your code slower.
-        //
-#if _XERCES_VERSION >= 20700
-
-#if _XERCES_VERSION >= 30000
         XMLSize_t size;
+
         auto_array<XMLByte, xml::std_memory_manager> data (
           Base64::decodeToXMLByte (src, &size, &mm, Base64::Conf_RFC2045),
 	  mm);
-#else
-        unsigned int size;
-        auto_array<XMLByte, xml::std_memory_manager> data (
-          Base64::decodeToXMLByte (src, &size, &mm, Base64::Conf_RFC2045),
-	  mm);
-#endif // _XERCES_VERSION >= 30000
 
         if (data)
         {
@@ -425,30 +386,6 @@ namespace xsd
         {
           //@@ throw
         }
-#else
-        unsigned int size;
-
-#if _XERCES_VERSION >= 20600  // Xerces 2.5.0 does not have Conf_RFC2045.
-        auto_array<XMLCh, xml::std_memory_manager> data (
-          Base64::decode (src, &size, &mm, Base64::Conf_RFC2045),
-	  mm);
-#else
-        auto_array<XMLCh, xml::std_memory_manager> data (
-          Base64::decode (src, &size, &mm), mm);
-#endif // _XERCES_VERSION >= 20600
-
-        if (data)
-        {
-          buffer<C> tmp (size);
-          for (unsigned int i (0); i < size; ++i)
-            tmp.data ()[i] = static_cast<char> (data[i]);
-          this->swap (tmp); // g++ 4.1 likes it qualified, not sure why.
-        }
-        else
-        {
-          //@@ throw
-        }
-#endif  //_XERCES_VERSION >= 20700
       }
 
 

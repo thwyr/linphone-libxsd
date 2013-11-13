@@ -8,7 +8,12 @@
 
 #include <string>
 
+#include <xercesc/util/XercesVersion.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
+
+#if _XERCES_VERSION < 30000
+#  error Xerces-C++ 2-series is not supported
+#endif
 
 namespace xsd
 {

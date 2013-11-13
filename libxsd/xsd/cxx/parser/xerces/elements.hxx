@@ -16,12 +16,18 @@
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/sax2/DefaultHandler.hpp>
 
+#include <xercesc/util/XercesVersion.hpp>
+
 #include <xsd/cxx/xml/elements.hxx>
 #include <xsd/cxx/xml/error-handler.hxx>
 
 #include <xsd/cxx/parser/exceptions.hxx>
 #include <xsd/cxx/parser/elements.hxx>
 #include <xsd/cxx/parser/document.hxx>
+
+#if _XERCES_VERSION < 30000
+#  error Xerces-C++ 2-series is not supported
+#endif
 
 namespace xsd
 {
@@ -403,13 +409,8 @@ namespace xsd
                       const XMLCh* const lname,
                       const XMLCh* const qname);
 
-#if _XERCES_VERSION >= 30000
           virtual void
           characters (const XMLCh* const s, const XMLSize_t length);
-#else
-          virtual void
-          characters (const XMLCh* const s, const unsigned int length);
-#endif
 
           virtual void
           startPrefixMapping (const XMLCh* const prefix,

@@ -51,10 +51,6 @@ main (int argc, char* argv[])
     DOMImplementation* impl (
       DOMImplementationRegistry::getDOMImplementation (ls_id));
 
-#if _XERCES_VERSION >= 30000
-
-    // Xerces-C++ 3.0.0 and later.
-    //
     xml::dom::auto_ptr<DOMLSParser> parser (
       impl->createLSParser (DOMImplementationLS::MODE_SYNCHRONOUS, 0));
 
@@ -128,41 +124,6 @@ main (int argc, char* argv[])
     //
     conf->setParameter (XMLUni::fgXercesUserAdoptsDOMDocument, true);
 
-#else // _XERCES_VERSION >= 30000
-
-    // Same as above but for Xerces-C++ 2 series.
-    //
-    xml::dom::auto_ptr<DOMBuilder> parser (
-      impl->createDOMBuilder(DOMImplementationLS::MODE_SYNCHRONOUS, 0));
-
-
-    parser->setFeature (XMLUni::fgDOMComments, false);
-    parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
-    parser->setFeature (XMLUni::fgDOMEntities, false);
-    parser->setFeature (XMLUni::fgDOMNamespaces, true);
-    parser->setFeature (XMLUni::fgDOMWhitespaceInElementContent, false);
-    parser->setFeature (XMLUni::fgDOMValidation, true);
-    parser->setFeature (XMLUni::fgXercesSchema, true);
-    parser->setFeature (XMLUni::fgXercesSchemaFullChecking, false);
-
-    tree::error_handler<char> eh;
-    xml::dom::bits::error_handler_proxy<char> ehp (eh);
-    parser->setErrorHandler (&ehp);
-
-    if (!parser->loadGrammar ("library.xsd", Grammar::SchemaGrammarType, true))
-    {
-      eh.handle ("library.xsd", 0, 0,
-                 tree::error_handler<char>::severity::fatal,
-                 "unable to load schema");
-    }
-
-    eh.throw_if_failed<xml_schema::parsing> ();
-    parser->setFeature (XMLUni::fgXercesUseCachedGrammarInParse, true);
-
-    parser->setFeature (XMLUni::fgXercesUserAdoptsDOMDocument, true);
-
-#endif // _XERCES_VERSION >= 30000
-
     // Parse XML documents.
     //
     for (unsigned long i (0); i < 10; ++i)
@@ -178,11 +139,7 @@ main (int argc, char* argv[])
 
       // Parse XML to DOM.
       //
-#if _XERCES_VERSION >= 30000
       xml_schema::dom::auto_ptr<DOMDocument> doc (parser->parse (&wrap));
-#else
-      xml_schema::dom::auto_ptr<DOMDocument> doc (parser->parse (wrap));
-#endif
 
       eh.throw_if_failed<xml_schema::parsing> ();
 

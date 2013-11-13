@@ -8,12 +8,8 @@
 #include <iostream>
 
 #include <xercesc/dom/DOM.hpp>
-#if _XERCES_VERSION >= 30000
-#  include <xercesc/dom/DOMLSOutput.hpp>
-#  include <xercesc/dom/DOMLSSerializer.hpp>
-#else
-#  include <xercesc/dom/DOMWriter.hpp>
-#endif
+#include <xercesc/dom/DOMLSOutput.hpp>
+#include <xercesc/dom/DOMLSSerializer.hpp>
 #include <xercesc/dom/DOMImplementation.hpp>
 #include <xercesc/dom/DOMImplementationRegistry.hpp>
 
@@ -75,7 +71,6 @@ serialization (const char* file, unsigned long iter)
     xsd::cxx::tree::error_handler<char> eh;
     xsd::cxx::xml::dom::bits::error_handler_proxy<char> ehp (eh);
 
-#if _XERCES_VERSION >= 30000
     xml_schema::dom::auto_ptr<DOMLSSerializer> writer (
       impl->createLSSerializer ());
 
@@ -87,14 +82,6 @@ serialization (const char* file, unsigned long iter)
     xml_schema::dom::auto_ptr<DOMLSOutput> out (impl->createLSOutput ());
 
     out->setByteStream (&ft);
-#else
-    // Same as above but for Xerces-C++ 2 series.
-    //
-    xml_schema::dom::auto_ptr<DOMWriter> writer (impl->createDOMWriter ());
-
-    writer->setErrorHandler (&ehp);
-    writer->setFeature (XMLUni::fgDOMXMLDeclaration, false);
-#endif
 
     // Serialization loop.
     //
@@ -110,12 +97,7 @@ serialization (const char* file, unsigned long iter)
 
       // Then serialize DOM to XML reusing the serializer we created above.
       //
-#if _XERCES_VERSION >= 30000
       writer->write (doc.get (), out.get ());
-#else
-      writer->writeNode (&ft, *doc);
-#endif
-
       eh.throw_if_failed<xml_schema::serialization> ();
     }
 

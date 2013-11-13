@@ -81,11 +81,7 @@ compressed_format_target::
 
 void compressed_format_target::
 writeChars (const XMLByte* const buf,
-#if _XERCES_VERSION >= 30000
             const XMLSize_t size,
-#else
-            const unsigned int size,
-#endif
             xercesc::XMLFormatter* const)
 {
   // Flush the buffer if the block is too large or if we don't have
