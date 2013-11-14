@@ -1,5 +1,9 @@
 Version 4.0.0
 
+  * Xerces-C++ 2-series (2.8.0 and earlier) are no longer supported.
+
+  * Visual Studio 2003 (7.1) is no longer supported.
+
   * Oracle/Berkeley DB XML support has been removed since the Xerces-C++-
     based document access is no longer supported.
 
