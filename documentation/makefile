@@ -103,7 +103,6 @@ $(install): $(out_base)/cxx/.install \
             $(out_base)/xsd.xhtml    \
             $(out_base)/xsd.1	
 	$(call install-data,$(src_base)/default.css,$(install_doc_dir)/xsd/default.css)
-	$(call install-data,$(src_base)/schema-authoring-guide.xhtml,$(install_doc_dir)/xsd/schema-authoring-guide.xhtml)
 	$(call install-data,$(out_base)/xsd.xhtml,$(install_doc_dir)/xsd/xsd.xhtml)
 	$(call install-data,$(src_base)/custom-literals.xsd,$(install_doc_dir)/xsd/custom-literals.xsd)
 	$(call install-data,$(out_base)/xsd.1,$(install_man_dir)/man1/xsd.1)
@@ -117,7 +116,6 @@ $(dist-common): $(out_base)/xsd.xhtml \
 	$(call install-data,$(src_base)/default.css,$(dist_prefix)/documentation/default.css)
 	$(call install-data,$(out_base)/xsd.xhtml,$(dist_prefix)/documentation/xsd.xhtml)
 	$(call install-data,$(out_base)/xsd.1,$(dist_prefix)/documentation/xsd.1)
-	$(call install-data,$(src_base)/schema-authoring-guide.xhtml,$(dist_prefix)/documentation/schema-authoring-guide.xhtml)
 	$(call install-data,$(src_base)/custom-literals.xsd,$(dist_prefix)/documentation/custom-literals.xsd)
 
 $(dist): $(dist-common) $(out_base)/cxx/.dist
