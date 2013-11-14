@@ -74,7 +74,3 @@ compression
 binary/
   A collection of examples that show how to serialize the object model
   into a number of predefined and custom binary formats.
-
-dbxml
-  Shows how to use the C++/Tree mapping on top of the Berkeley DB
-  XML embedded XML database.

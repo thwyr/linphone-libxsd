@@ -298,9 +298,6 @@
     <li><a href="http://wiki.codesynthesis.com/Tree/Customization_guide">C++/Tree
         Mapping Customization Guide</a></li>
 
-    <li><a href="http://www.codesynthesis.com/projects/xsd/documentation/cxx/tree/dbxml/">C++/Tree
-        Mapping and Berkeley DB XML Integration Guide</a></li>
-
     <li><a href="http://wiki.codesynthesis.com/Tree/FAQ">C++/Tree
         Mapping Frequently Asked Questions (FAQ)</a></li>
 
@@ -318,7 +315,6 @@
         mailing list is the place to ask technical questions about XSD and the C++/Parser mapping.
         Furthermore, the <a href="http://www.codesynthesis.com/pipermail/xsd-users/">archives</a>
         may already have answers to some of your questions.</li>
-
   </ul>
 
   <!-- Introduction -->
@@ -344,18 +340,17 @@
      mapping elements that can be useful in some applications. These
      include serialization and extraction to/from formats others than
      XML, such as unstructured text (useful for debugging) and binary
-     representations such as XDR and CDR for high-speed data processing,
-     integration with XML databases such as Berkeley DB XML, and automatic
-     documentation generation. The C++/Tree mapping also provides a wide
-     range of mechanisms for controlling and customizing the generated
-     code.</p>
+     representations such as XDR and CDR for high-speed data processing
+     as well as automatic documentation generation. The C++/Tree mapping
+     also provides a wide range of mechanisms for controlling and
+     customizing the generated code.</p>
 
-   <p>A typical application that uses C++/Tree for XML processing usually
-      performs the following three steps: it first reads (parses) an XML
-      document to an in-memory object model, it then performs some useful
-      computations on that object model which may involve modification
-      of the model, and finally it may write (serialize) the modified
-      object model back to XML.</p>
+  <p>A typical application that uses C++/Tree for XML processing usually
+     performs the following three steps: it first reads (parses) an XML
+     document to an in-memory object model, it then performs some useful
+     computations on that object model which may involve modification
+     of the model, and finally it may write (serialize) the modified
+     object model back to XML.</p>
 
   <p>The next chapter presents a simple application that performs these
      three steps. The following chapters show how to use the C++/Tree

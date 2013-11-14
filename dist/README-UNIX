@@ -66,9 +66,6 @@ WITH_BOOST  - Set this variable to 1 if you would like to build examples
 WITH_XQILLA - Set this variable to 1 if you would like to build examples
               that depend on the XQilla library (XPath 2)
 
-WITH_DBXML  - Set this variable to 1 if you would like to build examples
-              that depend on the Berkeley DB XML library
-
 Additionally, makefiles for the C++/Parser examples (examples/cxx/parser/)
 allow you to choose the underlying XML parser:
 

@@ -31,14 +31,7 @@ namespace xsd
             n->getNextSibling () == 0)
         {
           DOMText* t (static_cast<DOMText*> (n));
-
-          // Berkeley DB XML DOM does not implement getLength().
-          //
-#ifndef DBXML_DOM
           return xml::transcode<C> (t->getData (), t->getLength ());
-#else
-	  return xml::transcode<C> (t->getData ());
-#endif
         }
 
         std::basic_string<C> r;
@@ -51,14 +44,7 @@ namespace xsd
           case DOMNode::CDATA_SECTION_NODE:
             {
               DOMText* t (static_cast<DOMText*> (n));
-
-              // Berkeley DB XML DOM does not implement getLength().
-              //
-#ifndef DBXML_DOM
               r += xml::transcode<C> (t->getData (), t->getLength ());
-#else
-	      r += xml::transcode<C> (t->getData ());
-#endif
               break;
             }
           case DOMNode::ELEMENT_NODE:

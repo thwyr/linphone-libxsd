@@ -25,11 +25,9 @@ $(install): path := $(subst $(src_root)/documentation/,,$(src_base))
 $(dist-common): path := $(subst $(src_root)/,,$(src_base))
 
 $(install): $(addprefix $(out_base)/,$(addsuffix /.install,$(docs)))
-	$(call install-dir,$(src_base)/dbxml,$(install_doc_dir)/xsd/$(path)/dbxml)
 	$(call install-dir,$(src_base)/reference,$(install_doc_dir)/xsd/$(path)/reference)
 
 $(dist-common):
-	$(call install-dir,$(src_base)/dbxml,$(dist_prefix)/$(path)/dbxml)
 	$(call install-dir,$(src_base)/reference,$(dist_prefix)/$(path)/reference)
 
 $(dist): $(dist-common) $(addprefix $(out_base)/,$(addsuffix /.dist,$(docs)))

@@ -199,7 +199,6 @@ examples/cxx/tree/binary/boost     - depends on the Boost serialization library
 examples/cxx/tree/binary/cdr       - depends on the ACE library
 examples/cxx/tree/binary/xdr       - requires a third-party XDR library
 examples/cxx/tree/xpath            - depends on the XQilla library (XPath 2)
-examples/cxx/tree/dbxml            - depends on the Berkeley DB XML library
 
 
 Using XSD in Your Projects
