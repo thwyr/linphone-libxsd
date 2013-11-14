@@ -9,35 +9,6 @@ namespace CXX
 {
   namespace Parser
   {
-    // Keep this symbol first to help HP-UX linker (long symbols?).
-    //
-    Content::Value Context::
-    content (SemanticGraph::Complex& c)
-    {
-      using namespace SemanticGraph;
-
-      if (c.mixed_p ())
-        return Content::mixed;
-
-      if (c.inherits_p ())
-      {
-        Type& base (c.inherits ().base ());
-
-        if (Complex* cb = dynamic_cast<Complex*> (&base))
-          return content (*cb);
-
-        if (base.is_a<AnyType> ())
-          return Content::complex;
-
-        // Everyhting else (built-in type and AnySimpleType) is simple
-        // content.
-        //
-        return Content::simple;
-      }
-      else
-        return Content::complex;
-    }
-
     Context::
     Context (std::wostream& o,
              SemanticGraph::Schema& root,
@@ -127,6 +98,33 @@ namespace CXX
           ixx_expr (c.ixx_expr),
           hxx_impl_expr (c.hxx_impl_expr)
     {
+    }
+
+    Content::Value Context::
+    content (SemanticGraph::Complex& c)
+    {
+      using namespace SemanticGraph;
+
+      if (c.mixed_p ())
+        return Content::mixed;
+
+      if (c.inherits_p ())
+      {
+        Type& base (c.inherits ().base ());
+
+        if (Complex* cb = dynamic_cast<Complex*> (&base))
+          return content (*cb);
+
+        if (base.is_a<AnyType> ())
+          return Content::complex;
+
+        // Everyhting else (built-in type and AnySimpleType) is simple
+        // content.
+        //
+        return Content::simple;
+      }
+      else
+        return Content::complex;
     }
 
     bool Context::

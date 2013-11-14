@@ -18,8 +18,6 @@ namespace CXX
     class Validator
     {
     public:
-      Validator (); // Dummy ctor, helps with long symbols on HP-UX.
-
       bool
       validate (options const&,
                 SemanticGraph::Schema&,

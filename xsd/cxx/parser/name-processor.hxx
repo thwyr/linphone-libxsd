@@ -20,8 +20,6 @@ namespace CXX
     class NameProcessor
     {
     public:
-      NameProcessor (); // Dummy ctor, helps with long symbols on HP-UX.
-
       void
       process (options const&,
                XSDFrontend::SemanticGraph::Schema&,

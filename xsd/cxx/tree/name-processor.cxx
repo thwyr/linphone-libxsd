@@ -20,12 +20,6 @@ namespace CXX
 {
   namespace Tree
   {
-    NameProcessor::
-    NameProcessor ()
-    {
-      // Dummy ctor, helps with long symbols on HP-UX.
-    }
-
     namespace
     {
       //

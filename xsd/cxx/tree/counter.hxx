@@ -16,8 +16,6 @@ namespace CXX
     class Counter
     {
     public:
-      Counter (); // Dummy ctor, helps with long symbols on HP-UX.
-
       Counts
       count (options const&,
              SemanticGraph::Schema&,

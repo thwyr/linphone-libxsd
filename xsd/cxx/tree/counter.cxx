@@ -230,11 +230,6 @@ namespace CXX
       };
     }
 
-    Counter::
-    Counter ()
-    {
-    }
-
     Counts Counter::
     count (options const& ops,
            SemanticGraph::Schema& tu,

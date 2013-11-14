@@ -11,28 +11,6 @@ namespace CXX
   {
     // Context
     //
-    void Context::
-    update_ns_scope () // Keeping this function first helps HP-UX
-    {                  // (long symbols).
-      ns_scope.clear ();
-
-      bool first (true);
-
-      for (NamespaceStack::iterator i (ns_scope_stack.begin ());
-           i != ns_scope_stack.end ();
-           ++i)
-      {
-        // We only qualify names until the namespace level.
-        //
-        if (first)
-          first = false;
-        else
-          ns_scope += L"::";
-
-        ns_scope += *i;
-      }
-    }
-
     Context::
     Context (std::wostream& o,
              SemanticGraph::Schema& root,
@@ -364,6 +342,28 @@ namespace CXX
           ns_scope_stack (c.ns_scope_stack),
           cxx_uq_id_expr (c.cxx_uq_id_expr)
     {
+    }
+
+    void Context::
+    update_ns_scope ()
+    {
+      ns_scope.clear ();
+
+      bool first (true);
+
+      for (NamespaceStack::iterator i (ns_scope_stack.begin ());
+           i != ns_scope_stack.end ();
+           ++i)
+      {
+        // We only qualify names until the namespace level.
+        //
+        if (first)
+          first = false;
+        else
+          ns_scope += L"::";
+
+        ns_scope += *i;
+      }
     }
 
     bool Context::

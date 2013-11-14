@@ -520,12 +520,6 @@ namespace CXX
       };
     }
 
-    Validator::
-    Validator ()
-    {
-      // Dummy ctor, helps with long symbols on HP-UX.
-    }
-
     bool Validator::
     validate (options const& ops,
               SemanticGraph::Schema& schema,

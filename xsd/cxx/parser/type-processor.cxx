@@ -17,12 +17,6 @@ namespace CXX
 {
   namespace Parser
   {
-    TypeProcessor::
-    TypeProcessor ()
-    {
-      // Dummy ctor, helps with long symbols on HP-UX.
-    }
-
     namespace
     {
       //

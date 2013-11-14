@@ -21,8 +21,6 @@ namespace CXX
     class TypeProcessor
     {
     public:
-      TypeProcessor (); // Dummy ctor, helps with long symbols on HP-UX.
-
       void
       process (options const&,
                XSDFrontend::SemanticGraph::Schema&,
