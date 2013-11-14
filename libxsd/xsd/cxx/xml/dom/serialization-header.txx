@@ -121,13 +121,7 @@ namespace xsd
         void
         clear (xercesc::DOMElement& e)
         {
-          // HP aCC cannot handle using namespace xercesc;
-          //
-          using xercesc::DOMNode;
-          using xercesc::DOMAttr;
-          using xercesc::DOMNamedNodeMap;
-          using xercesc::XMLString;
-          using xercesc::SchemaSymbols;
+          using namespace xercesc;
 
           // Remove child nodes.
           //

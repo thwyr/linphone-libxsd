@@ -85,18 +85,7 @@ namespace xsd
                const properties<C>& prop,
                unsigned long flags)
         {
-          // HP aCC cannot handle using namespace xercesc;
-          //
-          using xercesc::DOMImplementationRegistry;
-          using xercesc::DOMImplementationLS;
-          using xercesc::DOMImplementation;
-          using xercesc::DOMDocument;
-          using xercesc::DOMLSParser;
-          using xercesc::DOMConfiguration;
-
-          using xercesc::Wrapper4InputSource;
-          using xercesc::XMLUni;
-
+          using namespace xercesc;
 
           // Instantiate the DOM parser.
           //
@@ -240,16 +229,7 @@ namespace xsd
                const properties<C>& prop,
                unsigned long flags)
         {
-          // HP aCC cannot handle using namespace xercesc;
-          //
-          using xercesc::DOMImplementationRegistry;
-          using xercesc::DOMImplementationLS;
-          using xercesc::DOMImplementation;
-          using xercesc::DOMDocument;
-          using xercesc::DOMLSParser;
-          using xercesc::DOMConfiguration;
-          using xercesc::XMLUni;
-
+          using namespace xercesc;
 
           // Instantiate the DOM parser.
           //

@@ -234,8 +234,6 @@ namespace CXX
           SemanticGraph::Type& t (e.type ());
           bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
-          // aCC cannot handle an inline call to std_ostream_map_instance.
-          //
           if (poly)
           {
             os << "{"

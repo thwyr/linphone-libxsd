@@ -65,27 +65,15 @@ endif
 
 # HP C++ (aCC)
 #
-# aCC3 and aCC6 are two very different compilers so we will call them
-# hp3 and hp6.
-#
-
-# 3
-ifeq ($(cxx_id),)
-ifeq ($(shell echo '$(cxx_sign)' | sed -e 's/^[^ ]* HP ANSI C.. .* A\.03\..*$$//'),)
-cxx_id := hp3
-endif
-endif
-
-# 6
 ifeq ($(cxx_id),)
 ifeq ($(shell echo '$(cxx_sign)' | sed -e 's/^[^ ]* HP aC..\/ANSI C .* A\.06\..*$$//'),)
-cxx_id := hp6
+cxx_id := hp
 endif
 endif
 
 ifeq ($(cxx_id),)
 ifeq ($(shell echo '$(cxx_sign)' | sed -e 's/^[^ ]* HP C\/aC.. .* A\.06\..*$$//'),)
-cxx_id := hp6
+cxx_id := hp
 endif
 endif
 

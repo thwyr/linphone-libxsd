@@ -252,9 +252,6 @@ namespace xsd
         bool present_;
       };
 
-
-      // Note that I cannot get rid of fund because of HP aCC3.
-      //
       template <typename T, bool fund = fundamental_p<T>::r>
       class optional;
 
@@ -527,13 +524,8 @@ namespace xsd
 
       // Sequence.
       //
-
-      // Note that I cannot get rid of 'fund' because HP aCC3 likes it
-      // this way.
-      //
       template <typename T, bool fund = fundamental_p<T>::r>
       class sequence;
-
 
       // Sun CC's <iterator> does not have iterator_traits. To overcome
       // this, we will wrap std::iterator_traits into our own and also

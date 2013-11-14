@@ -2076,20 +2076,7 @@ namespace xsd
         virtual void
         _container (container*);
 
-        // The above override also hides other _container versions. We
-        // also cannot do using-declarations because of bugs in HP aCC3.
-        //
-        const container*
-        _container () const
-        {
-          return B::_container ();
-        }
-
-        container*
-        _container ()
-        {
-          return B::_container ();
-        }
+        using B::_container;
 
         //@endcond
 

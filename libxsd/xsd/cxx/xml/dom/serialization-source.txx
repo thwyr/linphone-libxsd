@@ -116,15 +116,8 @@ namespace xsd
                    const namespace_infomap<C>& map,
                    unsigned long)
         {
-          // HP aCC cannot handle using namespace xercesc;
-          //
-          using xercesc::DOMImplementationRegistry;
-          using xercesc::DOMImplementation;
-          using xercesc::DOMDocument;
-          using xercesc::DOMElement;
+          using namespace xercesc;
 
-          //
-          //
           typedef std::basic_string<C> string;
           typedef namespace_infomap<C> infomap;
           typedef typename infomap::const_iterator infomap_iterator;
@@ -291,14 +284,7 @@ namespace xsd
                    xercesc::DOMErrorHandler& eh,
                    unsigned long flags)
         {
-          // HP aCC cannot handle using namespace xercesc;
-          //
-          using xercesc::DOMImplementationRegistry;
-          using xercesc::DOMImplementation;
-          using xercesc::DOMLSSerializer;
-          using xercesc::DOMConfiguration;
-          using xercesc::DOMLSOutput;
-          using xercesc::XMLUni;
+          using namespace xercesc;
 
           const XMLCh ls[] = {xercesc::chLatin_L,
                               xercesc::chLatin_S,

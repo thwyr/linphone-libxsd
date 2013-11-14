@@ -333,15 +333,9 @@ namespace CXX
 
           if (poly)
           {
-            // aCC cannot handle an inline call to type_factory_map_instance.
-            //
-            os << "::xsd::cxx::tree::type_factory_map< " << char_type <<
-              " >& tfm (" << endl
+            os << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "::xsd::cxx::tree::type_factory_map_instance< " <<
-              poly_plate << ", " << char_type << " > ());"
-               << endl
-               << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
-               << "tfm.create (" << endl
+              poly_plate << ", " << char_type << " > ().create (" << endl
                << strlit (e.name ()) << "," << endl
                << strlit (e.namespace_().name ()) << "," << endl
                << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl
@@ -431,15 +425,9 @@ namespace CXX
 
           if (poly)
           {
-            // aCC cannot handle an inline call to type_factory_map_instance.
-            //
-            os << "::xsd::cxx::tree::type_factory_map< " << char_type <<
-              " >& tfm (" << endl
+            os << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
                << "::xsd::cxx::tree::type_factory_map_instance< " <<
-              poly_plate << ", " << char_type << " > ());"
-               << endl
-               << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
-               << "tfm.create (" << endl
+              poly_plate << ", " << char_type << " > ().create (" << endl
                << strlit (e.name ()) << "," << endl
                << strlit (e.namespace_().name ()) << "," << endl
                << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl

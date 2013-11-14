@@ -312,8 +312,6 @@ namespace CXX
           os << "// " << comment (e.name ()) << endl
              << "//" << endl;
 
-          // aCC cannot handle an inline call to type_serializer_map_instance.
-          //
           if (poly)
           {
             os << "{"
@@ -1144,18 +1142,11 @@ namespace CXX
 
           if (poly)
           {
-            // aCC cannot handle an inline call to
-            // type_serializer_map_instance.
-            //
             os << "}"
                << "else"
                << "{"
-               << "::xsd::cxx::tree::type_serializer_map< " << char_type
-               << " >& tsm (" << endl
                << "::xsd::cxx::tree::type_serializer_map_instance< " <<
-                poly_plate << ", " << char_type << " > ());"
-               << endl
-               << "tsm.serialize (" << endl
+              poly_plate << ", " << char_type << " > ().serialize (" << endl
                << strlit (e.name ()) << "," << endl
                << strlit (e.namespace_().name ()) << "," << endl
                << "e, n, s);"
@@ -1175,37 +1166,23 @@ namespace CXX
 
           if (poly)
           {
-            // aCC cannot handle an inline call to
-            // type_serializer_map_instance as well as the direct
-            // auto_ptr assignment.
-            //
             os << dom_auto_ptr << "< " << xerces_ns << "::DOMDocument > d;"
                << endl
                << "if (typeid (" << type_name (e) << ") == typeid (s))"
                << "{"
-               << dom_auto_ptr << "< " << xerces_ns <<
-              "::DOMDocument > r (" << endl
-               << "::xsd::cxx::xml::dom::serialize< " <<
+               << "d = ::xsd::cxx::xml::dom::serialize< " <<
               char_type << " > (" << endl
                << strlit (e.name ()) << "," << endl
                << strlit (ns) << "," << endl
-               << "m, f));"
-               << "d = r;"
+               << "m, f);"
                << "}"
                << "else"
                << "{"
-               << "::xsd::cxx::tree::type_serializer_map< " << char_type
-               << " >& tsm (" << endl
-               << "::xsd::cxx::tree::type_serializer_map_instance< " <<
-                poly_plate << ", " << char_type << " > ());"
-               << endl
-               << dom_auto_ptr << "< " << xerces_ns <<
-              "::DOMDocument > r (" << endl
-               << "tsm.serialize (" << endl
+               << "d = ::xsd::cxx::tree::type_serializer_map_instance< " <<
+              poly_plate << ", " << char_type << " > ().serialize (" << endl
                << strlit (e.name ()) << "," << endl
                << strlit (e.namespace_().name ()) << "," << endl
-               << "m, s, f));"
-               << "d = r;"
+               << "m, s, f);"
                << "}";
           }
           else

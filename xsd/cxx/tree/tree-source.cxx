@@ -720,16 +720,10 @@ namespace CXX
 
           if (poly)
           {
-            // aCC cannot handle an inline call to type_factory_map_instance.
-            //
             os << "{"
-               << "::xsd::cxx::tree::type_factory_map< " << char_type <<
-              " >& tfm (" << endl
-               << "::xsd::cxx::tree::type_factory_map_instance< " <<
-              poly_plate << ", " << char_type << " > ());"
-               << endl
                << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
-               << "tfm.create (" << endl
+               << "::xsd::cxx::tree::type_factory_map_instance< " <<
+              poly_plate << ", " << char_type << " > ().create (" << endl
                << strlit (e.name ()) << "," << endl
                << (e.qualified_p ()
                    ? strlit (e.namespace_ ().name ())
@@ -1879,8 +1873,6 @@ namespace CXX
           }
           else
           {
-            // aCC cannot handle an inline call to comparison_map_instance.
-            //
             os << "{"
                << "::xsd::cxx::tree::comparison_map< " << char_type
                << " >& cm (" << endl

@@ -4,6 +4,8 @@ Version 4.0.0
 
   * Visual Studio 2003 (7.1) is no longer supported.
 
+  * HP aCC3 (HP-UX/PA-RISC) is no longer supported.
+
   * Oracle/Berkeley DB XML support has been removed since the Xerces-C++-
     based document access is no longer supported.
 

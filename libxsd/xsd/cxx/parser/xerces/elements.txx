@@ -572,11 +572,7 @@ namespace xsd
         std::auto_ptr<xercesc::SAX2XMLReader> document<C>::
         create_sax_ (flags f, const properties<C>& p)
         {
-          // HP aCC cannot handle using namespace xercesc;
-          //
-          using xercesc::SAX2XMLReader;
-          using xercesc::XMLReaderFactory;
-          using xercesc::XMLUni;
+          using namespace xercesc;
 
           std::auto_ptr<SAX2XMLReader> sax (
             XMLReaderFactory::createXMLReader ());

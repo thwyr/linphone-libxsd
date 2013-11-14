@@ -22,8 +22,7 @@ namespace xsd
     namespace tree
     {
       // Class template for xsd:list mapping. Based on the sequence
-      // template. Note that I cannot get rid of 'fund' because HP
-      // aCC3 likes it this way.
+      // template.
       //
       template <typename T,
                 typename C,

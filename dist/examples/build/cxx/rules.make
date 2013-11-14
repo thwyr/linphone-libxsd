@@ -32,23 +32,11 @@ ifeq ($(cxx_id),sun)
 endif
 
 
-# HP aCC3
+# HP aCC
 #
-ifeq ($(cxx_id),hp3)
+ifeq ($(cxx_id),hp)
 
-  # By default Xerces-C++ is built with -mt for aCC3.
-  # 849 : symbol to long, truncated to 4000
-  # 1039: incompatible vtable layout
-  #
-  CXXFLAGS := -AA -O -mt +W849 +W1039
-endif
-
-
-# HP aCC6
-#
-ifeq ($(cxx_id),hp6)
-
-  # By default Xerces-C++ is built with -mt for aCC6.
+  # By default Xerces-C++ is built with -mt for aCC.
   # 2334 no suitable copy constructor (e.g., for std::auto_ptr)
   #
   CXXFLAGS := -Aa -O -mt +W2334

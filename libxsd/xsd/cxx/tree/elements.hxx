@@ -208,12 +208,6 @@ namespace xsd
 
       typedef user_data_keys_template<0> user_data_keys;
 
-      // HP aCC3 complains about unresolved symbols without an explicit
-      // instantiation.
-      //
-#if defined(__HP_aCC) && __HP_aCC <= 39999
-      template struct user_data_keys_template<0>;
-#endif
       //
       //
       struct identity

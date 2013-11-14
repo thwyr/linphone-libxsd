@@ -167,11 +167,6 @@ namespace xsd
         return *this;
       }
 
-      // It would have been cleaner to mention empty and _container
-      // with the using-declaration but HP aCC3 can't handle it in
-      // some non-trivial to track down cases. So we are going to use
-      // the old-n-ugly this-> techniques.
-      //
       template <typename C, typename B>
       void id<C, B>::
       _container (container* c)
@@ -210,11 +205,6 @@ namespace xsd
         return new idref (*this, f, c);
       }
 
-      // It would have been cleaner to mention empty, _root, etc. with
-      // the using-declaration but HP aCC3 can't handle it in some
-      // non-trivial to track down cases. So we are going to use the
-      // old-n-ugly this-> techniques.
-      //
       template <typename C, typename B, typename T>
       const _type* idref<C, B, T>::
       get_ () const
@@ -320,18 +310,11 @@ namespace xsd
         return new base64_binary (*this, f, c);
       }
 
-      // It would have been cleaner to mention size, and data with the
-      // using-declaration but HP aCC3 can't handle it in some non-
-      // trivial to track down cases. So we are going to use the
-      // old-n- ugly this-> techniques.
-      //
       template <typename C, typename B>
       std::basic_string<C> base64_binary<C, B>::
       encode () const
       {
-        // HP aCC3 cannot handle using namespace xercesc;
-        //
-        using xercesc::Base64;
+        using namespace xercesc;
         std::basic_string<C> str;
 
         XMLSize_t n;
@@ -365,9 +348,7 @@ namespace xsd
       void base64_binary<C, B>::
       decode (const XMLCh* src)
       {
-        // HP aCC3 cannot handle using namespace xercesc;
-        //
-        using xercesc::Base64;
+        using namespace xercesc;
 
         xml::std_memory_manager mm;
         XMLSize_t size;
@@ -433,11 +414,6 @@ namespace xsd
         return new hex_binary (*this, f, c);
       }
 
-      // It would have been cleaner to mention size, and data with the
-      // using-declaration but HP aCC3 can't handle it in some non-
-      // trivial to track down cases. So we are going to use the
-      // old-n-ugly this-> techniques.
-      //
       template <typename C, typename B>
       std::basic_string<C> hex_binary<C, B>::
       encode () const
