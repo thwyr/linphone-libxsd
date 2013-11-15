@@ -1,4 +1,4 @@
-# file      : documentation/cxx/tree/guide/makefile
+# file      : doc/cxx/tree/guide/makefile
 # author    : Boris Kolpackov <boris@codesynthesis.com>
 # copyright : Copyright (c) 2006-2011 Code Synthesis Tools CC
 # license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
@@ -26,7 +26,7 @@ $(out_base)/cxx-tree-guide.pdf: $(out_base)/cxx-tree-guide.ps | $(out_base)/.
 
 # Install & Dist.
 #
-$(install): path := $(subst $(src_root)/documentation/,,$(src_base))
+$(install): path := $(subst $(src_root)/doc/,,$(src_base))
 $(dist): path := $(subst $(src_root)/,,$(src_base))
 
 $(install): $(out_base)/cxx-tree-guide.ps $(out_base)/cxx-tree-guide.pdf

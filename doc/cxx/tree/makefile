@@ -1,4 +1,4 @@
-# file      : documentation/cxx/tree/makefile
+# file      : doc/cxx/tree/makefile
 # author    : Boris Kolpackov <boris@codesynthesis.com>
 # copyright : Copyright (c) 2006-2011 Code Synthesis Tools CC
 # license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
@@ -21,7 +21,7 @@ $(default): $(addprefix $(out_base)/,$(addsuffix /,$(docs)))
 #
 dist-common := $(out_base)/.dist-common
 
-$(install): path := $(subst $(src_root)/documentation/,,$(src_base))
+$(install): path := $(subst $(src_root)/doc/,,$(src_base))
 $(dist-common): path := $(subst $(src_root)/,,$(src_base))
 
 $(install): $(addprefix $(out_base)/,$(addsuffix /.install,$(docs)))

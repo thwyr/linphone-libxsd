@@ -16,7 +16,7 @@ cleandoc := $(out_base)/.cleandoc
 $(default): $(out_base)/xsd/      \
             $(out_base)/tests/    \
             $(out_base)/examples/ \
-            $(out_base)/documentation/
+            $(out_base)/doc/
 
 # Test.
 #
@@ -28,7 +28,7 @@ $(test): $(out_base)/tests/.test
 $(install): $(out_base)/xsd/.install           \
             $(out_base)/libxsd/.install        \
 	    $(out_base)/examples/.install      \
-            $(out_base)/documentation/.install
+            $(out_base)/doc/.install
 	$(call install-dir,$(src_base)/dist/examples/build,$(install_doc_dir)/xsd/examples/build)
 	$(call install-dir,$(src_base)/dist/examples/cxx,$(install_doc_dir)/xsd/examples/cxx,-name makefile)
 	$(call install-data,$(src_base)/dist/examples/makefile,$(install_doc_dir)/xsd/examples/makefile)
@@ -44,7 +44,7 @@ $(install): $(out_base)/xsd/.install           \
 $(dist): $(out_base)/xsd/.dist           \
          $(out_base)/libxsd/.dist        \
          $(out_base)/examples/.dist      \
-         $(out_base)/documentation/.dist
+         $(out_base)/doc/.dist
 	$(call install-dir,$(src_base)/dist/examples/build,$(dist_prefix)/examples/build)
 	$(call install-dir,$(src_base)/dist/examples/cxx,$(dist_prefix)/examples/cxx,-name makefile)
 	$(call install-data,$(src_base)/dist/examples/makefile,$(dist_prefix)/examples/makefile)
@@ -58,7 +58,7 @@ $(dist): $(out_base)/xsd/.dist           \
 $(dist-win): $(out_base)/xsd/.dist-win           \
              $(out_base)/libxsd/.dist-win        \
              $(out_base)/examples/.dist-win      \
-             $(out_base)/documentation/.dist-win
+             $(out_base)/doc/.dist-win
 	$(call install-dir,$(src_base)/dist/etc,$(dist_prefix)/etc)
 	$(call install-dir,$(src_base)/dist/examples/build,$(dist_prefix)/examples/build)
 	$(call install-dir,$(src_base)/dist/examples/cxx,$(dist_prefix)/examples/cxx)
@@ -85,7 +85,7 @@ $(clean): $(out_base)/xsd/.clean      \
           $(out_base)/tests/.clean    \
           $(out_base)/examples/.clean
 
-$(cleandoc): $(out_base)/documentation/.cleandoc
+$(cleandoc): $(out_base)/doc/.cleandoc
 
 $(call include,$(bld_root)/install.make)
 
@@ -93,4 +93,4 @@ $(call import,$(src_base)/xsd/makefile)
 $(call import,$(src_base)/libxsd/makefile)
 $(call import,$(src_base)/tests/makefile)
 $(call import,$(src_base)/examples/makefile)
-$(call import,$(src_base)/documentation/makefile)
+$(call import,$(src_base)/doc/makefile)
