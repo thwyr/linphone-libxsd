@@ -107,7 +107,11 @@ $(cxx_obj) $(cxx_od):      \
 genf := $(cli_tun:.cli=.hxx) $(cli_tun:.cli=.ixx) $(cli_tun:.cli=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
+# Don't depend on installed executable since it may not exist.
+#
+ifneq ($(cli),cli)
 $(gen): $(cli)
+endif
 $(gen): cli := $(cli)
 $(gen): cli_options +=         \
 -I $(src_base)                 \
