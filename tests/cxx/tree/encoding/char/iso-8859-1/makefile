@@ -38,7 +38,7 @@ $(gen): xsd_options := --char-encoding iso8859-1 --generate-serialization \
 --generate-doxygen 
 $(gen): $(out_root)/xsd/xsd
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

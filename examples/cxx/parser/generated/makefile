@@ -45,7 +45,7 @@ $(gen): xsd_options := --generate-print-impl --generate-test-driver \
 --force-overwrite
 $(gen): $(out_root)/xsd/xsd
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

@@ -39,7 +39,7 @@ $(gen): xsd_options := --generate-default-ctor --generate-from-base-ctor \
 --generate-comparison
 $(gen): $(out_root)/xsd/xsd
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

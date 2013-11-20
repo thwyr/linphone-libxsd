@@ -36,7 +36,7 @@ $(gen): xsd := $(out_root)/xsd/xsd
 $(gen): xsd_options := --generate-insertion XDR --generate-extraction XDR
 $(gen): $(out_root)/xsd/xsd
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

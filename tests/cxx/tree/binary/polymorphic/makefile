@@ -41,7 +41,7 @@ $(gen): xsd_options := --generate-polymorphic --root-element-last \
 --generate-insertion ACE_OutputCDR --generate-extraction ACE_InputCDR
 $(gen): $(out_root)/xsd/xsd
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

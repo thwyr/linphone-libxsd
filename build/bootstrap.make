@@ -16,10 +16,17 @@ ifeq ($(patsubst %build/bootstrap.make,,$(lastword $(MAKEFILE_LIST))),)
 include $(build)/bootstrap.make
 endif
 
+def_goal := $(.DEFAULT_GOAL)
+
 # Configuration
 #
 $(call include,$(scf_root)/configuration.make)
 
+# Include C++ configuration. We need to know if we are using the generic
+# C++ compiler in which case we need to compensate for missing dependency
+# auto-generation (see below).
+#
+$(call include,$(bld_root)/cxx/configuration.make)
 
 # Aliases
 #
@@ -43,10 +50,6 @@ dist-win: $(out_base)/.dist-win
 clean: $(out_base)/.clean
 cleandoc: $(out_base)/.cleandoc
 
-ifneq ($(filter $(.DEFAULT_GOAL),test install dist dist-win clean cleandoc),)
-.DEFAULT_GOAL :=
-endif
-
 endif
 
 
@@ -58,13 +61,27 @@ $(error dist_prefix is not set)
 endif
 endif
 
-
-# Don't include dependency info for certain targets.
+# If we don't have dependency auto-generation then we need to manually
+# make sure that generated files are generated before C++ file are
+# compiler. To do this we make the object files ($2) depend in order-
+# only on generated files ($3).
 #
+ifeq ($(cxx_id),generic)
+
+define include-dep
+$(if $2,$(eval $2: | $3))
+endef
+
+else
+
 define include-dep
 $(call -include,$1)
 endef
 
+endif
+
+# Don't include dependency info for certain targets.
+#
 ifneq ($(filter $(MAKECMDGOALS),clean cleandoc disfigure),)
 include-dep =
 endif
@@ -84,3 +101,5 @@ include-dep =
 endif
 
 endif
+
+.DEFAULT_GOAL := $(def_goal)

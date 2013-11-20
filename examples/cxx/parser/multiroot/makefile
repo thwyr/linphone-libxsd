@@ -39,7 +39,7 @@ $(gen): xsd := $(out_root)/xsd/xsd
 $(gen): xsd_options := --type-map $(src_base)/protocol.map
 $(gen): $(out_root)/xsd/xsd $(src_base)/protocol.map
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

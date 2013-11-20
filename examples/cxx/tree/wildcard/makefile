@@ -40,7 +40,7 @@ $(gen): xsd_options := --generate-inline --generate-wildcard \
 --generate-serialization --root-element message
 $(gen): $(out_root)/xsd/xsd
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

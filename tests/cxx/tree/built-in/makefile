@@ -46,8 +46,7 @@ $(gen): xsd_options := \
 
 $(gen): $(src_root)/xsd/xsd
 
-$(call include-dep,$(dep))
-
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

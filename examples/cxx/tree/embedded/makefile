@@ -50,7 +50,7 @@ $(out_base)/%: xsdbin := $(xsdbin)
 $(out_base)/%-schema.hxx $(out_base)/%-schema.cxx: $(src_base)/%.xsd $(xsdbin)
 	$(call message,xsdbin $<,$(xsdbin) --output-dir $(out_base) $<)
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #

@@ -38,7 +38,7 @@ $(gen): xsd_options := --generate-serialization --generate-polymorphic \
 --polymorphic-type foo\#base --root-element root
 $(gen): $(out_root)/xsd/xsd
 
-$(call include-dep,$(dep))
+$(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.
 #
