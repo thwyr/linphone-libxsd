@@ -43,7 +43,7 @@ gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
 
-$(gen): xsd_options := --generate-ostream \
+$(gen): xsd_options += --generate-ostream \
 --hxx-prologue-file $(src_base)/library-prologue.hxx \
 --generate-insertion boost::archive::text_oarchive \
 --generate-extraction boost::archive::text_iarchive

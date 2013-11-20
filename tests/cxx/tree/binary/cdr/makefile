@@ -37,7 +37,7 @@ genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options := --generate-insertion ACE_OutputCDR \
+$(gen): xsd_options += --generate-insertion ACE_OutputCDR \
 --generate-extraction ACE_InputCDR
 $(gen): $(out_root)/xsd/xsd
 

@@ -32,7 +32,7 @@ genf := $(xsd:.xsd=-pskel.hxx) $(xsd:.xsd=-pskel.ixx) $(xsd:.xsd=-pskel.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options := --generate-polymorphic
+$(gen): xsd_options += --generate-polymorphic
 $(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep),$(obj),$(gen))

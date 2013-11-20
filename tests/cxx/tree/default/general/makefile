@@ -34,7 +34,7 @@ genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options := --generate-ostream --generate-serialization \
+$(gen): xsd_options += --generate-ostream --generate-serialization \
 --generate-default-ctor --generate-from-base-ctor
 $(gen): $(out_root)/xsd/xsd
 

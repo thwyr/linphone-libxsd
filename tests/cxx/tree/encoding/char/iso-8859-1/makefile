@@ -34,7 +34,7 @@ genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options := --char-encoding iso8859-1 --generate-serialization \
+$(gen): xsd_options += --char-encoding iso8859-1 --generate-serialization \
 --generate-doxygen 
 $(gen): $(out_root)/xsd/xsd
 

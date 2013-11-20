@@ -36,7 +36,7 @@ genf := $(xsd:.xsd=-pskel.hxx) $(xsd:.xsd=-pskel.ixx) $(xsd:.xsd=-pskel.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options := --type-map $(src_base)/text.map
+$(gen): xsd_options += --type-map $(src_base)/text.map
 $(gen): $(out_root)/xsd/xsd $(src_base)/text.map
 
 $(call include-dep,$(dep),$(obj),$(gen))

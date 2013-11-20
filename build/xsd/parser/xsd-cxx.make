@@ -28,7 +28,7 @@ endif
 $(xsd_parser_pattern): xsd := xsd
 $(xsd_parser_pattern): xsd_command := cxx-parser
 
-ops := --skel-file-suffix $(xsd_parser_skel_suffix)
+ops := --generate-inline --skel-file-suffix $(xsd_parser_skel_suffix)
 
 ifneq ($(xsd_pimpl_suffix),)
 ops += --impl-file-suffix $(xsd_parser_impl_suffix)

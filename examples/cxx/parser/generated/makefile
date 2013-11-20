@@ -41,7 +41,7 @@ gen  := $(addprefix $(out_base)/,$(genf))
 
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options := --generate-print-impl --generate-test-driver \
+$(gen): xsd_options += --generate-print-impl --generate-test-driver \
 --force-overwrite
 $(gen): $(out_root)/xsd/xsd
 

@@ -40,7 +40,7 @@ $(gen): xsd := $(out_root)/xsd/xsd
 # We have to double-escape '#' because the message function
 # (which is used in command scripts) expands things twice.
 #
-$(gen): xsd_options := \
+$(gen): xsd_options += \
 --generate-inline \
 --generate-ostream \
 --generate-serialization \

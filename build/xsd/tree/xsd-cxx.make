@@ -16,7 +16,7 @@ $(out_base)/%$(xsd_tree_suffix)-fwd.hxx
 
 $(xsd_tree_pattern): xsd := xsd
 $(xsd_tree_pattern): xsd_command := cxx-tree
-$(xsd_tree_pattern): xsd_options :=
+$(xsd_tree_pattern): xsd_options := --generate-inline
 
 .PRECIOUS: $(xsd_tree_pattern)
 

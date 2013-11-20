@@ -35,7 +35,7 @@ gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
 
-$(gen): xsd_options := \
+$(gen): xsd_options += \
 --char-type char \
 --generate-inline \
 --generate-ostream \
