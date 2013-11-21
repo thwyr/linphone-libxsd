@@ -36,19 +36,17 @@ $(call include,$(bld_root)/cxx/configuration.make)
         $(out_base)/.dist          \
         $(out_base)/.dist-win      \
         $(out_base)/.dist-common   \
-        $(out_base)/.clean         \
-        $(out_base)/.cleandoc
+        $(out_base)/.clean
 
 ifdef %interactive%
 
-.PHONY: test install dist dist-win clean cleandoc
+.PHONY: test install dist dist-win clean
 
 test: $(out_base)/.test
 install: $(out_base)/.install
 dist: $(out_base)/.dist
 dist-win: $(out_base)/.dist-win
 clean: $(out_base)/.clean
-cleandoc: $(out_base)/.cleandoc
 
 endif
 
@@ -82,7 +80,7 @@ endif
 
 # Don't include dependency info for certain targets.
 #
-ifneq ($(filter $(MAKECMDGOALS),clean cleandoc disfigure),)
+ifneq ($(filter $(MAKECMDGOALS),clean disfigure),)
 include-dep =
 endif
 

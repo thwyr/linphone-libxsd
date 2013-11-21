@@ -9,7 +9,7 @@ default  := $(out_base)/
 install  := $(out_base)/.install
 dist     := $(out_base)/.dist
 dist-win := $(out_base)/.dist-win
-cleandoc := $(out_base)/.cleandoc
+clean    := $(out_base)/.clean
 
 # Build.
 #
@@ -46,9 +46,11 @@ $(dist-win): $(dist)
 
 # Clean
 #
-$(cleandoc):
+$(clean):
+ifneq ($(xsd_clean_gen),n)
 	$(call message,rm $$1,rm -f $$1,$(out_base)/cxx-parser-guide.ps)
 	$(call message,rm $$1,rm -f $$1,$(out_base)/cxx-parser-guide.pdf)
+endif
 
 # How to.
 #

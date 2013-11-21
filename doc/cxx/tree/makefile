@@ -11,7 +11,7 @@ default  := $(out_base)/
 install  := $(out_base)/.install
 dist     := $(out_base)/.dist
 dist-win := $(out_base)/.dist-win
-cleandoc := $(out_base)/.cleandoc
+clean    := $(out_base)/.clean
 
 # Build.
 #
@@ -35,7 +35,7 @@ $(dist-win): $(dist-common) $(addprefix $(out_base)/,$(addsuffix /.dist-win,$(do
 
 # Clean.
 #
-$(cleandoc): $(addprefix $(out_base)/,$(addsuffix /.cleandoc,$(docs)))
+$(clean): $(addprefix $(out_base)/,$(addsuffix /.clean,$(docs)))
 
 $(call include,$(bld_root)/install.make)
 
