@@ -2,15 +2,14 @@ Compiler Prerequisites
 
   build-time:
 
-    - build                >= 0.3.7   http://www.codesynthesis.com/projects/build/
+    - build                >= 0.3.10  http://www.codesynthesis.com/projects/build/
     - g++                  >= 3.4.3   http://gcc.gnu.org
 
   run-time:
 
-    - libxsd-frontend      >= 1.17.0  http://www.codesynthesis.com/projects/libxsd-frontend/
-    - libbackend-elements  >= 1.7.2   http://kolpackov.net/projects/libbackend-elements/
-    - libcult              >= 1.4.6   http://kolpackov.net/projects/libcult/
-    - libxerces-c          >= 2.6.0   http://xerces.apache.org/xerces-c/
+    - libxsd-frontend      >= 2.0.0   http://www.codesynthesis.com/projects/libxsd-frontend/
+    - libcutl              >= 1.8.0   http://www.codesynthesis.com/projects/libcutl/
+    - libxerces-c          >= 3.0.0   http://xerces.apache.org/xerces-c/
 
 
 Generated Code Prerequisites
@@ -21,7 +20,7 @@ Generated Code Prerequisites
 
   run-time:
 
-    - libxerces-c >= 2.5.0 (C++/Tree and C++/Parser mappings)
+    - libxerces-c >= 3.0.0 (C++/Tree and C++/Parser mappings)
       http://xerces.apache.org/xerces-c/
 
     - libexpat >= 1.95.8 (C++/Parser mapping, alternative to libxerces-c)
@@ -30,8 +29,14 @@ Generated Code Prerequisites
 
 Building XSD
 
-  To build in the source directory simply run 'make'. You can also
-  build in a separate directory, e.g.,
+  First build (and optionally install) all the prerequisites listed above.
+  Alternatively, you can use the xsd+dep package that includes all the
+  prerequisites (except g++ and libxerces-c) and can be built with a
+  single 'make' invocation.
+
+  Once the prerequisites are ready, to build the XSD compiler in source
+  directory simply run 'make'. You can also build in a separate directory,
+  for example:
 
   $ mkdir xsd-i686-pc-linux-gnu
   $ cd xsd-i686-pc-linux-gnu
@@ -42,7 +47,7 @@ Installing XSD
 
   To install XSD, run 'make install'. Use the install_prefix command
   line variable to specify installation location (default is /usr/local),
-  e.g.,
+  for example:
 
   $ make install_prefix=/usr install
 
