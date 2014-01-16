@@ -33,7 +33,7 @@ $(call import,\
 $(driver): $(obj) $(xerces_c.l)
 $(xsdbin): $(obj2) $(xerces_c.l)
 
-$(obj) $(dep): cpp_options := -I$(src_root)/libxsd
+$(obj) $(dep): cpp_options := -I$(out_base) -I$(src_base) -I$(src_root)/libxsd
 $(obj) $(obj2) $(dep): $(xerces_c.l.cpp-options)
 
 genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)

@@ -35,7 +35,7 @@ endif
 #
 $(driver): $(obj) $(xerces_c.l) $(ace.l)
 
-$(obj) $(dep): cpp_options := -I$(src_root)/libxsd
+$(obj) $(dep): cpp_options := -I$(out_base) -I$(src_base) -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options) $(ace.l.cpp-options)
 
 genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)

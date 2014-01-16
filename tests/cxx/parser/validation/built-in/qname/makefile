@@ -25,7 +25,7 @@ $(call import,\
 #
 $(driver): $(obj) $(xerces_c.l)
 
-$(obj) $(dep): cpp_options := -I$(src_root)/libxsd
+$(obj) $(dep): cpp_options := -I$(out_base) -I$(src_base) -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options)
 
 $(call include-dep,$(dep),$(obj),$(gen))

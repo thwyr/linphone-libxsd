@@ -34,7 +34,7 @@ endif
 #
 $(driver): $(obj) $(xerces_c.l) $(boost_date_time.l)
 
-$(obj) $(dep): cpp_options := -I$(src_root)/libxsd
+$(obj) $(dep): cpp_options := -I$(out_base) -I$(src_base) -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options) $(boost_date_time.l.cpp-options)
 
 # Header file for XML Schema namespace.

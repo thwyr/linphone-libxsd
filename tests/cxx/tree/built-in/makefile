@@ -27,7 +27,7 @@ $(call import,\
 #
 $(driver): $(obj) $(xerces_c.l)
 
-$(obj) $(dep): cpp_options := -I$(src_root)/libxsd
+$(obj) $(dep): cpp_options := -I$(out_base) -I$(src_base) -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options)
 
 genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
@@ -44,7 +44,7 @@ $(gen): xsd_options += \
 --generate-from-base-ctor \
 --root-element-all
 
-$(gen): $(src_root)/xsd/xsd
+$(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep),$(obj),$(gen))
 

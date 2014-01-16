@@ -35,7 +35,7 @@ endif
 #
 $(driver): $(obj) $(xerces_c.l) $(boost_serialization.l)
 
-$(obj) $(dep): cpp_options := -I$(src_root)/libxsd -I$(src_root)
+$(obj) $(dep): cpp_options := -I$(out_base) -I$(src_base) -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options) $(boost_serialization.l.cpp-options)
 
 genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
