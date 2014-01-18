@@ -123,7 +123,7 @@ $(dist-win): $(dist-common) $(out_base)/cxx/.dist-win
 
 # Clean.
 #
-$(clean): $(src_base)/cxx/.clean
+$(clean): $(out_base)/cxx/.clean
 ifneq ($(xsd_clean_gen),n)
 	$(call message,rm $$1,rm -f $$1,$(out_base)/xsd.1)
 	$(call message,rm $$1,rm -f $$1,$(out_base)/xsd.xhtml)
