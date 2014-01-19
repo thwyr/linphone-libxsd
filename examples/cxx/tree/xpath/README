@@ -30,17 +30,13 @@ dom-parse.cxx
   XML document to a DOM document.
 
 driver.cxx
-  Driver for Xerces-C++ 3.x.y/XQilla 2.2.x. It first calls the above 
-  parse() function to parse the input file to a DOM document using 
-  XQilla-provided DOM Implementation with support for XPath 2. It
-  then parses the DOM document to the object model. Finally, it
-  prepares and executes an XPath query on the underlying DOM
-  document and then handles the result by getting back from the
-  returned DOM nodes to object model nodes.
-
-driver-2.cxx
-  Driver for Xerces-C++ 2.x.y/XQilla 2.1.x. It performs the same set
-  of actions as driver.cxx above. 
+  Driver for the example. It first calls the above parse() function to
+  parse the input file to a DOM document using XQilla-provided DOM
+  Implementation with support for XPath 2. It then parses the DOM
+  document to the object model. Finally, it prepares and executes
+  an XPath query on the underlying DOM document and then handles
+  the result by getting back from the returned DOM nodes to object
+  model nodes.
 
 To run the example on the sample XML document simply execute:
 

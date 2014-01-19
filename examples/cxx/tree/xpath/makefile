@@ -59,7 +59,6 @@ $(install) $(dist) $(dist-win) $(dist-common): path := $(subst $(src_root)/,,$(s
 $(install):
 	$(call install-data,$(src_base)/README,$(install_doc_dir)/xsd/$(path)/README)
 	$(call install-data,$(src_base)/driver.cxx,$(install_doc_dir)/xsd/$(path)/driver.cxx)
-	$(call install-data,$(src_base)/driver-2.cxx,$(install_doc_dir)/xsd/$(path)/driver-2.cxx)
 	$(call install-data,$(src_base)/people.xsd,$(install_doc_dir)/xsd/$(path)/people.xsd)
 	$(call install-data,$(src_base)/people.xml,$(install_doc_dir)/xsd/$(path)/people.xml)
 	$(call install-data,$(src_base)/dom-parse.hxx,$(install_doc_dir)/xsd/$(path)/dom-parse.hxx)
@@ -67,7 +66,6 @@ $(install):
 
 $(dist-common):
 	$(call install-data,$(src_base)/driver.cxx,$(dist_prefix)/$(path)/driver.cxx)
-	$(call install-data,$(src_base)/driver-2.cxx,$(dist_prefix)/$(path)/driver-2.cxx)
 	$(call install-data,$(src_base)/people.xsd,$(dist_prefix)/$(path)/people.xsd)
 	$(call install-data,$(src_base)/people.xml,$(dist_prefix)/$(path)/people.xml)
 	$(call install-data,$(src_base)/dom-parse.hxx,$(dist_prefix)/$(path)/dom-parse.hxx)
