@@ -6,7 +6,7 @@
 // Insert test description here.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <cassert>
 #include <iostream>
 
@@ -26,7 +26,7 @@ main (int argc, char* argv[])
 
   try
   {
-    auto_ptr<top_bottom> r (root (argv[1]));
+    XSD_AUTO_PTR<top_bottom> r (root (argv[1]));
 
     switch (*r)
     {

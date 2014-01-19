@@ -605,7 +605,7 @@ namespace CXX
       void
       gen_buffer (SemanticGraph::Type& t)
       {
-        String type (L"::std::auto_ptr< " + xs_ns_name () + L"::buffer >");
+        String type (auto_ptr + L"< " + xs_ns_name () + L"::buffer >");
 
         if (default_type (t, type))
         {

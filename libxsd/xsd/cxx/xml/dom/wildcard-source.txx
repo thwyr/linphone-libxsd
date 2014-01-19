@@ -17,7 +17,7 @@ namespace xsd
       namespace dom
       {
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         create_document ()
         {
           const XMLCh ls[] = {xercesc::chLatin_L,
@@ -29,7 +29,7 @@ namespace xsd
           xercesc::DOMImplementation* impl (
             xercesc::DOMImplementationRegistry::getDOMImplementation (ls));
 
-          return xml::dom::auto_ptr<xercesc::DOMDocument> (
+          return XSD_DOM_AUTO_PTR<xercesc::DOMDocument> (
             impl->createDocument ());
         }
       }

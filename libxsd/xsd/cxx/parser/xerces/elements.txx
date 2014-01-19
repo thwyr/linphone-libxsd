@@ -95,7 +95,7 @@ namespace xsd
 
           error_handler<C> eh;
           xml::sax::bits::error_handler_proxy<C> eh_proxy (eh);
-          std::auto_ptr<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
+          XSD_AUTO_PTR<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
 
           parse (uri, eh_proxy, *sax, f, p);
 
@@ -124,7 +124,7 @@ namespace xsd
           xml::auto_initializer init ((f & flags::dont_initialize) == 0);
 
           xml::sax::bits::error_handler_proxy<C> eh_proxy (eh);
-          std::auto_ptr<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
+          XSD_AUTO_PTR<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
 
           parse (uri, eh_proxy, *sax, f, p);
 
@@ -153,7 +153,7 @@ namespace xsd
                const properties<C>& p)
         {
           xml::sax::bits::error_handler_proxy<C> eh_proxy (eh);
-          std::auto_ptr<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
+          XSD_AUTO_PTR<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
 
           parse (uri, eh_proxy, *sax, f, p);
 
@@ -390,7 +390,7 @@ namespace xsd
         {
           error_handler<C> eh;
           xml::sax::bits::error_handler_proxy<C> eh_proxy (eh);
-          std::auto_ptr<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
+          XSD_AUTO_PTR<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
 
           parse (is, eh_proxy, *sax, f, p);
 
@@ -405,7 +405,7 @@ namespace xsd
                const properties<C>& p)
         {
           xml::sax::bits::error_handler_proxy<C> eh_proxy (eh);
-          std::auto_ptr<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
+          XSD_AUTO_PTR<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
 
           parse (is, eh_proxy, *sax, f, p);
 
@@ -421,7 +421,7 @@ namespace xsd
                const properties<C>& p)
         {
           xml::sax::bits::error_handler_proxy<C> eh_proxy (eh);
-          std::auto_ptr<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
+          XSD_AUTO_PTR<xercesc::SAX2XMLReader> sax (create_sax_ (f, p));
 
           parse (is, eh_proxy, *sax, f, p);
 
@@ -569,12 +569,12 @@ namespace xsd
 
 
         template <typename C>
-        std::auto_ptr<xercesc::SAX2XMLReader> document<C>::
+        XSD_AUTO_PTR<xercesc::SAX2XMLReader> document<C>::
         create_sax_ (flags f, const properties<C>& p)
         {
           using namespace xercesc;
 
-          std::auto_ptr<SAX2XMLReader> sax (
+          XSD_AUTO_PTR<SAX2XMLReader> sax (
             XMLReaderFactory::createXMLReader ());
 
           sax->setFeature (XMLUni::fgSAX2CoreNameSpaces, true);

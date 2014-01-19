@@ -35,25 +35,18 @@ namespace xsd
       //
       inline _type::
       _type (const xercesc::DOMElement& e, flags f, container* c)
-          : dom_info_ (0), container_ (c)
+          : container_ (c)
       {
         if (f & flags::keep_dom)
-        {
-          std::auto_ptr<dom_info> r (
-            dom_info_factory::create (e, *this, c == 0));
-          dom_info_ = r;
-        }
+          dom_info_ = dom_info_factory::create (e, *this, c == 0);
       }
 
       inline _type::
       _type (const xercesc::DOMAttr& a, flags f, container* c)
-          : dom_info_ (0), container_ (c)
+          : container_ (c)
       {
         if (f & flags::keep_dom)
-        {
-          std::auto_ptr<dom_info> r (dom_info_factory::create (a, *this));
-          dom_info_ = r;
-        }
+          dom_info_ = dom_info_factory::create (a, *this);
       }
 
       template <typename C>
@@ -62,8 +55,7 @@ namespace xsd
              const xercesc::DOMElement*,
              flags,
              container* c)
-          : dom_info_ (0), // List elements don't have associated DOM nodes.
-            container_ (c)
+          : container_ (c) // List elements don't have associated DOM nodes.
       {
       }
 

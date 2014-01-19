@@ -16,6 +16,7 @@
 #include <xsd/cxx/tree/elements.hxx>
 
 #include <xsd/cxx/xml/qualified-name.hxx>
+#include <xsd/cxx/xml/dom/auto-ptr.hxx>
 #include <xsd/cxx/xml/dom/serialization-header.hxx> // namespace_infomap
 
 namespace xsd
@@ -70,7 +71,7 @@ namespace xsd
         // Create DOMDocument with root element suitable for serializing
         // x into it.
         //
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         serialize (const C* name, // element name
                    const C* ns,   // element namespace
                    const xml::dom::namespace_infomap<C>&,

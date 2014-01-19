@@ -273,7 +273,7 @@ namespace xsd
       }
 
       template <typename C>
-      std::auto_ptr<type> type_factory_map<C>::
+      XSD_AUTO_PTR<type> type_factory_map<C>::
       create (const C* name,
               const C* ns,
               factory static_type,
@@ -307,7 +307,7 @@ namespace xsd
         }
 
         if (f == 0)
-          return std::auto_ptr<type> (0); // No match.
+          return XSD_AUTO_PTR<type> (); // No match.
 
         // Check for xsi:type
         //
@@ -326,11 +326,10 @@ namespace xsd
 
       template <typename C>
       template <typename T>
-      std::auto_ptr<type> type_factory_map<C>::
+      XSD_AUTO_PTR<type> type_factory_map<C>::
       traits_adapter (const xercesc::DOMElement& e, flags f, container* c)
       {
-        std::auto_ptr<T> r (traits<T, C>::create (e, f, c));
-        return std::auto_ptr<type> (r.release ());
+        return XSD_AUTO_PTR<type> (traits<T, C>::create (e, f, c));
       }
 
       template <typename C>
@@ -428,10 +427,10 @@ namespace xsd
       //
       //
       template<typename T>
-      std::auto_ptr<type>
+      XSD_AUTO_PTR<type>
       factory_impl (const xercesc::DOMElement& e, flags f, container* c)
       {
-        return std::auto_ptr<type> (new T (e, f, c));
+        return XSD_AUTO_PTR<type> (new T (e, f, c));
       }
 
       //

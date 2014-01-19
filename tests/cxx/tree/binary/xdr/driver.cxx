@@ -6,7 +6,7 @@
 // Test non-polymorphic binary serialization to XDR.
 //
 
-#include <memory>  // std::auto_ptr
+#include <memory>  // std::auto_ptr/unique_ptr
 #include <cstring> // std::memcpy
 #include <cassert>
 #include <iostream>
@@ -59,7 +59,7 @@ main (int argc, char* argv[])
 
   try
   {
-    auto_ptr<type> r (root (argv[1]));
+    XSD_AUTO_PTR<type> r (root (argv[1]));
 
     // Save to an XDR stream.
     //
@@ -81,7 +81,7 @@ main (int argc, char* argv[])
     xdr.x_op = XDR_DECODE;
     xdrrec_skiprecord (&xdr);
     xsd::cxx::tree::istream<XDR> ixdr (xdr);
-    auto_ptr<type> c (new type (ixdr));
+    XSD_AUTO_PTR<type> c (new type (ixdr));
     xdr_destroy (&xdr);
 
     // Compare the two.

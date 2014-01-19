@@ -6,7 +6,7 @@
 // Test default attribute omission from the output.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <iostream>
 
 #include "test.hxx"
@@ -25,7 +25,7 @@ main (int argc, char* argv[])
 
   try
   {
-    auto_ptr<type> r (root (argv[1], xml_schema::flags::dont_validate));
+    XSD_AUTO_PTR<type> r (root (argv[1], xml_schema::flags::dont_validate));
 
     cout << *r << endl
          << "default x: " << derived::x_default_value () << endl

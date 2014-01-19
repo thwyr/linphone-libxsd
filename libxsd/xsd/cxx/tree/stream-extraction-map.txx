@@ -233,7 +233,7 @@ namespace xsd
       }
 
       template <typename S, typename C>
-      std::auto_ptr<type> stream_extraction_map<S, C>::
+      XSD_AUTO_PTR<type> stream_extraction_map<S, C>::
       extract (istream<S>& s, flags f, container* c)
       {
         std::basic_string<C> ns, name;
@@ -303,10 +303,10 @@ namespace xsd
       //
       //
       template<typename S, typename T>
-      std::auto_ptr<type>
+      XSD_AUTO_PTR<type>
       extractor_impl (istream<S>& s, flags f, container* c)
       {
-        return std::auto_ptr<type> (new T (s, f, c));
+        return XSD_AUTO_PTR<type> (new T (s, f, c));
       }
 
 

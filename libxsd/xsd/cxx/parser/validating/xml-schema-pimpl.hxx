@@ -8,6 +8,8 @@
 
 #include <string>
 
+#include <xsd/cxx/config.hxx> // XSD_AUTO_PTR
+
 #include <xsd/cxx/parser/validating/xml-schema-pskel.hxx>
 
 namespace xsd
@@ -664,12 +666,12 @@ namespace xsd
           virtual void
           _post ();
 
-          virtual std::auto_ptr<buffer>
+          virtual XSD_AUTO_PTR<buffer>
           post_base64_binary ();
 
         protected:
           std::basic_string<C> str_;
-          std::auto_ptr<buffer> buf_;
+          XSD_AUTO_PTR<buffer> buf_;
         };
 
         // hexBinary
@@ -686,12 +688,12 @@ namespace xsd
           virtual void
           _post ();
 
-          virtual std::auto_ptr<buffer>
+          virtual XSD_AUTO_PTR<buffer>
           post_hex_binary ();
 
         protected:
           std::basic_string<C> str_;
-          std::auto_ptr<buffer> buf_;
+          XSD_AUTO_PTR<buffer> buf_;
         };
 
         // gday

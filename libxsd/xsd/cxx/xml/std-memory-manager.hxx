@@ -18,6 +18,8 @@ namespace xsd
       class std_memory_manager: public xercesc::MemoryManager
       {
       public:
+        // Xerces-C++ MemoryManager interface.
+        //
         virtual void*
         allocate(XMLSize_t size)
         {
@@ -35,6 +37,15 @@ namespace xsd
         getExceptionMemoryManager()
         {
           return xercesc::XMLPlatformUtils::fgMemoryManager;
+        }
+
+        // Standard deleter interface.
+        //
+        void
+        operator() (void* p) const
+        {
+          if (p)
+	    operator delete (p);
         }
       };
     }

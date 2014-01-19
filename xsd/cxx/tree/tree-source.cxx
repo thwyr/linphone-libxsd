@@ -721,7 +721,7 @@ namespace CXX
           if (poly)
           {
             os << "{"
-               << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
+               << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                << "::xsd::cxx::tree::type_factory_map_instance< " <<
               poly_plate << ", " << char_type << " > ().create (" << endl
                << strlit (e.name ()) << "," << endl
@@ -753,7 +753,7 @@ namespace CXX
 
             if (!fund)
             {
-              os << "::std::auto_ptr< " << type << " > r (" << endl
+              os << auto_ptr << "< " << type << " > r (" << endl
                  << tr << "::create (i, f, this));"
                  << endl;
             }
@@ -793,7 +793,7 @@ namespace CXX
             {
               // Cast to static type.
               //
-              os << "::std::auto_ptr< " << type << " > r (" << endl
+              os << auto_ptr << "< " << type << " > r (" << endl
                  << "dynamic_cast< " << type << "* > (tmp.get ()));"
                  << endl
                  << "if (r.get ())" << endl
@@ -804,23 +804,25 @@ namespace CXX
                  << endl;
             }
 
+            char const* r (std >= cxx_version::cxx11 ? "::std::move (r)" : "r");
+
             if (max (e) != 1)
             {
               // sequence
               //
-              os << "this->" << member << ".push_back (r);";
+              os << "this->" << member << ".push_back (" << r << ");";
             }
             else if (min (e) == 0)
             {
               // optional
               //
-              os << "this->" << member << ".set (r);";
+              os << "this->" << member << ".set (" << r << ");";
             }
             else
             {
               // one
               //
-              os << "this->" << member << ".set (r);";
+              os << "this->" << member << ".set (" << r << ");";
             }
           }
           else
@@ -1096,26 +1098,8 @@ namespace CXX
                << "{";
           }
 
-          bool fund (false);
-          {
-            IsFundamentalType traverser (fund);
-            traverser.dispatch (a.type ());
-          }
-
-          if (fund)
-          {
-            os << "this->" << member << ".set (" << tr <<
-              "::create (i, f, this));";
-          }
-          else
-          {
-            String type (etype (a));
-
-            os << "::std::auto_ptr< " << type << " > r (" << endl
-               << tr << "::create (i, f, this));"
-               << endl
-               << "this->" << member << ".set (r);";
-          }
+          os << "this->" << member << ".set (" << tr <<
+            "::create (i, f, this));";
 
           os << "continue;"
              << "}";
@@ -1259,33 +1243,31 @@ namespace CXX
                        Traversal::Type,
                        Context
       {
-        // If base_arg is empty then no base argument is
-        // generated.
+        // If base_arg is empty then no base argument is generated.
         //
-        CtorBase (Context& c, String const& base_arg)
-            : Context (c), base_arg_ (base_arg)
+        CtorBase (Context& c, CtorArgType at, String const& base_arg)
+            : Context (c), args_ (c, at, base_arg)
         {
         }
 
         virtual void
         traverse (SemanticGraph::Type&)
         {
-          if (base_arg_)
-            os << base_arg_;
+          if (args_.base_arg_)
+            os << args_.base_arg_;
         }
 
         virtual void
         traverse (SemanticGraph::Enumeration&)
         {
-          if (base_arg_)
-            os << base_arg_;
+          if (args_.base_arg_)
+            os << args_.base_arg_;
         }
 
         void
         traverse (SemanticGraph::Complex& c)
         {
-          Args args (*this, base_arg_);
-          args.traverse (c);
+          args_.traverse (c);
         }
 
       private:
@@ -1300,8 +1282,9 @@ namespace CXX
                      Traversal::Attribute,
                      Context
         {
-          Args (Context& c, String const& base_arg)
-              : Context (c), base_arg_ (base_arg), first_ (true)
+          Args (Context& c, CtorArgType at, String const& base_arg)
+              : Context (c),
+                arg_type_ (at), base_arg_ (base_arg), first_ (true)
           {
             *this >> inherits_ >> *this;
             *this >> names_ >> *this;
@@ -1342,7 +1325,32 @@ namespace CXX
             {
               // one
               //
-              os << comma () << ename (e);
+              bool move (false);
+
+              if (std >= cxx_version::cxx11)
+              {
+                switch (arg_type_)
+                {
+                case CtorArgType::complex_auto_ptr:
+                  {
+                    bool simple (true);
+                    IsSimpleType t (simple);
+                    t.dispatch (e.type ());
+                    move = !simple;
+                    break;
+                  }
+                case CtorArgType::poly_auto_ptr:
+                  {
+                    move = polymorphic && polymorphic_p (e.type ());
+                    break;
+                  }
+                case CtorArgType::type:
+                  break;
+                }
+              }
+
+              os << comma () << (move ? "std::move (" : "") << ename (e) <<
+                (move ? ")" : "");
             }
           }
 
@@ -1371,15 +1379,18 @@ namespace CXX
             return tmp ? "" : ",\n";
           }
 
-        private:
+        public:
+          CtorArgType arg_type_;
           String base_arg_;
+
+        private:
           bool first_;
 
           Traversal::Inherits inherits_;
           Traversal::Names names_;
         };
 
-        String base_arg_;
+        Args args_;
       };
 
 
@@ -1387,8 +1398,8 @@ namespace CXX
                          Traversal::Attribute,
                          Context
       {
-        CtorMember (Context& c)
-            : Context (c)
+        CtorMember (Context& c, CtorArgType at)
+            : Context (c), arg_type_ (at)
         {
         }
 
@@ -1418,8 +1429,33 @@ namespace CXX
           {
             // one
             //
+            bool move (false);
+
+            if (std >= cxx_version::cxx11)
+            {
+              switch (arg_type_)
+              {
+              case CtorArgType::complex_auto_ptr:
+                {
+                  bool simple (true);
+                  IsSimpleType t (simple);
+                  t.dispatch (e.type ());
+                  move = !simple;
+                  break;
+                }
+              case CtorArgType::poly_auto_ptr:
+                {
+                  move = polymorphic && polymorphic_p (e.type ());
+                  break;
+                }
+              case CtorArgType::type:
+                break;
+              }
+            }
+
             os << "," << endl
-               << "  " << member << " (" << ename (e) << ", this)";
+               << "  " << member << " (" << (move ? "std::move (" : "") <<
+              ename (e) << (move ? ")" : "") << ", this)";
           }
         }
 
@@ -1458,6 +1494,9 @@ namespace CXX
             }
           }
         }
+
+      private:
+        CtorArgType arg_type_;
       };
 
       struct CtorAny: Traversal::Any,
@@ -2134,7 +2173,7 @@ namespace CXX
               default_ctor_any_init_ (c),
               default_ctor_member_init_ (c),
               ctor_any_ (c),
-              ctor_member_ (c),
+              ctor_member_ (c, CtorArgType::type),
               element_ctor_any_ (c),
               element_ctor_member_ (c),
               assign_any_ (c),
@@ -2184,6 +2223,8 @@ namespace CXX
         virtual void
         traverse (Type& c)
         {
+          bool gen_wildcard (options.generate_wildcard ());
+
           String name (ename (c));
 
           // If renamed name is empty then we do not need to generate
@@ -2348,7 +2389,7 @@ namespace CXX
               inherits (c, inherits_member_);
               os << "& " << base_arg;
               {
-                FromBaseCtorArg args (*this, FromBaseCtorArg::arg_type, true);
+                FromBaseCtorArg args (*this, CtorArgType::type, true);
                 Traversal::Names args_names (args);
                 names (c, args_names);
               }
@@ -2375,13 +2416,14 @@ namespace CXX
               //
               if (has_complex_non_op_args)
               {
+                CtorArgType const at (CtorArgType::complex_auto_ptr);
+
                 os << name << "::" << endl
                    << name << " (const ";
                 inherits (c, inherits_member_);
                 os << "& " << base_arg;
                 {
-                  FromBaseCtorArg args (
-                    *this, FromBaseCtorArg::arg_complex_auto_ptr, true);
+                  FromBaseCtorArg args (*this, at, true);
                   Traversal::Names args_names (args);
                   names (c, args_names);
                 }
@@ -2396,7 +2438,15 @@ namespace CXX
                     " > ())";
                 }
 
-                names (c, ctor_names_);
+                {
+                  CtorMember t (*this, at);
+                  Traversal::Names n (t);
+
+                  if (gen_wildcard)
+                    n >> ctor_any_;
+
+                  names (c, n);
+                }
 
                 os << "{";
                 if (facets)
@@ -2410,13 +2460,14 @@ namespace CXX
               if (polymorphic &&
                   has_poly_non_op_args && !complex_poly_args_clash)
               {
+                CtorArgType const at (CtorArgType::poly_auto_ptr);
+
                 os << name << "::" << endl
                    << name << " (const ";
                 inherits (c, inherits_member_);
                 os << "& " << base_arg;
                 {
-                  FromBaseCtorArg args (
-                    *this, FromBaseCtorArg::arg_poly_auto_ptr, true);
+                  FromBaseCtorArg args (*this, at, true);
                   Traversal::Names args_names (args);
                   names (c, args_names);
                 }
@@ -2431,7 +2482,15 @@ namespace CXX
                     " > ())";
                 }
 
-                names (c, ctor_names_);
+                {
+                  CtorMember t (*this, at);
+                  Traversal::Names n (t);
+
+                  if (gen_wildcard)
+                    n >> ctor_any_;
+
+                  names (c, n);
+                }
 
                 os << "{";
                 if (facets)
@@ -2445,17 +2504,18 @@ namespace CXX
           //
           if (generate_no_base_ctor)
           {
+            CtorArgType const at (CtorArgType::type);
+
             os << name << "::" << endl
                << name << " (";
             {
-              CtorArgsWithoutBase ctor_args (
-                *this, CtorArgsWithoutBase::arg_type, true, true);
+              CtorArgsWithoutBase ctor_args (*this, at, true, true);
               ctor_args.dispatch (c);
             }
             os << ")" << endl
                << ": " << base << " (";
             {
-              CtorBase base (*this, "");
+              CtorBase base (*this, at, "");
               Traversal::Inherits inherits_base (base);
 
               inherits (c, inherits_base);
@@ -2483,17 +2543,18 @@ namespace CXX
             //
             if (has_complex_non_op_args)
             {
+              CtorArgType const at (CtorArgType::complex_auto_ptr);
+
               os << name << "::" << endl
                  << name << " (";
               {
-                CtorArgsWithoutBase ctor_args (
-                  *this, CtorArgsWithoutBase::arg_complex_auto_ptr, true, true);
+                CtorArgsWithoutBase ctor_args (*this, at, true, true);
                 ctor_args.dispatch (c);
               }
               os << ")" << endl
                  << ": " << base << " (";
               {
-                CtorBase base (*this, "");
+                CtorBase base (*this, at, "");
                 Traversal::Inherits inherits_base (base);
 
                 inherits (c, inherits_base);
@@ -2508,7 +2569,15 @@ namespace CXX
                   " > ())";
               }
 
-              names (c, ctor_names_);
+              {
+                CtorMember t (*this, at);
+                Traversal::Names n (t);
+
+                if (gen_wildcard)
+                  n >> ctor_any_;
+
+                names (c, n);
+              }
 
               os << "{";
               if (facets)
@@ -2522,17 +2591,18 @@ namespace CXX
             if (polymorphic &&
                 has_poly_non_op_args && !complex_poly_args_clash)
             {
+              CtorArgType const at (CtorArgType::poly_auto_ptr);
+
               os << name << "::" << endl
                  << name << " (";
               {
-                CtorArgsWithoutBase ctor_args (
-                  *this, CtorArgsWithoutBase::arg_poly_auto_ptr, true, true);
+                CtorArgsWithoutBase ctor_args (*this, at, true, true);
                 ctor_args.dispatch (c);
               }
               os << ")" << endl
                  << ": " << base << " (";
               {
-                CtorBase base (*this, "");
+                CtorBase base (*this, at, "");
                 Traversal::Inherits inherits_base (base);
 
                 inherits (c, inherits_base);
@@ -2547,7 +2617,15 @@ namespace CXX
                   " > ())";
               }
 
-              names (c, ctor_names_);
+              {
+                CtorMember t (*this, at);
+                Traversal::Names n (t);
+
+                if (gen_wildcard)
+                  n >> ctor_any_;
+
+                names (c, n);
+              }
 
               os << "{";
               if (facets)
@@ -2564,6 +2642,7 @@ namespace CXX
             {
               // c-tor (enum-value, all-non-optional-members)
               //
+              CtorArgType const at (CtorArgType::type);
               String base_arg (L"_xsd_" + ename (*enum_base) + L"_base");
 
               os << name << "::" << endl
@@ -2571,8 +2650,7 @@ namespace CXX
                 evalue (*enum_base) << " " << base_arg;
 
               {
-                CtorArgsWithoutBase ctor_args (
-                  *this, CtorArgsWithoutBase::arg_type, true, false);
+                CtorArgsWithoutBase ctor_args (*this, at, true, false);
                 ctor_args.dispatch (c);
               }
 
@@ -2580,7 +2658,7 @@ namespace CXX
                  << ": " << base << " (";
 
               {
-                CtorBase base (*this, base_arg);
+                CtorBase base (*this, at, base_arg);
                 Traversal::Inherits inherits_base (base);
 
                 inherits (c, inherits_base);
@@ -2604,6 +2682,7 @@ namespace CXX
               os << "}";
             }
 
+            CtorArgType const at (CtorArgType::type);
             String base_arg (L"_xsd_" + ename (ultimate_base (c)) + L"_base");
 
             // c-tor (const char*, all-non-optional-members)
@@ -2612,8 +2691,7 @@ namespace CXX
                << name << " (const " << char_type << "* " << base_arg;
 
             {
-              CtorArgsWithoutBase ctor_args (
-                *this, CtorArgsWithoutBase::arg_type, true, false);
+              CtorArgsWithoutBase ctor_args (*this, at, true, false);
               ctor_args.dispatch (c);
             }
 
@@ -2621,7 +2699,7 @@ namespace CXX
                << ": " << base << " (";
 
             {
-              CtorBase base (*this, base_arg);
+              CtorBase base (*this, at, base_arg);
               Traversal::Inherits inherits_base (base);
 
               inherits (c, inherits_base);
@@ -2651,8 +2729,7 @@ namespace CXX
                << name << " (const " << string_type << "& " << base_arg;
 
             {
-              CtorArgsWithoutBase ctor_args (
-                *this, CtorArgsWithoutBase::arg_type, true, false);
+              CtorArgsWithoutBase ctor_args (*this, at, true, false);
               ctor_args.dispatch (c);
             }
 
@@ -2660,7 +2737,7 @@ namespace CXX
                << ": " << base << " (";
 
             {
-              CtorBase base (*this, base_arg);
+              CtorBase base (*this, at, base_arg);
               Traversal::Inherits inherits_base (base);
 
               inherits (c, inherits_base);
@@ -2686,57 +2763,16 @@ namespace CXX
 
           // c-tor (ultimate-base, all-non-optional-members)
           //
-
-          os << name << "::" << endl
-             << name << " (";
-
-          String base_arg;
-
           {
-            CtorArgs ctor_args (*this, CtorArgs::arg_type, base_arg);
-            ctor_args.dispatch (c);
-          }
+            CtorArgType const at (CtorArgType::type);
 
-          os << ")" << endl
-             << ": " << base << " (";
-
-          {
-            CtorBase base (*this, base_arg);
-	    Traversal::Inherits inherits_base (base);
-
-            inherits (c, inherits_base);
-          }
-
-          os << ")";
-
-          if (edom_document_member_p (c))
-          {
-            os << "," << endl
-               << "  " << edom_document_member (c) << " (" <<
-              "::xsd::cxx::xml::dom::create_document< " << char_type <<
-              " > ())";
-          }
-
-          names (c, ctor_names_);
-
-          os << "{";
-          if (facets)
-            os << "this->_facet_table (_xsd_" << name << "_facet_table);";
-          os << "}";
-
-          // If we have any complex arguments in the previous c-tor
-          // then also generate the auto_ptr version.
-          //
-          if (has_complex_non_op_args)
-          {
             os << name << "::" << endl
                << name << " (";
 
             String base_arg;
 
             {
-              CtorArgs ctor_args (
-                *this, CtorArgs::arg_complex_auto_ptr, base_arg);
+              CtorArgs ctor_args (*this, at, base_arg);
               ctor_args.dispatch (c);
             }
 
@@ -2744,7 +2780,7 @@ namespace CXX
                << ": " << base << " (";
 
             {
-              CtorBase base (*this, base_arg);
+              CtorBase base (*this, at, base_arg);
               Traversal::Inherits inherits_base (base);
 
               inherits (c, inherits_base);
@@ -2768,20 +2804,19 @@ namespace CXX
             os << "}";
           }
 
-          // If we are generating polymorphic code then we also need to
-          // provide auto_ptr version for every polymorphic type.
+          // If we have any complex arguments in the previous c-tor
+          // then also generate the auto_ptr version.
           //
-          if (polymorphic &&
-              has_poly_non_op_args && !complex_poly_args_clash)
+          if (has_complex_non_op_args)
           {
+            CtorArgType const at (CtorArgType::complex_auto_ptr);
+            String base_arg;
+
             os << name << "::" << endl
                << name << " (";
 
-            String base_arg;
-
             {
-              CtorArgs ctor_args (
-                *this, CtorArgs::arg_poly_auto_ptr, base_arg);
+              CtorArgs ctor_args (*this, at, base_arg);
               ctor_args.dispatch (c);
             }
 
@@ -2789,7 +2824,7 @@ namespace CXX
                << ": " << base << " (";
 
             {
-              CtorBase base (*this, base_arg);
+              CtorBase base (*this, at, base_arg);
               Traversal::Inherits inherits_base (base);
 
               inherits (c, inherits_base);
@@ -2805,7 +2840,68 @@ namespace CXX
                 " > ())";
             }
 
-            names (c, ctor_names_);
+            {
+              CtorMember t (*this, at);
+              Traversal::Names n (t);
+
+              if (gen_wildcard)
+                n >> ctor_any_;
+
+              names (c, n);
+            }
+
+            os << "{";
+            if (facets)
+              os << "this->_facet_table (_xsd_" << name << "_facet_table);";
+            os << "}";
+          }
+
+          // If we are generating polymorphic code then we also need to
+          // provide auto_ptr version for every polymorphic type.
+          //
+          if (polymorphic &&
+              has_poly_non_op_args && !complex_poly_args_clash)
+          {
+            CtorArgType const at (CtorArgType::poly_auto_ptr);
+            String base_arg;
+
+            os << name << "::" << endl
+               << name << " (";
+
+            {
+              CtorArgs ctor_args (*this, at, base_arg);
+              ctor_args.dispatch (c);
+            }
+
+            os << ")" << endl
+               << ": " << base << " (";
+
+            {
+              CtorBase base (*this, at, base_arg);
+              Traversal::Inherits inherits_base (base);
+
+              inherits (c, inherits_base);
+            }
+
+            os << ")";
+
+            if (edom_document_member_p (c))
+            {
+              os << "," << endl
+                 << "  " << edom_document_member (c) << " (" <<
+                "::xsd::cxx::xml::dom::create_document< " << char_type <<
+                " > ())";
+            }
+
+            {
+              CtorMember t (*this, at);
+              Traversal::Names n (t);
+
+              if (gen_wildcard)
+                n >> ctor_any_;
+
+              names (c, n);
+            }
 
             os << "{";
             if (facets)
@@ -2838,7 +2934,7 @@ namespace CXX
 
             names >> copy_member;
 
-            if (options.generate_wildcard ())
+            if (gen_wildcard)
               names >> copy_any;
 
             Complex::names (c, names);
@@ -2856,8 +2952,6 @@ namespace CXX
 
           bool ha (has<Traversal::Attribute> (c));
           bool haa (has<Traversal::AnyAttribute> (c));
-
-          bool gen_wildcard (options.generate_wildcard ());
 
           //
           //
@@ -3291,7 +3385,7 @@ namespace CXX
             if (!simple || (polymorphic && polymorphic_p (t)))
             {
               os << name << "::" << endl
-                 << name << " (::std::auto_ptr< " << type << " > p)" << endl
+                 << name << " (" << auto_ptr << "< " << type << " > p)" << endl
                  << ": " << member << " (p, 0)"
                  << "{"
                  << "}";

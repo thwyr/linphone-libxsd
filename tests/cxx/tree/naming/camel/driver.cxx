@@ -6,7 +6,6 @@
 // Test camel case (upper for types, lower for functions) naming style.
 //
 
-#include <memory> // std::auto_ptr
 #include <sstream>
 #include <iostream>
 

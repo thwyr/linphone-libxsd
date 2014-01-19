@@ -68,7 +68,7 @@ namespace xsd
         // parse()
         //
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         parse (xercesc::InputSource& is,
                error_handler<C>& eh,
                const properties<C>& prop,
@@ -79,7 +79,7 @@ namespace xsd
         }
 
         template <typename C>
-        auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         parse (xercesc::InputSource& is,
                xercesc::DOMErrorHandler& eh,
                const properties<C>& prop,
@@ -98,7 +98,7 @@ namespace xsd
           DOMImplementation* impl (
             DOMImplementationRegistry::getDOMImplementation (ls_id));
 
-          auto_ptr<DOMLSParser> parser (
+          XSD_DOM_AUTO_PTR<DOMLSParser> parser (
             impl->createLSParser (DOMImplementationLS::MODE_SYNCHRONOUS, 0));
 
           DOMConfiguration* conf (parser->getDomConfig ());
@@ -196,7 +196,7 @@ namespace xsd
 
           xercesc::Wrapper4InputSource wrap (&is, false);
 
-          auto_ptr<DOMDocument> doc;
+          XSD_DOM_AUTO_PTR<DOMDocument> doc;
           try
           {
             doc.reset (parser->parse (&wrap));
@@ -212,7 +212,7 @@ namespace xsd
         }
 
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         parse (const std::basic_string<C>& uri,
                error_handler<C>& eh,
                const properties<C>& prop,
@@ -223,7 +223,7 @@ namespace xsd
         }
 
         template <typename C>
-        auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         parse (const std::basic_string<C>& uri,
                xercesc::DOMErrorHandler& eh,
                const properties<C>& prop,
@@ -242,7 +242,7 @@ namespace xsd
           DOMImplementation* impl (
             DOMImplementationRegistry::getDOMImplementation (ls_id));
 
-          auto_ptr<DOMLSParser> parser (
+          XSD_DOM_AUTO_PTR<DOMLSParser> parser (
             impl->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0));
 
           DOMConfiguration* conf (parser->getDomConfig ());
@@ -339,7 +339,7 @@ namespace xsd
           bits::error_handler_proxy<C> ehp (eh);
           conf->setParameter (XMLUni::fgDOMErrorHandler, &ehp);
 
-          auto_ptr<DOMDocument> doc;
+          XSD_DOM_AUTO_PTR<DOMDocument> doc;
           try
           {
             doc.reset (parser->parseURI (string (uri).c_str ()));

@@ -226,10 +226,11 @@
     <tr>
       <th>3</th><td><a href="#3">Overall Mapping Configuration</a>
         <table class="toc">
-          <tr><th>3.1</th><td><a href="#3.1">Character Type and Encoding</a></td></tr>
-          <tr><th>3.2</th><td><a href="#3.2">Support for Polymorphism </a></td></tr>
-          <tr><th>3.3</th><td><a href="#3.3">Namespace Mapping</a></td></tr>
-          <tr><th>3.4</th><td><a href="#3.4">Thread Safety</a></td></tr>
+	  <tr><th>3.1</th><td><a href="#3.1">C++ Standard</a></td></tr>
+          <tr><th>3.2</th><td><a href="#3.2">Character Type and Encoding</a></td></tr>
+          <tr><th>3.3</th><td><a href="#3.3">Support for Polymorphism </a></td></tr>
+          <tr><th>3.4</th><td><a href="#3.4">Namespace Mapping</a></td></tr>
+          <tr><th>3.5</th><td><a href="#3.5">Thread Safety</a></td></tr>
         </table>
       </td>
     </tr>
@@ -621,8 +622,29 @@ hello (std::istream&amp;);
      global element in XML Schema is a valid document root.
      By default XSD generated a set of parsing functions for each
      global element defined in XML Schema (this can be overridden
-     with the <code>--root-element-*</code> options). For more
-     information on parsing functions see <a href="#5">Chapter 5,
+     with the <code>--root-element-*</code> options). Parsing
+     functions return a dynamically allocated object model as an
+     automatic pointer. The actual pointer used depends on the
+     C++ standard selected. For C++98 it is <code>std::auto_ptr</code>
+     as shown above. For C++11 it is <code>std::unique_ptr</code>.
+     For example, if we modify our XSD compiler invocation to
+     select C++11:</p>
+
+  <pre class="terminal">
+$ xsd cxx-tree --std c++11 hello.xsd
+  </pre>
+
+  <p>Then the parsing function signatures will become:</p>
+
+  <pre class="c++">
+std::unique_ptr&lt;hello_t>
+hello (const std::string&amp; uri);
+
+std::unique_ptr&lt;hello_t>
+hello (std::istream&amp;);
+  </pre>
+
+  <p>For more information on parsing functions see <a href="#5">Chapter 5,
      "Parsing"</a>.</p>
 
   <h2><a name="2.3">2.3 Implementing Application Logic</a></h2>
@@ -1134,16 +1156,25 @@ $ doxygen hello.doxygen
      determine the overall properties and behavior of the generated code.
      Configuration parameters are specified with the XSD command line
      options. This chapter describes configuration aspects that are most
-     commonly encountered by application developers. These include:
-     the character type that is used by the generated code, handling of
-     vocabularies that use XML Schema polymorphism, XML Schema to C++
-     namespace mapping, and thread safety. For more ways to configure
+     commonly encountered by application developers. These include: the
+     C++ standard, the character type that is used by the generated code,
+     handling of vocabularies that use XML Schema polymorphism, XML Schema
+     to C++ namespace mapping, and thread safety. For more ways to configure
      the generated code refer to the
      <a href="http://www.codesynthesis.com/projects/xsd/documentation/xsd.xhtml">XSD
      Compiler Command Line Manual</a>.
   </p>
 
-  <h2><a name="3.1">3.1 Character Type and Encoding</a></h2>
+  <h2><a name="3.1">3.1 C++ Standard</a></h2>
+
+  <p>The C++/Tree mapping provides support for ISO/IEC C++ 1998/2003 (C++98)
+     and ISO/IEC C++ 2011 (C++11). To select the C++ standard for the
+     generated code we use the <code>--std</code> XSD compiler command
+     line option. While the majority of the examples in this guide use
+     C++98, support for the new functionality and library components
+     introduced in C++11 are discussed throughout the document.</p>
+
+  <h2><a name="3.2">3.2 Character Type and Encoding</a></h2>
 
   <p>The C++/Tree mapping has built-in support for two character types:
     <code>char</code> and <code>wchar_t</code>. You can select the
@@ -1174,7 +1205,7 @@ $ doxygen hello.doxygen
      all three (object mode, input XML, and output XML) can have different
      encodings.</p>
 
-  <h2><a name="3.2">3.2 Support for Polymorphism</a></h2>
+  <h2><a name="3.3">3.3 Support for Polymorphism</a></h2>
 
   <p>By default XSD generates non-polymorphic code. If your vocabulary
      uses XML Schema polymorphism in the form of <code>xsi:type</code>
@@ -1186,7 +1217,7 @@ $ doxygen hello.doxygen
      "Mapping for <code>xsi:type</code> and Substitution Groups"</a> in
      the C++/Tree Mapping User Manual.</p>
 
-  <h2><a name="3.3">3.3 Namespace Mapping</a></h2>
+  <h2><a name="3.4">3.4 Namespace Mapping</a></h2>
 
   <p>XSD maps XML namespaces specified in the <code>targetNamespace</code>
      attribute in XML Schema to one or more nested C++ namespaces. By
@@ -1213,7 +1244,7 @@ $ doxygen hello.doxygen
 --namespace-map =cs
   </pre>
 
-  <h2><a name="3.4">3.4 Thread Safety</a></h2>
+  <h2><a name="3.5">3.5 Thread Safety</a></h2>
 
   <p>XSD-generated code is thread-safe in the sense that you can
      use different instantiations of the object model in several
@@ -1829,7 +1860,7 @@ ps.push_back (jane);
      of the passed objects:</p>
 
   <pre class="c++">
-// Add the John Doe record.
+// Add the John Doe record. C++98 version.
 //
 auto_ptr&lt;person_t> john_p (
   new person_t ("John",           // first-name
@@ -1839,15 +1870,15 @@ auto_ptr&lt;person_t> john_p (
                 1));
 ps.push_back (john_p); // assumes ownership
 
-// Add the Jane Doe record.
+// Add the Jane Doe record. C++11 version
 //
-auto_ptr&lt;person_t> jane_p (
+unique_ptr&lt;person_t> jane_p (
   new person_t ("Jane",           // first-name
                 "Doe",            // last-name
                 gender_t::female, // gender
                 28,               // age
                 2));              // id
-ps.push_back (jane_p); // assumes ownership
+ps.push_back (std::move (jane_p)); // assumes ownership
   </pre>
 
   <p>For more information on the non-copying modifier functions refer to
@@ -2221,17 +2252,17 @@ ps.push_back (jane_p); // assumes ownership
      on the following three parsing functions:</p>
 
   <pre class="c++">
-std::auto_ptr&lt;people_t>
+std::[auto|unique]_ptr&lt;people_t>
 people (const std::string&amp; uri,
 	xml_schema::flags f = 0,
 	const xml_schema::properties&amp; p = xml_schema::properties ());
 
-std::auto_ptr&lt;people_t>
+std::[auto|unique]_ptr&lt;people_t>
 people (std::istream&amp; is,
         xml_schema::flags f = 0,
         const xml_schema::properties&amp; p = xml_schema::properties ());
 
-std::auto_ptr&lt;people_t>
+std::[auto|unique]_ptr&lt;people_t>
 people (std::istream&amp; is,
         const std::string&amp; resource_id,
         xml_schema::flags f = 0,
@@ -2251,8 +2282,11 @@ people (std::istream&amp; is,
      to fine-tune the parsing process. The properties argument allows
      to pass additional information to the parsing functions. We will
      use these two arguments in <a href="#5.1">Section 5.1, "XML Schema
-     Validation and Searching"</a> below. The following example shows
-     how we can use the above parsing functions:</p>
+     Validation and Searching"</a> below. All three functions return
+     the object model as either <code>std::auto_ptr</code> (C++98) or
+     <code>std::unique_ptr</code> (C++11), depending on the C++ standard
+     selected (<code>--std</code> XSD compiler option). The following
+     example shows how we can use the above parsing functions:</p>
 
   <pre class="c++">
 using std::auto_ptr;

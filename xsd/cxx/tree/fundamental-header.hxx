@@ -1146,7 +1146,8 @@ namespace CXX
              << "{";
 
           // @@ Disregarding current naming convention by using the
-          //    fixed name (no template typedef).
+          //    fixed name (even in C++11, template alias is not yet
+          //    widely supported).
           //
           if (doxygen)
             os << "/**" << endl
@@ -1156,8 +1157,12 @@ namespace CXX
             os << "// Automatic pointer for DOMDocument." << endl
                << "//" << endl;
 
-          os << "using ::xsd::cxx::xml::dom::auto_ptr;"
-             << endl;
+          if (std >= cxx_version::cxx11)
+            os << "using ::xsd::cxx::xml::dom::unique_ptr;";
+          else
+            os << "using ::xsd::cxx::xml::dom::auto_ptr;";
+
+          os << endl;
 
           if (parsing)
           {

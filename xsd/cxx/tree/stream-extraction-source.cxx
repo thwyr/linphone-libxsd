@@ -337,6 +337,11 @@ namespace CXX
           //
           bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
+          char const* r (
+            (poly || !fund) && std >= cxx_version::cxx11
+            ? "::std::move (r)"
+            : "r");
+
           if (max (e) != 1)
           {
             // sequence
@@ -358,14 +363,14 @@ namespace CXX
             if (poly)
             {
               os << "bool d;"
-                 << "::std::auto_ptr< " << type << " > r;"
+                 << auto_ptr << "< " << type << " > r;"
                  << "s >> d;"
                  << endl
                  << "if (!d)" << endl
                  << "r.reset (new " << type << " (s, f, this));"
                  << "else"
                  << "{"
-                 << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
+                 << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                  << "::xsd::cxx::tree::stream_extraction_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().extract (" << endl
@@ -385,11 +390,11 @@ namespace CXX
             }
             else
             {
-              os << "::std::auto_ptr< " << type << " > r (new " << type <<
+              os << auto_ptr << "< " << type << " > r (new " << type <<
                 " (s, f, this));";
             }
 
-            os << "c.push_back (r);"
+            os << "c.push_back (" << r << ");"
                << "}" // while
                << "}" // if
                << "}";
@@ -407,14 +412,14 @@ namespace CXX
             if (poly)
             {
               os << "bool d;"
-                 << "::std::auto_ptr< " << type << " > r;"
+                 << auto_ptr << "< " << type << " > r;"
                  << "s >> d;"
                  << endl
                  << "if (!d)" << endl
                  << "r.reset (new " << type << " (s, f, this));"
                  << "else"
                  << "{"
-                 << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
+                 << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                  << "::xsd::cxx::tree::stream_extraction_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().extract (" << endl
@@ -434,11 +439,11 @@ namespace CXX
             }
             else
             {
-              os << "::std::auto_ptr< " << type << " > r (new " << type <<
+              os << auto_ptr << "< " << type << " > r (new " << type <<
                 " (s, f, this));";
             }
 
-            os << "this->" << member << ".set (r);"
+            os << "this->" << member << ".set (" << r << ");"
                << "}" // if (p)
                << "}";
           }
@@ -451,14 +456,14 @@ namespace CXX
             if (poly)
             {
               os << "bool d;"
-                 << "::std::auto_ptr< " << type << " > r;"
+                 << auto_ptr << "< " << type << " > r;"
                  << "s >> d;"
                  << endl
                  << "if (!d)" << endl
                  << "r.reset (new " << type << " (s, f, this));"
                  << "else"
                  << "{"
-                 << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
+                 << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                  << "::xsd::cxx::tree::stream_extraction_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().extract (" << endl
@@ -478,11 +483,11 @@ namespace CXX
             }
             else
             {
-              os << "::std::auto_ptr< " << type << " > r (new " << type <<
+              os << auto_ptr << "< " << type << " > r (new " << type <<
                 " (s, f, this));";
             }
 
-            os << "this->" << member << ".set (r);"
+            os << "this->" << member << ".set (" << r << ");"
                << "}";
           }
         }
@@ -526,9 +531,8 @@ namespace CXX
             }
             else
             {
-              os << "::std::auto_ptr< " << type << " > r (new " << type <<
-                " (s, f, this));"
-                 << "this->" << member << ".set (r);";
+              os << "this->" << member << ".set (" << auto_ptr << "< " <<
+                type << " > (new " << type << " (s, f, this)));";
             }
 
             os << "}" // if (p)
@@ -546,9 +550,8 @@ namespace CXX
             }
             else
             {
-              os << "::std::auto_ptr< " << type << " > r (new " << type <<
-                " (s, f, this));"
-                 << "this->" << member << ".set (r);";
+              os << "this->" << member << ".set (" << auto_ptr << "< " <<
+                type << " > (new " << type << " (s, f, this)));";
             }
 
             os << "}";

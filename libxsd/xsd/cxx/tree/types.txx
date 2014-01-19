@@ -6,7 +6,13 @@
 #include <xercesc/util/Base64.hpp>
 #include <xercesc/util/XMLString.hpp>
 
-#include <xsd/cxx/auto-array.hxx>
+#include <xsd/cxx/config.hxx> // XSD_CXX11
+
+#ifdef XSD_CXX11
+#  include <memory> // std::unique_ptr
+#else
+#  include <xsd/cxx/auto-array.hxx>
+#endif
 
 #include <xsd/cxx/xml/std-memory-manager.hxx>
 
@@ -318,9 +324,13 @@ namespace xsd
         std::basic_string<C> str;
 
         XMLSize_t n;
-
         xml::std_memory_manager mm;
+
+#ifdef XSD_CXX11
+        std::unique_ptr<XMLByte[], xml::std_memory_manager&> r (
+#else
         auto_array<XMLByte, xml::std_memory_manager> r (
+#endif
           Base64::encode (
             reinterpret_cast<const XMLByte*> (this->data ()),
             static_cast<XMLSize_t> (this->size ()),
@@ -353,9 +363,13 @@ namespace xsd
         xml::std_memory_manager mm;
         XMLSize_t size;
 
+#ifdef XSD_CXX11
+        std::unique_ptr<XMLByte[], xml::std_memory_manager&> data (
+#else
         auto_array<XMLByte, xml::std_memory_manager> data (
+#endif
           Base64::decodeToXMLByte (src, &size, &mm, Base64::Conf_RFC2045),
-	  mm);
+          mm);
 
         if (data)
         {

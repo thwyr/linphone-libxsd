@@ -6,7 +6,7 @@
 // Test the wide character mapping.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <fstream>
 #include <iostream>
 
@@ -29,7 +29,7 @@ main (int argc, char* argv[])
     // Use dont_validate because we do not have instance's system id (path).
     //
     std::ifstream ifs (argv[1]);
-    auto_ptr<type> r (root (ifs, xml_schema::flags::dont_validate));
+    XSD_AUTO_PTR<type> r (root (ifs, xml_schema::flags::dont_validate));
 
     {
       type::b_sequence const& s (r->b ());

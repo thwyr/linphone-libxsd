@@ -6,7 +6,7 @@
 #ifndef XSD_CXX_PARSER_XERCES_ELEMENTS_HXX
 #define XSD_CXX_PARSER_XERCES_ELEMENTS_HXX
 
-#include <memory>  // std::auto_ptr
+#include <memory>  // std::auto_ptr/unique_ptr
 #include <string>
 #include <iosfwd>
 #include <vector>
@@ -17,6 +17,8 @@
 #include <xercesc/sax2/DefaultHandler.hpp>
 
 #include <xercesc/util/XercesVersion.hpp>
+
+#include <xsd/cxx/config.hxx> // XSD_AUTO_PTR
 
 #include <xsd/cxx/xml/elements.hxx>
 #include <xsd/cxx/xml/error-handler.hxx>
@@ -377,7 +379,7 @@ namespace xsd
                  const properties<C>&);
 
         private:
-          std::auto_ptr<xercesc::SAX2XMLReader>
+          XSD_AUTO_PTR<xercesc::SAX2XMLReader>
           create_sax_ (flags, const properties<C>&);
 
         private:

@@ -280,10 +280,11 @@
     <tr>
       <th>5</th><td><a href="#5">Mapping Configuration</a>
         <table class="toc">
-          <tr><th>5.1</th><td><a href="#5.1">Character Type and Encoding</a></td></tr>
-          <tr><th>5.2</th><td><a href="#5.2">Underlying XML Parser</a></td></tr>
-	  <tr><th>5.3</th><td><a href="#5.3">XML Schema Validation</a></td></tr>
-	  <tr><th>5.4</th><td><a href="#5.4">Support for Polymorphism</a></td></tr>
+          <tr><th>5.1</th><td><a href="#5.1">C++ Standard</a></td></tr>
+          <tr><th>5.2</th><td><a href="#5.2">Character Type and Encoding</a></td></tr>
+          <tr><th>5.3</th><td><a href="#5.3">Underlying XML Parser</a></td></tr>
+	  <tr><th>5.4</th><td><a href="#5.4">XML Schema Validation</a></td></tr>
+	  <tr><th>5.5</th><td><a href="#5.5">Support for Polymorphism</a></td></tr>
         </table>
       </td>
     </tr>
@@ -553,8 +554,8 @@ $ xsd cxx-parser --xml-parser expat hello.xsd
   </pre>
 
   <p>The <code>--xml-parser</code> option indicates that we want to
-     use Expat as the underlying XML parser (see <a href="#5.2">Section
-     5.2, "Underlying XML Parser"</a>). The XSD compiler produces two
+     use Expat as the underlying XML parser (see <a href="#5.3">Section
+     5.3, "Underlying XML Parser"</a>). The XSD compiler produces two
      C++ files: <code>hello-pskel.hxx</code> and <code>hello-pskel.cxx</code>.
      The following code fragment is taken from <code>hello-pskel.hxx</code>;
      it should give you an idea about what gets generated:
@@ -1615,8 +1616,13 @@ namespace http://www.example.com/xmlns/my
      following map files. The string-based XML Schema types are
      mapped to either <code>std::string</code> or
      <code>std::wstring</code> depending on the character type
-     selected (see <a href="#5.1"> Section 5.1, "Character Type and
-     Encoding"</a> for more information).</p>
+     selected (see <a href="#5.2"> Section 5.2, "Character Type and
+     Encoding"</a> for more information). The binary XML Schema
+     types are mapped to either <code>std::auto_ptr&lt;xml_schema::buffer></code>
+     or <code>std::unique_ptr&lt;xml_schema::buffer></code>
+     depending on the C++ standard selected (C++98 or C++11,
+     respectively; refer to the <code>--std</code> XSD compiler
+     command line option for details).</p>
 
   <pre class="type-map">
 namespace http://www.w3.org/2001/XMLSchema
@@ -1663,10 +1669,10 @@ namespace http://www.w3.org/2001/XMLSchema
 
   QName xml_schema::qname;
 
-  base64Binary std::auto_ptr&lt;xml_schema::buffer>
-               std::auto_ptr&lt;xml_schema::buffer>;
-  hexBinary std::auto_ptr&lt;xml_schema::buffer>
-            std::auto_ptr&lt;xml_schema::buffer>;
+  base64Binary std::[auto|unique]_ptr&lt;xml_schema::buffer>
+               std::[auto|unique]_ptr&lt;xml_schema::buffer>;
+  hexBinary std::[auto|unique]_ptr&lt;xml_schema::buffer>
+            std::[auto|unique]_ptr&lt;xml_schema::buffer>;
 
   date xml_schema::date;
   dateTime xml_schema::date_time;
@@ -1899,9 +1905,9 @@ age:    28
   <p>The C++/Parser mapping has a number of configuration parameters that
      determine the overall properties and behavior of the generated code.
      Configuration parameters are specified with the XSD command line
-     options and include the character type that is used by the generated
-     code, the underlying XML parser, whether the XML Schema validation
-     is performed in the generated code, and support for XML Schema
+     options and include the C++ standard, the character type that is used
+     by the generated code, the underlying XML parser, whether the XML Schema
+     validation is performed in the generated code, and support for XML Schema
      polymorphism. This chapter describes these configuration
      parameters in more detail. For more ways to configure the generated
      code refer to the
@@ -1909,7 +1915,16 @@ age:    28
      Compiler Command Line Manual</a>.
   </p>
 
-  <h2><a name="5.1">5.1 Character Type and Encoding</a></h2>
+  <h2><a name="5.1">5.1 C++ Standard</a></h2>
+
+  <p>The C++/Parser mapping provides support for ISO/IEC C++ 1998/2003 (C++98)
+     and ISO/IEC C++ 2011 (C++11). To select the C++ standard for the
+     generated code we use the <code>--std</code> XSD compiler command
+     line option. While the majority of the examples in this guide use
+     C++98, support for the new functionality and library components
+     introduced in C++11 are discussed throughout the document.</p>
+
+  <h2><a name="5.2">5.2 Character Type and Encoding</a></h2>
 
   <p>The C++/Parser mapping has built-in support for two character types:
     <code>char</code> and <code>wchar_t</code>. You can select the
@@ -1940,7 +1955,7 @@ age:    28
      all three (object mode, input XML, and output XML) can have different
      encodings.</p>
 
-  <h2><a name="5.2">5.2 Underlying XML Parser</a></h2>
+  <h2><a name="5.3">5.3 Underlying XML Parser</a></h2>
 
   <p>The C++/Parser mapping can be used with either Xerces-C++ or Expat
      as the underlying XML parser. You can select the XML parser with
@@ -1954,7 +1969,7 @@ age:    28
      in <a href="#7">Chapter 7, "Document Parser and Error Handling"</a>.</p>
 
 
-  <h2><a name="5.3">5.3 XML Schema Validation</a></h2>
+  <h2><a name="5.4">5.4 XML Schema Validation</a></h2>
 
   <p>The C++/Parser mapping provides support for validating a
      commonly-used subset of W3C XML Schema in the generated code.
@@ -1963,14 +1978,14 @@ age:    28
 
   <p>By default validation in the generated code is disabled if
      the underlying XML parser is validating (Xerces-C++) and
-     enabled otherwise (Expat). See <a href="#5.2">Section 5.2,
+     enabled otherwise (Expat). See <a href="#5.3">Section 5.3,
      "Underlying XML Parser"</a> for more information about
      the underlying XML parser. You can override the default
      behavior with the <code>--generate-validation</code>
      and <code>--suppress-validation</code> command line options.</p>
 
 
-  <h2><a name="5.4">5.4 Support for Polymorphism</a></h2>
+  <h2><a name="5.5">5.5 Support for Polymorphism</a></h2>
 
   <p>By default the XSD compiler generates non-polymorphic code. If your
      vocabulary uses XML Schema polymorphism in the form of <code>xsi:type</code>
@@ -2587,14 +2602,14 @@ private:
     <tr>
       <td><code>base64Binary</code></td>
       <td><code>base64_binary_pimpl</code></td>
-      <td><code>std::auto_ptr&lt;xml_schema::buffer></code><br/>
+      <td><code>std::[auto|unique]_ptr&lt; xml_schema::buffer></code><br/>
           <a href="#6.3">Section 6.3, "<code>base64Binary</code> and
           <code>hexBinary</code> Parsers"</a></td>
     </tr>
     <tr>
       <td><code>hexBinary</code></td>
       <td><code>hex_binary_pimpl</code></td>
-      <td><code>std::auto_ptr&lt;xml_schema::buffer></code><br/>
+      <td><code>std::[auto|unique]_ptr&lt; xml_schema::buffer></code><br/>
           <a href="#6.3">Section 6.3, "<code>base64Binary</code> and
           <code>hexBinary</code> Parsers"</a></td>
     </tr>
@@ -2738,10 +2753,12 @@ namespace xml_schema
   <h2><a name="6.3">6.3 <code>base64Binary</code> and <code>hexBinary</code> Parsers</a></h2>
 
   <p>The return type of the <code>base64_binary_pimpl</code> and
-     <code>hex_binary_pimpl</code> parser implementations is
-     <code>std::auto_ptr&lt;xml_schema::buffer></code>. The
-     <code>xml_schema::buffer</code> type represents a binary buffer
-     and its interface is presented below.</p>
+     <code>hex_binary_pimpl</code> parser implementations is either
+     <code>std::auto_ptr&lt;xml_schema::buffer></code> (C++98) or
+     <code>std::unique_ptr&lt;xml_schema::buffer></code> (C++11),
+     depending on the C++ standard selected (<code>--std</code> XSD
+     compiler option). The <code>xml_schema::buffer</code> type
+     represents a binary buffer and its interface is presented below.</p>
 
   <pre class="c++">
 namespace xml_schema
@@ -3304,7 +3321,7 @@ namespace xml_schema
      in more detail. As mentioned in <a href="#3.4">Section 3.4,
      "Connecting the Parsers Together"</a>, the interface of
      <code>xml_schema::document</code> depends on the underlying XML
-     parser selected (<a href="#5.2">Section 5.2, "Underlying XML
+     parser selected (<a href="#5.3">Section 5.3, "Underlying XML
      Parser"</a>). The following sections describe the
      <code>document</code> type interface for Xerces-C++ and
      Expat as underlying parsers.</p>
@@ -3315,7 +3332,7 @@ namespace xml_schema
      <code>document</code> type has the following interface. Note that
      if the character type is <code>wchar_t</code>, then the string type
      in the interface becomes <code>std::wstring</code>
-     (see <a href="#5.1">Section 5.1, "Character Type and Encoding"</a>).</p>
+     (see <a href="#5.2">Section 5.2, "Character Type and Encoding"</a>).</p>
 
   <pre class="c++">
 namespace xml_schema
@@ -3577,7 +3594,7 @@ namespace xml_schema
      <code>polymorphic</code>, specifies whether the XML documents
      being parsed use polymorphism. For more information on support
      for XML Schema polymorphism in the C++/Parser mapping refer
-     to <a href="#5.4">Section 5.4, "Support for Polymorphism"</a>.</p>
+     to <a href="#5.5">Section 5.5, "Support for Polymorphism"</a>.</p>
 
   <p>The rest of the <code>document</code> interface consists of overloaded
      <code>parse()</code> functions. The last two arguments in each of these
@@ -3610,7 +3627,7 @@ namespace xml_schema
      <code>document</code> type has the following interface. Note that
      if the character type is <code>wchar_t</code>, then the string type
      in the interface becomes <code>std::wstring</code>
-     (see <a href="#5.1">Section 5.1, "Character Type and Encoding"</a>).</p>
+     (see <a href="#5.2">Section 5.2, "Character Type and Encoding"</a>).</p>
 
   <pre class="c++">
 namespace xml_schema
@@ -3747,7 +3764,7 @@ namespace xml_schema
      <code>polymorphic</code>, specifies whether the XML documents
      being parsed use polymorphism. For more information on support
      for XML Schema polymorphism in the C++/Parser mapping refer
-     to <a href="#5.4">Section 5.4, "Support for Polymorphism"</a>.</p>
+     to <a href="#5.5">Section 5.5, "Support for Polymorphism"</a>.</p>
 
   <p>A number of overloaded <code>parse()</code> functions have the
      <code>system_id</code> and <code>public_id</code> arguments. The
@@ -3895,7 +3912,7 @@ main (int argc, char* argv[])
      character type is <code>wchar_t</code>, then the string type
      and output stream type in the definition become
      <code>std::wstring</code> and <code>std::wostream</code>,
-     respectively (see <a href="#5.1">Section 5.1, "Character Type
+     respectively (see <a href="#5.2">Section 5.2, "Character Type
      and Encoding"</a>).</p>
 
   <pre class="c++">
@@ -4008,7 +4025,7 @@ main (int argc, char* argv[])
      listing presents the definition of the <code>error_handler</code>
      interface. Note that if the character type is <code>wchar_t</code>,
      then the string type in the interface becomes <code>std::wstring</code>
-     (see <a href="#5.1">Section 5.1, "Character Type and Encoding"</a>).</p>
+     (see <a href="#5.2">Section 5.2, "Character Type and Encoding"</a>).</p>
 
   <pre class="c++">
 namespace xml_schema

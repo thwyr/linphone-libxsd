@@ -6,7 +6,7 @@
 // Test built-in type mapping.
 //
 
-#include <memory>  // std::auto_ptr
+#include <memory>  // std::auto_ptr/unique_ptr
 #include <sstream>
 #include <iostream>
 
@@ -15,7 +15,6 @@
 
 using std::cerr;
 using std::endl;
-using std::auto_ptr;
 
 int
 main (int argc, char* argv[])
@@ -26,12 +25,13 @@ main (int argc, char* argv[])
     return 1;
   }
 
-  auto_ptr<xmlns::test::Elements> elements (xmlns::test::elements (argv[1]));
+  XSD_AUTO_PTR<xmlns::test::Elements> elements (
+    xmlns::test::elements (argv[1]));
 
-  auto_ptr<xmlns::test::Attributes> attributes (
+  XSD_AUTO_PTR<xmlns::test::Attributes> attributes (
     xmlns::test::attributes (argv[2]));
 
-  auto_ptr<xmlns::test::Inherited> inherited (
+  XSD_AUTO_PTR<xmlns::test::Inherited> inherited (
     xmlns::test::inherited (argv[3]));
 
   cerr << "elements: " << *elements << endl
@@ -53,13 +53,14 @@ main (int argc, char* argv[])
     xmlns::test::elements (ostr, *elements, map);
 
     std::istringstream istr (ostr.str ());
-    auto_ptr<xmlns::test::Elements> elements1 (xmlns::test::elements (istr));
+    XSD_AUTO_PTR<xmlns::test::Elements> elements1 (
+      xmlns::test::elements (istr));
 
     std::ostringstream ostr1;
     xmlns::test::elements (ostr1, *elements1, map);
 
     if (ostr.str () != ostr1.str ())
-      return 1;     
+      return 1;
   }
 
   {
@@ -67,7 +68,7 @@ main (int argc, char* argv[])
     xmlns::test::attributes (ostr, *attributes, map);
 
     std::istringstream istr (ostr.str ());
-    auto_ptr<xmlns::test::Attributes> attributes1 (
+    XSD_AUTO_PTR<xmlns::test::Attributes> attributes1 (
       xmlns::test::attributes (istr));
 
     std::ostringstream ostr1;
@@ -82,7 +83,7 @@ main (int argc, char* argv[])
     xmlns::test::inherited (ostr, *inherited, map);
 
     std::istringstream istr (ostr.str ());
-    auto_ptr<xmlns::test::Inherited> inherited1 (
+    XSD_AUTO_PTR<xmlns::test::Inherited> inherited1 (
       xmlns::test::inherited (istr));
 
     std::ostringstream ostr1;

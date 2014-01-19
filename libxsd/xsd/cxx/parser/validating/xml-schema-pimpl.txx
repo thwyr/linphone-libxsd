@@ -6,6 +6,10 @@
 #include <limits>
 #include <locale>
 
+#ifdef XSD_CXX11
+#  include <utility> // std::move
+#endif
+
 #include <xsd/cxx/zc-istream.hxx>
 #include <xsd/cxx/parser/validating/exceptions.hxx>
 
@@ -1634,10 +1638,14 @@ namespace xsd
         }
 
         template <typename C>
-        std::auto_ptr<buffer> base64_binary_pimpl<C>::
+        XSD_AUTO_PTR<buffer> base64_binary_pimpl<C>::
         post_base64_binary ()
         {
+#ifdef XSD_CXX11
+          return std::move (buf_);
+#else
           return buf_;
+#endif
         }
 
         // hex_binary
@@ -1721,10 +1729,14 @@ namespace xsd
         }
 
         template <typename C>
-        std::auto_ptr<buffer> hex_binary_pimpl<C>::
+        XSD_AUTO_PTR<buffer> hex_binary_pimpl<C>::
         post_hex_binary ()
         {
+#ifdef XSD_CXX11
+          return std::move (buf_);
+#else
           return buf_;
+#endif
         }
 
         // time_zone

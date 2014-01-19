@@ -17,12 +17,18 @@
 #ifndef XSD_CXX_TREE_ELEMENTS_HXX
 #define XSD_CXX_TREE_ELEMENTS_HXX
 
+#include <xsd/cxx/config.hxx> // XSD_AUTO_PTR, XSD_CXX11
+
 #include <map>
 #include <string>
-#include <memory>  // std::auto_ptr
+#include <memory>  // std::auto_ptr/unique_ptr
 #include <istream>
 #include <sstream>
 #include <cassert>
+
+#ifdef XSD_CXX11
+#  include <utility> // std::move
+#endif
 
 #include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/dom/DOMAttr.hpp>
@@ -33,7 +39,7 @@
 #include <xercesc/util/XercesVersion.hpp>
 
 #include <xsd/cxx/xml/elements.hxx> // xml::properties
-#include <xsd/cxx/xml/dom/auto-ptr.hxx> // dom::auto_ptr
+#include <xsd/cxx/xml/dom/auto-ptr.hxx> // dom::auto_ptr/unique_ptr
 
 #include <xsd/cxx/tree/facet.hxx>
 #include <xsd/cxx/tree/exceptions.hxx>
@@ -83,7 +89,7 @@ namespace xsd
          *
          * This flag only makes sense together with the @c keep_dom
          * flag in the call to the %parsing function with the
-         * @c dom::auto_ptr<DOMDocument> argument.
+         * @c dom::auto_ptr/unique_ptr<DOMDocument> argument.
          *
          */
         static const unsigned long own_dom = 0x00000200UL;
@@ -386,11 +392,7 @@ namespace xsd
           {
             // Drop DOM association.
             //
-            if (dom_info_.get ())
-            {
-              std::auto_ptr<dom_info> r (0);
-              dom_info_ = r;
-            }
+            dom_info_.reset ();
           }
 
           return *this;
@@ -444,7 +446,7 @@ namespace xsd
               dr = c;
           }
 
-          std::auto_ptr<map>& m (dr ? dr->map_ : map_);
+          XSD_AUTO_PTR<map>& m (dr ? dr->map_ : map_);
 
           if (container_ == 0)
           {
@@ -455,11 +457,16 @@ namespace xsd
               if (m.get () != 0)
               {
                 m->insert (map_->begin (), map_->end ());
-                std::auto_ptr<map> tmp (0);
-                map_ = tmp;
+                map_.reset ();
               }
               else
+              {
+#ifdef XSD_CXX11
+                m = std::move (map_);
+#else
                 m = map_;
+#endif
+              }
             }
           }
           else
@@ -481,10 +488,7 @@ namespace xsd
                   // Part of our subtree.
                   //
                   if (m.get () == 0)
-                  {
-                    std::auto_ptr<map> tmp (new map);
-                    m = tmp;
-                  }
+                    m.reset (new map);
 
                   m->insert (*i);
                   sr->map_->erase (i++);
@@ -599,37 +603,31 @@ namespace xsd
             {
               if (container_ != 0)
               {
-                // @@ Should be a throw.
-                //
                 assert (_root ()->_node () != 0);
                 assert (_root ()->_node ()->getOwnerDocument () ==
                         n->getOwnerDocument ());
               }
 
-              std::auto_ptr<dom_info> r (
+              dom_info_ =
                 dom_info_factory::create (
                   *static_cast<xercesc::DOMElement*> (n),
                   *this,
-                  container_ == 0));
+                  container_ == 0);
 
-              dom_info_ = r;
               break;
             }
           case xercesc::DOMNode::ATTRIBUTE_NODE:
             {
-              //@@ Should be a throw.
-              //
               assert (container_ != 0);
               assert (_root ()->_node () != 0);
               assert (_root ()->_node ()->getOwnerDocument () ==
                       n->getOwnerDocument ());
 
-              std::auto_ptr<dom_info> r (
+              dom_info_ =
                 dom_info_factory::create (
                   *static_cast<xercesc::DOMAttr*> (n),
-                  *this));
+                  *this);
 
-              dom_info_ = r;
               break;
             }
           default:
@@ -650,10 +648,7 @@ namespace xsd
           assert (container_ == 0);
 
           if (map_.get () == 0)
-          {
-            std::auto_ptr<map> tmp (new map);
-            map_ = tmp;
-          }
+            map_.reset (new map);
 
           if (!map_->insert (
                 std::pair<const identity*, type*> (&i, t)).second)
@@ -714,7 +709,7 @@ namespace xsd
           {
           }
 
-          virtual std::auto_ptr<dom_info>
+          virtual XSD_AUTO_PTR<dom_info>
           clone (type& tree_node, container*) const = 0;
 
           virtual xercesc::DOMNode*
@@ -731,32 +726,35 @@ namespace xsd
         struct dom_element_info: public dom_info
         {
           dom_element_info (xercesc::DOMElement& e, type& n, bool root)
-              : doc_ (0), e_ (e)
+              : e_ (e)
           {
             e_.setUserData (user_data_keys::node, &n, 0);
 
             if (root)
             {
-              // The caller should have associated a dom::auto_ptr object
-              // that owns this document with the document node using the
-              // xml_schema::dom::tree_node_key key.
+              // The caller should have associated a dom::auto/unique_ptr
+              // object that owns this document with the document node
+              // using the xml_schema::dom::tree_node_key key.
               //
-              xml::dom::auto_ptr<xercesc::DOMDocument>* pd (
-                reinterpret_cast<xml::dom::auto_ptr<xercesc::DOMDocument>*> (
+              XSD_DOM_AUTO_PTR<xercesc::DOMDocument>* pd (
+                reinterpret_cast<XSD_DOM_AUTO_PTR<xercesc::DOMDocument>*> (
                   e.getOwnerDocument ()->getUserData (user_data_keys::node)));
 
               assert (pd != 0);
               assert (pd->get () == e.getOwnerDocument ());
 
-              doc_ = *pd; // Transfer ownership.
+              // Transfer ownership.
+#ifdef XSD_CXX11
+              doc_ = std::move (*pd);
+#else
+              doc_ = *pd;
+#endif
             }
           }
 
-          virtual std::auto_ptr<dom_info>
+          virtual XSD_AUTO_PTR<dom_info>
           clone (type& tree_node, container* c) const
           {
-            using std::auto_ptr;
-
             // Check if we are a document root.
             //
             if (c == 0)
@@ -764,11 +762,10 @@ namespace xsd
               // We preserver DOM associations only in complete
               // copies from root.
               //
-              if (doc_.get () == 0)
-                return auto_ptr<dom_info> (0);
-
-              return auto_ptr<dom_info> (
-                new dom_element_info (*doc_, tree_node));
+              return XSD_AUTO_PTR<dom_info> (
+                doc_.get () == 0
+                ? 0
+                : new dom_element_info (*doc_, tree_node));
             }
 
             // Check if our container does not have DOM association (e.g.,
@@ -779,8 +776,7 @@ namespace xsd
             DOMNode* cn (c->_node ());
 
             if (cn == 0)
-              return auto_ptr<dom_info> (0);
-
+              return XSD_AUTO_PTR<dom_info> ();
 
             // Now we are going to find the corresponding element in
             // the new tree.
@@ -812,7 +808,7 @@ namespace xsd
 
               assert (dn->getNodeType () == DOMNode::ELEMENT_NODE);
 
-              return auto_ptr<dom_info> (
+              return XSD_AUTO_PTR<dom_info> (
                 new dom_element_info (static_cast<DOMElement&> (*dn),
                                       tree_node,
                                       false));
@@ -835,7 +831,7 @@ namespace xsd
           }
 
         private:
-          xml::dom::auto_ptr<xercesc::DOMDocument> doc_;
+          XSD_DOM_AUTO_PTR<xercesc::DOMDocument> doc_;
           xercesc::DOMElement& e_;
         };
 
@@ -848,11 +844,9 @@ namespace xsd
             a_.setUserData (user_data_keys::node, &n, 0);
           }
 
-          virtual std::auto_ptr<dom_info>
+          virtual XSD_AUTO_PTR<dom_info>
           clone (type& tree_node, container* c) const
           {
-            using std::auto_ptr;
-
             // Check if we are a document root.
             //
             if (c == 0)
@@ -860,7 +854,7 @@ namespace xsd
               // We preserver DOM associations only in complete
               // copies from root.
               //
-              return auto_ptr<dom_info> (0);
+              return XSD_AUTO_PTR<dom_info> ();
             }
 
             // Check if our container does not have DOM association (e.g.,
@@ -871,7 +865,7 @@ namespace xsd
             DOMNode* cn (c->_node ());
 
             if (cn == 0)
-              return auto_ptr<dom_info> (0);
+              return XSD_AUTO_PTR<dom_info> ();
 
             // We are going to find the corresponding attribute in
             // the new tree.
@@ -898,7 +892,7 @@ namespace xsd
             DOMNode& n (*cn->getAttributes ()->item (i));
             assert (n.getNodeType () == DOMNode::ATTRIBUTE_NODE);
 
-            return auto_ptr<dom_info> (
+            return XSD_AUTO_PTR<dom_info> (
               new dom_attribute_info (static_cast<DOMAttr&> (n), tree_node));
           }
 
@@ -919,18 +913,18 @@ namespace xsd
 
         struct dom_info_factory
         {
-          static std::auto_ptr<dom_info>
+          static XSD_AUTO_PTR<dom_info>
           create (const xercesc::DOMElement& e, type& n, bool root)
           {
-            return std::auto_ptr<dom_info> (
+            return XSD_AUTO_PTR<dom_info> (
               new dom_element_info (
                 const_cast<xercesc::DOMElement&> (e), n, root));
           }
 
-          static std::auto_ptr<dom_info>
+          static XSD_AUTO_PTR<dom_info>
           create (const xercesc::DOMAttr& a, type& n)
           {
-            return std::auto_ptr<dom_info> (
+            return XSD_AUTO_PTR<dom_info> (
               new dom_attribute_info (
                 const_cast<xercesc::DOMAttr&> (a), n));
           }
@@ -938,7 +932,7 @@ namespace xsd
 
         //@endcond
 
-        std::auto_ptr<dom_info> dom_info_;
+        XSD_AUTO_PTR<dom_info> dom_info_;
 
 
         // ID/IDREF map.
@@ -961,7 +955,7 @@ namespace xsd
         std::map<const identity*, type*, identity_comparator>
         map;
 
-        std::auto_ptr<map> map_;
+        XSD_AUTO_PTR<map> map_;
 
       private:
         container* container_;
@@ -973,8 +967,7 @@ namespace xsd
       {
         if (x.dom_info_.get () != 0 && (f & flags::keep_dom))
         {
-          std::auto_ptr<dom_info> r (x.dom_info_->clone (*this, c));
-          dom_info_ = r;
+          dom_info_ = x.dom_info_->clone (*this, c);
         }
       }
 
@@ -1183,25 +1176,25 @@ namespace xsd
       {
         typedef T type;
 
-        static std::auto_ptr<T>
+        static XSD_AUTO_PTR<T>
         create (const xercesc::DOMElement& e, flags f, container* c)
         {
-          return std::auto_ptr<T> (new T (e, f, c));
+          return XSD_AUTO_PTR<T> (new T (e, f, c));
         }
 
-        static std::auto_ptr<T>
+        static XSD_AUTO_PTR<T>
         create (const xercesc::DOMAttr& a, flags f, container* c)
         {
-          return std::auto_ptr<T> (new T (a, f, c));
+          return XSD_AUTO_PTR<T> (new T (a, f, c));
         }
 
-        static std::auto_ptr<T>
+        static XSD_AUTO_PTR<T>
         create (const std::basic_string<C>& s,
                 const xercesc::DOMElement* e,
                 flags f,
                 container* c)
         {
-          return std::auto_ptr<T> (new T (s, e, f, c));
+          return XSD_AUTO_PTR<T> (new T (s, e, f, c));
         }
       };
 

@@ -19,7 +19,6 @@
 
 #include <xsd/cxx/xml/elements.hxx>      // properies
 #include <xsd/cxx/xml/error-handler.hxx>
-
 #include <xsd/cxx/xml/dom/auto-ptr.hxx>
 #include <xsd/cxx/xml/dom/elements.hxx>  // name
 #include <xsd/cxx/xml/dom/parsing-header.hxx>
@@ -102,28 +101,28 @@ namespace xsd
         const unsigned long no_muliple_imports = 0x00000800UL;
 
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         parse (xercesc::InputSource&,
                error_handler<C>&,
                const properties<C>&,
                unsigned long flags);
 
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         parse (xercesc::InputSource&,
                xercesc::DOMErrorHandler&,
                const properties<C>&,
                unsigned long flags);
 
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         parse (const std::basic_string<C>& uri,
                error_handler<C>&,
                const properties<C>&,
                unsigned long flags);
 
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         parse (const std::basic_string<C>& uri,
                xercesc::DOMErrorHandler&,
                const properties<C>&,

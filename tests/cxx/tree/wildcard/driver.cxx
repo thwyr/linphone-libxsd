@@ -6,13 +6,13 @@
 // Test wildcard (any & anyAttribute) mapping.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <sstream>
 #include <iostream>
 
-#include <xsd/cxx/xml/string.hxx>
+#include "test.hxx" // Get XSD_CXX11 defined.
 
-#include "test.hxx"
+#include <xsd/cxx/xml/string.hxx>
 
 using namespace std;
 using namespace test;
@@ -170,7 +170,7 @@ main (int argc, char* argv[])
 
     // Test parsing
     //
-    auto_ptr<type> r (root (argv[1]));
+    XSD_AUTO_PTR<type> r (root (argv[1]));
     print (*r);
 
     // Test serialization.
@@ -187,7 +187,7 @@ main (int argc, char* argv[])
     // cout << iostr.str () << endl
     //      << endl;
 
-    auto_ptr<type> copy (root (iostr, argv[1]));
+    XSD_AUTO_PTR<type> copy (root (iostr, argv[1]));
     assert (*copy == *r);
 
     print (*copy);

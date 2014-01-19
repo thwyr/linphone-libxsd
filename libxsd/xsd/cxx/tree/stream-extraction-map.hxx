@@ -7,8 +7,10 @@
 #define XSD_CXX_TREE_STREAM_EXTRACTION_MAP_HXX
 
 #include <map>
-#include <memory>  // std::auto_ptr
+#include <memory>  // std::auto_ptr/unique_ptr
 #include <cstddef> // std::size_t
+
+#include <xsd/cxx/config.hxx> // XSD_AUTO_PTR
 
 #include <xsd/cxx/tree/elements.hxx>
 #include <xsd/cxx/tree/istream.hxx>
@@ -24,7 +26,7 @@ namespace xsd
       struct stream_extraction_map
       {
         typedef xml::qualified_name<C> qualified_name;
-        typedef std::auto_ptr<type> (*extractor) (
+        typedef XSD_AUTO_PTR<type> (*extractor) (
           istream<S>&, flags, container*);
 
       public:
@@ -38,7 +40,7 @@ namespace xsd
         void
         unregister_type (const qualified_name& name);
 
-        std::auto_ptr<type>
+        XSD_AUTO_PTR<type>
         extract (istream<S>&, flags, container*);
 
       public:
@@ -82,7 +84,7 @@ namespace xsd
       //
       //
       template<typename S, typename T>
-      std::auto_ptr<type>
+      XSD_AUTO_PTR<type>
       extractor_impl (istream<S>&, flags, container*);
 
 

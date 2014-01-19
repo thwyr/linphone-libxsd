@@ -53,7 +53,7 @@ namespace xsd
         const unsigned long dont_pretty_print  = 0x00020000UL;
 
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         serialize (const std::basic_string<C>& root_element,
                    const std::basic_string<C>& root_element_namespace,
                    const namespace_infomap<C>& map,
@@ -62,7 +62,7 @@ namespace xsd
         // This one helps Sun C++ to overcome its fears.
         //
         template <typename C>
-        inline xml::dom::auto_ptr<xercesc::DOMDocument>
+        inline XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         serialize (const C* root_element,
                    const C* root_element_namespace,
                    const namespace_infomap<C>& map,

@@ -159,10 +159,12 @@ namespace CXX
           schema_root (c.schema_root),
           schema_path (c.schema_path),
           options (c.options),
+          std (c.std),
           char_type (c.char_type),
           char_encoding (c.char_encoding),
           L (c.L),
           string_type (c.string_type),
+          auto_ptr (c.auto_ptr),
           string_literal_map (c.string_literal_map),
           type_exp (c.type_exp),
           inst_exp (c.inst_exp),
@@ -184,10 +186,12 @@ namespace CXX
           schema_root (c.schema_root),
           schema_path (c.schema_path),
           options (c.options),
+          std (c.std),
           char_type (c.char_type),
           char_encoding (c.char_encoding),
           L (c.L),
           string_type (c.string_type),
+          auto_ptr (c.auto_ptr),
           string_literal_map (c.string_literal_map),
           type_exp (c.type_exp),
           inst_exp (c.inst_exp),
@@ -328,10 +332,14 @@ namespace CXX
 
     options_type const& options;
 
+    cxx_version std;
+
     String& char_type;
     String& char_encoding;
     String& L;                  // string literal prefix
     String& string_type;
+    String& auto_ptr;
+
     StringLiteralMap const* string_literal_map;
 
     String& type_exp;
@@ -350,6 +358,7 @@ namespace CXX
     String char_encoding_;
     String L_;
     String string_type_;
+    String auto_ptr_;
 
     String type_exp_;
     String inst_exp_;

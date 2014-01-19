@@ -7,7 +7,7 @@
 // The test just makes sure it still compiles and works.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <fstream>
 #include <iostream>
 
@@ -27,7 +27,7 @@ main (int argc, char* argv[])
 
   try
   {
-    auto_ptr<type> r (root (argv[1]));
+    XSD_AUTO_PTR<type> r (root (argv[1]));
 
     xml_schema::namespace_infomap map;
     map["t"].name = "test";

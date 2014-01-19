@@ -28,6 +28,13 @@ $(driver): $(obj) $(xerces_c.l)
 $(obj) $(dep): cpp_options := -I$(out_base) -I$(src_base) -I$(src_root)/libxsd
 $(obj) $(dep): $(xerces_c.l.cpp-options)
 
+# Define XSD_CXX11 since we include libxsd headers directly.
+#
+$(call include,$(bld_root)/cxx/standard.make) # cxx_standard
+ifeq ($(cxx_standard),c++11)
+$(obj) $(dep): cpp_options += -DXSD_CXX11
+endif
+
 $(call include-dep,$(dep),$(obj),$(gen))
 
 # Convenience alias for default target.

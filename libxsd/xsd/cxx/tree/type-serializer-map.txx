@@ -399,7 +399,7 @@ namespace xsd
       }
 
       template <typename C>
-      xml::dom::auto_ptr<xercesc::DOMDocument> type_serializer_map<C>::
+      XSD_DOM_AUTO_PTR<xercesc::DOMDocument> type_serializer_map<C>::
       serialize (const C* name,
                  const C* ns,
                  const xml::dom::namespace_infomap<C>& m,

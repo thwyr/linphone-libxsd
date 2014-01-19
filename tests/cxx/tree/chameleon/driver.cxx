@@ -6,7 +6,7 @@
 // Test chameleon inclusion.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <iostream>
 
 #include "includer.hxx"
@@ -25,7 +25,7 @@ main (int argc, char* argv[])
 
   try
   {
-    auto_ptr<root_t> r (root (argv[1]));
+    XSD_AUTO_PTR<root_t> r (root (argv[1]));
 
     cout << *r << endl;
   }

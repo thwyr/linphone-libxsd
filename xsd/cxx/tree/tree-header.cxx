@@ -1250,7 +1250,7 @@ namespace CXX
               }
 
               os << "void" << endl
-                 << mname << " (::std::auto_ptr< " << type << " > p);"
+                 << mname << " (" << auto_ptr << "< " << type << " > p);"
                  << endl;
             }
           }
@@ -1339,7 +1339,7 @@ namespace CXX
                 }
 
                 os << "void" << endl
-                   << mname << " (::std::auto_ptr< " << type << " > p);"
+                   << mname << " (" << auto_ptr << "< " << type << " > p);"
                    << endl;
 
               }
@@ -1363,7 +1363,7 @@ namespace CXX
                      << " */" << endl;
                 }
 
-                os << "::std::auto_ptr< " << type << " >" << endl
+                os << auto_ptr << "< " << type << " >" << endl
                    << edname (m) << " ();"
                    << endl;
               }
@@ -2506,7 +2506,7 @@ namespace CXX
               inherits (c, inherits_member_);
               os << "&";
               {
-                FromBaseCtorArg args (*this, FromBaseCtorArg::arg_type, false);
+                FromBaseCtorArg args (*this, CtorArgType::type, false);
                 Traversal::Names args_names (args);
                 names (c, args_names);
               }
@@ -2525,7 +2525,7 @@ namespace CXX
                     "base and" << endl
                      << " * initializers for required elements and "
                      << "attributes" << endl
-                     << " * (auto_ptr version)." << endl
+                     << " * (" << auto_ptr << " version)." << endl
                      << " *" << endl
                      << " * This constructor will try to use the passed " <<
                     "values directly" << endl
@@ -2538,7 +2538,7 @@ namespace CXX
                 os << "&";
                 {
                   FromBaseCtorArg args (
-                    *this, FromBaseCtorArg::arg_complex_auto_ptr, false);
+                    *this, CtorArgType::complex_auto_ptr, false);
                   Traversal::Names args_names (args);
                   names (c, args_names);
                 }
@@ -2559,7 +2559,7 @@ namespace CXX
                     "base and" << endl
                      << " * initializers for required elements and "
                      << "attributes" << endl
-                     << " * (auto_ptr version)." << endl
+                     << " * (" << auto_ptr << " version)." << endl
                      << " *" << endl
                      << " * This constructor will try to use the passed " <<
                     "values directly" << endl
@@ -2572,7 +2572,7 @@ namespace CXX
                 os << "&";
                 {
                   FromBaseCtorArg args (
-                    *this, FromBaseCtorArg::arg_poly_auto_ptr, false);
+                    *this, CtorArgType::poly_auto_ptr, false);
                   Traversal::Names args_names (args);
                   names (c, args_names);
                 }
@@ -2598,7 +2598,7 @@ namespace CXX
             os << name << " (";
             {
               CtorArgsWithoutBase ctor_args (
-                *this, CtorArgsWithoutBase::arg_type, false, true);
+                *this, CtorArgType::type, false, true);
               ctor_args.dispatch (c);
             }
             os << ");"
@@ -2616,7 +2616,8 @@ namespace CXX
                 os << "/**" << endl
                    << " * @brief Create an instance from initializers " <<
                   "for required " << endl
-                   << " * elements and attributes (auto_ptr version)." << endl
+                   << " * elements and attributes (" << auto_ptr <<
+                  " version)." << endl
                    << " *" << endl
                    << " * This constructor will try to use the passed " <<
                   "values directly" << endl
@@ -2627,7 +2628,7 @@ namespace CXX
               os << name << " (";
               {
                 CtorArgsWithoutBase ctor_args (
-                  *this, CtorArgsWithoutBase::arg_complex_auto_ptr, false, true);
+                  *this, CtorArgType::complex_auto_ptr, false, true);
                 ctor_args.dispatch (c);
               }
               os << ");"
@@ -2645,7 +2646,8 @@ namespace CXX
                 os << "/**" << endl
                    << " * @brief Create an instance from initializers " <<
                   "for required " << endl
-                   << " * elements and attributes (auto_ptr version)." << endl
+                   << " * elements and attributes (" << auto_ptr <<
+                  " version)." << endl
                    << " *" << endl
                    << " * This constructor will try to use the passed " <<
                   "values directly" << endl
@@ -2656,7 +2658,7 @@ namespace CXX
               os << name << " (";
               {
                 CtorArgsWithoutBase ctor_args (
-                  *this, CtorArgsWithoutBase::arg_poly_auto_ptr, false, true);
+                  *this, CtorArgType::poly_auto_ptr, false, true);
                 ctor_args.dispatch (c);
               }
               os << ");"
@@ -2687,7 +2689,7 @@ namespace CXX
 
               {
                 CtorArgsWithoutBase ctor_args (
-                  *this, CtorArgsWithoutBase::arg_type, false, false);
+                  *this, CtorArgType::type, false, false);
                 ctor_args.dispatch (c);
               }
 
@@ -2710,7 +2712,7 @@ namespace CXX
 
             {
               CtorArgsWithoutBase ctor_args (
-                *this, CtorArgsWithoutBase::arg_type, false, false);
+                *this, CtorArgType::type, false, false);
               ctor_args.dispatch (c);
             }
 
@@ -2732,7 +2734,7 @@ namespace CXX
 
             {
               CtorArgsWithoutBase ctor_args (
-                *this, CtorArgsWithoutBase::arg_type, false, false);
+                *this, CtorArgType::type, false, false);
               ctor_args.dispatch (c);
             }
 
@@ -2756,7 +2758,7 @@ namespace CXX
           os << name << " (";
 
           {
-            CtorArgs ctor_args (*this, CtorArgs::arg_type);
+            CtorArgs ctor_args (*this, CtorArgType::type);
             ctor_args.dispatch (c);
           }
 
@@ -2775,7 +2777,7 @@ namespace CXX
                 "base and" << endl
                  << " * initializers for required elements and " <<
                 "attributes" << endl
-                 << " * (auto_ptr version)." << endl
+                 << " * (" << auto_ptr << " version)." << endl
                  << " *" << endl
                  << " * This constructor will try to use the passed " <<
                 "values directly" << endl
@@ -2786,7 +2788,7 @@ namespace CXX
             os << name << " (";
 
             {
-              CtorArgs ctor_args (*this, CtorArgs::arg_complex_auto_ptr);
+              CtorArgs ctor_args (*this, CtorArgType::complex_auto_ptr);
               ctor_args.dispatch (c);
             }
 
@@ -2806,7 +2808,7 @@ namespace CXX
                 "base and" << endl
                  << " * initializers for required elements and " <<
                 "attributes" << endl
-                 << " * (auto_ptr version)." << endl
+                 << " * (" << auto_ptr << " version)." << endl
                  << " *" << endl
                  << " * This constructor will try to use the passed " <<
                 "values directly" << endl
@@ -2817,7 +2819,7 @@ namespace CXX
             os << name << " (";
 
             {
-              CtorArgs ctor_args (*this, CtorArgs::arg_poly_auto_ptr);
+              CtorArgs ctor_args (*this, CtorArgType::poly_auto_ptr);
               ctor_args.dispatch (c);
             }
 
@@ -3326,7 +3328,7 @@ namespace CXX
             }
 
             os << "void" << endl
-               << mname << " (::std::auto_ptr< " << type << " > p);"
+               << mname << " (" << auto_ptr << "< " << type << " > p);"
                << endl;
           }
 
@@ -3348,7 +3350,7 @@ namespace CXX
                  << " */" << endl;
             }
 
-            os << "::std::auto_ptr< " << type << " >" << endl
+            os << auto_ptr << "< " << type << " >" << endl
                << edname (e) << " ();"
                << endl;
           }
@@ -3455,7 +3457,8 @@ namespace CXX
               os << "/**" << endl
                  << " * @brief Create an instance from an initializer " <<
                 "for" << endl
-                 << " * the element value (auto_ptr version)." << endl
+                 << " * the element value (" << auto_ptr <<
+                " version)." << endl
                  << " *" << endl
                  << " * @param p Element value to use." << endl
                  << " *" << endl
@@ -3465,7 +3468,7 @@ namespace CXX
                  << " */" << endl;
             }
 
-            os << name << " (::std::auto_ptr< " << type << " > p);"
+            os << name << " (" << auto_ptr << "< " << type << " > p);"
                << endl;
           }
 
@@ -3802,10 +3805,14 @@ namespace CXX
       {
         bool inline_ (ctx.options.generate_inline ());
 
-        ctx.os << "#include <memory>    // std::auto_ptr" << endl
+        ctx.os << "#include <memory>    // " << ctx.auto_ptr << endl
                << "#include <limits>    // std::numeric_limits" << endl
-               << "#include <algorithm> // std::binary_search" << endl
-               << endl;
+               << "#include <algorithm> // std::binary_search" << endl;
+
+        if (ctx.std >= cxx_version::cxx11)
+          ctx.os << "#include <utility>   // std::move" << endl;
+
+        ctx.os << endl;
 
         if (ctx.char_type == L"char" && ctx.char_encoding != L"custom")
         {

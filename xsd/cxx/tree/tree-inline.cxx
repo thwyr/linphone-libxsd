@@ -537,9 +537,10 @@ namespace CXX
             if (!fund)
               os << inl
                  << "void " << scope_ << "::" << endl
-                 << mname << " (::std::auto_ptr< " << type << " > x)"
+                 << mname << " (" << auto_ptr << "< " << type << " > x)"
                  << "{"
-                 << "this->" << member << ".set (x);"
+                 << "this->" << member << ".set (" <<
+                (std >= cxx_version::cxx11 ? "std::move (x)" : "x") << ");"
                  << "}";
           }
           else
@@ -589,9 +590,10 @@ namespace CXX
               if (!fund)
                 os << inl
                    << "void " << scope_ << "::" << endl
-                   << mname << " (::std::auto_ptr< " << type << " > x)"
+                   << mname << " (" << auto_ptr << "< " << type << " > x)"
                    << "{"
-                   << "this->" << member << ".set (x);"
+                   << "this->" << member << ".set (" <<
+                  (std >= cxx_version::cxx11 ? "std::move (x)" : "x") << ");"
                    << "}";
 
               // auto_ptr<type>
@@ -599,7 +601,7 @@ namespace CXX
               //
               if (detach && !fund)
                 os << inl
-                   << "::std::auto_ptr< " << q_type << " > " <<
+                   << auto_ptr << "< " << q_type << " > " <<
                   scope_ << "::" << endl
                    << edname (m) << " ()"
                    << "{"
@@ -976,7 +978,7 @@ namespace CXX
              << "void " << name << "::" << endl
              << mname << " (const " << type << "& x)"
              << "{"
-             << "return this->" << member << ".set (x);"
+             << "this->" << member << ".set (x);"
              << "}";
 
           // void
@@ -986,9 +988,10 @@ namespace CXX
           {
             os << inl
                << "void " << name << "::" << endl
-               << mname << " (::std::auto_ptr< " << type << " > p)"
+               << mname << " (" << auto_ptr  << "< " << type << " > x)"
                << "{"
-               << "return this->" << member << ".set (p);"
+               << "this->" << member << ".set (" <<
+              (std >= cxx_version::cxx11 ? "std::move (x)" : "x") << ");"
                << "}";
           }
 
@@ -997,7 +1000,7 @@ namespace CXX
           //
           if (detach && !fund)
             os << inl
-               << "::std::auto_ptr< " << name << "::" << type << " > " <<
+               << auto_ptr << "< " << name << "::" << type << " > " <<
               name << "::" << endl
                << edname (e) << " ()"
                << "{"

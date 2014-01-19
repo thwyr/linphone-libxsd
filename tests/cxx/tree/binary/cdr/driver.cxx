@@ -6,7 +6,7 @@
 // Test non-polymorphic binary serialization to ACE CDR.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <cassert>
 #include <iostream>
 
@@ -26,7 +26,7 @@ main (int argc, char* argv[])
 
   try
   {
-    auto_ptr<type> r (root (argv[1]));
+    XSD_AUTO_PTR<type> r (root (argv[1]));
 
     // Save to a CDR stream.
     //
@@ -38,7 +38,7 @@ main (int argc, char* argv[])
     //
     ACE_InputCDR ace_icdr (ace_ocdr);
     xml_schema::istream<ACE_InputCDR> icdr (ace_icdr);
-    auto_ptr<type> c (new type (icdr));
+    XSD_AUTO_PTR<type> c (new type (icdr));
 
     // Compare the two.
     //

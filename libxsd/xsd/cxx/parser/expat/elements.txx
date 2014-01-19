@@ -334,18 +334,18 @@ namespace xsd
         {
           // First call.
           //
-          if (auto_xml_parser_ == 0)
+          if (auto_xml_parser_.get () == 0)
           {
             auto_xml_parser_ = XML_ParserCreateNS (0, XML_Char (' '));
 
-            if (auto_xml_parser_ == 0)
+            if (auto_xml_parser_.get () == 0)
               throw std::bad_alloc ();
 
             if (system_id || public_id)
-              parse_begin (auto_xml_parser_,
+              parse_begin (auto_xml_parser_.get (),
                            system_id ? *system_id : *public_id, eh);
             else
-              parse_begin (auto_xml_parser_, eh);
+              parse_begin (auto_xml_parser_.get (), eh);
           }
 
           bool r (XML_Parse (xml_parser_,

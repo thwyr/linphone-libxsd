@@ -12,6 +12,13 @@ Version 4.0.0
   * New option, --std, specifies the C++ standard that the generated code
     should conform to. Valid values are c++98 (default) and c++11.
 
+    The C++ standard affects various aspects of the generated code that
+    are discussed in more detail in various mapping-specific documentation.
+    Overall, when C++11 is selected, the generated code relies on the move
+    semantics and uses std::unique_ptr instead of deprecated std::auto_ptr.
+    See also the documentation for the --std option in the XSD compiler
+    command line manual (man pages).
+
   * New option, --fat-type-file, triggers the generation of code
     corresponding to global elements into type files instead of schema
     files in the file-per-type mode. This option is primarily useful

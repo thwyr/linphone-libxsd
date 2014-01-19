@@ -225,10 +225,11 @@
           <tr>
             <th>2.1</th><td><a href="#2.1">Preliminary Information</a>
               <table class="toc">
-                <tr><th>2.1.1</th><td><a href="#2.1.1">Identifiers</a></td></tr>
-                <tr><th>2.1.2</th><td><a href="#2.1.2">Character Type and Encoding</a></td></tr>
-                <tr><th>2.1.3</th><td><a href="#2.1.3">XML Schema Namespace</a></td></tr>
-		<tr><th>2.1.4</th><td><a href="#2.1.4">Anonymous Types</a></td></tr>
+		<tr><th>2.1.1</th><td><a href="#2.1.1">C++ Standard</a></td></tr>
+                <tr><th>2.1.2</th><td><a href="#2.1.2">Identifiers</a></td></tr>
+                <tr><th>2.1.3</th><td><a href="#2.1.3">Character Type and Encoding</a></td></tr>
+                <tr><th>2.1.4</th><td><a href="#2.1.4">XML Schema Namespace</a></td></tr>
+		<tr><th>2.1.5</th><td><a href="#2.1.5">Anonymous Types</a></td></tr>
               </table>
             </td>
           </tr>
@@ -517,7 +518,16 @@
 
   <h2><a name="2.1">2.1 Preliminary Information</a></h2>
 
-  <h3><a name="2.1.1">2.1.1 Identifiers</a></h3>
+  <h3><a name="2.1.1">2.1.1 C++ Standard</a></h3>
+
+  <p>The C++/Tree mapping provides support for ISO/IEC C++ 1998/2003 (C++98)
+     and ISO/IEC C++ 2011 (C++11). To select the C++ standard for the
+     generated code we use the <code>--std</code> XSD compiler command
+     line option. While the majority of the examples in this manual use
+     C++98, support for the new functionality and library components
+     introduced in C++11 are discussed throughout the document.</p>
+
+  <h3><a name="2.1.2">2.1.2 Identifiers</a></h3>
 
   <p>XML Schema names may happen to be reserved C++ keywords or contain
      characters that are illegal in C++ identifiers. To avoid C++ compilation
@@ -563,7 +573,7 @@
      CONVENTION section in the <a href="http://www.codesynthesis.com/projects/xsd/documentation/xsd.xhtml">XSD
      Compiler Command Line Manual</a>.</p>
 
-  <h3><a name="2.1.2">2.1.2 Character Type and Encoding</a></h3>
+  <h3><a name="2.1.3">2.1.3 Character Type and Encoding</a></h3>
 
   <p>The code that implements the mapping, depending on the
      <code>--char-type</code>  option, is generated using either
@@ -588,7 +598,7 @@
      encoding is UTF-16. On other platforms <code>wchar_t</code> is 4 bytes
      long and UTF-32/UCS-4 is used.</p>
 
-  <h3><a name="2.1.3">2.1.3 XML Schema Namespace</a></h3>
+  <h3><a name="2.1.4">2.1.4 XML Schema Namespace</a></h3>
 
   <p>The mapping relies on some predefined types, classes, and functions
      that are logically defined in the XML Schema namespace reserved for
@@ -605,7 +615,7 @@
   </p>
 
 
-  <h3><a name="2.1.4">2.1.4 Anonymous Types</a></h3>
+  <h3><a name="2.1.5">2.1.5 Anonymous Types</a></h3>
 
   <p>For the purpose of code generation, anonymous types defined in
      XML Schema are automatically assigned names that are derived
@@ -1132,9 +1142,10 @@ namespace system
      sequences of non-fundamental C++ types is the addition of
      the overloaded <code>push_back</code> and <code>insert</code>
      member functions which instead of the constant reference
-     to the element type accept automatic pointer to the element
-     type. These functions assume ownership of the pointed to
-     object and resets the passed automatic pointer.
+     to the element type accept automatic pointer (<code>std::auto_ptr</code>
+     or <code>std::unique_ptr</code>, depending on the C++ standard
+     selected) to the element type. These functions assume ownership
+     of the pointed to object and reset the passed automatic pointer.
   </p>
 
   <h3><a name="2.5.1">2.5.1 Inheritance from Built-in Data Types</a></h3>
@@ -2317,9 +2328,10 @@ public:
      sequences of non-fundamental C++ types is the addition of
      the overloaded <code>push_back</code> and <code>insert</code>
      member functions which instead of the constant reference
-     to the element type accept automatic pointer to the element
-     type. These functions assume ownership of the pointed to
-     object and resets the passed automatic pointer.
+     to the element type accept automatic pointer (<code>std::auto_ptr</code>
+     or <code>std::unique_ptr</code>, depending on the C++ standard
+     selected) to the element type. These functions assume ownership
+     of the pointed to object and reset the passed automatic pointer.
   </p>
 
   <h3><a name="2.6.4">2.6.4 Mapping for Derivation by Union</a></h3>
@@ -2384,10 +2396,11 @@ public:
      instance is initialized with copies of the passed objects. In the
      second constructor, arguments that are complex types (that is,
      they themselves contain elements or attributes) are passed as
-     references to <code>std::auto_ptr</code>. In this case the newly
+     either <code>std::auto_ptr</code> (C++98) or <code>std::unique_ptr</code>
+     (C++11), depending on the C++ standard selected. In this case the newly
      created instance is directly initialized with and assumes ownership
-     of the pointed to objects and the <code>std::auto_ptr</code> arguments
-     are reset to <code>0</code>. For instance:</p>
+     of the pointed to objects and the <code>std::[auto|unique]_ptr</code>
+     arguments are reset to <code>0</code>. For instance:</p>
 
   <pre class="xml">
 &lt;complexType name="complex">
@@ -2432,7 +2445,7 @@ class object: xml_schema::type
 {
 public:
   object (const bool&amp; s_one, const complex&amp; c_one);
-  object (const bool&amp; s_one, std::auto_ptr&lt;complex>&amp; c_one);
+  object (const bool&amp; s_one, std::[auto|unique]_ptr&lt;complex> c_one);
   object (const object&amp;);
 
 public:
@@ -2449,7 +2462,7 @@ public:
   </pre>
 
   <p>Notice that the generated <code>complex</code> class does not
-     have the second (<code>std::auto_ptr</code>) version of the
+     have the second (<code>std::[auto|unique]_ptr</code>) version of the
      constructor since all its required members are of simple types.</p>
 
   <p>If an XML Schema complex type has an ultimate base which is an XML
@@ -2720,9 +2733,10 @@ public:
       constant of the member's type. It makes a deep copy of its argument.
       Except for member's types that are mapped to fundamental C++ types,
       the second modifier function is provided that expects an argument
-      of type automatic pointer to the member's type. It assumes ownership
-      of the pointed to object and resets the passed automatic pointer.
-      For instance:</p>
+      of type automatic pointer (<code>std::auto_ptr</code> or
+      <code>std::unique_ptr</code>, depending on the C++ standard selected)
+      to the member's type. It assumes ownership of the pointed to object
+      and resets the passed automatic pointer. For instance:</p>
 
   <pre class="xml">
 &lt;complexType name="object">
@@ -2756,7 +2770,7 @@ public:
   member (const member_type&amp;);
 
   void
-  member (std::auto_ptr&lt;member_type>);
+  member (std::[auto|unique]_ptr&lt;member_type>);
   ...
 
 };
@@ -2773,7 +2787,7 @@ class object: xml_schema::type
 public:
   ...
 
-  std::auto_ptr&lt;member_type>
+  std::[auto|unique]_ptr&lt;member_type>
   detach_member ();
   ...
 
@@ -2798,10 +2812,19 @@ f (object&amp; o)
   o.member ("hello");           // set, deep copy
   o.member () = "hello";        // set, deep copy
 
+  // C++98 version.
+  //
   std::auto_ptr&lt;string> p (new string ("hello"));
   o.member (p);                 // set, assumes ownership
   p = o.detach_member ();       // detach, member is uninitialized
   o.member (p);                 // re-attach
+
+  // C++11 version.
+  //
+  std::unique_ptr&lt;string> p (new string ("hello"));
+  o.member (std::move (p));     // set, assumes ownership
+  p = o.detach_member ();       // detach, member is uninitialized
+  o.member (std::move (p));     // re-attach
 }
   </pre>
 
@@ -2831,11 +2854,12 @@ f (object&amp; o)
       member's type. It makes a deep copy of its argument.
       Except for member's types that are mapped to fundamental C++ types,
       the second modifier function is provided that expects an argument
-      of type automatic pointer to the member's type. It assumes ownership
-      of the pointed to object and resets the passed automatic pointer.
-      The last modifier function expects an argument of type reference
-      to constant of the container type. It makes a deep copy of its
-      argument. For instance:
+      of type automatic pointer (<code>std::auto_ptr</code> or
+      <code>std::unique_ptr</code>, depending on the C++ standard selected)
+      to the member's type. It assumes ownership of the pointed to object
+      and resets the passed automatic pointer. The last modifier function
+      expects an argument of type reference to constant of the container
+      type. It makes a deep copy of its argument. For instance:
    </p>
 
   <pre class="xml">
@@ -2871,7 +2895,7 @@ public:
   member (const member_type&amp;);
 
   void
-  member (std::auto_ptr&lt;member_type>);
+  member (std::[auto|unique]_ptr&lt;member_type>);
 
   void
   member (const member_optional&amp;);
@@ -2884,7 +2908,7 @@ public:
 
   <p>The <code>optional</code> class template is defined in an
      implementation-specific namespace and has the following
-     interface. The <code>auto_ptr</code>-based constructor
+     interface. The <code>[auto|unique]_ptr</code>-based constructor
      and modifier function are only available if the template
      argument is not a fundamental C++ type.
   </p>
@@ -2904,7 +2928,7 @@ public:
   // Assumes ownership.
   //
   explicit
-  optional (std::auto_ptr&lt;X>);
+  optional (std::[auto|unique]_ptr&lt;X>);
 
   optional (const optional&amp;);
 
@@ -2953,11 +2977,11 @@ public:
   // Assumes ownership.
   //
   void
-  set (std::auto_ptr&lt;X>);
+  set (std::[auto|unique]_ptr&lt;X>);
 
   // Detach and return the contained value.
   //
-  std::auto_ptr&lt;X>
+  std::[auto|unique]_ptr&lt;X>
   detach ();
 
   void
@@ -3016,6 +3040,8 @@ f (object&amp; o)
     o.member ().reset ();           // reset
   }
 
+  // C++98 version.
+  //
   std::auto_ptr&lt;string> p (new string ("hello"));
   o.member (p);                     // set, assumes ownership
 
@@ -3024,6 +3050,17 @@ f (object&amp; o)
 
   p = o.member ().detach ();        // detach, member is reset
   o.member ().set (p);              // re-attach
+
+  // C++11 version.
+  //
+  std::unique_ptr&lt;string> p (new string ("hello"));
+  o.member (std::move (p));         // set, assumes ownership
+
+  p.reset (new string ("hello"));
+  o.member ().set (std::move (p));  // set, assumes ownership
+
+  p = o.member ().detach ();        // detach, member is reset
+  o.member ().set (std::move (p));  // re-attach
 }
   </pre>
 
@@ -3104,9 +3141,11 @@ public:
      the overloaded <code>push_back</code> and <code>insert</code>
      as well as the <code>detach_back</code> and <code>detach</code>
      member functions. The additional <code>push_back</code> and
-     <code>insert</code> functions accept an automatic pointer to the
+     <code>insert</code> functions accept an automatic pointer
+     (<code>std::auto_ptr</code> or <code>std::unique_ptr</code>,
+     depending on the C++ standard selected) to the
      element type instead of the constant reference. They assume
-     ownership of the pointed to object and resets the passed
+     ownership of the pointed to object and reset the passed
      automatic pointer. The <code>detach_back</code> and
      <code>detach</code> functions detach the element
      value from the sequence container and, by default, remove
@@ -3121,17 +3160,17 @@ public:
   ...
 
   void
-  push_back (std::auto_ptr&lt;X>)
+  push_back (std::[auto|unique]_ptr&lt;X>)
 
   iterator
-  insert (iterator position, std::auto_ptr&lt;X>)
+  insert (iterator position, std::[auto|unique]_ptr&lt;X>)
 
-  std::auto_ptr&lt;X>
+  std::[auto|unique]_ptr&lt;X>
   detach_back (bool pop = true);
 
   iterator
   detach (iterator position,
-          std::auto_ptr&lt;X>&amp; result,
+          std::[auto|unique]_ptr&lt;X>&amp; result,
           bool erase = true)
 
   ...
@@ -3159,10 +3198,19 @@ f (object&amp; o)
   //
   s.push_back ("hello");  // deep copy
 
+  // C++98 version.
+  //
   std::auto_ptr&lt;string> p (new string ("hello"));
   s.push_back (p);        // assumes ownership
   p = s.detach_back ();   // detach and pop
   s.push_back (p);        // re-append
+
+  // C++11 version.
+  //
+  std::unique_ptr&lt;string> p (new string ("hello"));
+  s.push_back (std::move (p)); // assumes ownership
+  p = s.detach_back ();        // detach and pop
+  s.push_back (std::move (p)); // re-append
 
   // Setting a new container.
   //
@@ -3192,14 +3240,16 @@ f (object&amp; o)
   </p>
 
   <p>The parsing functions read XML instance documents and return
-     corresponding object models. Their signatures
+     corresponding object models as an automatic pointer
+     (<code>std::auto_ptr</code> or <code>std::unique_ptr</code>,
+     depending on the C++ standard selected). Their signatures
      have the following pattern (<code>type</code> denotes
      element's type and <code>name</code> denotes element's
      name):
   </p>
 
   <pre class="c++">
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (....);
   </pre>
 
@@ -3207,9 +3257,8 @@ name (....);
      functions, is the subject of <a href="#3">Chapter 3, "Parsing"</a>.
   </p>
 
-  <p>The serialization functions write object models
-     back to XML instance documents. Their signatures
-     have the following pattern:
+  <p>The serialization functions write object models back to XML instance
+     documents. Their signatures have the following pattern:
   </p>
 
   <pre class="c++">
@@ -3272,13 +3321,13 @@ public:
   value (const value_type&amp;);
 
   void
-  value (std::auto_ptr&lt;value_type>);
+  value (std::[auto|unique]_ptr&lt;value_type>);
 
   // Constructors.
   //
   root (const value_type&amp;);
 
-  root (std::auto_ptr&lt;value_type>);
+  root (std::[auto|unique]_ptr&lt;value_type>);
 
   root (const xercesc::DOMElement&amp;, xml_schema::flags = 0);
 
@@ -3374,7 +3423,7 @@ namespace xml_schema
   class element_map
   {
   public:
-    static std::auto_ptr&lt;xml_schema::element_type>
+    static std::[auto|unique]_ptr&lt;xml_schema::element_type>
     parse (const xercesc::DOMElement&amp;, flags = 0);
 
     static void
@@ -3385,7 +3434,9 @@ namespace xml_schema
 
   <p>The <code>parse()</code> function creates the corresponding
      element type object based on the element name and namespace
-     and returns it as a pointer to <code>xml_schema::element_type</code>.
+     and returns it as an automatic pointer (<code>std::auto_ptr</code>
+     or <code>std::unique_ptr</code>, depending on the C++ standard
+     selected) to <code>xml_schema::element_type</code>.
      The <code>serialize()</code> function serializes the passed element
      object to <code>DOMElement</code>. Note that in case of
      <code>serialize()</code>, the <code>DOMElement</code> object
@@ -4574,18 +4625,18 @@ f (object&amp; o, const xercesc::DOMAttr&amp; a)
 // Read from a URI or a local file.
 //
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (const std::basic_string&lt;C>&amp; uri,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (const std::basic_string&lt;C>&amp; uri,
       xml_schema::error_handler&amp;,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (const std::basic_string&lt;C>&amp; uri,
       xercesc::DOMErrorHandler&amp;,
       xml_schema::flags = 0,
@@ -4595,38 +4646,38 @@ name (const std::basic_string&lt;C>&amp; uri,
 // Read from std::istream.
 //
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (std::istream&amp;,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (std::istream&amp;,
       xml_schema::error_handler&amp;,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (std::istream&amp;,
       xercesc::DOMErrorHandler&amp;,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (std::istream&amp;,
       const std::basic_string&lt;C>&amp; id,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (std::istream&amp;,
       const std::basic_string&lt;C>&amp; id,
       xml_schema::error_handler&amp;,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (std::istream&amp;,
       const std::basic_string&lt;C>&amp; id,
       xercesc::DOMErrorHandler&amp;,
@@ -4637,18 +4688,18 @@ name (std::istream&amp;,
 // Read from InputSource.
 //
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (xercesc::InputSource&amp;,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (xercesc::InputSource&amp;,
       xml_schema::error_handler&amp;,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (xercesc::InputSource&amp;,
       xercesc::DOMErrorHandler&amp;,
       xml_schema::flags = 0,
@@ -4658,13 +4709,13 @@ name (xercesc::InputSource&amp;,
 // Read from DOM.
 //
 
-std::auto_ptr&lt;type>
+std::[auto|unique]_ptr&lt;type>
 name (const xercesc::DOMDocument&amp;,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
 
-std::auto_ptr&lt;type>
-name (xml_schema::dom::auto_ptr&lt;xercesc::DOMDocument>&amp;,
+std::[auto|unique]_ptr&lt;type>
+name (xml_schema::dom::[auto|unique]_ptr&lt;xercesc::DOMDocument>,
       xml_schema::flags = 0,
       const xml_schema::properties&amp; = xml_schema::properties ());
   </pre>
@@ -4672,8 +4723,11 @@ name (xml_schema::dom::auto_ptr&lt;xercesc::DOMDocument>&amp;,
   <p>You can choose between reading an XML instance from a local file,
      URI, <code>std::istream</code>, <code>xercesc::InputSource</code>,
      or a pre-parsed DOM instance in the form of
-     <code>xercesc::DOMDocument</code>. Each of these parsing functions
-     is discussed in more detail in the following sections.
+     <code>xercesc::DOMDocument</code>. All the parsing functions
+     return a dynamically allocated object model as either
+     <code>std::auto_ptr</code> or <code>std::unique_ptr</code>,
+     depending on the C++ standard selected. Each of these parsing
+     functions is discussed in more detail in the following sections.
   </p>
 
   <h2><a name="3.1">3.1 Initializing the Xerces-C++ Runtime</a></h2>
@@ -4715,7 +4769,7 @@ name (xml_schema::dom::auto_ptr&lt;xercesc::DOMDocument>&amp;,
     <dd>Assume ownership of the DOM document passed. This flag only
         makes sense together with the <code>keep_dom</code> flag in
         the call to the parsing function with the
-        <code>xml_schema::dom::auto_ptr&lt;DOMDocument></code>
+        <code>xml_schema::dom::[auto|unique]_ptr&lt;DOMDocument></code>
         argument.</dd>
 
     <dt><code>xml_schema::flags::dont_validate</code></dt>
@@ -5171,6 +5225,15 @@ auto_ptr&lt;type> r1 (name ("test.xml"));
 auto_ptr&lt;type> r2 (name ("http://www.codesynthesis.com/test.xml"));
   </pre>
 
+  <p>Or, in the C++11 mode:</p>
+
+  <pre class="c++">
+using std::unique_ptr;
+
+unique_ptr&lt;type> r1 (name ("test.xml"));
+unique_ptr&lt;type> r2 (name ("http://www.codesynthesis.com/test.xml"));
+  </pre>
+
   <h2><a name="3.5">3.5 Reading from <code>std::istream</code></a></h2>
 
   <p>When using an <code>std::istream</code> instance, you may also
@@ -5220,21 +5283,30 @@ std::auto_ptr&lt;type> r (name (is));
 
   <p>The last parsing function is useful when you would like to perform
      your own XML-to-DOM parsing and associate the resulting DOM document
-     with the object model nodes. If parsing is successeful, the
-     automatic <code>DOMDocument</code> pointer is reset and the
-     resulting object model assumes ownership of the DOM document
-     passed. For example:</p>
+     with the object model nodes. The automatic <code>DOMDocument</code>
+     pointer is reset and the resulting object model assumes ownership
+     of the DOM document passed. For example:</p>
 
   <pre class="c++">
+// C++98 version.
+//
 xml_schema::dom::auto_ptr&lt;xercesc::DOMDocument> doc = ...
 
 std::auto_ptr&lt;type> r (
   name (doc, xml_schema::flags::keep_dom | xml_schema::flags::own_dom));
 
 // At this point doc is reset to 0.
+
+// C++11 version.
+//
+xml_schema::dom::unique_ptr&lt;xercesc::DOMDocument> doc = ...
+
+std::unique_ptr&lt;type> r (
+  name (std::move (doc),
+        xml_schema::flags::keep_dom | xml_schema::flags::own_dom));
+
+// At this point doc is reset to 0.
   </pre>
-
-
 
   <h1><a name="4">4 Serialization</a></h1>
 
@@ -5321,7 +5393,7 @@ name (xercesc::XMLFormatTarget&amp;,
 
 // Serialize to DOM.
 //
-xml_schema::dom::auto_ptr&lt;xercesc::DOMDocument>
+xml_schema::dom::[auto|unique]_ptr&lt;xercesc::DOMDocument>
 name (const type&amp;,
       const xml_schema::namespace_infomap&amp;
         xml_schema::namespace_infomap (),
@@ -5800,10 +5872,10 @@ XMLPlatformUtils::Initialize ();
 {
   // Parse XML to object model.
   //
-  std::auto_ptr&lt;type> r = root (
+  std::auto_ptr&lt;type> r (root (
     "root.xml",
      xml_schema::flags::keep_dom |
-     xml_schema::flags::dont_initialize);
+     xml_schema::flags::dont_initialize));
 
    // Copy without DOM association.
    //
@@ -5847,10 +5919,10 @@ XMLPlatformUtils::Initialize ();
 {
   // Parse XML to object model.
   //
-  std::auto_ptr&lt;type> r = root (
+  std::auto_ptr&lt;type> r (root (
     "root.xml",
      xml_schema::flags::keep_dom |
-     xml_schema::flags::dont_initialize);
+     xml_schema::flags::dont_initialize));
 
   DOMNode* n = root->_node ();
   assert (n->getNodeType () == DOMNode::ELEMENT_NODE);
@@ -5938,7 +6010,7 @@ XMLPlatformUtils::Terminate ();
   <pre class="c++">
 // Parse XML to object model.
 //
-std::auto_ptr&lt;type> r = root ("root.xml");
+std::auto_ptr&lt;type> r (root ("root.xml"));
 
 // Save to a CDR stream.
 //

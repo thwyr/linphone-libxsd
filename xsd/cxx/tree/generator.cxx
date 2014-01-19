@@ -188,6 +188,7 @@ namespace CXX
             FileList& file_list,
             AutoUnlinks& unlinks)
   {
+    using cutl::shared_ptr;
     typedef cutl::re::regexsub Regex;
 
     typedef vector<Path> Paths;
@@ -711,29 +712,13 @@ namespace CXX
             << "#define " << guard << endl
             << endl;
 
-        // Version check.
-        //
-        fwd << "#include <xsd/cxx/version.hxx>" << endl
-            << endl
-            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
-            << "#error XSD runtime version mismatch" << endl
-            << "#endif" << endl
-            << endl;
-
-        fwd << "#include <xsd/cxx/pre.hxx>" << endl
+        if (ctx.std >= cxx_version::cxx11)
+        {
+          fwd << "#ifndef XSD_CXX11" << endl
+              << "#define XSD_CXX11" << endl
+              << "#endif" << endl
               << endl;
-
-        // Copy prologue.
-        //
-        fwd << "// Begin prologue." << endl
-            << "//" << endl;
-
-        append (fwd, ops.fwd_prologue (), ops.prologue ());
-        append (fwd, ops.fwd_prologue_file (), prologue);
-
-        fwd << "//" << endl
-            << "// End prologue." << endl
-            << endl;
+        }
 
         if (ctx.char_type == L"char")
         {
@@ -759,6 +744,30 @@ namespace CXX
               << "#endif" << endl
               << endl;
         }
+
+        // Version check.
+        //
+        fwd << "#include <xsd/cxx/version.hxx>" << endl
+            << endl
+            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
+            << "#error XSD runtime version mismatch" << endl
+            << "#endif" << endl
+            << endl;
+
+        fwd << "#include <xsd/cxx/pre.hxx>" << endl
+              << endl;
+
+        // Copy prologue.
+        //
+        fwd << "// Begin prologue." << endl
+            << "//" << endl;
+
+        append (fwd, ops.fwd_prologue (), ops.prologue ());
+        append (fwd, ops.fwd_prologue_file (), prologue);
+
+        fwd << "//" << endl
+            << "// End prologue." << endl
+            << endl;
 
         // Generate.
         //
@@ -817,34 +826,16 @@ namespace CXX
             << "#define " << guard << endl
             << endl;
 
-        // Version check.
-        //
-        hxx << "#include <xsd/cxx/config.hxx>" << endl
-            << endl
-            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
-            << "#error XSD runtime version mismatch" << endl
-            << "#endif" << endl
-            << endl;
-
-        hxx << "#include <xsd/cxx/pre.hxx>" << endl
-            << endl;
-
-        // Copy prologue.
-        //
-        hxx << "// Begin prologue." << endl
-            << "//" << endl;
-
-        append (hxx, ops.hxx_prologue (), ops.prologue ());
-        append (hxx, ops.hxx_prologue_file (), prologue);
-
-        hxx << "//" << endl
-            << "// End prologue." << endl
-            << endl;
-
-        // Generate character selection defines.
-        //
         if (!forward)
         {
+          if (ctx.std >= cxx_version::cxx11)
+          {
+            hxx << "#ifndef XSD_CXX11" << endl
+                << "#define XSD_CXX11" << endl
+                << "#endif" << endl
+                << endl;
+          }
+
           if (ctx.char_type == L"char")
           {
             hxx << "#ifndef XSD_USE_CHAR" << endl
@@ -870,6 +861,30 @@ namespace CXX
                 << endl;
           }
         }
+
+        // Version check.
+        //
+        hxx << "#include <xsd/cxx/config.hxx>" << endl
+            << endl
+            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
+            << "#error XSD runtime version mismatch" << endl
+            << "#endif" << endl
+            << endl;
+
+        hxx << "#include <xsd/cxx/pre.hxx>" << endl
+            << endl;
+
+        // Copy prologue.
+        //
+        hxx << "// Begin prologue." << endl
+            << "//" << endl;
+
+        append (hxx, ops.hxx_prologue (), ops.prologue ());
+        append (hxx, ops.hxx_prologue_file (), prologue);
+
+        hxx << "//" << endl
+            << "// End prologue." << endl
+            << endl;
 
         // Generate.
         //

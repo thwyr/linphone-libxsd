@@ -110,7 +110,7 @@ namespace xsd
         //
         //
         template <typename C>
-        auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         serialize (const std::basic_string<C>& el,
                    const std::basic_string<C>& ns,
                    const namespace_infomap<C>& map,
@@ -153,7 +153,7 @@ namespace xsd
           DOMImplementation* impl (
             DOMImplementationRegistry::getDOMImplementation (ls));
 
-          auto_ptr<DOMDocument> doc (
+          XSD_DOM_AUTO_PTR<DOMDocument> doc (
             impl->createDocument (
               (ns.empty () ? 0 : xml::string (ns).c_str ()),
               xml::string ((prefix.empty ()
@@ -295,7 +295,7 @@ namespace xsd
 
           bits::error_handler_proxy<C> ehp (eh);
 
-          xml::dom::auto_ptr<DOMLSSerializer> writer (
+          XSD_DOM_AUTO_PTR<DOMLSSerializer> writer (
             impl->createLSSerializer ());
 
           DOMConfiguration* conf (writer->getDomConfig ());
@@ -318,7 +318,7 @@ namespace xsd
               conf->canSetParameter (XMLUni::fgDOMXMLDeclaration, false))
             conf->setParameter (XMLUni::fgDOMXMLDeclaration, false);
 
-          xml::dom::auto_ptr<DOMLSOutput> out (impl->createLSOutput ());
+          XSD_DOM_AUTO_PTR<DOMLSOutput> out (impl->createLSOutput ());
 
           out->setEncoding (xml::string (encoding).c_str ());
           out->setByteStream (&target);

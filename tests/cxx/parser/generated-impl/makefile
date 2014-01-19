@@ -82,7 +82,12 @@ $(call include,$(bld_root)/cxx/cxx-o.make)
 $(call include,$(bld_root)/cxx/cxx-d.make)
 
 xsd_parser_impl_suffix := -pimpl
+
+$(call include,$(bld_root)/cxx/standard.make) # cxx_standard
+ifdef cxx_standard
+$(gen): xsd_options += --std $(cxx_standard)
 $(call include,$(scf_root)/xsd/parser/xsd-cxx.make)
+endif
 
 
 # Dependencies.

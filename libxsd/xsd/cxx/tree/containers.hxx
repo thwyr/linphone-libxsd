@@ -9,10 +9,12 @@
 #include <cstddef>   // std::ptrdiff_t
 #include <string>
 #include <vector>
-#include <memory>    // std::auto_ptr
+#include <memory>    // std::auto_ptr/unique_ptr
 #include <iterator>  // std::iterator_traits
 #include <algorithm> // std::equal, std::lexicographical_compare
 #include <iosfwd>
+
+#include <xsd/cxx/config.hxx> // XSD_AUTO_PTR
 
 #include <xsd/cxx/tree/elements.hxx>
 
@@ -136,7 +138,7 @@ namespace xsd
 
         one (const T&, container*);
 
-        one (std::auto_ptr<T>, container*);
+        one (XSD_AUTO_PTR<T>, container*);
 
         one (const one&, flags, container*);
 
@@ -163,7 +165,7 @@ namespace xsd
         }
 
         void
-        set (std::auto_ptr<T>);
+        set (XSD_AUTO_PTR<T>);
 
         bool
         present () const
@@ -171,13 +173,13 @@ namespace xsd
           return x_ != 0;
         }
 
-        std::auto_ptr<T>
+        XSD_AUTO_PTR<T>
         detach ()
         {
           T* x (x_);
           x->_container (0);
           x_ = 0;
-          return std::auto_ptr<T> (x);
+          return XSD_AUTO_PTR<T> (x);
         }
 
       protected:
@@ -268,7 +270,7 @@ namespace xsd
         optional (const T&, container* = 0);
 
         explicit
-        optional (std::auto_ptr<T>, container* = 0);
+        optional (XSD_AUTO_PTR<T>, container* = 0);
 
         optional (const optional&, flags = 0, container* = 0);
 
@@ -341,18 +343,18 @@ namespace xsd
         }
 
         void
-        set (std::auto_ptr<T>);
+        set (XSD_AUTO_PTR<T>);
 
         void
         reset ();
 
-        std::auto_ptr<T>
+        XSD_AUTO_PTR<T>
         detach ()
         {
           T* x (x_);
           x->_container (0);
           x_ = 0;
-          return std::auto_ptr<T> (x);
+          return XSD_AUTO_PTR<T> (x);
         }
 
       protected:
@@ -1266,7 +1268,7 @@ namespace xsd
         }
 
         void
-        push_back (std::auto_ptr<T> x)
+        push_back (XSD_AUTO_PTR<T> x)
         {
           if (x->_container () != container_)
             x->_container (container_);
@@ -1280,7 +1282,7 @@ namespace xsd
           v_.pop_back ();
         }
 
-        std::auto_ptr<T>
+        XSD_AUTO_PTR<T>
         detach_back (bool pop = true)
         {
           ptr& p (v_.back ());
@@ -1290,7 +1292,7 @@ namespace xsd
           if (pop)
             v_.pop_back ();
 
-          return std::auto_ptr<T> (x);
+          return XSD_AUTO_PTR<T> (x);
         }
 
         iterator
@@ -1302,7 +1304,7 @@ namespace xsd
         }
 
         iterator
-        insert (iterator position, std::auto_ptr<T> x)
+        insert (iterator position, XSD_AUTO_PTR<T> x)
         {
           if (x->_container () != container_)
             x->_container (container_);
@@ -1336,12 +1338,11 @@ namespace xsd
         }
 
         iterator
-        detach (iterator position, std::auto_ptr<T>& r, bool erase = true)
+        detach (iterator position, XSD_AUTO_PTR<T>& r, bool erase = true)
         {
           ptr& p (*position.base ());
           p->_container (0);
-          std::auto_ptr<T> tmp (static_cast<T*> (p.release ()));
-          r = tmp;
+          r.reset (static_cast<T*> (p.release ()));
 
           if (erase)
             return iterator (v_.erase (position.base ()));

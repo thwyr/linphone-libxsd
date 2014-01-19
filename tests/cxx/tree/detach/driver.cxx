@@ -6,10 +6,17 @@
 // Test the detach functionality.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <cassert>
 
 #include "test.hxx"
+
+#ifdef XSD_CXX11
+#  include <utility> // std::move
+#  define XSD_MOVE(x) std::move(x)
+#else
+#  define XSD_MOVE(x) x
+#endif
 
 using namespace std;
 using namespace test;
@@ -17,6 +24,8 @@ using namespace test;
 int
 main ()
 {
+  using test::ref;
+
   // Construct the model.
   //
   object o1 ("o1");
@@ -57,22 +66,22 @@ main ()
 
   // Detach one.
   //
-  auto_ptr<subtree> p (m.detach_one ());
+  XSD_AUTO_PTR<subtree> p (m.detach_one ());
   assert (p->_container () == 0);
   assert (p->r ()[0].get () == &p->o ()[1]);
   assert (m.opt ()->r ()[1].get () == 0);
 
-  m.one (p);
+  m.one (XSD_MOVE (p));
   assert (m.opt ()->r ()[1].get () == &m.one ().o ()[0]);
   p = m.detach_one ();
 
   model m1;
-  m1.one (p);
+  m1.one (XSD_MOVE (p));
   m1.opt (s2);
   assert (m1.opt ()->r ()[1].get () == &m1.one ().o ()[0]);
 
   p = m1.detach_one ();
-  m.seq ().push_back (p);
+  m.seq ().push_back (XSD_MOVE (p));
 
   // Detach opt.
   //
@@ -82,7 +91,7 @@ main ()
   assert (p->r ()[0].get () == &p->o ()[1]);
   assert (m.seq ()[0].r ()[1].get () == 0);
 
-  m.seq ().push_back (p);
+  m.seq ().push_back (XSD_MOVE (p));
 
   // Detach seq.
   //
@@ -91,7 +100,7 @@ main ()
   assert (p->r ()[0].get () == &p->o ()[1]);
   assert (m.seq ()[0].r ()[1].get () == 0);
 
-  m.seq ().push_back (p);
+  m.seq ().push_back (XSD_MOVE (p));
   assert (m.seq ()[0].r ()[1].get () == &m.seq ()[1].o ()[0]);
 
   m.seq ().detach (m.seq ().begin (), p);

@@ -19,7 +19,7 @@ namespace xsd
       namespace dom
       {
         template <typename C>
-        xml::dom::auto_ptr<xercesc::DOMDocument>
+        XSD_DOM_AUTO_PTR<xercesc::DOMDocument>
         create_document ();
       }
     }

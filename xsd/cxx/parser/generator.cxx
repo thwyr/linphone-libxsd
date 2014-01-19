@@ -290,12 +290,14 @@ namespace CXX
           string_type = L"::std::basic_string< " + char_type + L" >";
 
         String xns;
+        String auto_ptr;
         {
           Context ctx (std::wcerr, schema, file_path, ops, 0, 0, 0, 0);
           xns = ctx.xs_ns_name ();
+          auto_ptr = ctx.auto_ptr;
         }
 
-        String buffer (L"::std::auto_ptr< " + xns + L"::buffer >");
+        String buffer (auto_ptr + L"< " + xns + L"::buffer >");
         TypeMap::Namespace xsd ("http://www\\.w3\\.org/2001/XMLSchema");
 
         xsd.types_push_back ("string", string_type);
@@ -776,6 +778,14 @@ namespace CXX
         hxx << "#ifndef " << guard << endl
             << "#define " << guard << endl
             << endl;
+
+        if (ctx.std >= cxx_version::cxx11)
+        {
+          hxx << "#ifndef XSD_CXX11" << endl
+              << "#define XSD_CXX11" << endl
+              << "#endif" << endl
+              << endl;
+        }
 
         // Version check.
         //

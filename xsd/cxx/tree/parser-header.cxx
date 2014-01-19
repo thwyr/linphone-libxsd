@@ -71,7 +71,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (const " << string_type << "& uri," << endl
              << flags_type << " f = 0," << endl
              << "const " << properties_type << "& p = " << properties_type << " ());"
@@ -94,7 +94,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (const " << string_type << "& uri," << endl
              << error_handler << "& eh," << endl
              << flags_type << " f = 0," << endl
@@ -120,7 +120,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (const " << string_type << "& uri," << endl
              << xerces_ns << "::DOMErrorHandler& eh," << endl
              << flags_type << " f = 0," << endl
@@ -149,7 +149,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (::std::istream& is," << endl
              << flags_type << " f = 0," << endl
              << "const " << properties_type << "& p = " << properties_type << " ());"
@@ -172,7 +172,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (::std::istream& is," << endl
              << error_handler << "& eh," << endl
              << flags_type << " f = 0," << endl
@@ -198,7 +198,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (::std::istream& is," << endl
              << xerces_ns << "::DOMErrorHandler& eh," << endl
              << flags_type << " f = 0," << endl
@@ -225,7 +225,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (::std::istream& is," << endl
              << "const " << string_type << "& id," << endl
              << flags_type << " f = 0," << endl
@@ -256,7 +256,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (::std::istream& is," << endl
              << "const " << string_type << "& id," << endl
              << error_handler << "& eh," << endl
@@ -288,7 +288,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (::std::istream& is," << endl
              << "const " << string_type << "& id," << endl
              << xerces_ns << "::DOMErrorHandler& eh," << endl
@@ -318,7 +318,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (" << xerces_ns << "::InputSource& is," << endl
              << flags_type << " f = 0," << endl
              << "const " << properties_type << "& p = " << properties_type << " ());"
@@ -342,7 +342,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (" << xerces_ns << "::InputSource& is," << endl
              << error_handler << "& eh," << endl
              << flags_type << " f = 0," << endl
@@ -368,7 +368,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (" << xerces_ns << "::InputSource& is," << endl
              << xerces_ns << "::DOMErrorHandler& eh," << endl
              << flags_type << " f = 0," << endl
@@ -395,7 +395,7 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (const " << xerces_ns << "::DOMDocument& d," << endl
              << flags_type << " f = 0," << endl
              << "const " << properties_type << "& p = " << properties_type << " ());"
@@ -420,9 +420,9 @@ namespace CXX
           }
 
           os << inst_exp
-             << "::std::auto_ptr< " << type_name (e) << " >" << endl
+             << auto_ptr << "< " << type_name (e) << " >" << endl
              << name << " (" << dom_auto_ptr << "< " << xerces_ns <<
-            "::DOMDocument >& d," << endl
+            "::DOMDocument > d," << endl
              << flags_type << " f = 0," << endl
              << "const " << properties_type << "& p = " << properties_type << " ());"
              << endl;

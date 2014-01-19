@@ -118,10 +118,12 @@ namespace CXX
         schema_root (root),
         schema_path (schema_path_),
         options (ops),
+        std (ops.std ()),
         char_type (char_type_),
         char_encoding (char_encoding_),
         L (L_),
         string_type (string_type_),
+        auto_ptr (auto_ptr_),
         string_literal_map (string_literal_map_),
         type_exp (type_exp_),
         inst_exp (inst_exp_),
@@ -184,6 +186,12 @@ namespace CXX
     else
       string_type_ = L"::std::basic_string< " + char_type + L" >";
 
+    // Automatic pointer type.
+    //
+    auto_ptr_ = std >= cxx_version::cxx11
+      ? "::std::unique_ptr"
+      : "::std::auto_ptr";
+
     // Default encoding.
     //
     if (!char_encoding)
@@ -197,7 +205,7 @@ namespace CXX
     // Default mapping.
     //
     nsr_mapping_.push_back (
-      Regex (L"#^.* (.*?/)??"L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)/?$#$2#"));
+      Regex (L"#^.* (.*?/)??" L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)/?$#$2#"));
     nsr_mapping_.push_back (
       Regex (L"#^.* http://www\\.w3\\.org/2001/XMLSchema$#xml_schema#"));
 
@@ -1093,9 +1101,10 @@ namespace CXX
       {
         if (escape)
         {
-          // Close and open the string so there are no clashes.
+          // Close and open the string so there are no clashes. C++11
+          // requires a space between " and L.
           //
-          r += L"\"L\"";
+          r += L"\" L\"";
           escape = false;
         }
 

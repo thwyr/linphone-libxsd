@@ -38,9 +38,11 @@ namespace CXX
           // confused if the name is 'type'. (see tests/schema/anonymous)
           //
 
+          char const* d (std >= cxx_version::cxx11 ? "std::move (d)" : "d");
+
           // URI.
           //
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (const " << string_type << "& u," << endl
              << flags_type << " f," << endl
              << "const " << properties_type << "& p)"
@@ -59,19 +61,17 @@ namespace CXX
           if (options.disable_multi_import ())
             os << " | ::xsd::cxx::xml::dom::no_muliple_imports";
 
-            os << "));"
+          os << "));"
              << endl
              << "h.throw_if_failed< ::xsd::cxx::tree::parsing< " <<
             char_type << " > > ();"
              << endl
-             << "::std::auto_ptr< " << type << " > r (" << endl
+             << "return " << auto_ptr << "< " << type << " > (" << endl
              << fq_name (e, "parser") << " (" << endl
-             << "d, f | " << flags_type << "::own_dom, p));"
-             << endl
-             << "return r;"
+             << d << ", f | " << flags_type << "::own_dom, p));"
              << "}";
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (const " << string_type << "& u," << endl
              << error_handler << "& h," << endl
              << flags_type << " f," << endl
@@ -94,14 +94,12 @@ namespace CXX
              << "if (!d.get ())" << endl
              << "throw ::xsd::cxx::tree::parsing< " << char_type << " > ();"
              << endl
-             << "::std::auto_ptr< " << type << " > r (" << endl
+             << "return " << auto_ptr << "< " << type << " > (" << endl
              << fq_name (e, "parser") << " (" << endl
-             << "d, f | " << flags_type << "::own_dom, p));"
-             << endl
-             << "return r;"
+             << d << ", f | " << flags_type << "::own_dom, p));"
              << "}";
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (const " << string_type << "& u," << endl
              << xerces_ns << "::DOMErrorHandler& h," << endl
              << flags_type << " f," << endl
@@ -120,17 +118,15 @@ namespace CXX
              << "if (!d.get ())" << endl
              << "throw ::xsd::cxx::tree::parsing< " << char_type << " > ();"
              << endl
-             << "::std::auto_ptr< " << type << " > r (" << endl
+             << "return " << auto_ptr << "< " << type << " > (" << endl
              << fq_name (e, "parser") << " (" << endl
-             << "d, f | " << flags_type << "::own_dom, p));"
-             << endl
-             << "return r;"
+             << d << ", f | " << flags_type << "::own_dom, p));"
              << "}";
 
 
           // istream
           //
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (::std::istream& is," << endl
              << flags_type << " f," << endl
              << "const " << properties_type << "& p)"
@@ -143,7 +139,7 @@ namespace CXX
              << "return " << fq_name (e, "parser") << " (isrc, f, p);"
              << "}";
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (::std::istream& is," << endl
              << error_handler << "& h," << endl
              << flags_type << " f," << endl
@@ -157,7 +153,7 @@ namespace CXX
              << "return " << fq_name (e, "parser") << " (isrc, h, f, p);"
              << "}";
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (::std::istream& is," << endl
              << xerces_ns << "::DOMErrorHandler& h," << endl
              << flags_type << " f," << endl
@@ -167,7 +163,7 @@ namespace CXX
              << "return " << fq_name (e, "parser") << " (isrc, h, f, p);"
              << "}";
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (::std::istream& is," << endl
              << "const " << string_type << "& sid," << endl
              << flags_type << " f," << endl
@@ -181,7 +177,7 @@ namespace CXX
              << "return " << fq_name (e, "parser") << " (isrc, f, p);"
              << "}";
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (::std::istream& is," << endl
              << "const " << string_type << "& sid," << endl
              << error_handler << "& h," << endl
@@ -196,7 +192,7 @@ namespace CXX
              << "return " << fq_name (e, "parser") << " (isrc, h, f, p);"
              << "}";
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (::std::istream& is," << endl
              << "const " << string_type << "& sid," << endl
              << xerces_ns << "::DOMErrorHandler& h," << endl
@@ -210,7 +206,7 @@ namespace CXX
 
           // InputSource.
           //
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (" << xerces_ns << "::InputSource& i," << endl
              << flags_type << " f," << endl
              << "const " << properties_type << "& p)"
@@ -230,14 +226,12 @@ namespace CXX
              << "h.throw_if_failed< ::xsd::cxx::tree::parsing< " <<
             char_type << " > > ();"
              << endl
-             << "::std::auto_ptr< " << type << " > r (" << endl
+             << "return " << auto_ptr << "< " << type << " > (" << endl
              << fq_name (e, "parser") << " (" << endl
-             << "d, f | " << flags_type << "::own_dom, p));"
-             << endl
-             << "return r;"
+             << d << ", f | " << flags_type << "::own_dom, p));"
              << "}";
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (" << xerces_ns << "::InputSource& i," << endl
              << error_handler << "& h," << endl
              << flags_type << " f," << endl
@@ -256,15 +250,13 @@ namespace CXX
              << "if (!d.get ())" << endl
              << "throw ::xsd::cxx::tree::parsing< " << char_type << " > ();"
              << endl
-             << "::std::auto_ptr< " << type << " > r (" << endl
+             << "return " << auto_ptr << "< " << type << " > (" << endl
              << fq_name (e, "parser") << " (" << endl
-             << "d, f | " << flags_type << "::own_dom, p));"
-             << endl
-             << "return r;"
+             << d << ", f | " << flags_type << "::own_dom, p));"
              << "}";
 
 
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (" << xerces_ns << "::InputSource& i," << endl
              << xerces_ns << "::DOMErrorHandler& h," << endl
              << flags_type << " f," << endl
@@ -283,11 +275,9 @@ namespace CXX
              << "if (!d.get ())" << endl
              << "throw ::xsd::cxx::tree::parsing< " << char_type << " > ();"
              << endl
-             << "::std::auto_ptr< " << type << " > r (" << endl
+             << "return " << auto_ptr << "< " << type << " > (" << endl
              << fq_name (e, "parser") << " (" << endl
-             << "d, f | " << flags_type << "::own_dom, p));"
-             << endl
-             << "return r;"
+             << d << ", f | " << flags_type << "::own_dom, p));"
              << "}";
 
 
@@ -308,32 +298,30 @@ namespace CXX
 
           // const DOMDocument&
           //
-          os << "::std::auto_ptr< " << type << " >" << endl
-             << name << " (const " << xerces_ns << "::DOMDocument& d," << endl
+          os << auto_ptr << "< " << type << " >" << endl
+             << name << " (const " << xerces_ns << "::DOMDocument& doc," << endl
              << flags_type << " f," << endl
              << "const " << properties_type << "& p)"
              << "{"
              << "if (f & " << flags_type << "::keep_dom)"
              << "{"
              << dom_auto_ptr << "< " << xerces_ns <<
-            "::DOMDocument > c (" << endl
+            "::DOMDocument > d (" << endl
              << "static_cast< " << xerces_ns <<
-            "::DOMDocument* > (d.cloneNode (true)));"
+            "::DOMDocument* > (doc.cloneNode (true)));"
              << endl
-             << "::std::auto_ptr< " << type << " > r (" << endl
+             << "return " << auto_ptr << "< " << type << " > (" << endl
              << fq_name (e, "parser") << " (" << endl
-             << "c, f | " << flags_type << "::own_dom, p));"
-             << endl
-             << "return r;"
+             << d << ", f | " << flags_type << "::own_dom, p));"
              << "}"
-             << "const " << xerces_ns << "::DOMElement& e (*d.getDocumentElement ());"
+             << "const " << xerces_ns << "::DOMElement& e (*doc.getDocumentElement ());"
              << "const " << qname_type << " n (" << endl
              << "::xsd::cxx::xml::dom::name< " << char_type << " > (e));"
              << endl;
 
           if (poly)
           {
-            os << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
+            os << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                << "::xsd::cxx::tree::type_factory_map_instance< " <<
               poly_plate << ", " << char_type << " > ().create (" << endl
                << strlit (e.name ()) << "," << endl
@@ -343,7 +331,7 @@ namespace CXX
                << endl
                << "if (tmp.get () != 0)"
                << "{"
-               << "::std::auto_ptr< " << type << " > r (" << endl
+               << auto_ptr << "< " << type << " > r (" << endl
                << "dynamic_cast< " << type << "* > (tmp.get ()));"
                << endl
                << "if (r.get ())" << endl
@@ -361,7 +349,7 @@ namespace CXX
 
             if (fund)
             {
-              os << "::std::auto_ptr< " << type << " > r (" << endl
+              os << auto_ptr << "< " << type << " > r (" << endl
                  << "new " << type << " (" << endl
                  << "::xsd::cxx::tree::traits< " << type << ", " <<
                 char_type;
@@ -376,7 +364,7 @@ namespace CXX
             }
             else
             {
-              os << "::std::auto_ptr< " << type << " > r (" << endl
+              os << auto_ptr << "< " << type << " > r (" << endl
                  << "::xsd::cxx::tree::traits< " << type << ", " <<
                 char_type << " >::create (" << endl
                  << "e, f, 0));";
@@ -394,11 +382,11 @@ namespace CXX
              << "}";
 
 
-          // dom::auto_ptr<DOMDocument>
+          // dom::auto_ptr/unique_ptr<DOMDocument>
           //
-          os << "::std::auto_ptr< " << type << " >" << endl
+          os << auto_ptr << "< " << type << " >" << endl
              << name << " (" << dom_auto_ptr << "< " << xerces_ns <<
-            "::DOMDocument >& d," << endl
+            "::DOMDocument > d," << endl
              << flags_type << " f," << endl
              << "const " << properties_type << "&)"
              << "{"
@@ -425,7 +413,7 @@ namespace CXX
 
           if (poly)
           {
-            os << "::std::auto_ptr< ::xsd::cxx::tree::type > tmp (" << endl
+            os << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                << "::xsd::cxx::tree::type_factory_map_instance< " <<
               poly_plate << ", " << char_type << " > ().create (" << endl
                << strlit (e.name ()) << "," << endl
@@ -444,7 +432,7 @@ namespace CXX
 
             if (fund)
             {
-              os << "::std::auto_ptr< " << type << " > r (" << endl
+              os << auto_ptr << "< " << type << " > r (" << endl
                  << "new " << type << " (" << endl
                  << "::xsd::cxx::tree::traits< " << type << ", " <<
                 char_type;
@@ -459,7 +447,7 @@ namespace CXX
             }
             else
             {
-              os << "::std::auto_ptr< " << type << " > r (" << endl
+              os << auto_ptr << "< " << type << " > r (" << endl
                  << "::xsd::cxx::tree::traits< " << type << ", " <<
                 char_type << " >::create (" << endl
                  << "e, f, 0));";
@@ -469,7 +457,7 @@ namespace CXX
           if (poly)
           {
             os << endl
-               << "::std::auto_ptr< " << type << " > r (" << endl
+               << auto_ptr << "< " << type << " > r (" << endl
                << "dynamic_cast< " << type << "* > (tmp.get ()));"
                << endl
                << "if (r.get ())" << endl

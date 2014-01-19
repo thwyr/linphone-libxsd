@@ -24,7 +24,7 @@ struct any_type_pimpl: xml_schema::any_type_pimpl
   }
 
   virtual void
-  _start_any_element (ro_string const&, 
+  _start_any_element (ro_string const&,
                       ro_string const& n,
 		      ro_string const*)
   {
@@ -278,14 +278,14 @@ struct type_pimpl: type_pskel
   }
 
   virtual void
-  base64_binary (std::auto_ptr<xml_schema::buffer> v)
+  base64_binary (XSD_AUTO_PTR<xml_schema::buffer> v)
   {
     std::string tmp (v->data (), v->size ());
     cout << "'" << tmp << "'" << endl;
   }
 
   virtual void
-  hex_binary (std::auto_ptr<xml_schema::buffer> v)
+  hex_binary (XSD_AUTO_PTR<xml_schema::buffer> v)
   {
     std::string tmp (v->data (), v->size ());
     cout << "'" << tmp << "'" << endl;

@@ -6,7 +6,6 @@
 // Test Java naming style.
 //
 
-#include <memory> // std::auto_ptr
 #include <sstream>
 #include <iostream>
 

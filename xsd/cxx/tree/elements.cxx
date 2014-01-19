@@ -93,7 +93,10 @@ namespace CXX
             xsc.get<String> ("error-handler");
         }
 
-        dom_auto_ptr_ = xs_name + L"::dom::auto_ptr";
+        dom_auto_ptr_ = xs_name + (std >= cxx_version::cxx11
+                                   ? L"::dom::unique_ptr"
+                                   : L"::dom::auto_ptr");
+
         dom_node_key_ = xs_name + L"::dom::" +
           xsc.get<String> ("tree-node-key");
 
@@ -828,7 +831,7 @@ namespace CXX
     // FromBaseCtorArg
     //
     FromBaseCtorArg::
-    FromBaseCtorArg (Context& c, ArgType at, bool arg)
+    FromBaseCtorArg (Context& c, CtorArgType at, bool arg)
         : Context (c), arg_type_ (at), arg_ (arg)
     {
     }
@@ -863,29 +866,29 @@ namespace CXX
 
         os << "," << endl;
 
-        bool auto_ptr (false);
+        bool ptr (false);
 
         switch (arg_type_)
         {
-        case arg_complex_auto_ptr:
+        case CtorArgType::complex_auto_ptr:
           {
             bool simple (true);
             IsSimpleType t (simple);
             t.dispatch (e.type ());
-            auto_ptr = !simple;
+            ptr = !simple;
             break;
           }
-        case arg_poly_auto_ptr:
+        case CtorArgType::poly_auto_ptr:
           {
-            auto_ptr = polymorphic && polymorphic_p (e.type ());
+            ptr = polymorphic && polymorphic_p (e.type ());
             break;
           }
-        case arg_type:
+        case CtorArgType::type:
           break;
         }
 
-        if (auto_ptr)
-          os << "::std::auto_ptr< " << etype (e) << " >&";
+        if (ptr)
+          os << auto_ptr << "< " << etype (e) << " >";
         else
           os << "const " << etype (e) << "&";
 
@@ -916,7 +919,7 @@ namespace CXX
     // CtorArgs
     //
     CtorArgs::
-    CtorArgs (Context& c, ArgType at)
+    CtorArgs (Context& c, CtorArgType at)
         : Context (c),
           arg_type_ (at),
           base_arg_ (0),
@@ -928,7 +931,7 @@ namespace CXX
     }
 
     CtorArgs::
-    CtorArgs (Context& c, ArgType at, String& base_arg)
+    CtorArgs (Context& c, CtorArgType at, String& base_arg)
         : Context (c),
           arg_type_ (at),
           base_arg_ (&base_arg),
@@ -1000,29 +1003,29 @@ namespace CXX
 
       if (min (e) == 1 && max (e) == 1)
       {
-        bool auto_ptr (false);
+        bool ptr (false);
 
         switch (arg_type_)
         {
-        case arg_complex_auto_ptr:
+        case CtorArgType::complex_auto_ptr:
           {
             bool simple (true);
             IsSimpleType t (simple);
             t.dispatch (e.type ());
-            auto_ptr = !simple;
+            ptr = !simple;
             break;
           }
-        case arg_poly_auto_ptr:
+        case CtorArgType::poly_auto_ptr:
           {
-            auto_ptr = polymorphic && polymorphic_p (e.type ());
+            ptr = polymorphic && polymorphic_p (e.type ());
             break;
           }
-        case arg_type:
+        case CtorArgType::type:
           break;
         }
 
-        if (auto_ptr)
-          os << comma () << "::std::auto_ptr< " << etype (e) << " >&";
+        if (ptr)
+          os << comma () << auto_ptr << "< " << etype (e) << " >";
         else
           os << comma () << "const " << etype (e) << "&";
 
@@ -1059,7 +1062,7 @@ namespace CXX
     // CtorArgsWithoutBase
     //
     CtorArgsWithoutBase::
-    CtorArgsWithoutBase (Context& c, ArgType at, bool arg, bool first)
+    CtorArgsWithoutBase (Context& c, CtorArgType at, bool arg, bool first)
         : Context (c), arg_type_ (at), arg_ (arg), first_ (first)
     {
       *this >> inherits_ >> *this;
@@ -1089,29 +1092,29 @@ namespace CXX
 
       if (min (e) == 1 && max (e) == 1)
       {
-        bool auto_ptr (false);
+        bool ptr (false);
 
         switch (arg_type_)
         {
-        case arg_complex_auto_ptr:
+        case CtorArgType::complex_auto_ptr:
           {
             bool simple (true);
             IsSimpleType t (simple);
             t.dispatch (e.type ());
-            auto_ptr = !simple;
+            ptr = !simple;
             break;
           }
-        case arg_poly_auto_ptr:
+        case CtorArgType::poly_auto_ptr:
           {
-            auto_ptr = polymorphic && polymorphic_p (e.type ());
+            ptr = polymorphic && polymorphic_p (e.type ());
             break;
           }
-        case arg_type:
+        case CtorArgType::type:
           break;
         }
 
-        if (auto_ptr)
-          os << comma () << "::std::auto_ptr< " << etype (e) << " >&";
+        if (ptr)
+          os << comma () << auto_ptr << "< " << etype (e) << " >";
         else
           os << comma () << "const " << etype (e) << "&";
 

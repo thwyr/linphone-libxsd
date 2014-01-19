@@ -8,6 +8,8 @@
 
 #include <string>
 
+#include <xsd/cxx/config.hxx> // XSD_AUTO_PTR
+
 #include <xsd/cxx/parser/non-validating/xml-schema-pskel.hxx>
 
 namespace xsd
@@ -564,7 +566,7 @@ namespace xsd
           virtual void
           _characters (const ro_string<C>&);
 
-          virtual std::auto_ptr<buffer>
+          virtual XSD_AUTO_PTR<buffer>
           post_base64_binary ();
 
         protected:
@@ -582,7 +584,7 @@ namespace xsd
           virtual void
           _characters (const ro_string<C>&);
 
-          virtual std::auto_ptr<buffer>
+          virtual XSD_AUTO_PTR<buffer>
           post_hex_binary ();
 
         protected:

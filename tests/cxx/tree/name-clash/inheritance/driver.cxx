@@ -6,7 +6,7 @@
 // Test for name clashes across inheritance hierarchy.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <iostream>
 
 #include "test.hxx"
@@ -25,7 +25,7 @@ main (int argc, char* argv[])
 
   try
   {
-    auto_ptr<derived> r (root (argv[1]));
+    XSD_AUTO_PTR<derived> r (root (argv[1]));
 
     cout << *r << endl;
   }

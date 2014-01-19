@@ -4,6 +4,11 @@
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
 #include <ostream>
+
+#ifdef XSD_CXX11
+#  include <utility> // std::move
+#endif
+
 #include <xsd/cxx/tree/bits/literals.hxx>
 
 namespace xsd
@@ -38,10 +43,14 @@ namespace xsd
 
       template<typename T>
       one<T, false>::
-      one (std::auto_ptr<T> x, container* c)
+      one (XSD_AUTO_PTR<T> x, container* c)
           : x_ (0), container_ (c)
       {
+#ifdef XSD_CXX11
+        set (std::move (x));
+#else
         set (x);
+#endif
       }
 
       template<typename T>
@@ -86,7 +95,7 @@ namespace xsd
 
       template<typename T>
       void one<T, false>::
-      set (std::auto_ptr<T> x)
+      set (XSD_AUTO_PTR<T> x)
       {
         T* r (0);
 
@@ -128,10 +137,14 @@ namespace xsd
 
       template <typename T>
       optional<T, false>::
-      optional (std::auto_ptr<T> x, container* c)
+      optional (XSD_AUTO_PTR<T> x, container* c)
           : x_ (0), container_ (c)
       {
+#ifdef XSD_CXX11
+        set (std::move (x));
+#else
         set (x);
+#endif
       }
 
       template <typename T>
@@ -185,7 +198,7 @@ namespace xsd
 
       template <typename T>
       void optional<T, false>::
-      set (std::auto_ptr<T> x)
+      set (XSD_AUTO_PTR<T> x)
       {
         T* r (0);
 

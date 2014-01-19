@@ -5,26 +5,27 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../build/bootstrap.make
 
-tests :=      \
-built-in      \
-chameleon     \
-comparison    \
-compilation   \
-complex       \
-containment   \
-default       \
-detach        \
-encoding      \
-enumeration   \
-float         \
-list          \
-name-clash    \
-naming        \
-polymorphism  \
-prefix        \
-test-template \
-types-only    \
-union         \
+tests :=        \
+built-in        \
+chameleon       \
+comparison      \
+compilation     \
+complex         \
+containment     \
+default         \
+detach          \
+dom-association \
+encoding        \
+enumeration     \
+float           \
+list            \
+name-clash      \
+naming          \
+polymorphism    \
+prefix          \
+test-template   \
+types-only      \
+union           \
 wildcard
 
 ifeq ($(xsd_with_ace),y)

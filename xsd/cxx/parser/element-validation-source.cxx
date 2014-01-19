@@ -314,7 +314,7 @@ namespace CXX
               // compilers (e.g., IBM xlC that needs an lvalue to pass
               // std::auto_ptr).
               //
-              if (options.std () == cxx_version::cxx98)
+              if (std == cxx_version::cxx98)
                 os << arg_type (type) << " tmp (" << inst << "->" <<
                   post << " ());"
                    << "this->" << name << " (tmp);";

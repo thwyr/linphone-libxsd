@@ -9,8 +9,15 @@
 #include <string>
 #include <cstddef> // std::size_t
 
-#include <xsd/cxx/auto-array.hxx>
 #include <xercesc/util/XercesDefs.hpp> // XMLCh
+
+#include <xsd/cxx/config.hxx> // XSD_CXX11
+
+#ifdef XSD_CXX11
+#  include <memory> // std::unique_ptr
+#else
+#  include <xsd/cxx/auto-array.hxx>
+#endif
 
 namespace xsd
 {
@@ -73,7 +80,11 @@ namespace xsd
         operator= (const string&);
 
       private:
+#ifdef XSD_CXX11
+        std::unique_ptr<XMLCh[]> s_;
+#else
         auto_array<XMLCh> s_;
+#endif
       };
     }
   }

@@ -11,6 +11,13 @@
 
 #include "test.hxx"
 
+#ifdef XSD_CXX11
+#  include <utility> // std::move
+#  define XSD_MOVE(x) std::move(x)
+#else
+#  define XSD_MOVE(x) x
+#endif
+
 using namespace std;
 using namespace test;
 
@@ -64,12 +71,12 @@ main ()
     //
     e_base b1 (1, "foo", e_complex_type ("bar"));
 
-    auto_ptr<e_complex_type> c2 (new e_complex_type ("bar"));
-    e_base b2 (1, "foo", c2);
+    XSD_AUTO_PTR<e_complex_type> c2 (new e_complex_type ("bar"));
+    e_base b2 (1, "foo", XSD_MOVE (c2));
 
-    auto_ptr<e_simple_type> s3 (new e_simple_type ("foo"));
-    auto_ptr<e_complex_type> c3 (new e_complex_type ("bar"));
-    e_base b3 (1, s3, c3);
+    XSD_AUTO_PTR<e_simple_type> s3 (new e_simple_type ("foo"));
+    XSD_AUTO_PTR<e_complex_type> c3 (new e_complex_type ("bar"));
+    e_base b3 (1, XSD_MOVE (s3), XSD_MOVE (c3));
 
     assert (b1 == b2);
     assert (b1 == b3);
@@ -79,15 +86,20 @@ main ()
     e_derived d1 (1, "foo", e_complex_type ("bar"),
                   true, "baz", e_complex_type ("biz"));
 
-    auto_ptr<e_complex_type> c2a (new e_complex_type ("bar"));
-    auto_ptr<e_complex_type> c2b (new e_complex_type ("biz"));
-    e_derived d2 (1, "foo", c2a, true, "baz", c2b);
+    XSD_AUTO_PTR<e_complex_type> c2a (new e_complex_type ("bar"));
+    XSD_AUTO_PTR<e_complex_type> c2b (new e_complex_type ("biz"));
+    e_derived d2 (1, "foo", XSD_MOVE (c2a), true, "baz", XSD_MOVE (c2b));
 
-    auto_ptr<e_simple_type> s3a (new e_simple_type ("foo"));
-    auto_ptr<xml_schema::string> s3b (new xml_schema::string ("baz"));
-    auto_ptr<e_complex_type> c3a (new e_complex_type ("bar"));
-    auto_ptr<e_complex_type> c3b (new e_complex_type ("biz"));
-    e_derived d3 (1, s3a, c3a, true, s3b, c3b);
+    XSD_AUTO_PTR<e_simple_type> s3a (new e_simple_type ("foo"));
+    XSD_AUTO_PTR<xml_schema::string> s3b (new xml_schema::string ("baz"));
+    XSD_AUTO_PTR<e_complex_type> c3a (new e_complex_type ("bar"));
+    XSD_AUTO_PTR<e_complex_type> c3b (new e_complex_type ("biz"));
+    e_derived d3 (1,
+                  XSD_MOVE (s3a),
+                  XSD_MOVE (c3a),
+                  true,
+                  XSD_MOVE (s3b),
+                  XSD_MOVE (c3b));
 
     assert (d1 == d2);
     assert (d1 == d3);
@@ -99,12 +111,12 @@ main ()
   {
     f_type f1 (xml_schema::type (), 1, "foo", f_complex_type ("bar"));
 
-    auto_ptr<f_complex_type> c2 (new f_complex_type ("bar"));
-    f_type f2 (1, "foo", c2);
+    XSD_AUTO_PTR<f_complex_type> c2 (new f_complex_type ("bar"));
+    f_type f2 (1, "foo", XSD_MOVE (c2));
 
-    auto_ptr<f_simple_type> s3 (new f_simple_type ("foo"));
-    auto_ptr<f_complex_type> c3 (new f_complex_type ("bar"));
-    f_type f3 (1, s3, c3);
+    XSD_AUTO_PTR<f_simple_type> s3 (new f_simple_type ("foo"));
+    XSD_AUTO_PTR<f_complex_type> c3 (new f_complex_type ("bar"));
+    f_type f3 (1, XSD_MOVE (s3), XSD_MOVE (c3));
 
     assert (f1 == f2);
     assert (f1 == f3);

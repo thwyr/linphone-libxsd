@@ -6,7 +6,7 @@
 // Test ISO-8859-1 encoding.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <fstream>
 #include <iostream>
 
@@ -36,7 +36,7 @@ main (int argc, char* argv[])
     }
 
     xsd::cxx::xml::char_transcoder::unrep_char ('?');
-    auto_ptr<type> r (root (argv[1]));
+    XSD_AUTO_PTR<type> r (root (argv[1]));
 
     {
       type::a_sequence const& s (r->a ());

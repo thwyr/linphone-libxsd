@@ -8,8 +8,10 @@
 
 #include <map>
 #include <string>
-#include <memory>  // std::auto_ptr
+#include <memory>  // std::auto_ptr/unique_ptr
 #include <cstddef> // std::size_t
+
+#include <xsd/cxx/config.hxx> // XSD_AUTO_PTR
 
 namespace xsd
 {
@@ -187,7 +189,7 @@ namespace xsd
 
         S& s_;
         std::size_t seq_;
-        std::auto_ptr<pool> pool_;
+        XSD_AUTO_PTR<pool> pool_;
       };
 
 

@@ -6,10 +6,16 @@
 #ifndef XSD_CXX_PARSER_EXPAT_ELEMENTS_HXX
 #define XSD_CXX_PARSER_EXPAT_ELEMENTS_HXX
 
+#include <xsd/cxx/config.hxx> // XSD_CXX11
+
 #include <string>
 #include <iosfwd>
 #include <cstddef> // std::size_t
 #include <vector>
+
+#ifdef XSD_CXX11
+#  include <memory> // std::unique_ptr
+#endif
 
 #include <expat.h>
 
@@ -35,6 +41,19 @@ namespace xsd
     {
       namespace expat
       {
+#ifdef XSD_CXX11
+        struct parser_deleter
+        {
+          void
+          operator() (XML_Parser p) const
+          {
+            if (p != 0)
+              XML_ParserFree (p);
+          }
+        };
+
+        typedef std::unique_ptr<XML_ParserStruct> parser_auto_ptr;
+#else
         // Simple auto pointer for Expat's XML_Parser object.
         //
         struct parser_auto_ptr
@@ -61,8 +80,8 @@ namespace xsd
             return *this;
           }
 
-        public:
-          operator XML_Parser ()
+          XML_Parser
+          get () const
           {
             return parser_;
           }
@@ -76,7 +95,7 @@ namespace xsd
         private:
           XML_Parser parser_;
         };
-
+#endif // XSD_CXX11
 
         //
         //

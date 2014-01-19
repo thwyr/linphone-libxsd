@@ -7,7 +7,7 @@
 // and serialization.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <iostream>
 
 #include "test.hxx"
@@ -26,7 +26,7 @@ main (int argc, char* argv[])
 
   try
   {
-    auto_ptr<type> r (root (argv[1]));
+    XSD_AUTO_PTR<type> r (root (argv[1]));
 
     r->simple ().push_back (12.129456);
     r->simple ().push_back (123.129456);

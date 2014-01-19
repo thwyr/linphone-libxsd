@@ -1496,6 +1496,24 @@ namespace CXX
       Traversal::Names names_;
     };
 
+    // Contructor argument types.
+    //
+    struct CtorArgType
+    {
+      enum Value
+      {
+        type,
+        complex_auto_ptr,
+        poly_auto_ptr
+      };
+
+      CtorArgType (Value v = Value (0)) : v_ (v) {}
+      operator Value () const {return v_;}
+
+    private:
+      Value v_;
+    };
+
     // Immediate non-optional member. Note that AnyAttribute is always
     // mapped to a sequence.
     //
@@ -1504,14 +1522,7 @@ namespace CXX
                             Traversal::Attribute,
                             Context
     {
-      enum ArgType
-      {
-        arg_type,
-        arg_complex_auto_ptr,
-        arg_poly_auto_ptr
-      };
-
-      FromBaseCtorArg (Context& c, ArgType, bool arg);
+      FromBaseCtorArg (Context& c, CtorArgType, bool arg);
 
       virtual void
       traverse (SemanticGraph::Any&);
@@ -1523,7 +1534,7 @@ namespace CXX
       traverse (SemanticGraph::Element&);
 
     private:
-      ArgType arg_type_;
+      CtorArgType arg_type_;
       bool arg_;
     };
 
@@ -1538,18 +1549,11 @@ namespace CXX
                      Traversal::Attribute,
                      Context
     {
-      enum ArgType
-      {
-        arg_type,
-        arg_complex_auto_ptr,
-        arg_poly_auto_ptr
-      };
-
       // The second version outputs the argument name and stores
       // in in the base_arg string.
       //
-      CtorArgs (Context&, ArgType);
-      CtorArgs (Context&, ArgType, String& base_arg);
+      CtorArgs (Context&, CtorArgType);
+      CtorArgs (Context&, CtorArgType, String& base_arg);
 
       virtual void
       traverse (SemanticGraph::Type&);
@@ -1571,7 +1575,7 @@ namespace CXX
       comma ();
 
     private:
-      ArgType arg_type_;
+      CtorArgType arg_type_;
       String base_;
       String* base_arg_;
       bool first_;
@@ -1705,14 +1709,7 @@ namespace CXX
                                 Traversal::Attribute,
                                 Context
     {
-      enum ArgType
-      {
-        arg_type,
-        arg_complex_auto_ptr,
-        arg_poly_auto_ptr
-      };
-
-      CtorArgsWithoutBase (Context& c, ArgType, bool arg, bool first);
+      CtorArgsWithoutBase (Context& c, CtorArgType, bool arg, bool first);
 
       virtual void
       traverse (SemanticGraph::Any&);
@@ -1728,7 +1725,7 @@ namespace CXX
       comma ();
 
     private:
-      ArgType arg_type_;
+      CtorArgType arg_type_;
       bool arg_;
       bool first_;
 

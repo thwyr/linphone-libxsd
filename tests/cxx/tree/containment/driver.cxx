@@ -6,10 +6,17 @@
 // Test tree node containment.
 //
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::auto_ptr/unique_ptr
 #include <cassert>
 
 #include "test.hxx"
+
+#ifdef XSD_CXX11
+#  include <utility> // std::move
+#  define XSD_MOVE(x) std::move(x)
+#else
+#  define XSD_MOVE(x) x
+#endif
 
 using namespace std;
 using namespace test;
@@ -20,11 +27,11 @@ main ()
   // Change of a container in a sub-tree without ID.
   //
   {
-    auto_ptr<inner> i (new inner ());
+    XSD_AUTO_PTR<inner> i (new inner ());
     i->ref ("foo");
 
     outer o;
-    o.i (i);
+    o.i (XSD_MOVE (i));
     o.ref ("foo");
 
     assert (o.i ()->ref ()->get () == 0);
@@ -34,14 +41,14 @@ main ()
   // Change of container in a sub-tree with ID inside.
   //
   {
-    auto_ptr<inner> i (new inner ());
+    XSD_AUTO_PTR<inner> i (new inner ());
     inner* p (i.get ());
     i->id ("foo");
     i->ref ("foo");
     assert (i->ref ()->get () == p);
 
     outer o;
-    o.i (i);
+    o.i (XSD_MOVE (i));
     o.ref ("foo");
 
     assert (o.i ()->ref ()->get () == p);
@@ -51,10 +58,10 @@ main ()
   // Change of a container in ID.
   //
   {
-    auto_ptr<xml_schema::id> id (new xml_schema::id ("foo"));
+    XSD_AUTO_PTR<xml_schema::id> id (new xml_schema::id ("foo"));
 
     inner i;
-    i.id (id);
+    i.id (XSD_MOVE (id));
     i.ref ("foo");
     assert (i.ref ()->get () == &i);
   }
@@ -62,12 +69,12 @@ main ()
   // Change of a container in a type derived from ID with ID inside.
   //
   {
-    auto_ptr<id_ex> id (new id_ex ("foo"));
+    XSD_AUTO_PTR<id_ex> id (new id_ex ("foo"));
     id_ex* p (id.get ());
     id->id ("bar");
 
     inner i;
-    i.id_ex (id);
+    i.id_ex (XSD_MOVE (id));
 
     i.ref ("foo");
     assert (i.ref ()->get () == &i);
@@ -81,28 +88,28 @@ main ()
   {
     id i1 ("a"), i2 ("b");
 
-    auto_ptr<ids> ic (new ids);
+    XSD_AUTO_PTR<ids> ic (new ids);
     ic->id ().push_back (i1);
     ic->id ().push_back (i2);
 
-    auto_ptr<xml_schema::idrefs> r1 (new xml_schema::idrefs);
+    XSD_AUTO_PTR<xml_schema::idrefs> r1 (new xml_schema::idrefs);
     r1->push_back (xml_schema::idref ("a"));
     r1->push_back (xml_schema::idref ("b"));
 
-    auto_ptr<idref_list> r2 (new idref_list);
+    XSD_AUTO_PTR<idref_list> r2 (new idref_list);
     r2->push_back (xml_schema::idref ("a"));
     r2->push_back (xml_schema::idref ("b"));
 
-    auto_ptr<idrefs1> rc1 (new idrefs1);
-    auto_ptr<idrefs2> rc2 (new idrefs2);
+    XSD_AUTO_PTR<idrefs1> rc1 (new idrefs1);
+    XSD_AUTO_PTR<idrefs2> rc2 (new idrefs2);
 
-    rc1->idrefs (r1);
-    rc2->idrefs (r2);
+    rc1->idrefs (XSD_MOVE (r1));
+    rc2->idrefs (XSD_MOVE (r2));
 
     model m;
-    m.ids (ic);
-    m.idrefs1 (rc1);
-    m.idrefs2 (rc2);
+    m.ids (XSD_MOVE (ic));
+    m.idrefs1 (XSD_MOVE (rc1));
+    m.idrefs2 (XSD_MOVE (rc2));
 
     assert (m.idrefs1 ().idrefs ()[0].get () != 0);
     assert (m.idrefs1 ().idrefs ()[1].get () != 0);

@@ -1008,7 +1008,7 @@ namespace CXX
         virtual void
         traverse (SemanticGraph::Fundamental::Base64Binary& t)
         {
-          String buffer (L"::std::auto_ptr< " + xs_ns_ + L"::buffer >");
+          String buffer (auto_ptr + L"< " + xs_ns_ + L"::buffer >");
           gen_typedef (t, buffer,
                        "base64_binary_pskel", "base64_binary_pimpl");
         }
@@ -1016,7 +1016,7 @@ namespace CXX
         virtual void
         traverse (SemanticGraph::Fundamental::HexBinary& t)
         {
-          String buffer (L"::std::auto_ptr< " + xs_ns_ + L"::buffer >");
+          String buffer (auto_ptr + L"< " + xs_ns_ + L"::buffer >");
           gen_typedef (t, buffer, "hex_binary_pskel", "hex_binary_pimpl");
         }
 

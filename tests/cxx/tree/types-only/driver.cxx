@@ -7,7 +7,6 @@
 // still compiles.
 //
 
-#include <memory> // std::auto_ptr
 #include <iostream>
 
 #include "test.hxx"

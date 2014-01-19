@@ -7,7 +7,6 @@
 // all the types.
 //
 
-#include <memory> // std::auto_ptr
 #include <iostream>
 
 #include "test.hxx"
