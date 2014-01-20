@@ -19,3 +19,7 @@
 # Generated .gitignore files.
 #
 .gitignore
+
+# Convenience symlink to the XSD binary built in a separate directory.
+#
+xsd/xsd
