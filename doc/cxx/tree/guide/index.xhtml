@@ -2386,11 +2386,11 @@ if (getcwd (cwd, PATH_MAX) == 0)
 xml_schema::properties props;
 
 props.no_namespace_schema_location (
-  "file:///" + std::string (cwd) + "people.xsd");
+  "file:///" + std::string (cwd) + "/people.xsd");
 
 props.schema_location (
   "http://www.w3.org/XML/1998/namespace",
-  "file:///" + std::string (cwd) + "xml.xsd");
+  "file:///" + std::string (cwd) + "/xml.xsd");
 
 auto_ptr&lt;people_t> p (people ("people.xml", 0, props));
   </pre>
