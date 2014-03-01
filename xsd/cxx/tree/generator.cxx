@@ -745,18 +745,6 @@ namespace CXX
               << endl;
         }
 
-        // Version check.
-        //
-        fwd << "#include <xsd/cxx/version.hxx>" << endl
-            << endl
-            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
-            << "#error XSD runtime version mismatch" << endl
-            << "#endif" << endl
-            << endl;
-
-        fwd << "#include <xsd/cxx/pre.hxx>" << endl
-              << endl;
-
         // Copy prologue.
         //
         fwd << "// Begin prologue." << endl
@@ -769,12 +757,27 @@ namespace CXX
             << "// End prologue." << endl
             << endl;
 
+        // Version check.
+        //
+        fwd << "#include <xsd/cxx/version.hxx>" << endl
+            << endl
+            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
+            << "#error XSD runtime version mismatch" << endl
+            << "#endif" << endl
+            << endl;
+
+        fwd << "#include <xsd/cxx/pre.hxx>" << endl
+              << endl;
+
         // Generate.
         //
         {
           ind_filter ind (fwd); // We don't want to indent prologues/epilogues.
           generate_forward (ctx);
         }
+
+        fwd << "#include <xsd/cxx/post.hxx>" << endl
+            << endl;
 
         // Copy epilogue.
         //
@@ -786,9 +789,6 @@ namespace CXX
 
         fwd << "//" << endl
             << "// End epilogue." << endl
-            << endl;
-
-        fwd << "#include <xsd/cxx/post.hxx>" << endl
             << endl;
 
         fwd << "#endif // " << guard << endl;
@@ -862,18 +862,6 @@ namespace CXX
           }
         }
 
-        // Version check.
-        //
-        hxx << "#include <xsd/cxx/config.hxx>" << endl
-            << endl
-            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
-            << "#error XSD runtime version mismatch" << endl
-            << "#endif" << endl
-            << endl;
-
-        hxx << "#include <xsd/cxx/pre.hxx>" << endl
-            << endl;
-
         // Copy prologue.
         //
         hxx << "// Begin prologue." << endl
@@ -884,6 +872,18 @@ namespace CXX
 
         hxx << "//" << endl
             << "// End prologue." << endl
+            << endl;
+
+        // Version check.
+        //
+        hxx << "#include <xsd/cxx/config.hxx>" << endl
+            << endl
+            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
+            << "#error XSD runtime version mismatch" << endl
+            << "#endif" << endl
+            << endl;
+
+        hxx << "#include <xsd/cxx/pre.hxx>" << endl
             << endl;
 
         // Generate.
@@ -926,6 +926,9 @@ namespace CXX
               << endl;
         }
 
+        hxx << "#include <xsd/cxx/post.hxx>" << endl
+              << endl;
+
         // Copy epilogue.
         //
         hxx << "// Begin epilogue." << endl
@@ -937,9 +940,6 @@ namespace CXX
         hxx << "//" << endl
             << "// End epilogue." << endl
             << endl;
-
-        hxx << "#include <xsd/cxx/post.hxx>" << endl
-              << endl;
 
         hxx << "#endif // " << guard << endl;
 
@@ -1090,9 +1090,6 @@ namespace CXX
 
           sloc_filter sloc (os);
 
-          os << "#include <xsd/cxx/pre.hxx>" << endl
-             << endl;
-
           // Copy prologue.
           //
           os << "// Begin prologue." << endl
@@ -1103,6 +1100,9 @@ namespace CXX
 
           os << "//" << endl
              << "// End prologue." << endl
+             << endl;
+
+          os << "#include <xsd/cxx/pre.hxx>" << endl
              << endl;
 
           os << "#include " << ctx.process_include_path (hxx_name) << endl
@@ -1136,6 +1136,9 @@ namespace CXX
               generate_stream_insertion_source (ctx);
           }
 
+          os << "#include <xsd/cxx/post.hxx>" << endl
+             << endl;
+
           // Copy epilogue.
           //
           os << "// Begin epilogue." << endl
@@ -1146,9 +1149,6 @@ namespace CXX
 
           os << "//" << endl
              << "// End epilogue." << endl
-             << endl;
-
-          os << "#include <xsd/cxx/post.hxx>" << endl
              << endl;
 
           if (show_sloc)

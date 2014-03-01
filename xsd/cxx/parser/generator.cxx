@@ -787,18 +787,6 @@ namespace CXX
               << endl;
         }
 
-        // Version check.
-        //
-        hxx << "#include <xsd/cxx/config.hxx>" << endl
-            << endl
-            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
-            << "#error XSD runtime version mismatch" << endl
-            << "#endif" << endl
-            << endl;
-
-        hxx << "#include <xsd/cxx/pre.hxx>" << endl
-            << endl;
-
         // Copy prologue.
         //
         hxx << "// Begin prologue." << endl
@@ -809,6 +797,18 @@ namespace CXX
 
         hxx << "//" << endl
             << "// End prologue." << endl
+            << endl;
+
+        // Version check.
+        //
+        hxx << "#include <xsd/cxx/config.hxx>" << endl
+            << endl
+            << "#if (XSD_INT_VERSION != " << XSD_INT_VERSION << "L)" << endl
+            << "#error XSD runtime version mismatch" << endl
+            << "#endif" << endl
+            << endl;
+
+        hxx << "#include <xsd/cxx/pre.hxx>" << endl
             << endl;
 
         // Generate.
@@ -825,6 +825,9 @@ namespace CXX
         if (inline_)
           hxx << "#include " << ctx.process_include_path (ixx_name) << endl;
 
+        hxx << "#include <xsd/cxx/post.hxx>" << endl
+            << endl;
+
         // Copy epilogue.
         //
         hxx << "// Begin epilogue." << endl
@@ -835,9 +838,6 @@ namespace CXX
 
         hxx << "//" << endl
             << "// End epilogue." << endl
-            << endl;
-
-        hxx << "#include <xsd/cxx/post.hxx>" << endl
             << endl;
 
         hxx << "#endif // " << guard << endl;
@@ -929,6 +929,9 @@ namespace CXX
             << "// End prologue." << endl
             << endl;
 
+        cxx << "#include <xsd/cxx/pre.hxx>" << endl
+             << endl;
+
         cxx << "#include " << ctx.process_include_path (hxx_name) << endl
             << endl;
 
@@ -949,6 +952,9 @@ namespace CXX
             generate_characters_validation_source (ctx);
           }
         }
+
+        cxx << "#include <xsd/cxx/post.hxx>" << endl
+            << endl;
 
         // Copy epilogue.
         //
