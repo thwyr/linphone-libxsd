@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/custom/comments/dom-parse.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #include "dom-parse.hxx"

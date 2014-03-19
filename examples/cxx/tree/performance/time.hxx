@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/performance/time.hxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #ifndef TIME_HXX

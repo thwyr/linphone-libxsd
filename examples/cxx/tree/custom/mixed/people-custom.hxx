@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/custom/mixed/people-custom.hxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 // Do not include this file directly, use people.hxx instead. This

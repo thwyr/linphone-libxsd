@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/binary/boost/boost-archive-insertion.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #ifndef BOOST_ARCHIVE_EXTRACTION_HXX

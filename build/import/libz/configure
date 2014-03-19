@@ -1,7 +1,6 @@
 #! /usr/bin/env bash
 
 # file      : build/import/libz/configure
-# author    : Boris Kolpackov <boris@kolpackov.net>
 # copyright : Copyright (c) 2009 Boris Kolpackov
 # license   : GNU GPL v2; see accompanying LICENSE file
 

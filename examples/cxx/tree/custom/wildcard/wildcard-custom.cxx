@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/custom/wildcard/wildcard-custom.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #include <ostream>

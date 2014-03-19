@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/custom/contacts/contacts-custom.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #include <ostream>

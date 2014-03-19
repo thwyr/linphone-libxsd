@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/custom/wildcard/wildcard-custom.hxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 // Do not include this file directly, use wildcard.hxx instead. This

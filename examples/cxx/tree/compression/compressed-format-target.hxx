@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/compression/compressed-format-target.hxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #ifndef COMPRESSED_FORMAT_TARGET_HXX

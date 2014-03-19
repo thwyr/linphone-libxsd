@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/embedded/xsdbin.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 // This program loads the XML Schema file(s) and converts them to

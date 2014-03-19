@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/compression/compressed-input-source.hxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #ifndef COMPRESSED_INPUT_SOURCE_HXX

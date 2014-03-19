@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/custom/double/double-custom.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 // Include xml-schema.hxx instead of double-custom.hxx here.

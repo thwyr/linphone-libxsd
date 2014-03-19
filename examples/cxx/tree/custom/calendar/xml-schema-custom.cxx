@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/custom/calendar/xml-schema-custom.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 // Include xml-schema.hxx instead of xml-schema-custom.hxx here.

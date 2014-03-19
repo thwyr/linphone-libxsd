@@ -1,5 +1,4 @@
 // file      : examples/cxx/parser/performance/time.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #include "time.hxx"

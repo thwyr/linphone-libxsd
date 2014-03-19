@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/embedded/grammar-input-stream.hxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #ifndef GRAMMAR_INPUT_STREAM_HXX

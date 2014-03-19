@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/compression/compressed-format-target.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #include <ostream>

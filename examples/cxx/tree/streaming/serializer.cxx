@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/streaming/serializer.cxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #include <xercesc/util/XMLUni.hpp>

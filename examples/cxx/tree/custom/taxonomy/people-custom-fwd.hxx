@@ -1,5 +1,4 @@
 // file      : examples/cxx/tree/custom/taxonomy/people-custom-fwd.hxx
-// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 // Do not include this file directly, use people-fwd.hxx instead. This
