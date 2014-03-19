@@ -53,6 +53,7 @@ serialize (std::ostream& os,
   //
   conf->setParameter (XMLUni::fgDOMWRTDiscardDefaultContent, true);
   conf->setParameter (XMLUni::fgDOMWRTFormatPrettyPrint, true);
+  conf->setParameter (XMLUni::fgDOMWRTXercesPrettyPrint, false);
 
   xml::dom::auto_ptr<DOMLSOutput> out (impl->createLSOutput ());
   out->setEncoding (xml::string (encoding).c_str ());

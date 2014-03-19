@@ -310,7 +310,14 @@ namespace xsd
 
           if (!(flags & dont_pretty_print) &&
               conf->canSetParameter (XMLUni::fgDOMWRTFormatPrettyPrint, true))
+          {
             conf->setParameter (XMLUni::fgDOMWRTFormatPrettyPrint, true);
+
+            // Don't add extra new lines between first-level elements.
+            //
+            if (conf->canSetParameter (XMLUni::fgDOMWRTXercesPrettyPrint, true))
+              conf->setParameter (XMLUni::fgDOMWRTXercesPrettyPrint, false);
+          }
 
           // See if we need to write XML declaration.
           //

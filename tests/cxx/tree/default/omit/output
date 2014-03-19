@@ -13,9 +13,7 @@ fixed q1: 1
 fixed q2: 2
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <t:root xmlns:t="test">
-
   <derived q1="1" q2="2">
     <a>a</a>
   </derived>
-
 </t:root>
