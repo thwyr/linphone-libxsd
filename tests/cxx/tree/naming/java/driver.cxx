@@ -28,6 +28,7 @@ main ()
     {
       Gender::Value v;
       v = Gender::female;
+      XSD_UNUSED (v);
     }
 
     // Anonymous type.
@@ -48,6 +49,7 @@ main ()
       //
       {
         Type::FooType* p = 0;
+        XSD_UNUSED (p);
         Type::FooOptional o;
 
         if (t.getFoo ().present ())
@@ -60,6 +62,7 @@ main ()
       //
       {
         Type::BarType* p = 0;
+        XSD_UNUSED (p);
 
         if (t.getBar () != "bar")
           return 1;
@@ -71,9 +74,13 @@ main ()
       //
       {
         Type::BazType* p = 0;
+        XSD_UNUSED (p);
+
         Type::BazSequence s;
         Type::BazIterator i (s.begin ());
         Type::BazConstIterator ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.getBaz () != s)
           return 1;
@@ -87,6 +94,8 @@ main ()
         Type::AnySequence s (t.getDomDocument ());
         Type::AnyIterator i (s.begin ());
         Type::AnyConstIterator  ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.getAny () != s)
           return 1;
@@ -111,6 +120,8 @@ main ()
         Type::AnyAttributeSet s (t.getDomDocument ());
         Type::AnyAttributeIterator i (s.begin ());
         Type::AnyAttributeConstIterator ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.getAnyAttribute () != s)
           return 1;

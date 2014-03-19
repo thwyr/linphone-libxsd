@@ -23,6 +23,7 @@ namespace CXX
     {
       typedef vector<SemanticGraph::Particle*> Particles;
 
+      /*
       void
       print (Particles const& p)
       {
@@ -46,6 +47,7 @@ namespace CXX
 
         wcerr << endl;
       }
+      */
 
       //
       //

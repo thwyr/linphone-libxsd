@@ -80,6 +80,8 @@ main ()
         Type::BazSequence s;
         Type::BazIterator i (s.begin ());
         Type::BazConstIterator ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.baz () != s)
           return 1;
@@ -93,6 +95,8 @@ main ()
         Type::AnySequence s (t.domDocument ());
         Type::AnyIterator i (s.begin ());
         Type::AnyConstIterator  ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.any () != s)
           return 1;
@@ -117,6 +121,8 @@ main ()
         Type::AnyAttributeSet s (t.domDocument ());
         Type::AnyAttributeIterator i (s.begin ());
         Type::AnyAttributeConstIterator ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.anyAttribute () != s)
           return 1;

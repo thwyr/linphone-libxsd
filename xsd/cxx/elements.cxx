@@ -9,6 +9,7 @@
 #include <memory>
 #include <sstream>
 #include <fstream>
+#include <cassert>
 #include <iostream>
 
 using std::wcerr;
@@ -861,7 +862,7 @@ namespace CXX
       }
       else
       {
-        unsigned int count;
+        unsigned int count (0);
         unsigned int tmp[4];
 
         if (u < 0x800)
@@ -891,7 +892,10 @@ namespace CXX
         case 1:
           {
             tmp[0] = u | utf8_first_char_mask[count];
+            break;
           }
+        default:
+          assert (false);
         }
 
         for (unsigned int j (0); j < count; ++j)

@@ -1037,8 +1037,8 @@ namespace CXX
                             Traversal::Compositor,
                             Context
       {
-        CompositorPre (Context& c, SemanticGraph::Complex& type)
-            : Context (c), type_ (type)
+        CompositorPre (Context& c)
+            : Context (c)
         {
         }
 
@@ -1065,9 +1065,6 @@ namespace CXX
              << "vd.state = 0;"
              << "vd.count = 0;";
         }
-
-      private:
-        SemanticGraph::Complex& type_;
       };
 
 
@@ -1253,8 +1250,8 @@ namespace CXX
                                    Traversal::Compositor,
                                    Context
       {
-        CompositorEndElement (Context& c, SemanticGraph::Complex& type)
-            : Context (c), type_ (type)
+        CompositorEndElement (Context& c)
+          : Context (c)
         {
         }
 
@@ -1276,9 +1273,6 @@ namespace CXX
              << "vs.size--;" // pop
              << endl;
         }
-
-      private:
-        SemanticGraph::Complex& type_;
       };
 
 
@@ -1288,8 +1282,8 @@ namespace CXX
                              Traversal::Compositor,
                              Context
       {
-        CompositorPost (Context& c, SemanticGraph::Complex& type)
-            : Context (c), type_ (type), particle_name_ (c)
+        CompositorPost (Context& c)
+            : Context (c), particle_name_ (c)
         {
         }
 
@@ -1366,7 +1360,6 @@ namespace CXX
         }
 
       private:
-        SemanticGraph::Complex& type_;
         ParticleName particle_name_;
       };
 
@@ -1499,7 +1492,7 @@ namespace CXX
           }
 
           {
-            CompositorEndElement t (*this, c);
+            CompositorEndElement t (*this);
             t.dispatch (comp);
           }
 
@@ -1518,7 +1511,7 @@ namespace CXX
              << endl;
 
           {
-            CompositorPre t (*this, c);
+            CompositorPre t (*this);
             t.dispatch (comp);
           }
 
@@ -1566,7 +1559,7 @@ namespace CXX
           }
 
           {
-            CompositorPost t (*this, c);
+            CompositorPost t (*this);
             t.dispatch (c.contains_compositor ().compositor ());
           }
 

@@ -80,6 +80,8 @@ main ()
         type::baz_sequence s;
         type::baz_iterator i (s.begin ());
         type::baz_const_iterator ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.baz () != s)
           return 1;
@@ -93,6 +95,8 @@ main ()
         type::any_sequence s (t.dom_document ());
         type::any_iterator i (s.begin ());
         type::any_const_iterator ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.any () != s)
           return 1;
@@ -117,6 +121,8 @@ main ()
         type::any_attribute_set s (t.dom_document ());
         type::any_attribute_iterator i (s.begin ());
         type::any_attribute_const_iterator ci (s.begin ());
+        XSD_UNUSED (i);
+        XSD_UNUSED (ci);
 
         if (t.any_attribute () != s)
           return 1;
