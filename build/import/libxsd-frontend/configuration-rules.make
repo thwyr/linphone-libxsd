@@ -1,5 +1,5 @@
 # file      : build/import/libxsd-frontend/configuration-rules.make
-# copyright : Copyright (c) 2005-2009 Code Synthesis Tools CC
+# copyright : Copyright (c) 2005-2014 Code Synthesis Tools CC
 # license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
 $(dcf_root)/import/libxsd-frontend/configuration-dynamic.make: | $(dcf_root)/import/libxsd-frontend/.

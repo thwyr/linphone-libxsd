@@ -1,5 +1,5 @@
 // file      : xsd/cxx/tree/elements.txx
-// copyright : Copyright (c) 2005-2011 Code Synthesis Tools CC
+// copyright : Copyright (c) 2005-2014 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
 #include <xercesc/util/XMLUniDefs.hpp>
