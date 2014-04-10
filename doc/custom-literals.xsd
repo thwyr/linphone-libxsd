@@ -3,7 +3,6 @@
 <!--
 
 file      : doc/custom-literals.xsd
-author    : Boris Kolpackov <boris@codesynthesis.com>
 copyright : not copyrighted - public domain
 
 This schema describes the XML format used to provide the custom string
