@@ -1076,7 +1076,7 @@ namespace CXX
           }
 
           bool def_attr (m.default_p () &&
-                            m.is_a<SemanticGraph::Attribute> ());
+                         m.is_a<SemanticGraph::Attribute> ());
 
           if (max (m) != 1)
           {
@@ -1784,6 +1784,9 @@ namespace CXX
           if (skip (m))
             return;
 
+          SemanticGraph::Complex& c (
+            dynamic_cast<SemanticGraph::Complex&> (m.scope ()));
+
           String const& type (etype (m));
           bool el (m.is_a<SemanticGraph::Element> ());
 
@@ -1826,7 +1829,7 @@ namespace CXX
           else
           {
             os << "// " << comment (m.name ()) << endl
-               << "// " << endl;
+               << "//" << endl;
           }
 
           // Typedefs.
@@ -1872,7 +1875,7 @@ namespace CXX
                  << " */" << endl;
             }
 
-            // IntelliSense does not not like aliases and fully-qualified
+            // IntelliSense does not like aliases and fully-qualified
             // names here.
             //
             if (!isense)
@@ -1941,6 +1944,24 @@ namespace CXX
           os << " > " << etraits (m) << ";"
              << endl;
 
+
+          // Element id.
+          //
+          if (el && ordered_p (c))
+          {
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Element id used for capturing content " <<
+                "order." << endl
+                 << " */" << endl;
+
+            SemanticGraph::Context& ctx (m.context ());
+
+            os << "static const ::std::size_t " <<
+              ctx.get<String> ("ordered-id-name") << " = " <<
+              ctx.get<size_t> ("ordered-id") << "UL;" << endl;
+          }
+
           member_function_.traverse (m);
 
           if (doxygen)
@@ -1970,6 +1991,9 @@ namespace CXX
         virtual void
         traverse (SemanticGraph::Any& a)
         {
+          SemanticGraph::Complex& c (
+            dynamic_cast<SemanticGraph::Complex&> (a.scope ()));
+
           if (doxygen)
           {
             os << "/**" << endl
@@ -1990,7 +2014,7 @@ namespace CXX
           else
           {
             os << "// " << ename (a) << endl
-               << "// " << endl;
+               << "//" << endl;
           }
 
           // Typedefs.
@@ -2060,6 +2084,23 @@ namespace CXX
               os << endl;
           }
 
+          // Wildcard id.
+          //
+          if (ordered_p (c))
+          {
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Wildcard id used for capturing content " <<
+                "order." << endl
+                 << " */" << endl;
+
+            SemanticGraph::Context& ctx (a.context ());
+
+            os << "static const ::std::size_t " <<
+              ctx.get<String> ("ordered-id-name") << " = " <<
+              ctx.get<size_t> ("ordered-id") << "UL;" << endl;
+          }
+
           any_function_.traverse (a);
 
           if (doxygen)
@@ -2095,7 +2136,7 @@ namespace CXX
           else
           {
             os << "// " << ename (a) << endl
-               << "// " << endl;
+               << "//" << endl;
           }
 
           if (doxygen)
@@ -2288,12 +2329,17 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
+          SemanticGraph::Context& ctx (c.context ());
+
           bool has_members (has<Traversal::Member> (c));
 
           bool hae (has<Traversal::Any> (c));
           bool haa (has<Traversal::AnyAttribute> (c));
 
           bool gen_wildcard (options.generate_wildcard ());
+
+          bool mixed (mixed_p (c) && !ctx.count ("mixed-in-base"));
+          bool ordered (ordered_p (c) && !ctx.count ("order-in-base"));
 
           bool simple (true);
           {
@@ -2344,17 +2390,148 @@ namespace CXX
           //
           names (c, names_);
 
+          // Mixed content.
+          //
+          if (mixed)
+          {
+            String const& type (ctx.get<String> ("mixed-type"));
+            String const& cont (ctx.get<String> ("mixed-container"));
+            String const& iter (ctx.get<String> ("mixed-iterator"));
+            String const& citer (ctx.get<String> ("mixed-const-iterator"));
+
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @name " << comment ("text_content") << endl
+                 << " *" << endl
+                 << " * @brief Accessor and modifier functions for text " <<
+                "content." << endl
+                 << " */" << endl
+                 << "//@{" << endl;
+            else
+              os << "// text_content" << endl
+                 << "//" << endl;
+
+            // Typedefs.
+            //
+            bool isense (options.generate_intellisense ());
+
+            if (doxygen)
+              os << endl
+                 << "/**" << endl
+                 << " * @brief Text content type." << endl
+                 << " */" << endl;
+
+            os << "typedef " << xs_string_type << " " << type << ";";
+
+            if (doxygen)
+              os << endl
+                 << "/**" << endl
+                 << " * @brief Text content sequence container type." << endl
+                 << " */" << endl;
+
+            os << "typedef ::xsd::cxx::tree::sequence< " << type <<
+              " > " << cont << ";";
+
+
+            if (doxygen)
+              os << endl
+                 << "/**" << endl
+                 << " * @brief Text content iterator type." << endl
+                 << " */" << endl;
+
+            // IntelliSense does not like aliases and fully-qualified
+            // names here.
+            //
+            if (!isense)
+              os << "typedef " << cont << "::iterator " << iter<< ";";
+            else
+              os << "typedef ::xsd::cxx::tree::sequence< " << type <<
+                " >::iterator " << iter << ";";
+
+            if (doxygen)
+              os << endl
+                 << "/**" << endl
+                 << " * @brief Text content constant iterator type." << endl
+                 << " */" << endl;
+
+            if (!isense)
+              os << "typedef " << cont << "::const_iterator " << citer<< ";";
+            else
+              os << "typedef ::xsd::cxx::tree::sequence< " << type <<
+                " >::const_iterator " << citer << ";";
+
+            os << endl;
+
+            // Content id.
+            //
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Text content id used for capturing content " <<
+                "order." << endl
+                 << " */" << endl;
+
+            os << "static const ::std::size_t " <<
+              ctx.get<String> ("mixed-ordered-id-name") << " = " <<
+              ctx.get<size_t> ("mixed-ordered-id") << "UL;" << endl;
+
+            // Accessors and modifiers.
+            //
+            String const& aname (ctx.get<String> ("mixed-aname"));
+            String const& mname (ctx.get<String> ("mixed-mname"));
+
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Return a read-only (constant) reference " <<
+                "to the text" << endl
+                 << " * content sequence." << endl
+                 << " *" << endl
+                 << " * @return A constant reference to the sequence " <<
+                "container." << endl
+                 << " */" << endl;
+
+            os << "const " << cont << "&" << endl
+               << aname << " () const;"
+               << endl;
+
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Return a read-write reference to the " <<
+                "text content" << endl
+                 << " * sequence." << endl
+                 << " *" << endl
+                 << " * @return A reference to the sequence container." << endl
+                 << " */" << endl;
+
+            os << cont << "&" << endl
+               << aname << " ();"
+               << endl;
+
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Copy elements from a given sequence." << endl
+                 << " *" << endl
+                 << " * @param s A sequence to copy entries from." << endl
+                 << " *" << endl
+                 << " * For each element in @a s this function " <<
+                "add it to the sequence." << endl
+                 << " * Note that this operation " <<
+                "completely changes the sequence and" << endl
+                 << " * all old elements will be lost." << endl
+                 << " */" << endl;
+
+            os << "void" << endl
+               << mname << " (const " << cont << "& s);"
+               << endl;
+
+            if (doxygen)
+              os << "//@}" << endl
+                 << endl;
+          }
+
           // dom_document accessors.
           //
           if (edom_document_member_p (c))
           {
-
-            if (!doxygen)
-            {
-              os << "// DOMDocument for wildcard content." << endl
-                 << "//" << endl;
-            }
-
             if (doxygen)
             {
               os << "/**" << endl
@@ -2369,6 +2546,9 @@ namespace CXX
                  << " * the raw XML content corresponding to wildcards." << endl
                  << " */" << endl;
             }
+            else
+              os << "// DOMDocument for wildcard content." << endl
+                 << "//" << endl;
 
             os << "const " << xerces_ns << "::DOMDocument&" << endl
                << edom_document (c) << " () const;"
@@ -2391,6 +2571,137 @@ namespace CXX
             os << xerces_ns << "::DOMDocument&" << endl
                << edom_document (c) << " ();"
                << endl;
+          }
+
+          // Order container.
+          //
+          if (ordered)
+          {
+            String const& type (ctx.get<String> ("order-type"));
+            String const& cont (ctx.get<String> ("order-container"));
+            String const& iter (ctx.get<String> ("order-iterator"));
+            String const& citer (ctx.get<String> ("order-const-iterator"));
+
+            String const ct (options.order_container_specified ()
+                             ? options.order_container ()
+                             : "::std::vector");
+
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @name " << comment ("content_order") << endl
+                 << " *" << endl
+                 << " * @brief Accessor and modifier functions for content " <<
+                "order." << endl
+                 << " */" << endl
+                 << "//@{" << endl;
+            else
+              os << "// content_order" << endl
+                 << "//" << endl;
+
+            // Typedefs.
+            //
+            bool isense (options.generate_intellisense ());
+
+            if (doxygen)
+              os << endl
+                 << "/**" << endl
+                 << " * @brief Content order entry type." << endl
+                 << " */" << endl;
+
+            os << "typedef " << ns_name (xs_ns ()) << "::" <<
+              xs_ns ().context ().get<String> ("content-order") << " " <<
+              type << ";";
+
+            if (doxygen)
+              os << endl
+                 << "/**" << endl
+                 << " * @brief Content order sequence container type." << endl
+                 << " */" << endl;
+
+            os << "typedef " << ct << "< " << type << " > " << cont << ";";
+
+
+            if (doxygen)
+              os << endl
+                 << "/**" << endl
+                 << " * @brief Content order iterator type." << endl
+                 << " */" << endl;
+
+            // IntelliSense does not like aliases and fully-qualified
+            // names here.
+            //
+            if (!isense)
+              os << "typedef " << cont << "::iterator " << iter<< ";";
+            else
+              os << "typedef " << ct << "< " << type << " >::iterator " <<
+                iter << ";";
+
+            if (doxygen)
+              os << endl
+                 << "/**" << endl
+                 << " * @brief Content order constant iterator type." << endl
+                 << " */" << endl;
+
+            if (!isense)
+              os << "typedef " << cont << "::const_iterator " << citer<< ";";
+            else
+              os << "typedef " <<  ct << "< " << type <<
+                " >::const_iterator " << citer << ";";
+
+            os << endl;
+
+            // Accessors and modifiers.
+            //
+            String const& aname (ctx.get<String> ("order-aname"));
+            String const& mname (ctx.get<String> ("order-mname"));
+
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Return a read-only (constant) reference " <<
+                "to the content" << endl
+                 << " * order sequence." << endl
+                 << " *" << endl
+                 << " * @return A constant reference to the sequence " <<
+                "container." << endl
+                 << " */" << endl;
+
+            os << "const " << cont << "&" << endl
+               << aname << " () const;"
+               << endl;
+
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Return a read-write reference to the " <<
+                "content order" << endl
+                 << " * sequence." << endl
+                 << " *" << endl
+                 << " * @return A reference to the sequence container." << endl
+                 << " */" << endl;
+
+            os << cont << "&" << endl
+               << aname << " ();"
+               << endl;
+
+            if (doxygen)
+              os << "/**" << endl
+                 << " * @brief Copy elements from a given sequence." << endl
+                 << " *" << endl
+                 << " * @param s A sequence to copy entries from." << endl
+                 << " *" << endl
+                 << " * For each element in @a s this function " <<
+                "add it to the sequence." << endl
+                 << " * Note that this operation " <<
+                "completely changes the sequence and" << endl
+                 << " * all old elements will be lost." << endl
+                 << " */" << endl;
+
+            os << "void" << endl
+               << mname << " (const " << cont << "& s);"
+               << endl;
+
+            if (doxygen)
+              os << "//@}" << endl
+                 << endl;
           }
 
           if (doxygen)
@@ -3042,7 +3353,7 @@ namespace CXX
 
           // Data members and implementation functions.
           //
-          if (has_members || hae || (haa && gen_wildcard))
+          if (has_members || hae || (haa && gen_wildcard) || ordered || mixed)
           {
             os << "// Implementation." << endl
                << "//" << endl;
@@ -3052,9 +3363,10 @@ namespace CXX
                  << "//@cond" << endl
                  << endl;
 
-            if (!options.suppress_parsing ())
+            if (!options.suppress_parsing () &&
+                (has_members || hae || (haa && gen_wildcard) || mixed))
             {
-              // parse (xercesc::DOMElement)
+              // parse ()
               //
               os << "protected:" << endl
                  << "void" << endl
@@ -3082,12 +3394,30 @@ namespace CXX
               }
             }
 
-            //
+            // DOM document.
             //
             if (edom_document_member_p (c))
             {
               os << dom_auto_ptr << "< " << xerces_ns <<
                 "::DOMDocument > " << edom_document_member (c) << ";"
+                 << endl;
+            }
+
+            // Mixed text content.
+            //
+            if (mixed)
+            {
+              os << ctx.get<String> ("mixed-container") << " " <<
+                ctx.get<String> ("mixed-member") << ";"
+                 << endl;
+            }
+
+            // Order container.
+            //
+            if (ordered)
+            {
+              os << ctx.get<String> ("order-container") << " " <<
+                ctx.get<String> ("order-member") << ";"
                  << endl;
             }
 
@@ -3810,6 +4140,15 @@ namespace CXX
 
         if (ctx.std >= cxx_version::cxx11)
           ctx.os << "#include <utility>   // std::move" << endl;
+
+        if (!ctx.options.ordered_type ().empty () ||
+            ctx.options.ordered_type_all ())
+        {
+          ctx.os << "#include <cstddef>   // std::size_t" << endl;
+
+          if (!ctx.options.order_container_specified ())
+            ctx.os << "#include <vector>" << endl;
+        }
 
         ctx.os << endl;
 

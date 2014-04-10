@@ -14,8 +14,9 @@ namespace cli
   struct parser<NarrowString>
   {
     static void
-    parse (NarrowString& x, scanner& s)
+    parse (NarrowString& x, bool& xs, scanner& s)
     {
+      xs = true;
       const char* o (s.next ());
 
       if (s.more ())

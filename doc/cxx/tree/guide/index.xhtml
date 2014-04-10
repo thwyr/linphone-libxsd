@@ -1558,18 +1558,31 @@ class people_t
      container. The modifier functions copies the entries from
      the passed sequence.</p>
 
+  <p>C++/Tree is a "flattening" mapping in a sense that many levels of
+     nested compositors (<code>choice</code> and <code>sequence</code>),
+     all potentially with their own cardinalities, are in the end mapped
+     to a flat set of elements with one of the three cardinality classes
+     discussed above. While this results in a simple and easy to use API
+     for most types, in certain cases, the order of elements in the actual
+     XML documents is not preserved once parsed into the object model. To
+     overcome this limitation we can mark certain schema types, for which
+     content order is not sufficiently preserved, as ordered. For more
+     information on this functionality refer to
+     <a href="http://www.codesynthesis.com/projects/xsd/documentation/cxx/tree/manual/#2.8.4">Section
+     2.8.4, "Element Order"</a> in the C++/Tree Mapping User Manual.</p>
+
   <p>For complex schemas with many levels of nested compositors
-     (<code>xs:choice</code> and <code>xs:sequence</code>) it can
+     (<code>choice</code> and <code>sequence</code>) it can also
      be hard to deduce the cardinality class of a particular element.
      The generated Doxygen documentation can greatly help with
      this task. For each element and attribute the documentation
      clearly identifies its cardinality class. Alternatively, you
      can study the generated header files to find out the cardinality
-     class of a particular attribute or element. In the next sections
-     we will examine how to access and modify information stored in
-     an object model using accessor and modifier functions described
-     in this section.</p>
+     class of a particular attribute or element.</p>
 
+  <p>In the next sections we will examine how to access and modify
+     information stored in an object model using accessor and modifier
+     functions described in this section.</p>
 
   <h2><a name="4.2">4.2 Accessing the Object Model</a></h2>
 

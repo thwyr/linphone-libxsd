@@ -51,6 +51,58 @@ namespace CXX
          schemas that define the same polymorphic types."
       };
 
+      // Ordered content.
+      //
+      NarrowStrings --ordered-type
+      {
+        "<type>",
+        "Indicate that element order in <type> is significant. An example
+         would be a complex type with unbounded choice as a content model
+         where the element order in XML has application-specific semantics.
+         For ordered types the compiler generates a special container data
+         member and a corresponding set of accessors and modifiers that are
+         used to capture the order of elements and, for mixed content, of
+         text.
+
+         The <type> argument is an XML Schema type name that can be optionally
+         qualified with a namespace in the \c{\i{namespace}\b{#}\i{name}} form.
+         Note also that you will need to specify this option when compiling
+         every schema file that has other ordered types derived from this
+         type."
+      };
+
+      bool --ordered-type-derived
+      {
+        "Automatically treat types derived from ordered bases as also
+         ordered. This is primarily useful if you would like to be able
+         to iterate over the complete content using the content order
+         container."
+      };
+
+      bool --ordered-type-mixed
+      {
+        "Automatically treat complex types with mixed content as ordered."
+      };
+
+      bool --ordered-type-all
+      {
+        "Indicate that element order in all types is significant."
+      };
+
+      NarrowString --order-container
+      {
+        "<type>",
+        "Specify a custom class template that should be used as a container
+         for the content order in ordered types instead of the default
+         \cb{std::vector}. See \cb{--ordered-type} for more information on
+         ordered type. This option is primarily useful if you need to
+         perform more complex lookups in the content order container, for
+         example by element id. In this case, a container like Boost
+         multi-index may be more convenient. Note that if using a custom
+         container, you will also most likely need to include the relevant
+         headers using the \cb{--hxx-prologue*} options."
+      };
+
       // Features.
       //
       bool --generate-serialization
@@ -297,6 +349,14 @@ namespace CXX
         "Add <regex> to the list of regular expressions used to translate
          XML Schema element names to C++ serialization function names. See
          the NAMING CONVENTION section below for more information."
+      };
+
+      NarrowStrings --const-regex
+      {
+        "<regex>",
+        "Add <regex> to the list of regular expressions used to translate
+         XML Schema-derived names to C++ constant names. See the NAMING
+         CONVENTION section below for more information."
       };
 
       NarrowStrings --enumerator-regex

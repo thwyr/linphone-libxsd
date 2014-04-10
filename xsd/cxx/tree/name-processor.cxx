@@ -60,6 +60,7 @@ namespace CXX
               seq_modifier_regex (seq_modifier_regex_),
               parser_regex (parser_regex_),
               serializer_regex (serializer_regex_),
+              const_regex (const_regex_),
               enumerator_regex (enumerator_regex_),
               element_type_regex (element_type_regex_)
         {
@@ -231,6 +232,30 @@ namespace CXX
                            "serializer");
           }
 
+          // Const regex.
+          //
+          {
+            if (fn == "knr")
+            {
+              const_regex.push_back ("/([^,]+),([^,]+),([^,]+)/$1_$2_$3/");
+              const_regex.push_back ("/([^,]+),([^,]+)/$1_$2/");
+            }
+            else if (fn == "lcc")
+            {
+              const_regex.push_back ("/([^,]+),([^,]+),([^,]+)/\\l$1_\\u$2_\\u$3/");
+              const_regex.push_back ("/([^,]+),([^,]+)/\\l$1\\u$2/");
+            }
+            else
+            {
+              // Java: all uppercase.
+              //
+              const_regex.push_back ("/([^,]+),([^,]+),([^,]+)/\\U$1_$2_$3/");
+              const_regex.push_back ("/([^,]+),([^,]+)/\\U$1_$2/");
+            }
+
+            compile_regex (options.const_regex (), const_regex, "const");
+          }
+
           // Enumerator name regex.
           //
           {
@@ -267,6 +292,7 @@ namespace CXX
               seq_modifier_regex (c.seq_modifier_regex),
               parser_regex (c.parser_regex),
               serializer_regex (c.serializer_regex),
+              const_regex (c.const_regex),
               enumerator_regex (c.enumerator_regex),
               element_type_regex (c.element_type_regex)
         {
@@ -522,6 +548,7 @@ namespace CXX
         RegexVector seq_modifier_regex_;
         RegexVector parser_regex_;
         RegexVector serializer_regex_;
+        RegexVector const_regex_;
         RegexVector enumerator_regex_;
         RegexVector element_type_regex_;
 
@@ -542,6 +569,7 @@ namespace CXX
         RegexVector& seq_modifier_regex;
         RegexVector& parser_regex;
         RegexVector& serializer_regex;
+        RegexVector& const_regex;
         RegexVector& enumerator_regex;
         RegexVector& element_type_regex;
       };
@@ -655,6 +683,9 @@ namespace CXX
           if (Tree::Context::skip (m))
             return;
 
+          SemanticGraph::Complex& c (
+            dynamic_cast<SemanticGraph::Complex&> (m.scope ()));
+
           size_t max (Tree::Context::max (m));
           size_t min (Tree::Context::min (m));
 
@@ -662,7 +693,7 @@ namespace CXX
           String const& b (m.context ().get<String> ("name"));
 
           bool def_attr (m.default_p () &&
-                            m.is_a<SemanticGraph::Attribute> ());
+                         m.is_a<SemanticGraph::Attribute> ());
 
           // Accessors/modifiers. Note that we postpone inserting
           // the names into the name_set to avoid over-escaping.
@@ -816,7 +847,7 @@ namespace CXX
                   process_regex (
                     s + L",default,value", accessor_regex, L"accessor")));
 
-              m.context ().set ( "default-value", find_name (an, name_set_));
+              m.context ().set ("default-value", find_name (an, name_set_));
 
               bool lit (false);
               {
@@ -831,6 +862,18 @@ namespace CXX
                   find_name (b + L"_default_value_", name_set_));
               }
             }
+          }
+
+          // Element id.
+          //
+          if (m.is_a<SemanticGraph::Element> () && ordered_p (c))
+          {
+            String id (
+              escape (
+                process_regex (
+                  s + L",id", const_regex, L"const")));
+
+            m.context ().set ("ordered-id-name", find_name (id, name_set_));
           }
         }
 
@@ -857,6 +900,9 @@ namespace CXX
         virtual void
         traverse (SemanticGraph::Any& a)
         {
+          SemanticGraph::Complex& c (
+            dynamic_cast<SemanticGraph::Complex&> (a.scope ()));
+
           size_t max (Tree::Context::max (a));
           size_t min (Tree::Context::min (a));
 
@@ -972,6 +1018,18 @@ namespace CXX
           //
           a.context ().set ("member", find_name (b + L"_", name_set_));
 
+          // Wildcard id.
+          //
+          if (ordered_p (c))
+          {
+            String id (
+              escape (
+                process_regex (
+                  s + L",id", const_regex, L"const")));
+
+            a.context ().set ("ordered-id-name", find_name (id, name_set_));
+          }
+
           if (!has_wildcard_)
             has_wildcard_ = true;
         }
@@ -1057,17 +1115,17 @@ namespace CXX
         virtual void
         traverse (Type& c)
         {
-          SemanticGraph::Context& cc (c.context ());
+          SemanticGraph::Context& ctx (c.context ());
 
           // We leave this set around to allow other mappings to use
           // this information.
           //
-          cc.set ("cxx-tree-name-processor-stem-set", NameSet ());
-          cc.set ("cxx-tree-name-processor-member-set", NameSet ());
+          ctx.set ("cxx-tree-name-processor-stem-set", NameSet ());
+          ctx.set ("cxx-tree-name-processor-member-set", NameSet ());
 
           // Use processed name.
           //
-          String name (cc.get<String> ("name"));
+          String name (ctx.get<String> ("name"));
 
           // If renamed name is empty then we are not generating
           // anything for this type and name processing is not
@@ -1077,10 +1135,10 @@ namespace CXX
             return;
 
           NameSet& stem_set (
-            cc.get<NameSet> ("cxx-tree-name-processor-stem-set"));
+            ctx.get<NameSet> ("cxx-tree-name-processor-stem-set"));
 
           NameSet& member_set (
-            cc.get<NameSet> ("cxx-tree-name-processor-member-set"));
+            ctx.get<NameSet> ("cxx-tree-name-processor-member-set"));
 
           stem_set.insert (c.name ());
           member_set.insert (name);
@@ -1136,6 +1194,116 @@ namespace CXX
             Complex::names (c, names);
           }
 
+          // Names for the mixed content.
+          //
+          if (mixed_p (c))
+          {
+            // Check if we already have the mixed content down inheritance
+            // hierarchy.
+            //
+            using SemanticGraph::Complex;
+
+            for (Complex* p (&c); p->inherits_p ();)
+            {
+              if (Complex* b = dynamic_cast<Complex*> (
+                    &p->inherits ().base ()))
+              {
+                if (mixed_p (*b))
+                {
+                  SemanticGraph::Context& bctx (b->context ());
+                  ctx.set ("mixed-type", bctx.get<String> ("mixed-type"));
+                  ctx.set ("mixed-const-iterator",
+                           bctx.get<String> ("mixed-const-iterator"));
+                  ctx.set ("mixed-ordered-id-name",
+                           bctx.get<String> ("mixed-ordered-id-name"));
+                  ctx.set ("mixed-aname", bctx.get<String> ("mixed-aname"));
+                  ctx.set ("mixed-member", bctx.get<String> ("mixed-member"));
+                  ctx.set ("mixed-in-base", true);
+                  break;
+                }
+
+                p = b;
+              }
+              else
+                break;
+            }
+
+            // If not, set up the names.
+            //
+            if (!ctx.count ("mixed-in-base"))
+            {
+              String s (find_name (L"text,content", stem_set));
+              String n (find_name (escape (s), member_set, false));
+
+              String an (find_name (
+                           escape (process_regex (s,
+                                                  seq_accessor_regex,
+                                                  accessor_regex,
+                                                  L"sequence accessor")),
+                           member_set,
+                           false));
+
+              String mn (find_name (
+                           escape (process_regex (s,
+                                                  seq_modifier_regex,
+                                                  modifier_regex,
+                                                  L"sequence modifier")),
+                           member_set,
+                           false));
+
+              ctx.set ("mixed-aname", an);
+              ctx.set ("mixed-mname", mn);
+
+              member_set.insert (name);
+
+              if (an != n)
+                member_set.insert (an);
+
+              if (mn != n && mn != an)
+                member_set.insert (mn);
+
+              // Types.
+              //
+              ctx.set (
+                "mixed-type",
+                find_name (
+                  escape (process_regex (s + L",type", type_regex, L"type")),
+                  member_set));
+
+              ctx.set (
+                "mixed-container",
+                find_name (
+                  escape (process_regex (s + L",sequence", type_regex, L"type")),
+                  member_set));
+
+              ctx.set (
+                "mixed-iterator",
+                find_name (
+                  escape (process_regex (s + L",iterator", type_regex, L"type")),
+                  member_set));
+
+              ctx.set (
+                "mixed-const-iterator",
+                find_name (
+                  escape (
+                    process_regex (s + L",const,iterator", type_regex, L"type")),
+                  member_set));
+
+              // Text content id.
+              //
+              ctx.set (
+                "mixed-ordered-id-name",
+                find_name (
+                  escape (
+                    process_regex (s + L",id", const_regex, L"const")),
+                  member_set));
+
+              // Data member.
+              //
+              ctx.set ("mixed-member", find_name (n + L"_", member_set));
+            }
+          }
+
           // Names for wildcards.
           //
           if (options.generate_wildcard ())
@@ -1188,6 +1356,105 @@ namespace CXX
                   "dom-document-member",
                   find_name (escape (stem + L"_"), member_set));
               }
+            }
+          }
+
+          // Names for the order container.
+          //
+          if (ordered_p (c))
+          {
+            // Check if we already have the order container down
+            // inheritance hierarchy.
+            //
+            using SemanticGraph::Complex;
+
+            for (Complex* p (&c); p->inherits_p ();)
+            {
+              if (Complex* b = dynamic_cast<Complex*> (
+                    &p->inherits ().base ()))
+              {
+                if (ordered_p (*b))
+                {
+                  SemanticGraph::Context& bctx (b->context ());
+                  ctx.set ("order-type", bctx.get<String> ("order-type"));
+                  ctx.set ("order-const-iterator",
+                           bctx.get<String> ("order-const-iterator"));
+                  ctx.set ("order-aname", bctx.get<String> ("order-aname"));
+                  ctx.set ("order-member", bctx.get<String> ("order-member"));
+                  ctx.set ("order-in-base", true);
+                  break;
+                }
+
+                p = b;
+              }
+              else
+                break;
+            }
+
+            // If not, set up the names.
+            //
+            if (!ctx.count ("order-in-base"))
+            {
+              String s (find_name (L"content,order", stem_set));
+              String n (find_name (escape (s), member_set, false));
+
+              String an (find_name (
+                           escape (process_regex (s,
+                                                  seq_accessor_regex,
+                                                  accessor_regex,
+                                                  L"sequence accessor")),
+                           member_set,
+                           false));
+
+              String mn (find_name (
+                           escape (process_regex (s,
+                                                  seq_modifier_regex,
+                                                  modifier_regex,
+                                                  L"sequence modifier")),
+                           member_set,
+                           false));
+
+              ctx.set ("order-aname", an);
+              ctx.set ("order-mname", mn);
+
+              member_set.insert (name);
+
+              if (an != n)
+                member_set.insert (an);
+
+              if (mn != n && mn != an)
+                member_set.insert (mn);
+
+              // Types.
+              //
+              ctx.set (
+                "order-type",
+                find_name (
+                  escape (process_regex (s + L",type", type_regex, L"type")),
+                  member_set));
+
+              ctx.set (
+                "order-container",
+                find_name (
+                  escape (process_regex (s + L",sequence", type_regex, L"type")),
+                  member_set));
+
+              ctx.set (
+                "order-iterator",
+                find_name (
+                  escape (process_regex (s + L",iterator", type_regex, L"type")),
+                  member_set));
+
+              ctx.set (
+                "order-const-iterator",
+                find_name (
+                  escape (
+                    process_regex (s + L",const,iterator", type_regex, L"type")),
+                  member_set));
+
+              // Data member.
+              //
+              ctx.set ("order-member", find_name (n + L"_", member_set));
             }
           }
         }
@@ -1869,6 +2136,8 @@ namespace CXX
           process_name (n, "container", "container");
           process_name (n, "buffer", "buffer");
           process_name (n, "time,zone", "time-zone");
+
+          process_name (n, "content,order", "content-order");
 
           if (options.generate_element_type ())
             process_name (n, "element,type", "element-type");

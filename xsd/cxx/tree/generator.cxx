@@ -24,6 +24,7 @@
 #include <cxx/tree/counter.hxx>
 #include <cxx/tree/validator.hxx>
 #include <cxx/tree/name-processor.hxx>
+#include <cxx/tree/order-processor.hxx>
 #include <cxx/tree/polymorphism-processor.hxx>
 
 #include <cxx/tree/tree-forward.hxx>
@@ -233,6 +234,15 @@ namespace CXX
       }
 
       bool gen_cxx (!ops.generate_dep_only ());
+
+      // Process ordered types.
+      //
+      if (gen_cxx)
+      {
+        OrderProcessor proc;
+        if (!proc.process (ops, schema, file_path))
+          throw Failed ();
+      }
 
       // Process names.
       //

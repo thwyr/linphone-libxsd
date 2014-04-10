@@ -298,6 +298,7 @@
 	        <tr><th>2.8.1</th><td><a href="#2.8.1">Mapping for Members with the One Cardinality Class</a></td></tr>
 	        <tr><th>2.8.2</th><td><a href="#2.8.2">Mapping for Members with the Optional Cardinality Class</a></td></tr>
 	        <tr><th>2.8.3</th><td><a href="#2.8.3">Mapping for Members with the Sequence Cardinality Class</a></td></tr>
+		<tr><th>2.8.4</th><td><a href="#2.8.4">Element Order</a></td></tr>
               </table>
             </td>
           </tr>
@@ -321,7 +322,8 @@
 	        <tr><th>2.12.1</th><td><a href="#2.12.1">Mapping for <code>any</code> with the One Cardinality Class</a></td></tr>
 	        <tr><th>2.12.2</th><td><a href="#2.12.2">Mapping for <code>any</code> with the Optional Cardinality Class</a></td></tr>
 	        <tr><th>2.12.3</th><td><a href="#2.12.3">Mapping for <code>any</code> with the Sequence Cardinality Class</a></td></tr>
-		<tr><th>2.12.4</th><td><a href="#2.12.4">Mapping for <code>anyAttribute</code></a></td></tr>
+		<tr><th>2.12.4</th><td><a href="#2.12.4">Element Wildcard Order</a></td></tr>
+		<tr><th>2.12.5</th><td><a href="#2.12.5">Mapping for <code>anyAttribute</code></a></td></tr>
               </table>
             </td>
           </tr>
@@ -2237,7 +2239,7 @@ public:
   <p>is mapped to:</p>
 
   <pre class="c++">
-class color: xml_schema::string
+class color: public xml_schema::string
 {
 public:
   enum value
@@ -2423,7 +2425,7 @@ public:
   <p>is mapped to:</p>
 
   <pre class="c++">
-class complex: xml_schema::type
+class complex: public xml_schema::type
 {
 public:
   object (const int&amp; a, const xml_schema::string&amp; b);
@@ -2441,7 +2443,7 @@ public:
 
 };
 
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   object (const bool&amp; s_one, const complex&amp; c_one);
@@ -2484,7 +2486,7 @@ public:
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::string
+class object: public xml_schema::string
 {
 public:
   object (const xml_schema::language&amp; lang);
@@ -2529,7 +2531,7 @@ public:
   <p>is mapped to:</p>
 
   <pre class="c++">
-class color: xml_schema::string
+class color: public xml_schema::string
 {
 public:
   enum value
@@ -2666,7 +2668,7 @@ public:
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   typedef xml_schema::string member_type;
@@ -2692,7 +2694,7 @@ public:
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   typedef xml_schema::string data_type;
@@ -2749,7 +2751,7 @@ public:
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   // Type definitions.
@@ -2782,7 +2784,7 @@ public:
       member's type, for example:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   ...
@@ -2873,7 +2875,7 @@ f (object&amp; o)
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   // Type definitions.
@@ -3102,7 +3104,7 @@ f (object&amp; o)
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   // Type definitions.
@@ -3218,6 +3220,415 @@ f (object&amp; o)
   n.push_back ("one");
   n.push_back ("two");
   o.member (n);           // deep copy
+}
+  </pre>
+
+  <h3><a name="2.8.4">2.8.4 Element Order</a></h3>
+
+  <p>C++/Tree is a "flattening" mapping in a sense that many levels of
+     nested compositors (<code>choice</code> and <code>sequence</code>),
+     all potentially with their own cardinalities, are in the end mapped
+     to a flat set of elements with one of the three cardinality classes
+     discussed in the previous sections. While this results in a simple
+     and easy to use API for most types, in certain cases, the order of
+     elements in the actual XML documents is not preserved once parsed
+     into the object model. And sometimes such order has
+     application-specific significance. As an example, consider a schema
+     that defines a batch of bank transactions:</p>
+
+  <pre class="xml">
+&lt;complexType name="withdraw">
+  &lt;sequence>
+    &lt;element name="account" type="unsignedInt"/>
+    &lt;element name="amount" type="unsignedInt"/>
+  &lt;/sequence>
+&lt;/complexType>
+
+&lt;complexType name="deposit">
+  &lt;sequence>
+    &lt;element name="account" type="unsignedInt"/>
+    &lt;element name="amount" type="unsignedInt"/>
+  &lt;/sequence>
+&lt;/complexType>
+
+&lt;complexType name="batch">
+  &lt;choice minOccurs="0" maxOccurs="unbounded">
+    &lt;element name="withdraw" type="withdraw"/>
+    &lt;element name="deposit" type="deposit"/>
+  &lt;/choice>
+&lt;/complexType>
+  </pre>
+
+  <p>The batch can contain any number of transactions in any order
+     but the order of transactions in each actual batch is significant.
+     For instance, consider what could happen if we reorder the
+     transactions and apply all the withdrawals before deposits.</p>
+
+  <p>For the <code>batch</code> schema type defined above the default
+     C++/Tree mapping will produce a C++ class that contains a pair of
+     sequence containers, one for each of the two elements. While this
+     will capture the content (transactions), the order of this content
+     as it appears in XML will be lost. Also, if we try to serialize the
+     batch we just loaded back to XML, all the withdrawal transactions
+     will appear before deposits.</p>
+
+  <p>To overcome this limitation of a flattening mapping, C++/Tree
+     allows us to mark certain XML Schema types, for which content
+     order is important, as ordered.</p>
+
+  <p>There are several command line options that control which
+     schema types are treated as ordered. To make an individual
+     type ordered, we use the <code>--ordered-type</code> option,
+     for example:</p>
+
+  <pre class="term">
+--ordered-type batch
+  </pre>
+
+  <p>To automatically treat all the types that are derived from an ordered
+     type also ordered, we use the <code>--ordered-type-derived</code>
+     option. This is primarily useful if you would like to iterate
+     over the complete hierarchy's content using the content order
+     sequence (discussed below).</p>
+
+  <p>Ordered types are also useful for handling mixed content. To
+     automatically mark all the types with mixed content as ordered
+     we use the <code>--ordered-type-mixed</code> option. For more
+     information on handling mixed content see <a href="#2.13">Section
+     2.13, "Mapping for Mixed Content Models"</a>.</p>
+
+  <p>Finally, we can mark all the types in the schema we are
+     compiling with the <code>--ordered-type-all</code> option.
+     You should only resort to this option if all the types in
+     your schema truly suffer from the loss of content
+     order since, as we will discuss shortly, ordered types
+     require extra effort to access and, especially, modify.
+     See the
+     <a href="http://www.codesynthesis.com/projects/xsd/documentation/xsd.xhtml">XSD
+     Compiler Command Line Manual</a> for more information on
+     these options.</p>
+
+  <p>Once a type is marked ordered, C++/Tree alters its mapping
+     in several ways. Firstly, for each local element, element
+     wildcard (<a href="#2.12.4">Section 2.12.4, "Element Wildcard
+     Order"</a>), and mixed content text (<a href="#2.13">Section
+     2.13, "Mapping for Mixed Content Models"</a>) in this type, a
+     content id constant is generated. Secondly, an addition sequence
+     is added to the class that captures the content order. Here
+     is how the mapping of our <code>batch</code> class changes
+     once we make it ordered:</p>
+
+  <pre class="c++">
+class batch: public xml_schema::type
+{
+public:
+  // withdraw
+  //
+  typedef withdraw withdraw_type;
+  typedef sequence&lt;withdraw_type> withdraw_sequence;
+  typedef withdraw_sequence::iterator withdraw_iterator;
+  typedef withdraw_sequence::const_iterator withdraw_const_iterator;
+
+  static const std::size_t withdraw_id = 1;
+
+  const withdraw_sequence&amp;
+  withdraw () const;
+
+  withdraw_sequence&amp;
+  withdraw ();
+
+  void
+  withdraw (const withdraw_sequence&amp;);
+
+  // deposit
+  //
+  typedef deposit deposit_type;
+  typedef sequence&lt;deposit_type> deposit_sequence;
+  typedef deposit_sequence::iterator deposit_iterator;
+  typedef deposit_sequence::const_iterator deposit_const_iterator;
+
+  static const std::size_t deposit_id = 2;
+
+  const deposit_sequence&amp;
+  deposit () const;
+
+  deposit_sequence&amp;
+  deposit ();
+
+  void
+  deposit (const deposit_sequence&amp;);
+
+  // content_order
+  //
+  typedef xml_schema::content_order content_order_type;
+  typedef std::vector&lt;content_order_type> content_order_sequence;
+  typedef content_order_sequence::iterator content_order_iterator;
+  typedef content_order_sequence::const_iterator content_order_const_iterator;
+
+  const content_order_sequence&amp;
+  content_order () const;
+
+  content_order_sequence&amp;
+  content_order ();
+
+  void
+  content_order (const content_order_sequence&amp;);
+
+  ...
+};
+  </pre>
+
+  <p>Notice the <code>withdraw_id</code> and <code>deposit_id</code>
+     content ids as well as the extra <code>content_order</code>
+     sequence that does not correspond to any element in the
+     schema definition. The other changes to the mapping for ordered
+     types has to do with XML parsing and serialization code. During
+     parsing the content order is captured in the <code>content_order</code>
+     sequence while during serialization this sequence is used to
+     determine the order in which content is serialized. The
+     <code>content_order</code> sequence is also copied during
+     copy construction and assigned during copy assignment. It is also
+     taken into account during comparison.</p>
+
+  <p>The entry type of the <code>content_order</code> sequence is the
+     <code>xml_schema::content_order</code> type that has the following
+     interface:</p>
+
+  <pre class="c++">
+namespace xml_schema
+{
+  struct content_order
+  {
+    content_order (std::size_t id, std::size_t index = 0);
+
+    std::size_t id;
+    std::size_t index;
+  };
+
+  bool
+  operator== (const content_order&amp;, const content_order&amp;);
+
+  bool
+  operator!= (const content_order&amp;, const content_order&amp;);
+
+  bool
+  operator&lt; (const content_order&amp;, const content_order&amp;);
+}
+  </pre>
+
+  <p>The <code>content_order</code> sequence describes the order of
+     content (elements, including wildcards, as well as mixed content
+     text). Each entry in this sequence consists of the content id
+     (for example, <code>withdraw_id</code> or <code>deposit_id</code>
+     in our case) as well as, for elements of the sequence cardinality
+     class, an index into the corresponding sequence container (the
+     index is unused for the one and optional cardinality classes).
+     For example, in our case, if the content id is <code>withdraw_id</code>,
+     then the index will point into the <code>withdraw</code> element
+     sequence.</p>
+
+  <p>With all this information we can now examine how to iterate over
+     transaction in the batch in content order:</p>
+
+  <pre class="c++">
+batch&amp; b = ...
+
+for (batch::content_order_const_iterator i (b.content_order ().begin ());
+     i != b.content_order ().end ();
+     ++i)
+{
+  switch (i->id)
+  {
+  case batch::withdraw_id:
+    {
+      const withdraw&amp; t (b.withdraw ()[i->index]);
+      cerr &lt;&lt; t.account () &lt;&lt; " withdraw " &lt;&lt; t.amount () &lt;&lt; endl;
+      break;
+    }
+  case batch::deposit_id:
+    {
+      const deposit&amp; t (b.deposit ()[i->index]);
+      cerr &lt;&lt; t.account () &lt;&lt; " deposit " &lt;&lt; t.amount () &lt;&lt; endl;
+      break;
+    }
+  default:
+    {
+      assert (false); // Unknown content id.
+    }
+  }
+}
+  </pre>
+
+  <p>If we serialized our batch back to XML, we would also see that the
+     order of transactions in the output is exactly the same as in the
+     input rather than all the withdrawals first followed by all the
+     deposits.</p>
+
+  <p>The most complex aspect of working with ordered types is
+     modifications. Now we not only need to change the content,
+     but also remember to update the order information corresponding
+     to this change. As a first example, we add a deposit transaction
+     to the batch:</p>
+
+  <pre class="c++">
+using xml_schema::content_order;
+
+batch::deposit_sequence&amp; d (b.deposit ());
+batch::withdraw_sequence&amp; w (b.withdraw ());
+batch::content_order_sequence&amp; co (b.content_order ());
+
+d.push_back (deposit (123456789, 100000));
+co.push_back (content_order (batch::deposit_id, d.size () - 1));
+  </pre>
+
+  <p>In the above example we first added the content (deposit
+     transaction) and then updated the content order information
+     by adding an entry with <code>deposit_id</code> content
+     id and the index of the just added deposit transaction.</p>
+
+  <p>Removing the last transaction can be easy if we know which
+     transaction (deposit or withdrawal) is last:</p>
+
+  <pre class="c++">
+d.pop_back ();
+co.pop_back ();
+  </pre>
+
+  <p>If, however, we do not know which transaction is last, then
+     things get a bit more complicated:</p>
+
+  <pre class="c++">
+switch (co.back ().id)
+{
+case batch::withdraw_id:
+  {
+    d.pop_back ();
+    break;
+  }
+case batch::deposit_id:
+  {
+    w.pop_back ();
+    break;
+  }
+}
+
+co.pop_back ();
+  </pre>
+
+  <p>The following example shows how to add a transaction at the
+     beginning of the batch:</p>
+
+  <pre class="c++">
+w.push_back (withdraw (123456789, 100000));
+co.insert (co.begin (),
+           content_order (batch::withdraw_id, w.size () - 1));
+  </pre>
+
+  <p>Note also that when we merely modify the content of one
+     of the elements in place, we do not need to update its
+     order since it doesn't change. For example, here is how
+     we can change the amount in the first withdrawal:</p>
+
+  <pre class="c++">
+w[0].amount (10000);
+  </pre>
+
+  <p>For the complete working code shown in this section refer to the
+     <code>order/element</code> example in the
+     <code>examples/cxx/tree/</code> directory in the XSD distribution.</p>
+
+  <p>If both the base and derived types are ordered, then the
+     content order sequence is only added to the base and the content
+     ids are unique within the whole hierarchy. In this case
+     the content order sequence for the derived type contains
+     ordering information for both base and derived content.</p>
+
+  <p>In some applications we may need to perform more complex
+     content processing. For example, in our case, we may need
+     to remove all the withdrawal transactions. The default
+     container, <code>std::vector</code>, is not particularly
+     suitable for such operations. What may be required by
+     some applications is a multi-index container that not
+     only allows us to iterate in content order similar to
+     <code>std::vector</code> but also search by the content
+     id as well as the content id and index pair.</p>
+
+  <p>While C++/Tree does not provide this functionality by
+     default, it allows us to specify a custom container
+     type for content order with the <code>--order-container</code>
+     command line option. The only requirement from the
+     generated code side for such a container is to provide
+     the <code>vector</code>-like <code>push_back()</code>,
+     <code>size()</code>, and const iteration interfaces.</p>
+
+  <p>As an example, here is how we can use the Boost Multi-Index
+     container for content order. First we create the
+     <code>content-order-container.hxx</code> header with the
+     following definition (in C++11, use the alias template
+     instead):</p>
+
+  <pre class="c++">
+#ifndef CONTENT_ORDER_CONTAINER
+#define CONTENT_ORDER_CONTAINER
+
+#include &lt;cstddef> // std::size_t
+
+#include &lt;boost/multi_index_container.hpp>
+#include &lt;boost/multi_index/member.hpp>
+#include &lt;boost/multi_index/identity.hpp>
+#include &lt;boost/multi_index/ordered_index.hpp>
+#include &lt;boost/multi_index/random_access_index.hpp>
+
+struct by_id {};
+struct by_id_index {};
+
+template &lt;typename T>
+struct content_order_container:
+  boost::multi_index::multi_index_container&lt;
+    T,
+    boost::multi_index::indexed_by&lt;
+      boost::multi_index::random_access&lt;>,
+      boost::multi_index::ordered_unique&lt;
+        boost::multi_index::tag&lt;by_id_index>,
+        boost::multi_index::identity&lt;T>
+      >,
+      boost::multi_index::ordered_non_unique&lt;
+        boost::multi_index::tag&lt;by_id>,
+        boost::multi_index::member&lt;T, std::size_t, &amp;T::id>
+      >
+    >
+  >
+{};
+
+#endif
+  </pre>
+
+  <p>Next we add the following two XSD compiler options to include
+     this header into every generated header file and to use the
+     custom container type (see the XSD compiler command line manual
+     for more information on shell quoting for the first option):</p>
+
+  <pre class="term">
+--hxx-prologue '#include "content-order-container.hxx"'
+--order-container content_order_container
+  </pre>
+
+  <p>With these changes we can now use the multi-index functionality,
+     for example, to search for a specific content id:</p>
+
+  <pre class="c++">
+typedef batch::content_order_sequence::index&lt;by_id>::type id_set;
+typedef id_set::iterator id_iterator;
+
+const id_set&amp; ids (b.content_order ().get&lt;by_id> ());
+
+std::pair&lt;id_iterator, id_iterator> r (
+  ids.equal_range (std::size_t (batch::deposit_id));
+
+for (id_iterator i (r.first); i != r.second; ++i)
+{
+  const deposit&amp; t (b.deposit ()[i->index]);
+  cerr &lt;&lt; t.account () &lt;&lt; " deposit " &lt;&lt; t.amount () &lt;&lt; endl;
 }
   </pre>
 
@@ -3729,7 +4140,7 @@ f (root&amp; r)
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   // any
@@ -3807,7 +4218,7 @@ public:
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   // Accessors.
@@ -3888,7 +4299,7 @@ f (object&amp; o, const xercesc::DOMElement&amp; e)
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   // Type definitions.
@@ -4071,7 +4482,7 @@ f (object&amp; o, const xercesc::DOMElement&amp; e)
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   // Type definitions.
@@ -4314,8 +4725,84 @@ f (object&amp; o, const xercesc::DOMElement&amp; e)
 }
   </pre>
 
+  <h3><a name="2.12.4">2.12.4 Element Wildcard Order</a></h3>
 
-  <h3><a name="2.12.4">2.12.4 Mapping for <code>anyAttribute</code></a></h3>
+  <p>Similar to elements, element wildcards in ordered types
+     (<a href="#2.8.4">Section 2.8.4, "Element Order"</a>) are assigned
+     content ids and are included in the content order sequence.
+     Continuing with the bank transactions example started in Section
+     2.8.4, we can extend the batch by allowing custom transactions:</p>
+
+  <pre class="xml">
+&lt;complexType name="batch">
+  &lt;choice minOccurs="0" maxOccurs="unbounded">
+    &lt;element name="withdraw" type="withdraw"/>
+    &lt;element name="deposit" type="deposit"/>
+    &lt;any namespace="##other" processContents="lax"/>
+  &lt;/choice>
+&lt;/complexType>
+  </pre>
+
+  <p>This will lead to the following changes in the generated
+     <code>batch</code> C++ class:</p>
+
+  <pre class="c++">
+class batch: public xml_schema::type
+{
+public:
+  ...
+
+  // any
+  //
+  typedef element_sequence any_sequence;
+  typedef any_sequence::iterator any_iterator;
+  typedef any_sequence::const_iterator any_const_iterator;
+
+  static const std::size_t any_id = 3UL;
+
+  const any_sequence&amp;
+  any () const;
+
+  any_sequence&amp;
+  any ();
+
+  void
+  any (const any_sequence&amp;);
+
+  ...
+};
+  </pre>
+
+  <p>With this change we also need to update the iteration code to handle
+     the new content id:</p>
+
+  <pre class="c++">
+for (batch::content_order_const_iterator i (b.content_order ().begin ());
+     i != b.content_order ().end ();
+     ++i)
+{
+  switch (i->id)
+  {
+    ...
+
+  case batch::any_id:
+    {
+      const DOMElement&amp; e (b.any ()[i->index]);
+      ...
+      break;
+    }
+
+    ...
+  }
+}
+  </pre>
+
+  <p>For the complete working code that shows the use of wildcards in
+     ordered types refer to the <code>order/element</code> example in
+     the <code>examples/cxx/tree/</code> directory in the XSD
+     distribution.</p>
+
+  <h3><a name="2.12.5">2.12.5 Mapping for <code>anyAttribute</code></a></h3>
 
   <p>For <code>anyAttribute</code> the type definitions consist of an alias
      of the container type with name <code>any_attribute_set</code>
@@ -4353,7 +4840,7 @@ f (object&amp; o, const xercesc::DOMElement&amp; e)
   <p>is mapped to:</p>
 
   <pre class="c++">
-class object: xml_schema::type
+class object: public xml_schema::type
 {
 public:
   // Type definitions.
@@ -4594,14 +5081,138 @@ f (object&amp; o, const xercesc::DOMAttr&amp; a)
 
   <h2><a name="2.13">2.13 Mapping for Mixed Content Models</a></h2>
 
-  <p>XML Schema mixed content models do not have a direct C++ mapping.
-     Instead, information in XML instance documents, corresponding to
-     a mixed content model, can be accessed using generic DOM nodes that
-     can optionally be associated with object model nodes. See
-     <a href="#5.1">Section 5.1, "DOM Association"</a> for more
-     information about keeping association with DOM nodes.
-  </p>
+  <p>For XML Schema types with mixed content models C++/Tree provides
+     mapping support only if the type is marked as ordered
+     (<a href="#2.8.4">Section 2.8.4, "Element Order"</a>). Use the
+     <code>--ordered-type-mixed</code> XSD compiler option to
+     automatically mark all types with mixed content as ordered.</p>
 
+  <p>For an ordered type with mixed content, C++/Tree adds an extra
+     text content sequence that is used to store the text fragments.
+     This text content sequence is also assigned the content id and
+     its entries are included in the content order sequence, just
+     like elements. As a result, it is possible to capture the order
+     between elements and text fragments.</p>
+
+  <p>As an example, consider the following schema that describes text
+     with embedded links:</p>
+
+  <pre class="xml">
+&lt;complexType name="anchor">
+  &lt;simpleContent>
+    &lt;extension base="string">
+      &lt;attribute name="href" type="anyURI" use="required"/>
+    &lt;/extension>
+  &lt;/simpleContent>
+&lt;/complexType>
+
+&lt;complexType name="text" mixed="true">
+  &lt;sequence>
+    &lt;element name="a" type="anchor" minOccurs="0" maxOccurs="unbounded"/>
+  &lt;/sequence>
+&lt;/complexType>
+  </pre>
+
+  <p>The generated <code>text</code> C++ class will provide the following
+     API (assuming it is marked as ordered):</p>
+
+  <pre class="c++">
+class text: public xml_schema::type
+{
+public:
+  // a
+  //
+  typedef anchor a_type;
+  typedef sequence&lt;a_type> a_sequence;
+  typedef a_sequence::iterator a_iterator;
+  typedef a_sequence::const_iterator a_const_iterator;
+
+  static const std::size_t a_id = 1UL;
+
+  const a_sequence&amp;
+  a () const;
+
+  a_sequence&amp;
+  a ();
+
+  void
+  a (const a_sequence&amp;);
+
+  // text_content
+  //
+  typedef xml_schema::string text_content_type;
+  typedef sequence&lt;text_content_type> text_content_sequence;
+  typedef text_content_sequence::iterator text_content_iterator;
+  typedef text_content_sequence::const_iterator text_content_const_iterator;
+
+  static const std::size_t text_content_id = 2UL;
+
+  const text_content_sequence&amp;
+  text_content () const;
+
+  text_content_sequence&amp;
+  text_content ();
+
+  void
+  text_content (const text_content_sequence&amp;);
+
+  // content_order
+  //
+  typedef xml_schema::content_order content_order_type;
+  typedef std::vector&lt;content_order_type> content_order_sequence;
+  typedef content_order_sequence::iterator content_order_iterator;
+  typedef content_order_sequence::const_iterator content_order_const_iterator;
+
+  const content_order_sequence&amp;
+  content_order () const;
+
+  content_order_sequence&amp;
+  content_order ();
+
+  void
+  content_order (const content_order_sequence&amp;);
+
+  ...
+};
+  </pre>
+
+  <p>Given this interface we can iterate over both link elements
+     and text in content order. The following code fragment converts
+     our format to plain text with references.</p>
+
+  <pre class="c++">
+const text&amp; t = ...
+
+for (text::content_order_const_iterator i (t.content_order ().begin ());
+     i != t.content_order ().end ();
+     ++i)
+{
+  switch (i->id)
+  {
+  case text::a_id:
+    {
+      const anchor&amp; a (t.a ()[i->index]);
+      cerr &lt;&lt; a &lt;&lt; "[" &lt;&lt; a.href () &lt;&lt; "]";
+      break;
+    }
+  case text::text_content_id:
+    {
+      const xml_schema::string&amp; s (t.text_content ()[i->index]);
+      cerr &lt;&lt; s;
+      break;
+    }
+  default:
+    {
+      assert (false); // Unknown content id.
+    }
+  }
+}
+  </pre>
+
+  <p>For the complete working code that shows the use of mixed content
+     in ordered types refer to the <code>order/mixed</code> example in
+     the <code>examples/cxx/tree/</code> directory in the XSD
+     distribution.</p>
 
   <!-- Parsing -->
 
@@ -5835,7 +6446,7 @@ XMLPlatformUtils::Terminate ();
 
   <p>Maintaining DOM association is normally useful when the application
      needs access to XML constructs that are not preserved in the
-     object model, for example, text in the mixed content model.
+     object model, for example, XML comments.
      Another useful aspect of DOM association is the ability of the
      application to navigate the document tree using the generic DOM
      interface (for example, with the help of an XPath processor)
@@ -5845,7 +6456,7 @@ XMLPlatformUtils::Terminate ();
      be ignored during serialization. If you need to not only access
      but also modify some aspects of XML that are not preserved in
      the object model, then type customization with custom parsing
-     constructs and serialization operators should be used instead.</p>
+     constructors and serialization operators should be used instead.</p>
 
   <p>To request DOM association you will need to pass the
      <code>xml_schema::flags::keep_dom</code> flag to one of the

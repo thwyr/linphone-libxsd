@@ -31,6 +31,7 @@ cxx_tun += cxx/tree/elements.cxx                      \
            cxx/tree/validator.cxx                     \
            cxx/tree/counter.cxx                       \
            cxx/tree/name-processor.cxx                \
+           cxx/tree/order-processor.cxx               \
            cxx/tree/polymorphism-processor.cxx        \
 	   cxx/tree/default-value.cxx                 \
            cxx/tree/generator.cxx                     \
@@ -114,6 +115,7 @@ endif
 $(gen): cli := $(cli)
 $(gen): cli_options +=         \
 -I $(src_base)                 \
+--generate-specifier           \
 --ostream-type ::std::wostream \
 --exclude-base                 \
 --suppress-undocumented        \

@@ -2,7 +2,6 @@
 // copyright : Copyright (c) 2006-2014 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-#include <set>
 #include <iostream>
 
 #include <cxx/tree/elements.hxx>
@@ -19,59 +18,12 @@ namespace CXX
   {
     namespace
     {
-      struct TypeSet
-      {
-        template <typename I>
-        TypeSet (I begin, I end)
-        {
-          for (; begin != end; ++begin)
-            insert (*begin);
-        }
-
-        void
-        insert (String const& name)
-        {
-          size_t p (name.rfind ('#'));
-
-          if (p == String::npos)
-            unames_.insert (name);
-          else
-            qnames_.insert (name);
-        }
-
-        bool
-        find (SemanticGraph::Type& t)
-        {
-          if (!unames_.empty ())
-          {
-            if (unames_.find (t.name ()) != unames_.end ())
-              return true;
-          }
-
-          if (!qnames_.empty ())
-          {
-            if (qnames_.find (t.scope ().name () + L"#" + t.name ()) !=
-                qnames_.end ())
-              return true;
-          }
-
-          return false;
-        }
-
-      private:
-        typedef set<String> StringSet;
-
-        StringSet unames_;
-        StringSet qnames_;
-      };
-
-
       //
       //
       struct Type: Traversal::Type,
                    Traversal::Complex
       {
-        Type (TypeSet& poly_types)
+        Type (TypeNameSet& poly_types)
             : poly_types_ (poly_types)
         {
         }
@@ -110,7 +62,7 @@ namespace CXX
         }
 
       private:
-        TypeSet& poly_types_;
+        TypeNameSet& poly_types_;
       };
 
       struct FundType: Traversal::AnyType,
@@ -169,7 +121,7 @@ namespace CXX
                        Traversal::Fundamental::Entity,
                        Traversal::Fundamental::Entities
       {
-        FundType (TypeSet& poly_types, bool& valid)
+        FundType (TypeNameSet& poly_types, bool& valid)
             : poly_types_ (poly_types), valid_ (valid)
         {
         }
@@ -493,13 +445,13 @@ namespace CXX
         }
 
       private:
-        TypeSet& poly_types_;
+        TypeNameSet& poly_types_;
         bool& valid_;
       };
 
       struct GlobalElement: Traversal::Element
       {
-        GlobalElement (TypeSet& poly_types,
+        GlobalElement (TypeNameSet& poly_types,
                        bool& valid,
                        const WarningSet& disabled_warnings)
             : poly_types_ (poly_types), valid_ (valid), warning_ (true)
@@ -603,7 +555,7 @@ namespace CXX
         }
 
       private:
-        TypeSet& poly_types_;
+        TypeNameSet& poly_types_;
         bool& valid_;
         bool warning_;
       };
@@ -674,8 +626,8 @@ namespace CXX
         // Prepare a set of polymorphic types.
         //
 
-        TypeSet poly_types (ops.polymorphic_type ().begin (),
-                            ops.polymorphic_type ().end ());
+        TypeNameSet poly_types (ops.polymorphic_type ().begin (),
+                                ops.polymorphic_type ().end ());
 
         // Root schema in the file-per-type mode is just a bunch
         // of includes without a namespace.

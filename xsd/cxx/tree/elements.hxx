@@ -6,6 +6,7 @@
 #define CXX_TREE_ELEMENTS_HXX
 
 #include <map>
+#include <set>
 #include <deque>
 #include <vector>
 #include <sstream>
@@ -66,6 +67,54 @@ namespace CXX
     private:
       String mapping_;
       String reason_;
+    };
+
+    // A set of potentially qualified XML Schema type names.
+    //
+    struct TypeNameSet
+    {
+      template <typename I>
+      TypeNameSet (I begin, I end)
+      {
+        for (; begin != end; ++begin)
+          insert (*begin);
+      }
+
+      void
+      insert (String const& name)
+      {
+        size_t p (name.rfind ('#'));
+
+        if (p == String::npos)
+          unames_.insert (name);
+        else
+          qnames_.insert (name);
+      }
+
+      bool
+      find (SemanticGraph::Type& t)
+      {
+        if (!unames_.empty ())
+        {
+          if (unames_.find (t.name ()) != unames_.end ())
+            return true;
+        }
+
+        if (!qnames_.empty ())
+        {
+          if (qnames_.find (t.scope ().name () + L"#" + t.name ()) !=
+              qnames_.end ())
+            return true;
+        }
+
+        return false;
+      }
+
+    private:
+      typedef std::set<String> StringSet;
+
+      StringSet unames_;
+      StringSet qnames_;
     };
 
     //
@@ -157,6 +206,22 @@ namespace CXX
       //
       //
     public:
+      static bool
+      ordered_p (SemanticGraph::Type const& t)
+      {
+        return t.context ().count ("ordered") &&
+          t.context ().get<bool> ("ordered");
+      }
+
+      // Check if we are generating mixed support for this type. We only
+      // do it for ordered types.
+      //
+      static bool
+      mixed_p (SemanticGraph::Complex const& c)
+      {
+        return c.mixed_p () && ordered_p (c);
+      }
+
       bool
       polymorphic_p (SemanticGraph::Type&);
 
@@ -1338,7 +1403,11 @@ namespace CXX
       virtual void
       traverse (SemanticGraph::Complex& c)
       {
-        names (c, names_);
+        if (c.mixed_p ())
+          v_ = false;
+
+        if (v_)
+          names (c, names_);
 
         if (v_)
           inherits (c, inherits_);

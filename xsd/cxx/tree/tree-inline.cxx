@@ -891,6 +891,41 @@ namespace CXX
 
           Complex::names (c, names);
 
+          // Mixed text content.
+          //
+          if (mixed_p (c) && !c.context ().count ("mixed-in-base"))
+          {
+            SemanticGraph::Context& ctx (c.context ());
+
+            String const& cont (ctx.get<String> ("mixed-container"));
+            String const& memb (ctx.get<String> ("mixed-member"));
+
+            String const& aname (ctx.get<String> ("mixed-aname"));
+            String const& mname (ctx.get<String> ("mixed-mname"));
+
+            os << inl
+               << "const " << name << "::" << cont << "& " <<
+              name << "::" << endl
+               << aname << " () const"
+               << "{"
+               << "return this->" << memb << ";"
+               << "}";
+
+            os << inl
+               << name << "::" << cont << "& " << name << "::" << endl
+               << aname << " ()"
+               << "{"
+               << "return this->" << memb << ";"
+               << "}";
+
+            os << inl
+               << "void " << name << "::" << endl
+               << mname << " (const " << cont << "& s)"
+               << "{"
+               << "this->" << memb << " = s;"
+               << "}";
+          }
+
           // dom_document accessors.
           //
           if (edom_document_member_p (c))
@@ -900,14 +935,49 @@ namespace CXX
               name << "::" << endl
                << edom_document (c) << " () const"
                << "{"
-               << "return *" << edom_document_member (c) << ";"
+               << "return *this->" << edom_document_member (c) << ";"
                << "}";
 
             os << inl
                << xerces_ns << "::DOMDocument& " << name << "::" << endl
                << edom_document (c) << " ()"
                << "{"
-               << "return *" << edom_document_member (c) << ";"
+               << "return *this->" << edom_document_member (c) << ";"
+               << "}";
+          }
+
+          // Order container.
+          //
+          if (ordered_p (c) && !c.context ().count ("order-in-base"))
+          {
+            SemanticGraph::Context& ctx (c.context ());
+
+            String const& cont (ctx.get<String> ("order-container"));
+            String const& memb (ctx.get<String> ("order-member"));
+
+            String const& aname (ctx.get<String> ("order-aname"));
+            String const& mname (ctx.get<String> ("order-mname"));
+
+            os << inl
+               << "const " << name << "::" << cont << "& " <<
+              name << "::" << endl
+               << aname << " () const"
+               << "{"
+               << "return this->" << memb << ";"
+               << "}";
+
+            os << inl
+               << name << "::" << cont << "& " << name << "::" << endl
+               << aname << " ()"
+               << "{"
+               << "return this->" << memb << ";"
+               << "}";
+
+            os << inl
+               << "void " << name << "::" << endl
+               << mname << " (const " << cont << "& s)"
+               << "{"
+               << "this->" << memb << " = s;"
                << "}";
           }
 

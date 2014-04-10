@@ -16,6 +16,7 @@
      <code><b>--seq-modifier-regex</b></code>,
      <code><b>--parser-regex</b></code>,
      <code><b>--serializer-regex</b></code>,
+     <code><b>--const-regex</b></code>,
      <code><b>--enumerator-regex</b></code>, and
      <code><b>--element-type-regex</b></code> options.
   </p>
@@ -78,6 +79,7 @@
      <code><b>--seq-modifier-regex</b></code>,
      <code><b>--parser-regex</b></code>,
      <code><b>--serializer-regex</b></code>,
+     <code><b>--const-regex</b></code>,
      <code><b>--enumerator-regex</b></code>, and
      <code><b>--element-type-regex</b></code> options allow you to
      specify extra regular expressions for each name category in
@@ -183,6 +185,9 @@
      is selected:</p>
 
   <p><code><b>/(.+)/parse\u$1/</b></code></p>
+
+  <p>The const category is used to create C++ constant names for the
+     element/wildcard/text content ids in ordered types.</p>
 
   <p>See also the REGEX AND SHELL QUOTING section below.</p>
 

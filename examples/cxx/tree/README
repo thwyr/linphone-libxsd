@@ -17,6 +17,10 @@ polymorphism
   Shows how to use XML Schema polymorphism features such as the
   xsi:type attribute and substitution groups.
 
+order/
+  A collection of examples that show how to use ordered types to
+  capture and maintain content order.
+
 xpath
   Shows how to use the C++/Tree mapping together with XPath.
 
@@ -45,7 +49,7 @@ caching
 
 embedded
   Shows how to embed the binary representation of the schema grammar
-  into an application and then use it with the C++/Tree mapping to 
+  into an application and then use it with the C++/Tree mapping to
   parse and validate XML documents.
 
 performance
@@ -68,7 +72,7 @@ streaming
   that are too large to fit into memory.
 
 compression
-  Shows how to compress an XML document during serialization and decompress 
+  Shows how to compress an XML document during serialization and decompress
   it during parsing using the zlib library.
 
 binary/

@@ -693,6 +693,9 @@ namespace CXX
           if (skip (e))
             return;
 
+          SemanticGraph::Complex& c (
+            dynamic_cast<SemanticGraph::Complex&> (e.scope ()));
+
           String const& member (emember (e));
 
           String tr (etraits (e)); // traits type name
@@ -849,6 +852,27 @@ namespace CXX
             }
           }
 
+          // Capture order.
+          //
+          if (ordered_p (c))
+          {
+            SemanticGraph::Context& ctx (c.context ());
+
+            String const& t (ctx.get<String> ("order-type"));
+            String const& m (ctx.get<String> ("order-member"));
+
+            os << "this->" << m << ".push_back (" << endl
+               << t << " (" <<
+              e.context ().get<String> ("ordered-id-name");
+
+            // sequence
+            //
+            if (max (e) != 1)
+              os << ", " << "this->" << member << ".size () - 1";
+
+            os << "));";
+          }
+
           os << "continue;";
 
           // End of check block.
@@ -920,10 +944,11 @@ namespace CXX
         {
           String const& member (emember (a));
 
+          SemanticGraph::Complex& c (
+            dynamic_cast<SemanticGraph::Complex&> (a.scope ()));
+
           String const& ns (a.definition_namespace ().name ());
-          String const& dom_doc (
-            edom_document (
-              dynamic_cast<SemanticGraph::Complex&> (a.scope ())));
+          String const& dom_doc (edom_document (c));
 
           os << "// " << ename (a) << endl
              << "//" << endl
@@ -1004,7 +1029,7 @@ namespace CXX
           {
             // sequence
             //
-            os << "this->" << member << " .push_back (r);";
+            os << "this->" << member << ".push_back (r);";
           }
           else if (min (a) == 0)
           {
@@ -1017,6 +1042,31 @@ namespace CXX
             // one
             //
             os << "this->" << member << ".set (r);";
+          }
+
+          // Capture order.
+          //
+          if (ordered_p (c))
+          {
+            SemanticGraph::Context& ctx (c.context ());
+
+            String const& t (ctx.get<String> ("order-type"));
+            String const& m (ctx.get<String> ("order-member"));
+
+            os << "this->" << m << ".push_back (" << endl
+               << t << " (" <<
+              a.context ().get<String> ("ordered-id-name") << ", ";
+
+            if (max (a) != 1)
+              // sequence
+              //
+              os << "this->" << member << ".size () - 1";
+            else
+              // optional & one
+              //
+              os << "0";
+
+            os << "));";
           }
 
           os << "continue;";
@@ -2042,6 +2092,9 @@ namespace CXX
         virtual void
         traverse (SemanticGraph::Complex& c)
         {
+          if (mixed_p (c) && !c.context ().count ("mixed-in-base"))
+            has_el_ = true;
+
           names (c);
 
           if (!(has_el_ && has_at_))
@@ -2232,6 +2285,11 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
+          SemanticGraph::Context& ctx (c.context ());
+
+          bool mixed (mixed_p (c) && !ctx.count ("mixed-in-base"));
+          bool ordered (ordered_p (c) && !ctx.count ("order-in-base"));
+
           bool string_based (false);
           {
             IsStringBasedType t (string_based);
@@ -2348,6 +2406,12 @@ namespace CXX
                   " > ())";
               }
 
+              if (mixed)
+              {
+                os << "," << endl
+                   << "  " << ctx.get<String> ("mixed-member") << " (this)";
+              }
+
               names (c, default_ctor_init_names_);
 
               os << "{";
@@ -2403,6 +2467,12 @@ namespace CXX
                   " > ())";
               }
 
+              if (mixed)
+              {
+                os << "," << endl
+                   << "  " << ctx.get<String> ("mixed-member") << " (this)";
+              }
+
               names (c, ctor_names_);
 
               os << "{";
@@ -2435,6 +2505,12 @@ namespace CXX
                      << "  " << edom_document_member (c) << " (" <<
                     "::xsd::cxx::xml::dom::create_document< " << char_type <<
                     " > ())";
+                }
+
+                if (mixed)
+                {
+                  os << "," << endl
+                     << "  " << ctx.get<String> ("mixed-member") << " (this)";
                 }
 
                 {
@@ -2479,6 +2555,12 @@ namespace CXX
                      << "  " << edom_document_member (c) << " (" <<
                     "::xsd::cxx::xml::dom::create_document< " << char_type <<
                     " > ())";
+                }
+
+                if (mixed)
+                {
+                  os << "," << endl
+                     << "  " << ctx.get<String> ("mixed-member") << " (this)";
                 }
 
                 {
@@ -2529,6 +2611,12 @@ namespace CXX
                 " > ())";
             }
 
+            if (mixed)
+            {
+              os << "," << endl
+                 << "  " << ctx.get<String> ("mixed-member") << " (this)";
+            }
+
             names (c, ctor_names_);
 
             os << "{";
@@ -2566,6 +2654,12 @@ namespace CXX
                    << "  " << edom_document_member (c) << " (" <<
                   "::xsd::cxx::xml::dom::create_document< " << char_type <<
                   " > ())";
+              }
+
+              if (mixed)
+              {
+                os << "," << endl
+                   << "  " << ctx.get<String> ("mixed-member") << " (this)";
               }
 
               {
@@ -2614,6 +2708,12 @@ namespace CXX
                    << "  " << edom_document_member (c) << " (" <<
                   "::xsd::cxx::xml::dom::create_document< " << char_type <<
                   " > ())";
+              }
+
+              if (mixed)
+              {
+                os << "," << endl
+                   << "  " << ctx.get<String> ("mixed-member") << " (this)";
               }
 
               {
@@ -2673,6 +2773,8 @@ namespace CXX
                   " > ())";
               }
 
+              // Cannot be mixed.
+
               names (c, ctor_names_);
 
               os << "{";
@@ -2714,6 +2816,8 @@ namespace CXX
                 " > ())";
             }
 
+            // Cannot be mixed.
+
             names (c, ctor_names_);
 
             os << "{";
@@ -2751,6 +2855,8 @@ namespace CXX
                 "::xsd::cxx::xml::dom::create_document< " << char_type <<
                 " > ())";
             }
+
+            // Cannot be mixed.
 
             names (c, ctor_names_);
 
@@ -2795,6 +2901,12 @@ namespace CXX
                 " > ())";
             }
 
+            if (mixed)
+            {
+              os << "," << endl
+                 << "  " << ctx.get<String> ("mixed-member") << " (this)";
+            }
+
             names (c, ctor_names_);
 
             os << "{";
@@ -2837,6 +2949,12 @@ namespace CXX
                  << "  " << edom_document_member (c) << " (" <<
                 "::xsd::cxx::xml::dom::create_document< " << char_type <<
                 " > ())";
+            }
+
+            if (mixed)
+            {
+              os << "," << endl
+                 << "  " << ctx.get<String> ("mixed-member") << " (this)";
             }
 
             {
@@ -2892,6 +3010,12 @@ namespace CXX
                 " > ())";
             }
 
+            if (mixed)
+            {
+              os << "," << endl
+                 << "  " << ctx.get<String> ("mixed-member") << " (this)";
+            }
+
             {
               CtorMember t (*this, at);
               Traversal::Names n (t);
@@ -2924,6 +3048,20 @@ namespace CXX
                << "  " << edom_document_member (c) << " (" <<
               "::xsd::cxx::xml::dom::create_document< " << char_type <<
               " > ())";
+          }
+
+          if (mixed)
+          {
+            String const& m (ctx.get<String> ("mixed-member"));
+            os << "," << endl
+               << "  " << m << " (x." << m << ", f, this)";
+          }
+
+          if (ordered)
+          {
+            String const& m (ctx.get<String> ("order-member"));
+            os << "," << endl
+               << "  " << m << " (x." << m << ")";
           }
 
           {
@@ -2964,7 +3102,7 @@ namespace CXX
                << container << "* c)" << endl
                << ": " << base << " (e, f";
 
-            if (he || ha || hae || (haa && gen_wildcard))
+            if (he || ha || hae || (haa && gen_wildcard) || mixed)
               os << " | " << flags_type << "::base";
 
             os << ", c)";
@@ -2975,6 +3113,12 @@ namespace CXX
                  << "  " << edom_document_member (c) << " (" <<
                 "::xsd::cxx::xml::dom::create_document< " << char_type <<
                 " > ())";
+            }
+
+            if (mixed)
+            {
+              os << "," << endl
+                 << "  " << ctx.get<String> ("mixed-member") << " (this)";
             }
 
             names (c, element_ctor_names_);
@@ -2988,9 +3132,9 @@ namespace CXX
             bool base_has_el (false), base_has_at (false);
 
             // We are only interested in this information if we are
-            // generating out own parse().
+            // generating our own parse().
             //
-            if (he || ha || hae || (haa && gen_wildcard))
+            if (he || ha || hae || (haa && gen_wildcard) || mixed)
             {
               if (c.inherits_p ())
               {
@@ -2999,13 +3143,14 @@ namespace CXX
               }
             }
 
-            //@@ throw if p is no exhausted at the end.
+            //@@ Throw if p is not exhausted at the end.
             //
-            if (he || ha || hae || (haa && gen_wildcard))
+            if (he || ha || hae || (haa && gen_wildcard) || mixed)
               os << "if ((f & " << flags_type << "::base) == 0)"
                  << "{"
                  << parser_type << " p (e, " <<
-                (he || hae || base_has_el ? "true, " : "false, ") <<
+                (he || hae || base_has_el || mixed_p (c) ? "true, " : "false, ") <<
+                (mixed_p (c) ? "true, " : "false, ") <<
                 (ha || (haa && gen_wildcard) || base_has_at ? "true" : "false")
                  << ");"
                  << "this->" << unclash (name, "parse") << " (p, f);"
@@ -3051,7 +3196,7 @@ namespace CXX
               os << "}";
             }
 
-            if (he || ha || hae || (haa && gen_wildcard))
+            if (he || ha || hae || (haa && gen_wildcard) || mixed)
             {
               os << "void " << name << "::" << endl
                  << unclash (name, "parse") << " (" <<
@@ -3066,17 +3211,45 @@ namespace CXX
                 os << "this->" << base << "::parse (p, f);"
                    << endl;
 
-              if (he || hae)
+              if (he || hae || mixed_p (c))
               {
-                os << "for (; p.more_elements (); p.next_element ())"
-                   << "{"
-                   << "const " << xerces_ns << "::DOMElement& i (" <<
-                  "p.cur_element ());"
-                   << "const " << qname_type << " n (" << endl
-                   << "::xsd::cxx::xml::dom::name< " << char_type << " > (i));"
-                   << endl;
+                bool m (mixed_p (c));
 
-                names (c, names_element_);
+                os << "for (; p.more_content (); p.next_content (" <<
+                  (m ? "true" : "false") << "))"
+                   << "{";
+
+                if (m)
+                {
+                  String const& ma (ctx.get<String> ("mixed-aname"));
+                  String const& mi (ctx.get<String> ("mixed-ordered-id-name"));
+                  String const& oa (ctx.get<String> ("order-aname"));
+                  String const& ot (ctx.get<String> ("order-type"));
+
+                  os << "if (p.cur_is_text ())"
+                     << "{"
+                     << "const " << xerces_ns << "::DOMText& t (" <<
+                    "p.cur_text ());"
+                     << "this->" << ma << " ().push_back (" << endl
+                     << "::xsd::cxx::xml::transcode<" << char_type << "> (" <<
+                    "t.getData (), t.getLength ()));"
+                     << "this->" << oa << " ().push_back (" << endl
+                     << ot << " (" << mi << "," << endl
+                     << "this->" << ma << " ().size () - 1));"
+                     << "continue;"
+                     << "}";
+                }
+
+                if (he || hae)
+                {
+                  os << "const " << xerces_ns << "::DOMElement& i (" <<
+                    "p.cur_element ());"
+                     << "const " << qname_type << " n (" << endl
+                     << "::xsd::cxx::xml::dom::name< " << char_type << " > (i));"
+                     << endl;
+
+                  names (c, names_element_);
+                }
 
                 os << "break;"
                    << "}";
@@ -3152,7 +3325,23 @@ namespace CXX
             // Note that here we don't assign the DOMDocument that is
             // used to hold wildcard fragments. Each document has its
             // own copy.
+
+            // Mixed text content.
             //
+            if (mixed)
+            {
+              String const& m (ctx.get<String> ("mixed-member"));
+              os << "this->" << m << " = x." << m << ";";
+            }
+
+            // Order container.
+            //
+            if (ordered)
+            {
+              String const& m (ctx.get<String> ("order-member"));
+              os << "this->" << m << " = x." << m << ";";
+            }
+
             names (c, assign_names_);
 
             os << "}"
@@ -3203,7 +3392,7 @@ namespace CXX
           // Comparison operators.
           //
           if (options.generate_comparison () &&
-              (he || ha || !c.inherits_p () ||
+              (he || ha || mixed || ordered || !c.inherits_p () ||
                ((hae || haa) && gen_wildcard)))
           {
             bool base_comp (false);
@@ -3214,8 +3403,8 @@ namespace CXX
               test.dispatch (c.inherits ().base ());
             }
 
-            bool has_body (he || ha || base_comp ||
-                              ((hae || haa) && gen_wildcard));
+            bool has_body (he || ha || ordered || mixed || base_comp ||
+                           ((hae || haa) && gen_wildcard));
 
             os << "bool" << endl
                << "operator== (const " << name << "&" <<
@@ -3231,6 +3420,22 @@ namespace CXX
 
             {
               Complex::names (c, comparison_names_);
+            }
+
+            if (mixed)
+            {
+              String const& an (ctx.get<String> ("mixed-aname"));
+              os << "if (!(x." << an << " () == y." << an << " ()))" << endl
+                 << "return false;"
+                 << endl;
+            }
+
+            if (ordered)
+            {
+              String const& an (ctx.get<String> ("order-aname"));
+              os << "if (!(x." << an << " () == y." << an << " ()))" << endl
+                 << "return false;"
+                 << endl;
             }
 
             os << "return true;"

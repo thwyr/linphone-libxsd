@@ -1,23 +1,11 @@
-# file      : examples/cxx/tree/makefile
+# file      : examples/cxx/tree/order/makefile
 # copyright : Copyright (c) 2006-2014 Code Synthesis Tools CC
 # license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-include $(dir $(lastword $(MAKEFILE_LIST)))../../../build/bootstrap.make
+include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
-all_examples := binary caching embedded custom hello library messaging \
-mixed multiroot order performance polymorphism streaming wildcard \
-compression xpath
-
-build_examples := binary caching embedded custom hello library messaging \
-mixed multiroot order performance polymorphism streaming wildcard
-
-ifeq ($(xsd_with_zlib),y)
-build_examples += compression
-endif
-
-ifeq ($(xsd_with_xqilla),y)
-build_examples += xpath
-endif
+all_examples   := element mixed
+build_examples := element mixed
 
 default  := $(out_base)/
 install  := $(out_base)/.install

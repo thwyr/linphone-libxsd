@@ -21,6 +21,7 @@ options. A custom naming convention can be achieved using the
 .BR --seq-modifier-regex ,
 .BR --parser-regex ,
 .BR --serializer-regex ,
+.BR --const-regex ,
 .BR --enumerator-regex ,
 and
 .B --element-type-regex
@@ -96,6 +97,7 @@ The
 .BR --seq-modifier-regex ,
 .BR --parser-regex ,
 .BR --serializer-regex ,
+.BR --const-regex ,
 .BR --enumerator-regex ,
 and
 .B --element-type-regex
@@ -233,6 +235,9 @@ regular expression is used to transform parsing function names when the
 naming convention is selected:
 
 .B /(.+)/parse\\\\u$1/
+
+The const category is used to create C++ constant names for the
+element/wildcard/text content ids in ordered types.
 
 See also the REGEX AND SHELL QUOTING section below.
 

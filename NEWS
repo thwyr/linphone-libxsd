@@ -28,6 +28,16 @@ Version 4.0.0
 
 C++/Tree
 
+  * Support for ordered types. C++/Tree flattens nested compositors
+    which sometimes can result in loss of element ordering information
+    that could be significant to the application. Ordered types address
+    this problem. For more information, refer to Section 2.8.4, "Element
+    Order" in the C++/Tree Mapping User Manual.
+
+  * Support for mixed content in ordered types. For more information, refer
+    to Section 2.13, "Mapping for Mixed Content Models" in the C++/Tree
+    Mapping User Manual.
+
   * New option, --suppress-assignment, suppress the generation of copy
     assignment operators for complex types. If this option is specified,
     the copy assignment operators for such types are declared private

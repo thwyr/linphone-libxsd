@@ -724,6 +724,17 @@ namespace CXX
         bool serialization (options.generate_serialization ());
         bool element_map (options.generate_element_map ());
 
+        {
+          if (doxygen)
+            os << endl
+               << "/**" << endl
+               << " * @brief Content order sequence entry." << endl
+               << " */" << endl;
+
+          gen_typedef (c.get<String> ("content-order"),
+                       "::xsd::cxx::tree::content_order");
+        }
+
         if (options.generate_element_type ())
         {
           if (doxygen)

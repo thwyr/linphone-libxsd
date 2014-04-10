@@ -9,6 +9,9 @@
 #include <sstream>
 #include <iostream>
 
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+
 #include "test.hxx" // Get XSD_CXX11 defined.
 
 #include <xsd/cxx/xml/string.hxx>

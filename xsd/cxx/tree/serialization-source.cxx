@@ -295,6 +295,11 @@ namespace CXX
           if (skip (e))
             return;
 
+          SemanticGraph::Complex& c (
+            dynamic_cast<SemanticGraph::Complex&> (e.scope ()));
+
+          bool ordered (ordered_p (c));
+
           String const& aname (eaname (e));
           String ns (e.qualified_p () ? e.namespace_ ().name () : "");
           String type (scope + L"::" + etype (e));
@@ -311,9 +316,14 @@ namespace CXX
           os << "// " << comment (e.name ()) << endl
              << "//" << endl;
 
+          if (ordered)
+            os << "case " << scope << "::" <<
+              e.context ().get<String> ("ordered-id-name") << ":"
+               << "{";
+
           if (poly)
           {
-            os << "{"
+            os << (ordered ? "" : "{")
                << "::xsd::cxx::tree::type_serializer_map< " << char_type
                << " >& tsm (" << endl
                << "::xsd::cxx::tree::type_serializer_map_instance< " <<
@@ -325,15 +335,22 @@ namespace CXX
           {
             // sequence
             //
-            os << "for (" << scope << "::" << econst_iterator (e) << endl
-               << "b (i." << aname << " ().begin ()), " <<
-              "n (i." << aname << " ().end ());" << endl
-               << "b != n; ++b)"
-               << "{";
+            if (ordered)
+              os << "const " << type << "& x (i." << aname <<
+                " ()[b->index]);"
+                 << endl;
+            else
+              os << "for (" << scope << "::" << econst_iterator (e) << endl
+                 << "b (i." << aname << " ().begin ()), " <<
+                "n (i." << aname << " ().end ());" << endl
+                 << "b != n; ++b)"
+                 << "{";
+
+            char const* x (ordered ? "x" : "*b");
 
             if (poly)
             {
-              os << "if (typeid (" << type << ") == typeid (*b))"
+              os << "if (typeid (" << type << ") == typeid (" << x << "))"
                  << "{"
                  << xerces_ns << "::DOMElement& s (" << endl
                  << "::xsd::cxx::xml::dom::create_element (" << endl
@@ -341,14 +358,14 @@ namespace CXX
                  << (ns ? strlit (ns) + L",\n" : L"")
                  << "e));"
                  << endl
-                 << "s << *b;"
+                 << "s << " << x << ";"
                  << "}"
                  << "else" << endl
                  << "tsm.serialize (" << endl
                  << strlit (e.name ()) << "," << endl
                  << strlit (ns) << "," << endl
                  << (e.global_p () ? "true" : "false") << ", " <<
-                (e.qualified_p () ? "true" : "false") << ", e, *b);";
+                (e.qualified_p () ? "true" : "false") << ", e, " << x << ");";
             }
             else
             {
@@ -363,30 +380,29 @@ namespace CXX
               {
               case st_other:
                 {
-                  os << "s << *b;";
+                  os << "s << " << x << ";";
                   break;
                 }
               case st_double:
                 {
-                  os << "s << " << as_double_type << " (*b);";
+                  os << "s << " << as_double_type << " (" << x << ");";
                   break;
                 }
               case st_decimal:
                 {
-                  os << "s << " << as_decimal_type << " (*b);";
+                  os << "s << " << as_decimal_type << " (" << x << ");";
                   break;
                 }
               }
             }
-
-            os << "}";
           }
           else if (min (e) == 0)
           {
             // optional
             //
-            os << "if (i." << aname << " ())"
-               << "{";
+            if (!ordered)
+              os << "if (i." << aname << " ())"
+                 << "{";
 
             if (poly)
             {
@@ -436,8 +452,6 @@ namespace CXX
                 }
               }
             }
-
-            os << "}";
           }
           else
           {
@@ -465,8 +479,10 @@ namespace CXX
             }
             else
             {
-              os << "{"
-                 << xerces_ns << "::DOMElement& s (" << endl
+              if (!ordered)
+                os << "{";
+
+              os << xerces_ns << "::DOMElement& s (" << endl
                  << "::xsd::cxx::xml::dom::create_element (" << endl
                  << strlit (e.name ()) << "," << endl
                  << (ns ? strlit (ns) + L",\n" : L"")
@@ -491,13 +507,26 @@ namespace CXX
                   break;
                 }
               }
-
-              os << "}";
             }
           }
 
-          if (poly)
+          if (ordered)
+          {
+            // See comment for bool text (false); below.
+            //
+            if (mixed_p (c) && c.context ().get<size_t> ("ordered-start") != 1)
+              os << "text = true;";
+
+            os << "continue;"
+               << "}";
+          }
+          else
+          {
             os << "}";
+
+            if (poly && (max (e) != 1 || min (e) == 0))
+              os << "}"; // There is no extra block for poly one.
+          }
         }
 
       private:
@@ -514,48 +543,77 @@ namespace CXX
         virtual void
         traverse (Type& a)
         {
+          SemanticGraph::Complex& c (
+            dynamic_cast<SemanticGraph::Complex&> (a.scope ()));
+
+          bool ordered (ordered_p (c));
+
           String const& aname (eaname (a));
 
           os << "// " << ename (a) << endl
              << "//" << endl;
 
+          if (ordered)
+            os << "case " << scope << "::" <<
+              a.context ().get<String> ("ordered-id-name") << ":";
+
           if (max (a) != 1)
           {
             // sequence
             //
-            os << "for (" << scope << "::" << econst_iterator (a) << endl
-               << "b (i." << aname << " ().begin ()), " <<
-              "n (i." << aname << " ().end ());" << endl
-               << "b != n; ++b)"
-               << "{"
+            if (!ordered)
+              os << "for (" << scope << "::" << econst_iterator (a) << endl
+                 << "b (i." << aname << " ().begin ()), " <<
+                "n (i." << aname << " ().end ());" << endl
+                 << "b != n; ++b)";
+
+            os << "{"
                << "e.appendChild (" << endl
                << "e.getOwnerDocument ()->importNode (" << endl
                << "const_cast< " << xerces_ns <<
-              "::DOMElement* > (&(*b)), true));"
-               << "}";
+              "::DOMElement* > (&(" <<
+              (ordered ? (L"i." + aname + L" ()[b->index]") : L"*b") <<
+              ")), true));";
           }
           else if (min (a) == 0)
           {
             // optional
             //
-            os << "if (i." << aname << " ())"
-               << "{"
+            if (!ordered)
+              os << "if (i." << aname << " ())";
+
+            os << "{"
                << "e.appendChild (" << endl
                << "e.getOwnerDocument ()->importNode (" << endl
                << "const_cast< " << xerces_ns << "::DOMElement* > (&(*i." <<
-              aname << " ())), true));"
-               << "}";
+              aname << " ())), true));";
           }
           else
           {
             // one
             //
+            if (ordered)
+              os << "{";
+
             os << "e.appendChild (" << endl
                << "e.getOwnerDocument ()->importNode (" << endl
                << "const_cast< " << xerces_ns << "::DOMElement* > (&(i." <<
               aname << " ())), true));"
                << endl;
           }
+
+          if (ordered)
+          {
+            // See comment for bool text (false); below.
+            //
+            if (mixed_p (c) && c.context ().get<size_t> ("ordered-start") != 1)
+              os << "text = true;";
+
+            os << "continue;";
+          }
+
+          if (ordered || max (a) != 1 || min (a) == 0)
+            os << "}";
         }
 
       private:
@@ -702,6 +760,8 @@ namespace CXX
         virtual void
         traverse (Type& c)
         {
+          SemanticGraph::Context& ctx (c.context ());
+
           String name (ename (c));
 
           // If renamed name is empty then we do not need to generate
@@ -740,22 +800,107 @@ namespace CXX
           }
 
           {
+            bool o (ordered_p (c));
+            size_t start, count;
+
+            if (o)
+            {
+              start = ctx.get<size_t> ("ordered-start");
+              count = ctx.get<size_t> ("ordered-count");
+
+              if (start != count)
+              {
+                String const& ci (ctx.get<String> ("order-const-iterator"));
+                String const& an (ctx.get<String> ("order-aname"));
+
+                // If we have mixed content and a base, then we have to
+                // skip the text content until we serialize one of "our"
+                // elements.
+                //
+                if (mixed_p (c) && start != 1)
+                  os << "bool text (false);"
+                     << endl;
+
+                os << "for (" << name << "::" << ci << endl
+                   << "b (i." << an << " ().begin ()), n (i." << an <<
+                  " ().end ());" << endl
+                   << "b != n; ++b)"
+                   << "{"
+                   << "switch (b->id)"
+                   << "{";
+              }
+            }
+
             Traversal::Names names;
             Any any (*this, name);
             Element element (*this, name);
-            Attribute attribute (*this, name);
 
             names >> element;
-            names >> attribute;
 
             if (options.generate_wildcard ())
               names >> any;
 
             Complex::names (c, names);
+
+            if (o)
+            {
+              if (start != count)
+              {
+                if (mixed_p (c))
+                {
+                  //@@ propagate mixed-ordered-id to derived
+
+                  os << "// text_content" << endl
+                     << "//" << endl
+                     << "case " << name << "::" <<
+                    ctx.get<String> ("mixed-ordered-id-name") << ":"
+                     << "{";
+
+                  // See the comment above.
+                  //
+                  if (start != 1)
+                    os << "if (text)" << endl;
+
+                  os << "e.appendChild (" << endl
+                     << "e.getOwnerDocument ()->createTextNode (" << endl
+                     << "::xsd::cxx::xml::string (" << endl
+                     << "i." << ctx.get<String> ("mixed-aname") <<
+                    " ()[b->index].c_str ()).c_str ()));";
+
+                  // os << "e << i." << ctx.get<String> ("mixed-aname") <<
+                  //  " ()[b->index];";
+
+                  os << "continue;"
+                     << "}";
+                }
+
+                // Ignore content before our id range and stop serializing
+                // if we see anything past. This handles inheritance.
+                //
+                os << "default:"
+                   << "{";
+
+                if (start != 1)
+                  os << "if (b->id < " << start << "UL)" << endl
+                     << "continue;";
+
+                os << "break;" // Stop (see break below).
+                   << "}";
+
+                os << "}"      // switch
+                   << "break;" // Unknown element past our elements.
+                   << "}";     // for
+              }
+            }
+          }
+
+          {
+            Attribute attribute (*this, name);
+            Traversal::Names names (attribute);
+            Complex::names (c, names);
           }
 
           os << "}";
-
 
           bool simple (true);
           {

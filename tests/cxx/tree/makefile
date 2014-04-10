@@ -20,6 +20,7 @@ float           \
 list            \
 name-clash      \
 naming          \
+order           \
 polymorphism    \
 prefix          \
 test-template   \

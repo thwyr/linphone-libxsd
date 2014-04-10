@@ -8,6 +8,27 @@ namespace xsd
   {
     namespace tree
     {
+      // content_order_type
+      //
+
+      inline bool
+      operator== (const content_order& x, const content_order& y)
+      {
+        return x.id == y.id && x.index == y.index;
+      }
+
+      inline bool
+      operator!= (const content_order& x, const content_order& y)
+      {
+        return !(x == y);
+      }
+
+      inline bool
+      operator< (const content_order& x, const content_order& y)
+      {
+        return x.id < y.id || (x.id == y.id && x.index < y.index);
+      }
+
       // type
       //
 

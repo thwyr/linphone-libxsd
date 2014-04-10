@@ -21,6 +21,7 @@
 #include <map>
 #include <string>
 #include <memory>  // std::auto_ptr/unique_ptr
+#include <cstddef> // std::size_t
 #include <istream>
 #include <sstream>
 #include <cassert>
@@ -190,7 +191,6 @@ namespace xsd
         unsigned long x_;
       };
 
-
       // Parsing properties. Refer to xsd/cxx/xml/elements.hxx for XML-
       // related properties.
       //
@@ -198,6 +198,44 @@ namespace xsd
       class properties: public xml::properties<C>
       {
       };
+
+      /**
+       * @brief Content order sequence entry.
+       *
+       * @nosubgrouping
+       */
+      struct content_order
+      {
+        /**
+         * @brief Initialize an instance with passed id and index.
+         *
+         * @param id Content id.
+         * @param index Content index in the corresponding sequence.
+         */
+        content_order (std::size_t id, std::size_t index = 0)
+            : id (id), index (index)
+        {
+        }
+
+        /**
+         * @brief Content id.
+         */
+        std::size_t id;
+
+        /**
+         * @brief Content index.
+         */
+        std::size_t index;
+      };
+
+      bool
+      operator== (const content_order&, const content_order&);
+
+      bool
+      operator!= (const content_order&, const content_order&);
+
+      bool
+      operator< (const content_order&, const content_order&);
 
       //@cond
 
