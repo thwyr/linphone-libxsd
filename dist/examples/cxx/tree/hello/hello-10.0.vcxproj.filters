@@ -10,7 +10,7 @@
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Schema Files">
-      <UniqueIdentifier>{d512d9c4-9ddd-4830-a487-1d87db0643d5}</UniqueIdentifier>
+      <UniqueIdentifier>{D512D9C4-9DDD-4830-A487-1D87DB0643D5}</UniqueIdentifier>
       <Extensions>xsd</Extensions>
     </Filter>
   </ItemGroup>
