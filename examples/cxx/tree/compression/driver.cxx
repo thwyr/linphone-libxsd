@@ -19,7 +19,7 @@ main (int argc, char* argv[])
 {
   if (argc != 2)
   {
-    cerr << "usage: " << argv[0] << " library.xml" << endl;
+    cerr << "usage: " << argv[0] << " library.xml.gz" << endl;
     return 1;
   }
 
