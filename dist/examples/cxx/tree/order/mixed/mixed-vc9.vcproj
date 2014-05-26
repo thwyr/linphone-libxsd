@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
-	Name="element"
-	ProjectGUID="{B6118FC1-3886-4F01-BECE-44B3BDD92CA6}"
-	RootNamespace="element"
+	Version="9.00"
+	Name="order-mixed"
+	ProjectGUID="{B58CABEE-0A5C-43F3-B22B-53D060763B67}"
+	RootNamespace="order-mixed"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -51,7 +52,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -71,6 +72,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/driver.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -90,87 +93,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
-			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="0"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_3.lib"
-				OutputFile="$(OutDir)/driver.exe"
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -210,7 +132,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -230,6 +152,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/driver.pdb"
 				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -251,7 +175,81 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release"
+			IntermediateDirectory="Release"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				RuntimeLibrary="0"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="xerces-c_3.lib"
+				OutputFile="$(OutDir)/driver.exe"
+				LinkIncremental="1"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -288,7 +286,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -309,6 +307,8 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
 				TargetMachine="17"
 			/>
 			<Tool
@@ -330,9 +330,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -343,24 +340,24 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{084F9FF2-F141-40BC-8D7D-7A78CC6707B0}"
+			UniqueIdentifier="{49DCF246-346C-4532-8D81-B3D8943C51A3}"
 			>
 			<File
 				RelativePath=".\driver.cxx"
 				>
 			</File>
 			<File
-				RelativePath=".\transactions.cxx"
+				RelativePath=".\text.cxx"
 				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{F9AFEC3B-B8A5-47F6-BD3B-316A28A94B1F}"
+			UniqueIdentifier="{0317763E-1AA4-4187-8ED7-58C87F59E051}"
 			>
 			<File
-				RelativePath=".\transactions.hxx"
+				RelativePath=".\text.hxx"
 				>
 			</File>
 		</Filter>
@@ -369,26 +366,16 @@
 			Filter="xsd"
 			>
 			<File
-				RelativePath=".\transactions.xsd"
+				RelativePath=".\text.xsd"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="xsd transactions.xsd"
-						CommandLine="xsd.exe cxx-tree --generate-intellisense --generate-serialization --generate-wildcard --ordered-type batch transactions.xsd"
-						Outputs="transactions.cxx;transactions.hxx"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="xsd transactions.xsd"
-						CommandLine="xsd.exe cxx-tree --generate-intellisense --generate-serialization --generate-wildcard --ordered-type batch transactions.xsd"
-						Outputs="transactions.cxx;transactions.hxx"
+						Description="xsd text.xsd"
+						CommandLine="xsd.exe cxx-tree --generate-serialization --ordered-type-mixed text.xsd"
+						Outputs="text.cxx;text.hxx"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -396,9 +383,19 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="xsd transactions.xsd"
-						CommandLine="xsd.exe cxx-tree --generate-intellisense --generate-serialization --generate-wildcard --ordered-type batch transactions.xsd"
-						Outputs="transactions.cxx;transactions.hxx"
+						Description="xsd text.xsd"
+						CommandLine="xsd.exe cxx-tree --generate-serialization --ordered-type-mixed text.xsd"
+						Outputs="text.cxx;text.hxx"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="xsd text.xsd"
+						CommandLine="xsd.exe cxx-tree --generate-serialization --ordered-type-mixed text.xsd"
+						Outputs="text.cxx;text.hxx"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -406,9 +403,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="xsd transactions.xsd"
-						CommandLine="xsd.exe cxx-tree --generate-intellisense --generate-serialization --generate-wildcard --ordered-type batch transactions.xsd"
-						Outputs="transactions.cxx;transactions.hxx"
+						Description="xsd text.xsd"
+						CommandLine="xsd.exe cxx-tree --generate-serialization --ordered-type-mixed text.xsd"
+						Outputs="text.cxx;text.hxx"
 					/>
 				</FileConfiguration>
 			</File>

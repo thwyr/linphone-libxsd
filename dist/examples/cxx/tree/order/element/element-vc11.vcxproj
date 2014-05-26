@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,30 +19,30 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>mixed</ProjectName>
-    <ProjectGuid>{94A74673-C980-426B-B5BB-00744559EAD1}</ProjectGuid>
-    <RootNamespace>mixed</RootNamespace>
+    <ProjectName>order-element</ProjectName>
+    <ProjectGuid>{9488E872-8E09-4B68-9715-AF68534164C4}</ProjectGuid>
+    <RootNamespace>order-element</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -91,7 +91,6 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -120,7 +119,6 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -143,7 +141,6 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -170,7 +167,6 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -187,25 +183,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="driver.cxx" />
-    <ClCompile Include="text.cxx" />
+    <ClCompile Include="transactions.cxx" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="text.hxx" />
+    <ClInclude Include="transactions.hxx" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="text.xsd">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xsd text.xsd</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xsd.exe cxx-tree --generate-serialization --ordered-type-mixed text.xsd</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">text.cxx;text.hxx;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xsd text.xsd</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xsd.exe cxx-tree --generate-serialization --ordered-type-mixed text.xsd</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">text.cxx;text.hxx;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xsd text.xsd</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xsd.exe cxx-tree --generate-serialization --ordered-type-mixed text.xsd</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">text.cxx;text.hxx;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xsd text.xsd</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xsd.exe cxx-tree --generate-serialization --ordered-type-mixed text.xsd</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">text.cxx;text.hxx;%(Outputs)</Outputs>
+    <CustomBuild Include="transactions.xsd">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xsd transactions.xsd</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xsd.exe cxx-tree --generate-serialization --generate-wildcard --ordered-type batch transactions.xsd</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">transactions.cxx;transactions.hxx;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xsd transactions.xsd</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xsd.exe cxx-tree --generate-serialization --generate-wildcard --ordered-type batch transactions.xsd</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">transactions.cxx;transactions.hxx;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xsd transactions.xsd</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xsd.exe cxx-tree --generate-serialization --generate-wildcard --ordered-type batch transactions.xsd</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">transactions.cxx;transactions.hxx;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xsd transactions.xsd</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xsd.exe cxx-tree --generate-serialization --generate-wildcard --ordered-type batch transactions.xsd</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">transactions.cxx;transactions.hxx;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

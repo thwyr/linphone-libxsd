@@ -64,9 +64,16 @@ $(dist-common):
 $(dist): $(dist-common)
 	$(call install-data,$(src_base)/README,$(dist_prefix)/$(path)/README)
 
+$(dist-win): |$(out_root)/.dist-pre
 $(dist-win): $(dist-common)
 	$(call install-data,$(src_base)/README,$(dist_prefix)/$(path)/README.txt)
 	$(call message,,todos $(dist_prefix)/$(path)/README.txt)
+	$(call meta-vc8sln,$(src_root)/dist/template-vc8.sln,xdr-vc8.sln)
+	$(call meta-vc9sln,$(src_root)/dist/template-vc9.sln,xdr-vc9.sln)
+	$(call meta-vc10sln,$(src_root)/dist/template-vc10.sln,xdr-vc10.sln)
+	$(call meta-vc11sln,$(src_root)/dist/template-vc11.sln,xdr-vc11.sln)
+	$(call meta-vc12sln,$(src_root)/dist/template-vc12.sln,xdr-vc12.sln)
+
 
 # Clean.
 #
@@ -92,8 +99,15 @@ endif
 $(call include,$(bld_root)/cxx/o-e.make)
 $(call include,$(bld_root)/cxx/cxx-o.make)
 $(call include,$(bld_root)/cxx/cxx-d.make)
-$(call include,$(bld_root)/install.make)
 $(call include,$(scf_root)/xsd/tree/xsd-cxx.make)
+
+$(call include,$(bld_root)/install.make)
+$(call include,$(bld_root)/meta/vc8sln.make)
+$(call include,$(bld_root)/meta/vc9sln.make)
+$(call include,$(bld_root)/meta/vc10sln.make)
+$(call include,$(bld_root)/meta/vc11sln.make)
+$(call include,$(bld_root)/meta/vc12sln.make)
+
 
 # Dependencies.
 #

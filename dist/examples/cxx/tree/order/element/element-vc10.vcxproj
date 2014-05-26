@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>element</ProjectName>
+    <ProjectName>order-element</ProjectName>
     <ProjectGuid>{9488E872-8E09-4B68-9715-AF68534164C4}</ProjectGuid>
-    <RootNamespace>element</RootNamespace>
+    <RootNamespace>order-element</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

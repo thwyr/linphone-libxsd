@@ -9,7 +9,10 @@ test     := $(out_base)/.test
 install  := $(out_base)/.install
 dist     := $(out_base)/.dist
 dist-win := $(out_base)/.dist-win
+dist-pre := $(out_base)/.dist-pre
 clean    := $(out_base)/.clean
+
+.PHONY: $(dist-pre)
 
 $(default): $(out_base)/xsd/      \
             $(out_base)/tests/    \
@@ -53,13 +56,13 @@ $(dist): $(out_base)/xsd/.dist           \
 	$(call install-data,$(src_base)/NEWS,$(dist_prefix)/NEWS)
 	$(call install-data,$(src_base)/version,$(dist_prefix)/version)
 
-$(dist-win): $(out_base)/xsd/.dist-win           \
+$(dist-win): $(dist-pre)                         \
+             $(out_base)/xsd/.dist-win           \
              $(out_base)/libxsd/.dist-win        \
              $(out_base)/examples/.dist-win      \
              $(out_base)/doc/.dist-win
 	$(call install-dir,$(src_base)/dist/etc,$(dist_prefix)/etc)
 	$(call install-dir,$(src_base)/dist/examples/build,$(dist_prefix)/examples/build)
-	$(call install-dir,$(src_base)/dist/examples/cxx,$(dist_prefix)/examples/cxx)
 	$(call install-data,$(src_base)/dist/examples/makefile,$(dist_prefix)/examples/makefile)
 	$(call install-data,$(src_base)/dist/README-WINDOWS,$(dist_prefix)/README.txt)
 	$(call message,,todos $(dist_prefix)/README.txt)
@@ -76,6 +79,12 @@ $(dist-win): $(out_base)/xsd/.dist-win           \
 	$(call install-data,$(src_base)/version,$(dist_prefix)/version.txt)
 	$(call message,,todos $(dist_prefix)/version.txt)
 
+# We need the project files for the examples copied before we try to
+# auto-generate the solution files. So each example target that generates
+# solutions should depend in order-only on this target.
+#
+$(dist-pre):
+	$(call install-dir,$(src_base)/dist/examples/cxx,$(dist_prefix)/examples/cxx)
 
 # Clean.
 #
