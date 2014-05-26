@@ -66,10 +66,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="xerces-c_3D.lib"
-				OutputFile="$(OutDir)/library-driver.exe"
+				OutputFile="$(OutDir)/driver.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/library-driver.pdb"
+				ProgramDatabaseFile="$(OutDir)/driver.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -145,10 +145,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="xerces-c_3D.lib"
-				OutputFile="$(OutDir)/library-driver.exe"
+				OutputFile="$(OutDir)/driver.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/library-driver.pdb"
+				ProgramDatabaseFile="$(OutDir)/driver.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -220,7 +220,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="xerces-c_3.lib"
-				OutputFile="$(OutDir)/library-driver.exe"
+				OutputFile="$(OutDir)/driver.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -297,7 +297,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="xerces-c_3.lib"
-				OutputFile="$(OutDir)/library-driver.exe"
+				OutputFile="$(OutDir)/driver.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
