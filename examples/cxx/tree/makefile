@@ -39,6 +39,7 @@ $(install): $(addprefix $(out_base)/,$(addsuffix /.install,$(all_examples)))
 $(dist): $(addprefix $(out_base)/,$(addsuffix /.dist,$(all_examples)))
 	$(call install-data,$(src_base)/README,$(dist_prefix)/$(path)/README)
 
+$(dist-win): export dirs := $(shell find $(src_base) -type d -exec test -f {}/driver.cxx ';' -printf '%P ')
 $(dist-win): |$(out_root)/.dist-pre
 $(dist-win): $(addprefix $(out_base)/,$(addsuffix /.dist-win,$(all_examples)))
 	$(call install-data,$(src_base)/README,$(dist_prefix)/$(path)/README.txt)
@@ -48,6 +49,7 @@ $(dist-win): $(addprefix $(out_base)/,$(addsuffix /.dist-win,$(all_examples)))
 	$(call meta-vc10sln,$(src_root)/dist/template-vc10.sln,tree-vc10.sln)
 	$(call meta-vc11sln,$(src_root)/dist/template-vc11.sln,tree-vc11.sln)
 	$(call meta-vc12sln,$(src_root)/dist/template-vc12.sln,tree-vc12.sln)
+	$(call meta-vctest,tree-vc8.sln,$(src_root)/dist/examples/test.bat,test.bat)
 
 # Clean.
 #
@@ -59,6 +61,7 @@ $(call include,$(bld_root)/meta/vc9sln.make)
 $(call include,$(bld_root)/meta/vc10sln.make)
 $(call include,$(bld_root)/meta/vc11sln.make)
 $(call include,$(bld_root)/meta/vc12sln.make)
+$(call include,$(bld_root)/meta/vctest.make)
 
 ifneq ($(filter $(MAKECMDGOALS),dist dist-win install),)
 $(foreach e,$(all_examples),$(call import,$(src_base)/$e/makefile))

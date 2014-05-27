@@ -7,10 +7,8 @@ The example consists of the following files:
 test.xsd
   XML Schema which describes the test vocabulary.
 
-test-5k.xml
 test-50k.xml
-test-500k.xml
-  Test XML documents of various sizes.
+  Test XML document.
 
 gen.cxx
   Program to generate a test document of desired size.
@@ -41,4 +39,4 @@ parser (only makes sense for Xerces-C++, off by default). The -i option
 can be used to specify the number of parsing iterations (1000 by default).
 For example:
 
-$ ./driver -v -i 100 test-500k.xml
+$ ./driver -v -i 100 test-50k.xml

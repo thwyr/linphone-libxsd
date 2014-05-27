@@ -63,6 +63,7 @@ $(dist-win): $(dist-pre)                         \
              $(out_base)/doc/.dist-win
 	$(call install-dir,$(src_base)/dist/etc,$(dist_prefix)/etc)
 	$(call install-dir,$(src_base)/dist/examples/build,$(dist_prefix)/examples/build)
+	$(call install-data,$(src_base)/dist/examples/tester.bat,$(dist_prefix)/examples/tester.bat)
 	$(call install-data,$(src_base)/dist/examples/makefile,$(dist_prefix)/examples/makefile)
 	$(call install-data,$(src_base)/dist/README-WINDOWS,$(dist_prefix)/README.txt)
 	$(call message,,todos $(dist_prefix)/README.txt)
