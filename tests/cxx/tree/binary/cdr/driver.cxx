@@ -127,6 +127,14 @@ main (int argc, char* argv[])
     assert (r->time () == c->time ());
     assert (r->date_time () == c->date_time ());
     assert (r->duration () == c->duration ());
+
+    // anySimpleType
+    //
+    assert (!r->any_simple_type_attr ().text_content ().empty ());
+    assert (r->any_simple_type_attr () == c->any_simple_type_attr ());
+
+    assert (!r->any_simple_type ().text_content ().empty ());
+    assert (r->any_simple_type () == c->any_simple_type ());
   }
   catch (xml_schema::exception const& e)
   {

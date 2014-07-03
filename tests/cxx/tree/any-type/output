@@ -1,0 +1,73 @@
+
+t: 
+t: 
+t: 
+t: 
+t: 
+t: 
+t: 
+t: 
+s: 
+s: simple
+s: baz
+l: one two three
+a: any simple content
+
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<t:root xmlns:t="test" a="any simple content" xmlns:o="other" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="test test.xsd">
+  <t/>
+  <t x="x"/>
+  <t>any</t>
+  <t x="x">any</t>
+  <t o:y="y" x="x">
+    <n1>
+      <n2>nested 1</n2>
+      <n2>nested 2</n2>
+    </n1>
+    <o:n2 o:x="x">more</o:n2>
+  </t><t x="x">
+    <n1>mi
+      <n2>nested 1</n2>x
+      <n2>nested 2</n2>ed
+    </n1>content
+  </t>
+  <t x="foo">data</t>
+  <t x="foo">data</t>
+  <s/>
+  <s>simple</s>
+  <s>baz</s>
+  <l>one two three</l>
+</t:root>
+
+
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<t:root xmlns:t="test" a="any simple content" xmlns:o="other" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="test test.xsd">
+  <t/>
+  <t x="x"/>
+  <t>any</t>
+  <t x="x">any</t>
+  <t o:y="y" x="x">
+    <n1>
+      <n2>nested 1</n2>
+      <n2>nested 2</n2>
+    </n1>
+    <o:n2 o:x="x">more</o:n2>
+  </t><t x="x">
+    <n1>mi
+      
+      <n2>nested 1</n2>x
+      
+      <n2>nested 2</n2>ed
+    
+    </n1>content
+  
+  </t>
+  <t x="foo">data</t>
+  <t x="foo">data</t>
+  <s/>
+  <s>simple</s>
+  <s>baz</s>
+  <l>one two three</l>
+</t:root>
+
+

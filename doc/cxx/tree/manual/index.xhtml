@@ -1214,17 +1214,43 @@ public:
   virtual
   ~type ();
 
-public:
   type ();
   type (const type&amp;);
 
-public:
   type&amp;
   operator= (const type&amp;);
 
-public:
   virtual type*
   _clone () const;
+
+  // anyType DOM content.
+  //
+public:
+  typedef element_optional dom_content_optional;
+
+  const dom_content_optional&amp;
+  dom_content () const;
+
+  dom_content_optional&amp;
+  dom_content ();
+
+  void
+  dom_content (const xercesc::DOMElement&amp;);
+
+  void
+  dom_content (xercesc::DOMElement*);
+
+  void
+  dom_content (const dom_content_optional&amp;);
+
+  const xercesc::DOMDocument&amp;
+  dom_content_document () const;
+
+  xercesc::DOMDocument&amp;
+  dom_content_document ();
+
+  bool
+  null_content () const;
 
   // DOM association.
   //
@@ -1237,7 +1263,44 @@ public:
 };
   </pre>
 
-  <p>For more information about DOM association refer to
+  <p>When <code>xml_schema::type</code> is used to create an instance
+     (as opposed to being a base of a derived type), it represents
+     the XML Schema <code>anyType</code> type. <code>anyType</code>
+     allows any attributes and any content in any order. In the
+     C++/Tree mapping this content can be represented as a DOM
+     fragment, similar to XML Schema wildcards (<a href="#2.12">Section
+     2.12, "Mapping for <code>any</code> and
+     <code>anyAttribute</code>"</a>).</p>
+
+  <p>To enable automatic extraction of <code>anyType</code> content
+     during parsing, the <code>--generate-any-type</code> option must be
+     specified. Because the DOM API is used to access such content, the
+     Xerces-C++ runtime should be initialized by the application prior to
+     parsing and should remain initialized for the lifetime of objects
+     with the DOM content. For more information on the Xerces-C++ runtime
+     initialization see <a href="#3.1">Section 3.1, "Initializing the
+     Xerces-C++ Runtime"</a>.</p>
+
+  <p>The DOM content is stored as the optional DOM element container
+     and the DOM content accessors and modifiers presented above are
+     identical to those generated for an optional element wildcard.
+     Refer to <a href="#2.12.2">Section 2.12.2, "Mapping for <code>any</code>
+     with the Optional Cardinality Class"</a> for details on their
+     semantics.</p>
+
+  <p>The <code>dom_content_document()</code> function returns the
+     DOM document used to store the raw XML content corresponding
+     to the <code>anyType</code> instance. It is equivalent to the
+     <code>dom_document()</code> function generated for types
+     with wildcards.</p>
+
+  <p>The <code>null_content()</code> accessor is an optimization function
+     that allows us to check for the lack of content without actually
+     creating its empty representation, that is, empty DOM document for
+     <code>anyType</code> or empty string for <code>anySimpleType</code>
+     (see the following section for details on <code>anySimpleType</code>).</p>
+
+  <p>For more information on DOM association refer to
      <a href="#5.1">Section 5.1, "DOM Association"</a>.</p>
 
   <h3><a name="2.5.3">2.5.3 Mapping for <code>anySimpleType</code></a></h3>
@@ -1250,18 +1313,37 @@ class simple_type: public type
 {
 public:
   simple_type ();
+  simple_type (const C*);
+  simple_type (const std::basic_string&lt;C>&amp;);
+
   simple_type (const simple_type&amp;);
 
-public:
   simple_type&amp;
   operator= (const simple_type&amp;);
 
-public:
   virtual simple_type*
   _clone () const;
+
+  // anySimpleType text content.
+  //
+public:
+  const std::basic_string&lt;C>&amp;
+  text_content () const;
+
+  std::basic_string&lt;C>&amp;
+  text_content ();
+
+  void
+  text_content (const std::basic_string&lt;C>&amp;);
 };
   </pre>
 
+  <p>When <code>xml_schema::simple_type</code> is used to create an instance
+     (as opposed to being a base of a derived type), it represents
+     the XML Schema <code>anySimpleType</code> type. <code>anySimpleType</code>
+     allows any simple content. In the C++/Tree mapping this content can
+     be represented as a string and accessed or modified with the
+     <code>text_content()</code> functions shown above.</p>
 
   <h3><a name="2.5.4">2.5.4 Mapping for <code>QName</code></a></h3>
 

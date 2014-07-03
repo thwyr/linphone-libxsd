@@ -19,18 +19,17 @@ namespace xsd
         // anyType and anySimpleType.
         //
 
-        //register_type (
-        //  typeid (type),
-        //  &comparator_impl<type>,
-        //  false);
+        register_type (
+          typeid (type),
+          &comparator_impl<type>,
+          false);
 
-        typedef simple_type<type> simple_type;
+        typedef simple_type<C, type> simple_type;
 
-        //register_type (
-        //  typeid (simple_type),
-        //  &comparator_impl<simple_type>,
-        //  false);
-
+        register_type (
+          typeid (simple_type),
+          &comparator_impl<simple_type>,
+          false);
 
         // Strings
         //

@@ -24,7 +24,7 @@ namespace xsd
           &inserter_impl<C, type>,
           false);
 
-        typedef simple_type<type> simple_type;
+        typedef simple_type<C, type> simple_type;
         register_type (
           typeid (simple_type),
           &inserter_impl<C, simple_type>,

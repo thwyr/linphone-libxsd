@@ -30,7 +30,7 @@ namespace xsd
           &extractor_impl<S, type>,
           false);
 
-        typedef simple_type<type> simple_type;
+        typedef simple_type<C, type> simple_type;
         register_type (
           qualified_name (bits::any_simple_type<C> (), xsd),
           &extractor_impl<S, simple_type>,

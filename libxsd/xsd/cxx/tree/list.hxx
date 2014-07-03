@@ -10,7 +10,7 @@
 #include <xercesc/dom/DOMAttr.hpp>
 #include <xercesc/dom/DOMElement.hpp>
 
-#include <xsd/cxx/tree/elements.hxx> // tree::istream
+#include <xsd/cxx/tree/elements.hxx>
 #include <xsd/cxx/tree/istream-fwd.hxx> // tree::istream
 #include <xsd/cxx/tree/containers.hxx>  // fundamental_p, sequence
 

@@ -15,7 +15,7 @@
 
 #include <xsd/cxx/xml/string.hxx>
 
-#include <xsd/cxx/tree/containers.hxx> // iterator_adapter
+#include <xsd/cxx/tree/iterator-adapter.hxx>
 
 namespace xsd
 {

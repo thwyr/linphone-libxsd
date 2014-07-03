@@ -82,6 +82,28 @@ namespace CXX
              << "  " << base_type << " (o, f, this)"
              << "{"
              << "}";
+
+          // Comparison operators.
+          //
+          if (options.generate_comparison ())
+          {
+            os << inl
+               << "bool" << endl
+               << "operator== (const " << name << "& x, " <<
+              "const " << name << "& y)"
+               << "{"
+               << "const " << base_type << "& bx (x);"
+               << "return bx == y;"
+               << "}";
+
+            os << inl
+               << "bool" << endl
+               << "operator!= (const " << name << "& x, " <<
+              "const " << name << "& y)"
+               << "{"
+               << "return !(x == y);"
+               << "}";
+          }
         }
 
       private:

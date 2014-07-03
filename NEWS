@@ -38,6 +38,14 @@ C++/Tree
     to Section 2.13, "Mapping for Mixed Content Models" in the C++/Tree
     Mapping User Manual.
 
+  * xml_schema::typecan represent anyType content as a DOM fragment, similar
+    to wildcards. For more information, refer to Section 2.5.2, "Mapping for
+    anyType" in the C++/Tree Mapping User Manual.
+
+  * xml_schema::simple_type can represent anySimpleType content as a text
+    string. For more information, refer to Section 2.5.3, "Mapping for
+    anySimpleType" in the C++/Tree Mapping User Manual.
+
   * New option, --suppress-assignment, suppress the generation of copy
     assignment operators for complex types. If this option is specified,
     the copy assignment operators for such types are declared private

@@ -170,6 +170,13 @@ namespace CXX
          this option."
       };
 
+      bool --generate-any-type
+      {
+        "Extract and store content of the XML Schema \cb{anyType} type as a
+         DOM fragment. Note that you need to initialize the Xerces-C++ runtime
+         if you are using this option."
+      };
+
       NarrowStrings --generate-insertion
       {
         "<os>",

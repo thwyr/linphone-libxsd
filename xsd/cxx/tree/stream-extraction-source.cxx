@@ -321,6 +321,7 @@ namespace CXX
 
           SemanticGraph::Type& t (e.type ());
           String type (etype (e));
+          String tr (etraits (e)); // traits type name
 
           bool fund (false);
           {
@@ -389,8 +390,8 @@ namespace CXX
             }
             else
             {
-              os << auto_ptr << "< " << type << " > r (new " << type <<
-                " (s, f, this));";
+              os << auto_ptr << "< " << type << " > r (" << endl
+                 << tr << "::create (s, f, this));";
             }
 
             os << "c.push_back (" << r << ");"
@@ -438,8 +439,8 @@ namespace CXX
             }
             else
             {
-              os << auto_ptr << "< " << type << " > r (new " << type <<
-                " (s, f, this));";
+              os << auto_ptr << "< " << type << " > r (" << endl
+                 << tr << "::create (s, f, this));";
             }
 
             os << "this->" << member << ".set (" << r << ");"
@@ -482,8 +483,8 @@ namespace CXX
             }
             else
             {
-              os << auto_ptr << "< " << type << " > r (new " << type <<
-                " (s, f, this));";
+              os << auto_ptr << "< " << type << " > r (" << endl
+                 << tr << "::create (s, f, this));";
             }
 
             os << "this->" << member << ".set (" << r << ");"
@@ -507,6 +508,7 @@ namespace CXX
         {
           String const& member (emember (a));
           String type (etype (a));
+          String tr (etraits (a)); // traits type name
 
           bool fund (false);
           {
@@ -530,8 +532,8 @@ namespace CXX
             }
             else
             {
-              os << "this->" << member << ".set (" << auto_ptr << "< " <<
-                type << " > (new " << type << " (s, f, this)));";
+              os << "this->" << member << ".set (" << tr <<
+                "::create (s, f, this));";
             }
 
             os << "}" // if (p)
@@ -549,8 +551,8 @@ namespace CXX
             }
             else
             {
-              os << "this->" << member << ".set (" << auto_ptr << "< " <<
-                type << " > (new " << type << " (s, f, this)));";
+              os << "this->" << member << ".set (" << tr <<
+                "::create (s, f, this));";
             }
 
             os << "}";

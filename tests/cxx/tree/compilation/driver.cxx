@@ -13,7 +13,7 @@
 using namespace std;
 using namespace test;
 
-template class xsd::cxx::tree::simple_type<xml_schema::type>;
+template class xsd::cxx::tree::simple_type<char, xml_schema::type>;
 
 // String types.
 //

@@ -291,6 +291,22 @@ namespace CXX
              << "~" << name << " ();";
 
           os << "};";
+
+          // Comparison operators.
+          //
+          if (options.generate_comparison ())
+          {
+            os << inst_exp
+               << "bool" << endl
+               << "operator== (const " << name << "&, const " << name << "&);"
+               << endl;
+
+            os << inst_exp
+               << "bool" << endl
+               << "operator!= (const " << name << "&, const " << name << "&);"
+               << endl
+               << endl;
+          }
         }
 
       private:

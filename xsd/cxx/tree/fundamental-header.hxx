@@ -241,7 +241,7 @@ namespace CXX
       traverse (SemanticGraph::AnySimpleType& t)
       {
         simple_type_ = built_in_type (
-          t, L"::xsd::cxx::tree::simple_type< ", type_);
+          t, L"::xsd::cxx::tree::simple_type< " + char_type + L", ", type_);
 
         if (doxygen)
           os << "/**" << endl

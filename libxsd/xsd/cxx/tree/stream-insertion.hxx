@@ -23,15 +23,19 @@ namespace xsd
       inline ostream<S>&
       operator<< (ostream<S>& s, const type&)
       {
+        // Not saving DOM content even if it's there.
         return s;
       }
 
       // simple_type
       //
-      template <typename S, typename B>
+      template <typename S, typename C, typename B>
       inline ostream<S>&
-      operator<< (ostream<S>& s, const simple_type<B>&)
+      operator<< (ostream<S>& s, const simple_type<C, B>& x)
       {
+        if (!x.null_content ())
+          s << x.text_content ();
+
         return s;
       }
 

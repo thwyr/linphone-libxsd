@@ -1,0 +1,26 @@
+<t:root xmlns:t="test"
+        xmlns:o="other"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="test test.xsd"
+
+        a="any simple content">
+
+  <t/>
+  <t x="x"/>
+  <t>any</t>
+  <t x="x">any</t>
+  <t x="x" o:y="y">
+    <n1>
+      <n2>nested 1</n2>
+      <n2>nested 2</n2>
+    </n1>
+    <o:n2 o:x="x">more</o:n2>
+  </t>
+  <t x="x"><n1>mi<n2>nested 1</n2>x<n2>nested 2</n2>ed</n1>content</t>
+
+  <s/>
+  <s>simple</s>
+
+  <l>one two three</l>
+
+</t:root>

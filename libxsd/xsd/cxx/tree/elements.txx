@@ -27,8 +27,8 @@ namespace xsd
 
       // simple_type
       //
-      template <typename B>
-      simple_type<B>::
+      template <typename C, typename B>
+      simple_type<C, B>::
       simple_type (const simple_type& other,
                    flags f,
                    container* c)
@@ -36,8 +36,8 @@ namespace xsd
       {
       }
 
-      template <typename B>
-      simple_type<B>* simple_type<B>::
+      template <typename C, typename B>
+      simple_type<C, B>* simple_type<C, B>::
       _clone (flags f, container* c) const
       {
         return new simple_type (*this, f, c);

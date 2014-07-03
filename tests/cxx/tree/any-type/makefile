@@ -1,8 +1,8 @@
-# file      : tests/cxx/tree/binary/polymorphic/makefile
+# file      : tests/cxx/tree/any-type/makefile
 # copyright : Copyright (c) 2006-2014 Code Synthesis Tools CC
 # license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
-include $(dir $(lastword $(MAKEFILE_LIST)))../../../../../build/bootstrap.make
+include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
 xsd := test.xsd
 cxx := driver.cxx
@@ -21,24 +21,20 @@ $(call import,\
   $(scf_root)/import/libxerces-c/stub.make,\
   l: xerces_c.l,cpp-options: xerces_c.l.cpp-options)
 
-$(call import,\
-  $(scf_root)/import/libace/stub.make,\
-  l: ace.l,cpp-options: ace.l.cpp-options)
 
 # Build.
 #
-$(driver): $(obj) $(xerces_c.l) $(ace.l)
+$(driver): $(obj) $(xerces_c.l)
 
 $(obj) $(dep): cpp_options := -I$(out_base) -I$(src_base) -I$(src_root)/libxsd
-$(obj) $(dep): $(xerces_c.l.cpp-options) $(ace.l.cpp-options)
+$(obj) $(dep): $(xerces_c.l.cpp-options)
 
 genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options += --generate-polymorphic --root-element-last \
---generate-insertion ACE_OutputCDR --generate-extraction ACE_InputCDR \
- --generate-comparison
+$(gen): xsd_options += --generate-any-type --generate-serialization \
+--generate-ostream --generate-comparison
 $(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep),$(obj),$(gen))
@@ -51,8 +47,8 @@ $(out_base)/: $(driver)
 # Test.
 #
 $(test): driver := $(driver)
-$(test): $(driver) $(src_base)/test.xml
-	$(call message,test $$1,$$1 $(src_base)/test.xml,$(driver))
+$(test): $(driver) $(src_base)/test.xml $(src_base)/output
+	$(call message,test $$1,$$1 $(src_base)/test.xml | diff -u $(src_base)/output -,$(driver))
 
 # Clean.
 #

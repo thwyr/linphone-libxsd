@@ -756,7 +756,13 @@ namespace CXX
             if (!fund)
             {
               os << auto_ptr << "< " << type << " > r (" << endl
-                 << tr << "::create (i, f, this));"
+                 << tr << "::create (i, f";
+
+              if (t.is_a<SemanticGraph::AnyType> () &&
+                  options.generate_any_type ())
+                os << " | " << flags_type << "::extract_content";
+
+              os << ", this));"
                  << endl;
             }
           }

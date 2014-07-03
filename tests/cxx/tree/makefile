@@ -5,6 +5,7 @@
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../build/bootstrap.make
 
 tests :=        \
+any-type        \
 built-in        \
 chameleon       \
 comparison      \

@@ -112,7 +112,10 @@
       <element name="year"                  type="gYear"/>
       <element name="year_month"            type="gYearMonth"/>
       <element name="time"                  type="time"/>
+
+      <element name="any_simple_type"       type="anySimpleType"/>
     </sequence>
+    <attribute name="any_simple_type_attr"  type="anySimpleType" use="required"/>
   </complexType>
 
   <element name="root" type="t:type"/>

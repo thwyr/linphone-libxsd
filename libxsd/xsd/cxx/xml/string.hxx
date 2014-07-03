@@ -56,21 +56,16 @@ namespace xsd
       public :
         template <typename C>
         string (const std::basic_string<C>& s)
-            : s_ (transcode_to_xmlch<C> (s))
-        {
-        }
+            : s_ (transcode_to_xmlch<C> (s)) {}
 
         template <typename C>
-        string (const C* s)
-            : s_ (transcode_to_xmlch<C> (s))
-        {
-        }
+        string (const C* s): s_ (transcode_to_xmlch<C> (s)) {}
 
         const XMLCh*
-        c_str () const
-        {
-          return s_.get ();
-        }
+        c_str () const {return s_.get ();}
+
+        XMLCh*
+        release () {return s_.release ();}
 
       private:
         string (const string&);

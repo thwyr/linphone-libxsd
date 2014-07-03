@@ -32,7 +32,8 @@ genf := $(xsd:.xsd=.hxx) $(xsd:.xsd=.ixx) $(xsd:.xsd=.cxx)
 gen  := $(addprefix $(out_base)/,$(genf))
 
 $(gen): xsd := $(out_root)/xsd/xsd
-$(gen): xsd_options += --generate-insertion XDR --generate-extraction XDR
+$(gen): xsd_options += --generate-insertion XDR --generate-extraction XDR \
+--generate-comparison
 $(gen): $(out_root)/xsd/xsd
 
 $(call include-dep,$(dep),$(obj),$(gen))
