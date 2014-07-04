@@ -1,12 +1,10 @@
-// file      : examples/cxx/tree/streaming/parser.hxx
-// copyright : not copyrighted - public domain
-
 #ifndef PARSER_HXX
 #define PARSER_HXX
 
 #include <string>
 #include <iosfwd>
-#include <memory> // std::auto_ptr
+#include <cstddef> // std::size_t
+#include <memory>  // std::auto_ptr
 
 #include <xercesc/dom/DOMDocument.hpp>
 
@@ -17,20 +15,44 @@ class parser_impl;
 class parser
 {
 public:
-  ~parser ();
-  parser ();
-
-  // The start function returns a "carcase" of the complete document. That
-  // is, the root element with all the attributes but without any content.
+  // We can specify embedded XML Schema grammar to be used by the parser
+  // that was created by the xsdbin utility from the 'embedded' example.
   //
-  xsd::cxx::xml::dom::auto_ptr<xercesc::DOMDocument>
+  parser (const XMLByte* grammar = 0, std::size_t grammar_size = 0);
+  ~parser ();
+
+  // The start function prepares everything for parsing a new document.
+  //
+  void
   start (std::istream& is, const std::string& id, bool validate);
 
-  // The next function returns next first-level element with all its
-  // attributes and content or 0 if no more available.
+  typedef xsd::cxx::xml::dom::auto_ptr<xercesc::DOMDocument> document_ptr;
+
+  // The peek function parses just the next element (ignoring any
+  // preceding content assuming it is whitespace) without parsing
+  // any of its nested content (but it includes the element's
+  // attributes). It returns NULL if there are no more elements
+  // at this level (there could still be on outer levels in case
+  // of nested streaming).
   //
-  xsd::cxx::xml::dom::auto_ptr<xercesc::DOMDocument>
-  next ();
+  document_ptr
+  peek ();
+
+  // The next function parses (or finishes parsing after peek) the
+  // next element including its nested content. It returns NULL if
+  // there are no more elements at this level (there could still
+  // be on outer levels in case of nested streaming).
+  //
+  // If doc is not NULL, then it should be the document returned
+  // by peek(). That is, a document with only the root element.
+  // In this case next() finishes parsing this element.
+  //
+  // If outer_doc is not NULL, then next() will first add doc to
+  // outer_doc as a child of the document root.
+  //
+  document_ptr
+  next (document_ptr doc = document_ptr (),
+        document_ptr outer_doc = document_ptr ());
 
 private:
   parser (const parser&);

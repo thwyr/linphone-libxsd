@@ -1,4 +1,5 @@
 // file      : examples/cxx/tree/streaming/serializer.hxx
+// author    : Boris Kolpackov <boris@codesynthesis.com>
 // copyright : not copyrighted - public domain
 
 #ifndef SERIALIZER_HXX
@@ -59,6 +60,32 @@ public:
         const namespace_infomap&,
         const T& x);
 
+  // The next_open/close functions are like next() but split into two steps.
+  // next_open() serializes the object model fragment into an element leaving
+  // it open while next_close() closes the element.
+  //
+  template <typename T>
+  void
+  next_open (const std::string& name, const T& x);
+
+  template <typename T>
+  void
+  next_open (const std::string& name, const namespace_infomap&, const T& x);
+
+  template <typename T>
+  void
+  next_open (const std::string& ns, const std::string& name, const T& x);
+
+  template <typename T>
+  void
+  next_open (const std::string& ns,
+        const std::string& name,
+        const namespace_infomap&,
+        const T& x);
+
+  void
+  next_close (const std::string& name);
+
 private:
   serializer (const serializer&);
 
@@ -75,7 +102,13 @@ private:
           const namespace_infomap&);
 
   void
-  serialize (xercesc::DOMElement&);
+  serialize (xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement>);
+
+  void
+  serialize_open (xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement>);
+
+  void
+  serialize_close (const std::string& name);
 
 private:
   std::auto_ptr<serializer_impl> impl_;
@@ -88,7 +121,7 @@ next (const std::string& name, const T& x)
   xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement> e (
     create (name, namespace_infomap ()));
   *e << x;
-  serialize (*e);
+  serialize (e);
 }
 
 template <typename T>
@@ -97,7 +130,7 @@ next (const std::string& name, const namespace_infomap& map, const T& x)
 {
   xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement> e (create (name, map));
   *e << x;
-  serialize (*e);
+  serialize (e);
 }
 
 template <typename T>
@@ -106,9 +139,8 @@ next (const std::string& ns, const std::string& name, const T& x)
 {
   xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement> e (
     create (ns, name, namespace_infomap ()));
-
   *e << x;
-  serialize (*e);
+  serialize (e);
 }
 
 template <typename T>
@@ -120,7 +152,54 @@ next (const std::string& ns,
 {
   xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement> e (create (ns, name, map));
   *e << x;
-  serialize (*e);
+  serialize (e);
+}
+
+template <typename T>
+inline void serializer::
+next_open (const std::string& name, const T& x)
+{
+  xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement> e (
+    create (name, namespace_infomap ()));
+  *e << x;
+  serialize_open (e);
+}
+
+template <typename T>
+inline void serializer::
+next_open (const std::string& name, const namespace_infomap& map, const T& x)
+{
+  xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement> e (create (name, map));
+  *e << x;
+  serialize_open (e);
+}
+
+template <typename T>
+inline void serializer::
+next_open (const std::string& ns, const std::string& name, const T& x)
+{
+  xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement> e (
+    create (ns, name, namespace_infomap ()));
+  *e << x;
+  serialize_open (e);
+}
+
+template <typename T>
+inline void serializer::
+next_open (const std::string& ns,
+      const std::string& name,
+      const namespace_infomap& map,
+      const T& x)
+{
+  xsd::cxx::xml::dom::auto_ptr<xercesc::DOMElement> e (create (ns, name, map));
+  *e << x;
+  serialize_open (e);
+}
+
+inline void serializer::
+next_close (const std::string& name)
+{
+  serialize_close (name);
 }
 
 #endif // SERIALIZER_HXX

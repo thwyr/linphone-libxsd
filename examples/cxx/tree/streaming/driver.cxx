@@ -15,9 +15,6 @@
 using namespace std;
 using namespace xercesc;
 
-static void
-measure_position (unsigned int n, float& lat, float& lon);
-
 int
 main (int argc, char* argv[])
 {
@@ -39,96 +36,92 @@ main (int argc, char* argv[])
     using namespace op;
     namespace xml = xsd::cxx::xml;
 
-    // Parse.
+    // Parse and serialize at the same time, in the streaming mode.
     //
 
     ifstream ifs;
     ifs.exceptions (ifstream::badbit | ifstream::failbit);
     ifs.open (argv[1]);
 
-    parser p;
-
-    // The first document we get is the "carcase" of the complete document.
-    // That is, the root element with all the attributes but without any
-    // content. We may need it to get to the attributes in the root element.
-    //
-    // There are two ways this can be done. The easiest approach is to
-    // instantiate the root element's type (object in our case). This
-    // will only work if all the content in the root element is optional.
-    // Alternatively, we can manually look up attributes that we are
-    // interested in and instantiate the corresponding type. The following
-    // fragment shows how to use the second approach.
-    //
-    xml_schema::dom::auto_ptr<DOMDocument> doc (p.start (ifs, argv[1], true));
-
-    // Find the id attribute.
-    //
-    DOMAttr* id_attr (
-      doc->getDocumentElement ()->getAttributeNode (
-        xml::string ("id").c_str ()));
-
-    // Use the type and traits aliases from the object model.
-    //
-    object::id_type id (object::id_traits::create (*id_attr, 0, 0));
-    cerr << "id:   " << id << endl;
-
-    // The next chunk we get is the header element.
-    //
-    doc = p.next ();
-    header hdr (*doc->getDocumentElement ());
-    cerr << "name: " << hdr.name () << endl
-         << "type: " << hdr.type () << endl;
-
-    // The rest is position elements.
-    //
-    for (doc = p.next (); doc.get () != 0; doc = p.next ())
-    {
-      position p (*doc->getDocumentElement ());
-      cerr << "lat: " << p.lat () << " lon: " << p.lon () << endl;
-    }
-
-    // Serialize.
-    //
-
     ofstream ofs;
     ofs.exceptions (ios_base::badbit | ios_base::failbit);
     ofs.open ("out.xml");
 
+    xml_schema::namespace_infomap ns_map;
+    ns_map["op"].name = "http://www.codesynthesis.com/op";
+    ns_map["op"].schema = "position.xsd";
+
+    parser p;
     serializer s;
 
-    // With this approach we manually write the XML declaration, opening
-    // and closing root element tags, as well as any attributes in the
-    // root element.
-    //
-    ofs << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl
-        << "<op:object xmlns:op=\"http://www.codesynthesis.com/op\"" << endl
-        << "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" << endl
-        << "  xsi:schemaLocation=\"http://www.codesynthesis.com/op " <<
-      "position.xsd\"" << endl
-        << "  id=\"" << 123 << "\">" << endl;
-
+    p.start (ifs, argv[1], true);
     s.start (ofs);
 
-    // Serialize the header.
-    //
-    header h ("Lion's Head", "rock");
-    s.next ("header", h);
+    typedef xml_schema::dom::auto_ptr<DOMDocument> document_ptr;
 
-    // Serialize position elements, one at a time.
+    // Peek at the root element. This way we only get the "carcase"
+    // of the document, that is, the root element with its name, all
+    // the attributes, and namespace declarations but without any of
+    // the nested elements.
     //
-    for (unsigned short i (0); i < 8; i++)
+    document_ptr docr (p.peek ());
+    bool parsed (false);
+
+    // Parse first-level elements.
+    //
+    for (document_ptr doc1 (p.peek ()); doc1.get () != 0; doc1 = p.peek ())
     {
-      float lat, lon;
-      measure_position (i, lat, lon);
-      position p (lat, lon);
-      s.next ("position", p);
+      // Check whether it is an element that we should stream (position) or
+      // just add to the root (header).
+      //
+      string n1 (xml::transcode<char> (
+                   doc1->getDocumentElement ()->getLocalName ()));
+
+      // If we see the first streaming element, then parse the root carcase.
+      //
+      if (!parsed && n1 == "position")
+      {
+        object o (*docr->getDocumentElement ());
+
+        cerr << "id:   " << o.id () << endl
+             << "name: " << o.header ().name () << endl
+             << "type: " << o.header ().type () << endl;
+
+        // Start serializing the document by writing out the root carcase.
+        // Note that we leave it open so that we can serialize more elements.
+        //
+        s.next_open (ns_map["op"].name, "op:object", ns_map, o);
+        parsed = true;
+      }
+
+      // Handle elements that need streaming.
+      //
+      if (n1 == "position")
+      {
+        // Position has no nested elements that we need to stream so we
+        // finish parsing it in one go.
+        //
+        doc1 = p.next (doc1);
+        position pos (*doc1->getDocumentElement ());
+
+        cerr << "lat: " << pos.lat () << " lon: " << pos.lon () << endl;
+
+        // Serialize it (append) to the root element.
+        //
+        s.next ("position", pos);
+      }
+      else
+      {
+        // Element that doesn't require streaming (header in our case). Add
+        // to the root element and finish parsing.
+        //
+        docr = p.next (doc1, docr);
+      }
     }
 
-    // Close the root element.
+    // Close the root element in serializer.
     //
-    ofs << endl
-        << "</op:object>" << endl;
-
+    s.next_close ("op:object");
   }
   catch (const xml_schema::exception& e)
   {
@@ -143,33 +136,4 @@ main (int argc, char* argv[])
 
   xercesc::XMLPlatformUtils::Terminate ();
   return r;
-}
-
-// Position measurement instrument interface.
-//
-struct measurements
-{
-  float lat;
-  float lon;
-};
-
-measurements test_measurements [8] =
-{
-  {-33.8569F, 18.5083F},
-  {-33.8568F, 18.5083F},
-  {-33.8568F, 18.5082F},
-  {-33.8570F, 18.5083F},
-  {-33.8569F, 18.5084F},
-  {-33.8570F, 18.5084F},
-  {-33.8570F, 18.5082F},
-  {-33.8569F, 18.5082F}
-};
-
-static void
-measure_position (unsigned int n, float& lat, float& lon)
-{
-  // Call the instrument to measure the position.
-  //
-  lat = test_measurements[n].lat;
-  lon = test_measurements[n].lon;
 }

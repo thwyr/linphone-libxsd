@@ -356,6 +356,9 @@
 			<File
 				RelativePath=".\serializer.cxx">
 			</File>
+			<File
+				RelativePath=".\grammar-input-stream.cxx">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -371,6 +374,9 @@
 			</File>
 			<File
 				RelativePath=".\serializer.hxx">
+			</File>
+			<File
+				RelativePath=".\grammar-input-stream.hxx">
 			</File>
 		</Filter>
 		<Filter

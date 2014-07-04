@@ -5,7 +5,7 @@
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
 xsd := position.xsd
-cxx := driver.cxx parser.cxx serializer.cxx
+cxx := driver.cxx parser.cxx serializer.cxx grammar-input-stream.cxx
 
 obj := $(addprefix $(out_base)/,$(cxx:.cxx=.o) $(xsd:.xsd=.o))
 dep := $(obj:.o=.o.d)
@@ -58,6 +58,8 @@ $(install):
 	$(call install-data,$(src_base)/parser.hxx,$(install_doc_dir)/xsd/$(path)/parser.hxx)
 	$(call install-data,$(src_base)/serializer.cxx,$(install_doc_dir)/xsd/$(path)/serializer.cxx)
 	$(call install-data,$(src_base)/serializer.hxx,$(install_doc_dir)/xsd/$(path)/serializer.hxx)
+	$(call install-data,$(src_base)/grammar-input-stream.cxx,$(install_doc_dir)/xsd/$(path)/grammar-input-stream.cxx)
+	$(call install-data,$(src_base)/grammar-input-stream.hxx,$(install_doc_dir)/xsd/$(path)/grammar-input-stream.hxx)
 	$(call install-data,$(src_base)/position.xsd,$(install_doc_dir)/xsd/$(path)/position.xsd)
 	$(call install-data,$(src_base)/position.xml,$(install_doc_dir)/xsd/$(path)/position.xml)
 
@@ -67,6 +69,8 @@ $(dist-common):
 	$(call install-data,$(src_base)/parser.hxx,$(dist_prefix)/$(path)/parser.hxx)
 	$(call install-data,$(src_base)/serializer.cxx,$(dist_prefix)/$(path)/serializer.cxx)
 	$(call install-data,$(src_base)/serializer.hxx,$(dist_prefix)/$(path)/serializer.hxx)
+	$(call install-data,$(src_base)/grammar-input-stream.cxx,$(dist_prefix)/$(path)/grammar-input-stream.cxx)
+	$(call install-data,$(src_base)/grammar-input-stream.hxx,$(dist_prefix)/$(path)/grammar-input-stream.hxx)
 	$(call install-data,$(src_base)/position.xsd,$(dist_prefix)/$(path)/position.xsd)
 	$(call install-data,$(src_base)/position.xml,$(dist_prefix)/$(path)/position.xml)
 
