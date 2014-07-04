@@ -46,6 +46,12 @@ namespace xsd
         xercesc::DOMElement&
         create_element (const C* name, const C* ns, xercesc::DOMElement&);
 
+        // Add namespace declarations and schema locations.
+        //
+        template <typename C>
+        void
+        add_namespaces (xercesc::DOMElement&, const namespace_infomap<C>&);
+
         // Serialization flags.
         //
         const unsigned long no_xml_declaration = 0x00010000UL;
