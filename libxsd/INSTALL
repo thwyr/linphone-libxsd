@@ -2,7 +2,7 @@ Prerequisites
 
   run-time:
 
-    - libxerces-c >= 2.5.0  http://xerces.apache.org/xerces-c/
+    - libxerces-c >= 3.0.0  http://xerces.apache.org/xerces-c/
 
 
 Building libxsd
