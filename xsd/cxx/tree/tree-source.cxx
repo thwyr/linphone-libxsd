@@ -3237,7 +3237,7 @@ namespace CXX
                      << "const " << xerces_ns << "::DOMText& t (" <<
                     "p.cur_text ());"
                      << "this->" << ma << " ().push_back (" << endl
-                     << "::xsd::cxx::xml::transcode<" << char_type << "> (" <<
+                     << "::xsd::cxx::xml::transcode< " << char_type << " > (" <<
                     "t.getData (), t.getLength ()));"
                      << "this->" << oa << " ().push_back (" << endl
                      << ot << " (" << mi << "," << endl
