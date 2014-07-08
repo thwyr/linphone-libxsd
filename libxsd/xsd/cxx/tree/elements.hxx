@@ -753,7 +753,7 @@ namespace xsd
          * @brief Exception indicating that a DOM node cannot be associated
          * with an object model node.
          */
-        class bad_dom_node_type: public std::exception //@@ Inherit exception.
+        class bad_dom_node_type: public std::exception //@@ Inherit exception<C>.
         {
         public:
           /**
@@ -843,7 +843,7 @@ namespace xsd
           }
         }
 
-        //@@ Does not inherit from exception.
+        //@@ Does not inherit from exception<C>.
         //
         struct not_registered: std::exception
         {
