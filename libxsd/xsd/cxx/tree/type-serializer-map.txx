@@ -11,8 +11,6 @@
 #include <xsd/cxx/tree/types.hxx>
 #include <xsd/cxx/tree/bits/literals.hxx>
 
-#include <iostream>
-
 namespace xsd
 {
   namespace cxx
