@@ -216,7 +216,7 @@
     <None Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="xsdbin-10.0.vcxproj">
+    <ProjectReference Include="xsdbin-vc12.vcxproj">
       <Project>{a3f6e060-d536-4a43-af4b-89063f65de91}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

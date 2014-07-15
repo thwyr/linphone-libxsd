@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xsdbin", "xsdbin-vc11.vcxproj", "{A3F6E060-D536-4A43-AF4B-89063F65DE91}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "embedded", "embedded-vc11.vcxproj", "{9C8C2AA4-DF31-4884-B3B9-A6A36F3CB429}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A3F6E060-D536-4A43-AF4B-89063F65DE91} = {A3F6E060-D536-4A43-AF4B-89063F65DE91}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
