@@ -59,7 +59,7 @@ namespace xsd
       gday (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>
@@ -109,7 +109,7 @@ namespace xsd
       gmonth (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>
@@ -159,7 +159,7 @@ namespace xsd
       gyear (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>
@@ -222,7 +222,7 @@ namespace xsd
       gmonth_day (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>
@@ -273,7 +273,7 @@ namespace xsd
       gyear_month (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>
@@ -337,7 +337,7 @@ namespace xsd
       date (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>
@@ -402,7 +402,7 @@ namespace xsd
       time (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>
@@ -469,7 +469,7 @@ namespace xsd
       date_time (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>
@@ -556,7 +556,7 @@ namespace xsd
       duration (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        parse (text_content<C> (e));
+        parse (tree::text_content<C> (e));
       }
 
       template <typename C, typename B>

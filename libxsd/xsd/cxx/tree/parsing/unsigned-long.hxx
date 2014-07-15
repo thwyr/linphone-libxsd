@@ -40,7 +40,7 @@ namespace xsd
       unsigned long long traits<unsigned long long, C, schema_type::other>::
       create (const xercesc::DOMElement& e, flags f, container* c)
       {
-        return create (text_content<C> (e), 0, f, c);
+        return create (tree::text_content<C> (e), 0, f, c);
       }
 
       template <typename C>

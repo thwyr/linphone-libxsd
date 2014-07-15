@@ -182,7 +182,7 @@ namespace xsd
       list (const xercesc::DOMElement& e, flags f, container* c)
           : sequence<T> (c)
       {
-        init (text_content<C> (e), &e, f & ~flags::keep_dom);
+        init (tree::text_content<C> (e), &e, f & ~flags::keep_dom);
       }
 
       template <typename T, typename C, schema_type::value ST>
@@ -260,7 +260,7 @@ namespace xsd
       list (const xercesc::DOMElement& e, flags, container* c)
           : sequence<T> (c)
       {
-        init (text_content<C> (e), &e);
+        init (tree::text_content<C> (e), &e);
       }
 
       template <typename T, typename C, schema_type::value ST>
@@ -334,7 +334,7 @@ namespace xsd
       string<C, B>::
       string (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c),
-            base_type (text_content<C> (e))
+            base_type (tree::text_content<C> (e))
       {
       }
 
@@ -701,7 +701,7 @@ namespace xsd
       uri<C, B>::
       uri (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c),
-            base_type (trim (text_content<C> (e)))
+            base_type (trim (tree::text_content<C> (e)))
       {
       }
 
@@ -731,7 +731,7 @@ namespace xsd
       qname (const xercesc::DOMElement& e, flags f, container* c)
           : B (e, f, c)
       {
-        std::basic_string<C> v (trim (text_content<C> (e)));
+        std::basic_string<C> v (trim (tree::text_content<C> (e)));
         ns_ = resolve (v, &e);
         name_ = xml::uq_name (v);
       }
@@ -802,7 +802,7 @@ namespace xsd
       {
         // This implementation is not optimal.
         //
-        std::basic_string<C> str (trim (text_content<C> (e)));
+        std::basic_string<C> str (trim (tree::text_content<C> (e)));
         decode (xml::string (str).c_str ());
       }
 
@@ -837,7 +837,7 @@ namespace xsd
       {
         // This implementation is not optimal.
         //
-        std::basic_string<C> str (trim (text_content<C> (e)));
+        std::basic_string<C> str (trim (tree::text_content<C> (e)));
         decode (xml::string (str).c_str ());
       }
 
