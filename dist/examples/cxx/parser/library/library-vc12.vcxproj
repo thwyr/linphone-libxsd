@@ -89,7 +89,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -117,7 +116,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -139,7 +137,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -165,7 +162,6 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
