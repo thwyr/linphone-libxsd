@@ -25,12 +25,14 @@ rem compressed XML files (.xml.gz).
 rem
 if exist *.xml* (
   for %%f in (*.xml*) do (
-
-    %dir%\driver.exe %%f
-    if errorlevel 1 goto error
+    if NOT "%%f" == "out.xml" (
+      if NOT "%%f" == "out.xml.gz" (
+        %dir%\driver.exe %%f
+        if errorlevel 1 goto error
+      )
+    )
   )
 ) else (
-
   %dir%\driver.exe
   if errorlevel 1 goto error
 )
