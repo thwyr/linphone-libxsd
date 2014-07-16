@@ -22,8 +22,14 @@ people.cxx people.ixx people.hxx: people.xsd
 # Generate header for XML Schema namespace.
 #
 XML_SCHEMA_XSDFLAGS := --generate-xml-schema --generate-serialization \
---custom-type anyType=/type_base \
 --hxx-epilogue '\#include "xml-schema-custom.hxx"'
+
+ifneq ($(shell uname -o),Msys)
+XML_SCHEMA_XSDFLAGS += --custom-type anyType=/type_base
+else
+# Prevent MSYS from converting / to Windows path.
+XML_SCHEMA_XSDFLAGS += --custom-type anyType=//type_base
+endif
 
 xml-schema.hxx:
 	$(XSD) cxx-tree $(XML_SCHEMA_XSDFLAGS) xml-schema.xsd

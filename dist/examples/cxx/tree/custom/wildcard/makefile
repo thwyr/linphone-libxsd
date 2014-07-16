@@ -5,8 +5,14 @@ include $(root)/build/xsd/tree-rules.make
 
 
 override XSDFLAGS += --generate-inline --generate-ostream \
---generate-serialization --custom-type data=/data_base \
---hxx-epilogue '\#include "wildcard-custom.hxx"'
+--generate-serialization --hxx-epilogue '\#include "wildcard-custom.hxx"'
+
+ifneq ($(shell uname -o),Msys)
+override XSDFLAGS += --custom-type data=/data_base
+else
+# Prevent MSYS from converting / to Windows path.
+override XSDFLAGS += --custom-type data=//data_base
+endif
 
 
 # Build.

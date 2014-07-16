@@ -4,9 +4,15 @@ include $(root)/build/cxx/rules.make
 include $(root)/build/xsd/tree-rules.make
 
 
-override XSDFLAGS += --generate-inline --custom-type contact=/contact_base \
+override XSDFLAGS += --generate-inline \
 --hxx-epilogue '\#include "contacts-custom.hxx"'
 
+ifneq ($(shell uname -o),Msys)
+override XSDFLAGS += --custom-type contact=/contact_base
+else
+# Prevent MSYS from converting / to Windows path.
+override XSDFLAGS += --custom-type contact=//contact_base
+endif
 
 # Build.
 #
