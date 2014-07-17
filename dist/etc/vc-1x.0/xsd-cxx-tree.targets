@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <PropertyPageSchema
@@ -46,6 +46,7 @@
       Condition="'@(CXX_Tree_Mapping_Rule)' != '' and '%(CXX_Tree_Mapping_Rule.ExcludedFromBuild)' != 'true'"
       CommandLineTemplate="%(CXX_Tree_Mapping_Rule.CommandLineTemplate)"
       ProprietaryLicense="%(CXX_Tree_Mapping_Rule.ProprietaryLicense)"
+      CxxStd="%(CXX_Tree_Mapping_Rule.CxxStd)"
       GenInline="%(CXX_Tree_Mapping_Rule.GenInline)"
       GenForward="%(CXX_Tree_Mapping_Rule.GenForward)"
       GenSerialization="%(CXX_Tree_Mapping_Rule.GenSerialization)"
@@ -59,6 +60,7 @@
       GenFromBaseCtor="%(CXX_Tree_Mapping_Rule.GenFromBaseCtor)"
       GenDetach="%(CXX_Tree_Mapping_Rule.GenDetach)"
       GenWildcard="%(CXX_Tree_Mapping_Rule.GenWildcard)"
+      GenAnyType="%(CXX_Tree_Mapping_Rule.GenAnyType)"
       GenElementType="%(CXX_Tree_Mapping_Rule.GenElementType)"
       GenElementMap="%(CXX_Tree_Mapping_Rule.GenElementMap)"
       GenIntellisense="%(CXX_Tree_Mapping_Rule.GenIntellisense)"

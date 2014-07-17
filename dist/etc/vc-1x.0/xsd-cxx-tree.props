@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup
     Condition="'$(CXX_Tree_Mapping_RuleBeforeTargets)' == '' and '$(CXX_Tree_Mapping_RuleAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
@@ -12,6 +12,7 @@
   <ItemDefinitionGroup>
     <CXX_Tree_Mapping_Rule>
       <ProprietaryLicense>False</ProprietaryLicense>
+      <CxxStd>0</CxxStd>
       <GenInline>False</GenInline>
       <GenForward>False</GenForward>
       <GenSerialization>False</GenSerialization>
@@ -25,6 +26,7 @@
       <GenFromBaseCtor>False</GenFromBaseCtor>
       <GenDetach>False</GenDetach>
       <GenWildcard>False</GenWildcard>
+      <GenAnyType>False</GenAnyType>
       <GenElementType>False</GenElementType>
       <GenElementMap>False</GenElementMap>
       <GenIntellisense>False</GenIntellisense>

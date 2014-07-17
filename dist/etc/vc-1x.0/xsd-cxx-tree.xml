@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ProjectSchemaDefinitions xmlns="clr-namespace:Microsoft.Build.Framework.XamlTypes;assembly=Microsoft.Build.Framework" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:transformCallback="Microsoft.Cpp.Dev10.ConvertPropertyCallback">
   <Rule
     Name="CXX_Tree_Mapping_Rule"
@@ -44,6 +44,20 @@
       DisplayName="Proprietary License"
       Description="Indicate that the generated code is licensed under a proprietary license instead of the GPL."
       Switch="--proprietary-license" />
+    <EnumProperty
+      Name="CxxStd"
+      Category="Code Generation"
+      HelpContext="0"
+      DisplayName="C++ Standard"
+      Description="C++ Standard the generated code should conform to.">
+      <EnumValue
+        Name="0"
+        DisplayName="c++98" />
+      <EnumValue
+        Name="1"
+        DisplayName="c++11"
+        Switch="--std c++11" />
+    </EnumProperty>
     <BoolProperty
       Name="GenInline"
       Category="Code Generation"
@@ -135,6 +149,13 @@
       DisplayName="Generate Wildcard"
       Description="Generate accessors and modifiers as well as parsing and serialization code for XML Schema wildcards (any and anyAttribute)."
       Switch="--generate-wildcard" />
+    <BoolProperty
+      Name="GenAnyType"
+      Category="Code Generation"
+      HelpContext="0"
+      DisplayName="Generate anyType"
+      Description="Extract and store content of the XML Schema anyType type as a DOM fragment."
+      Switch="--generate-any-type" />
     <BoolProperty
       Name="GenElementType"
       Category="Code Generation"
