@@ -870,6 +870,14 @@ namespace CXX
                 << endl;
           }
         }
+        else if (!generate_xml_schema)
+        {
+          // Generate it before the prologue so that we get the above
+          // defines.
+          //
+          hxx << "#include " << ctx.process_include_path (fwd_name)
+              << endl << endl;
+        }
 
         // Copy prologue.
         //
@@ -900,14 +908,8 @@ namespace CXX
         {
           ind_filter ind (hxx); // We don't want to indent prologues/epilogues.
 
-          if (!generate_xml_schema)
-          {
-            if (forward)
-              hxx << "#include " << ctx.process_include_path (fwd_name)
-                  << endl << endl;
-            else
-              generate_forward (ctx);
-          }
+          if (!generate_xml_schema && !forward)
+            generate_forward (ctx);
 
           generate_tree_header (ctx);
 
