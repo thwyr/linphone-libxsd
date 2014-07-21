@@ -91,7 +91,7 @@ namespace xsd
          *
          * This flag only makes sense together with the @c keep_dom
          * flag in the call to the %parsing function with the
-         * @c dom::auto_ptr/unique_ptr<DOMDocument> argument.
+         * @c dom::auto_ptr/unique_ptr\<DOMDocument> argument.
          *
          */
         static const unsigned long own_dom = 0x00000200UL;
@@ -1344,7 +1344,7 @@ namespace xsd
         /**
          * @brief Set the anySimpleType text content.
          *
-         * @param e A new text string to set.
+         * @param t A new text string to set.
          */
         void
         text_content (const std::basic_string<C>& t);
