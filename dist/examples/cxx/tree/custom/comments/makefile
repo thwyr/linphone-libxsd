@@ -24,7 +24,7 @@ people.cxx people.ixx people.hxx: people.xsd
 XML_SCHEMA_XSDFLAGS := --generate-xml-schema --generate-serialization \
 --hxx-epilogue '\#include "xml-schema-custom.hxx"'
 
-ifneq ($(shell uname -o),Msys)
+ifneq ($(shell uname -o 2>&1),Msys)
 XML_SCHEMA_XSDFLAGS += --custom-type anyType=/type_base
 else
 # Prevent MSYS from converting / to Windows path.

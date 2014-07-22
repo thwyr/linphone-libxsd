@@ -7,7 +7,7 @@ include $(root)/build/xsd/tree-rules.make
 override XSDFLAGS += --generate-inline --generate-serialization \
 --hxx-epilogue '\#include "people-custom.hxx"'
 
-ifneq ($(shell uname -o),Msys)
+ifneq ($(shell uname -o 2>&1),Msys)
 override XSDFLAGS += --custom-type bio=/bio_base 
 else
 # Prevent MSYS from converting / to Windows path.

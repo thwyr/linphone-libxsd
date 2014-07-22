@@ -7,7 +7,7 @@ include $(root)/build/xsd/tree-rules.make
 override XSDFLAGS += --generate-inline \
 --hxx-epilogue '\#include "contacts-custom.hxx"'
 
-ifneq ($(shell uname -o),Msys)
+ifneq ($(shell uname -o 2>&1),Msys)
 override XSDFLAGS += --custom-type contact=/contact_base
 else
 # Prevent MSYS from converting / to Windows path.
