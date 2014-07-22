@@ -45,6 +45,10 @@ C++/Tree
     string. For more information, refer to Section 2.5.3, "Mapping for
     anySimpleType" in the C++/Tree Mapping User Manual.
 
+  * Improved streaming example that now provides better XML namespace
+    handling and supports streaming parsing and serialization at multiple
+    document levels.
+
   * New option, --generate-dep, triggers the generation of the make
     dependency files (.d) for the generated C++ files. Other options
     controlling dependency generation are: --generate-dep-only,
