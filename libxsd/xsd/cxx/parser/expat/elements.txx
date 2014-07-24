@@ -283,9 +283,10 @@ namespace xsd
             throw std::bad_alloc ();
 
           if (system_id || public_id)
-            parse_begin (parser, system_id ? *system_id : *public_id, eh);
+            parse_begin (
+              parser.get (), system_id ? *system_id : *public_id, eh);
           else
-            parse_begin (parser, eh);
+            parse_begin (parser.get (), eh);
 
           // Temporarily unset the exception failbit. Also clear the
           // fail bit when we reset the old state if it was caused
@@ -310,8 +311,10 @@ namespace xsd
               break;
             }
 
-            if (XML_Parse (
-                  parser, buf, is.gcount (), is.eof ()) == XML_STATUS_ERROR)
+            if (XML_Parse (parser.get (),
+                           buf,
+                           is.gcount (),
+                           is.eof ()) == XML_STATUS_ERROR)
             {
               r = false;
               break;

@@ -51,7 +51,9 @@ namespace xsd
           }
         };
 
-        typedef std::unique_ptr<XML_ParserStruct> parser_auto_ptr;
+        typedef
+        std::unique_ptr<XML_ParserStruct, parser_deleter>
+        parser_auto_ptr;
 #else
         // Simple auto pointer for Expat's XML_Parser object.
         //
