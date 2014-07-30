@@ -2,11 +2,20 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:t="test"
         targetNamespace="test" elementFormDefault="qualified">
 
-  <complexType name="base">
+  <complexType name="abst_base" abstract="1">
     <sequence>
       <element name="a" type="string"/>
-      <element name="fund" type="int"/>
     </sequence>
+  </complexType>
+
+  <complexType name="base">
+    <complexContent>
+      <extension base="t:abst_base">
+        <sequence>
+          <element name="fund" type="int"/>
+        </sequence>
+      </extension>
+    </complexContent>
   </complexType>
   <element name="base" type="t:base"/>
 

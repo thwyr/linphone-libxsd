@@ -6,6 +6,7 @@
 //
 
 #include <memory> // std::auto_ptr/unique_ptr
+#include <sstream>
 #include <iostream>
 
 #include "test.hxx"
@@ -65,6 +66,17 @@ main (int argc, char* argv[])
 
       assert (*r != r1);
     }
+
+    xml_schema::namespace_infomap map;
+
+    map["t"].name = "test";
+
+    stringstream s;
+    root (s, *r, map);
+
+    XSD_AUTO_PTR<type> c (root (s, xml_schema::flags::dont_validate));
+
+    assert (*r == *c);
   }
   catch (xml_schema::exception const& e)
   {

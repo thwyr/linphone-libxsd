@@ -290,23 +290,26 @@ namespace xsd
         if (qn.name () == name &&
             (qualified ? qn.namespace_ () == ns : ns[0] == C ('\0')))
         {
-          f = static_type;
+          f = static_type; // NULL for abstract types.
         }
-        else if (global)
+        else
         {
           // See if we have a substitution.
           //
-          typename element_map::const_iterator i (
-            element_map_.find (qualified_name (name, ns)));
-
-          if (i != element_map_.end ())
+          if (global)
           {
-            f = find_substitution (i->second, qn);
-          }
-        }
+            typename element_map::const_iterator i (
+              element_map_.find (qualified_name (name, ns)));
 
-        if (f == 0)
-          return XSD_AUTO_PTR<type> (); // No match.
+            if (i != element_map_.end ())
+            {
+              f = find_substitution (i->second, qn);
+            }
+          }
+
+          if (f == 0)
+            return XSD_AUTO_PTR<type> (); // No match.
+        }
 
         // Check for xsi:type
         //

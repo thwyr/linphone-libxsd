@@ -956,7 +956,10 @@ namespace CXX
           // but substitutes, then it will be registered as part of the
           // substitution registration.
           //
-          if (polymorphic && polymorphic_p (c) && !anonymous_p (c))
+          if (polymorphic &&
+              polymorphic_p (c) &&
+              !c.abstract_p () &&
+              !anonymous_p (c))
           {
             // Note that we are using the original type name.
             //

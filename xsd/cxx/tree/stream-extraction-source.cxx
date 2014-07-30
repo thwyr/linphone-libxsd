@@ -673,6 +673,7 @@ namespace CXX
             //
             if (polymorphic &&
                 polymorphic_p (c) &&
+                !c.abstract_p () &&
                 (!anonymous_p (c) || anonymous_substitutes_p (c)))
             {
               // Note that we are using the original type name.

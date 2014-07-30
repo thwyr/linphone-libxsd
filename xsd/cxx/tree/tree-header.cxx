@@ -3296,7 +3296,8 @@ namespace CXX
 
           os << "virtual " << name << "*" << endl
              << "_clone (" << flags_type << " f = 0," << endl
-             << container << "* c = 0) const;"
+             << container << "* c = 0) const" <<
+            (c.abstract_p () ? " = 0" : "") << ";"
              << endl;
 
           // operator=

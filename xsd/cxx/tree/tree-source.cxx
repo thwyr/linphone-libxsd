@@ -729,8 +729,16 @@ namespace CXX
                << strlit (e.name ()) << "," << endl
                << (e.qualified_p ()
                    ? strlit (e.namespace_ ().name ())
-                   : L + String ("\"\"")) << "," << endl
-               << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl
+                   : L + String ("\"\"")) << "," << endl;
+
+            SemanticGraph::Complex* tc;
+            if ((tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
+                tc->abstract_p ())
+              os << "0,";
+            else
+              os << "&::xsd::cxx::tree::factory_impl< " << type << " >,";
+
+            os << endl
                << (e.global_p () ? "true" : "false") << ", " <<
               (e.qualified_p () ? "true" : "false") << ", " <<
               "i, n, f, this));"
@@ -3309,12 +3317,13 @@ namespace CXX
 
           // _clone
           //
-          os << name << "* " << name << "::" << endl
-             << "_clone (" << flags_type << " f," << endl
-             << container << "* c) const"
-             << "{"
-             << "return new class " << name << " (*this, f, c);"
-             << "}";
+          if (!c.abstract_p ())
+            os << name << "* " << name << "::" << endl
+               << "_clone (" << flags_type << " f," << endl
+               << container << "* c) const"
+               << "{"
+               << "return new class " << name << " (*this, f, c);"
+               << "}";
 
           // operator=
           //
@@ -3364,7 +3373,7 @@ namespace CXX
 
           // Register with type factory map.
           //
-          if (polymorphic && polymorphic_p (c))
+          if (polymorphic && polymorphic_p (c) && !c.abstract_p ())
           {
             // Note that we are using the original type name.
             //

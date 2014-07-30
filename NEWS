@@ -1,3 +1,11 @@
+Version 4.1.0
+
+C++/Tree
+
+  * Support for abstract XML Schema types. The corresponding C++ classes
+    now have _clone() declared pure virtual which prevents construction
+    of their instances.
+
 Version 4.0.0
 
   * Xerces-C++ 2-series (2.8.0 and earlier) is no longer supported.
