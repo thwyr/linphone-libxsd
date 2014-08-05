@@ -2296,7 +2296,8 @@ namespace CXX
           // If renamed name is empty then we do not need to generate
           // anything for this type.
           //
-          if (renamed_type (c, name) && !name)
+          bool renamed (renamed_type (c, name));
+          if (renamed && !name)
             return;
 
           SemanticGraph::Context& ctx (c.context ());
@@ -3317,7 +3318,8 @@ namespace CXX
 
           // _clone
           //
-          if (!c.abstract_p ())
+          if (!(c.abstract_p () ||
+                (renamed && polymorphic && polymorphic_p (c))))
             os << name << "* " << name << "::" << endl
                << "_clone (" << flags_type << " f," << endl
                << container << "* c) const"

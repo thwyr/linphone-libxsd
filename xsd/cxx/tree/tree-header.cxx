@@ -2342,7 +2342,8 @@ namespace CXX
           // If renamed name is empty then we do not need to generate
           // anything for this type.
           //
-          if (renamed_type (c, name) && !name)
+          bool renamed (renamed_type (c, name));
+          if (renamed && !name)
             return;
 
           SemanticGraph::Context& ctx (c.context ());
@@ -3296,8 +3297,18 @@ namespace CXX
 
           os << "virtual " << name << "*" << endl
              << "_clone (" << flags_type << " f = 0," << endl
-             << container << "* c = 0) const" <<
-            (c.abstract_p () ? " = 0" : "") << ";"
+             << container << "* c = 0) const";
+
+          // Make the _clone() function pure virtual if the type is
+          // abstract or we are generating a polymorphic base for a
+          // custom implementation (in which case the base must be
+          // inherited from and _clone() overridden).
+          //
+          if (c.abstract_p () ||
+              (renamed && polymorphic && polymorphic_p (c)))
+            os << " = 0";
+
+          os << ";"
              << endl;
 
           // operator=
