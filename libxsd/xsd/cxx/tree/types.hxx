@@ -2432,7 +2432,7 @@ namespace xsd
          * @brief Get a constant pointer to the referenced object.
          *
          * @return A constant pointer to the referenced object or 0 if
-         * the object is not found.
+         * the object of this type is not found.
          */
         const ref_type*
         get () const
@@ -2444,7 +2444,7 @@ namespace xsd
          * @brief Get a pointer to the referenced object.
          *
          * @return A pointer to the referenced object or 0 if the object
-         * is not found.
+         * of this type is not found.
          */
         ref_type*
         get ()
