@@ -348,6 +348,7 @@ namespace xsd
          * is to allow statically-initialized default values of anyType type.
          */
         template <typename C>
+        explicit
         _type (const C* s);
 
       public:
