@@ -334,7 +334,7 @@ main (int argc, char* argv[])
     //
     string::size_type p (base.rfind ('/')), p1 (base.rfind ('\\'));
 
-    if (p1 != string::npos && p1 > p)
+    if (p1 != string::npos && (p == string::npos || p1 > p))
       p = p1;
 
     if (p != string::npos)
