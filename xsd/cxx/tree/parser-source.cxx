@@ -324,8 +324,16 @@ namespace CXX
                << "::xsd::cxx::tree::type_factory_map_instance< " <<
               poly_plate << ", " << char_type << " > ().create (" << endl
                << strlit (e.name ()) << "," << endl
-               << strlit (e.namespace_().name ()) << "," << endl
-               << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl
+               << strlit (e.namespace_().name ()) << "," << endl;
+
+            SemanticGraph::Complex* tc;
+            if ((tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
+                tc->abstract_p ())
+              os << "0,";
+            else
+              os << "&::xsd::cxx::tree::factory_impl< " << type << " >,";
+
+            os << endl
                << "true, true, e, n, f, 0));"
                << endl
                << "if (tmp.get () != 0)"
@@ -416,8 +424,16 @@ namespace CXX
                << "::xsd::cxx::tree::type_factory_map_instance< " <<
               poly_plate << ", " << char_type << " > ().create (" << endl
                << strlit (e.name ()) << "," << endl
-               << strlit (e.namespace_().name ()) << "," << endl
-               << "&::xsd::cxx::tree::factory_impl< " << type << " >," << endl
+               << strlit (e.namespace_().name ()) << "," << endl;
+
+            SemanticGraph::Complex* tc;
+            if ((tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
+                tc->abstract_p ())
+              os << "0,";
+            else
+              os << "&::xsd::cxx::tree::factory_impl< " << type << " >,";
+
+            os << endl
                << "true, true, e, n, f, 0));"
                << endl
                << "if (tmp.get () != 0)"
