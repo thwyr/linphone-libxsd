@@ -1322,7 +1322,38 @@ namespace CXX
       }
 
       if (t == source && !weak)
+      {
+        if (u.user ().context ().count ("type-schema"))
+        {
+          // Strong include into a type schema -- this is a base class.
+          // We have already included its header in our header so it
+          // would seem we don't need to do anything here. There is one
+          // subtle issue, however: Our constructors include arguments
+          // for base members which we simply pass to the base. The base
+          // header has only forward declarations for its members. This
+          // is not a problem if we pass references to base members --
+          // forward declarations are sufficient for this case. The
+          // problematic case is when we pass them as auto/unique_ptr.
+          // Because we pass them by value (which is done to support
+          // unique_ptr move semantics), the compiler needs to be able
+          // to destroy the member, presumably if an exception is thrown.
+          // And for that forward declarations are not enough.
+          //
+          // So what we are going to do here is include all the base
+          // member headers (transitively), just like the base's source
+          // file does.
+          //
+          // Note that we only do this for source since in the inline
+          // case the necessary files are already pulled via the the
+          // .ixx file includes.
+          //
+          Traversal::Schema schema;
+          schema >> *this;
+          schema.dispatch (s);
+        }
+
         return;
+      }
 
       SemanticGraph::Path path (
         s.context ().count ("renamed")
