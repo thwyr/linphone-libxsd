@@ -571,7 +571,11 @@ namespace xsd
         XSD_AUTO_PTR<xercesc::SAX2XMLReader> document<C>::
         create_sax_ (flags f, const properties<C>& p)
         {
-          using namespace xercesc;
+          // Cannot use 'using namespace' because of MSXML conflict.
+          //
+          using xercesc::XMLUni;
+          using xercesc::SAX2XMLReader;
+          using xercesc::XMLReaderFactory;
 
           XSD_AUTO_PTR<SAX2XMLReader> sax (
             XMLReaderFactory::createXMLReader ());

@@ -319,7 +319,10 @@ namespace xsd
       std::basic_string<C> base64_binary<C, B>::
       encode () const
       {
-        using namespace xercesc;
+        // Cannot use 'using namespace' because of MSXML conflict.
+        //
+        using xercesc::Base64;
+
         std::basic_string<C> str;
 
         XMLSize_t n;
@@ -357,7 +360,9 @@ namespace xsd
       void base64_binary<C, B>::
       decode (const XMLCh* src)
       {
-        using namespace xercesc;
+        // Cannot use 'using namespace' because of MSXML conflict.
+        //
+        using xercesc::Base64;
 
         xml::std_memory_manager mm;
         XMLSize_t size;
