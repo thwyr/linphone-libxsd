@@ -120,11 +120,19 @@ namespace xsd
         void
         clear (xercesc::DOMElement& e)
         {
-          using namespace xercesc;
+          // Cannot use 'using namespace' because of MSXML conflict.
+          //
+          using xercesc::XMLUni;
+          using xercesc::XMLString;
+          using xercesc::SchemaSymbols;
+
+          using xercesc::DOMNode;
+          using xercesc::DOMAttr;
+          using xercesc::DOMNamedNodeMap;
 
           // Remove child nodes.
           //
-          while (xercesc::DOMNode* n = e.getFirstChild ())
+          while (DOMNode* n = e.getFirstChild ())
           {
             e.removeChild (n);
             n->release ();
@@ -149,7 +157,7 @@ namespace xsd
 
               if (ns != 0)
               {
-                if (XMLString::equals (ns, xercesc::XMLUni::fgXMLNSURIName))
+                if (XMLString::equals (ns, XMLUni::fgXMLNSURIName))
                   continue;
 
                 if (XMLString::equals (ns, SchemaSymbols::fgURI_XSI))

@@ -97,10 +97,16 @@ namespace xsd
 
         if (!x.null_content () && x.dom_content ().present ())
         {
+          // Cannot use 'using namespace' because of MSXML conflict.
+          //
+          using xercesc::DOMAttr;
+          using xercesc::DOMNode;
+          using xercesc::DOMElement;
+          using xercesc::DOMDocument;
+          using xercesc::DOMNamedNodeMap;
+
           // Clone the contents of the element.
           //
-          using namespace xercesc;
-
           DOMDocument& doc (*e.getOwnerDocument ());
           const DOMElement& se (x.dom_content ().get ());
           DOMNamedNodeMap& sa (*se.getAttributes ());
