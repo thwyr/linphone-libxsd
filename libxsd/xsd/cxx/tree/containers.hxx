@@ -129,14 +129,12 @@ namespace xsd
       class one<T, false>
       {
       public:
+        typedef T value_type;
+
         ~one ();
-
         one (container*);
-
         one (const T&, container*);
-
         one (XSD_AUTO_PTR<T>, container*);
-
         one (const one&, flags, container*);
 
         one&
@@ -193,16 +191,10 @@ namespace xsd
       class one<T, true>
       {
       public:
-        one (container*)
-            : present_ (false)
-        {
-        }
+        typedef T value_type;
 
-        one (const T& x, container*)
-            : x_ (x), present_ (true)
-        {
-        }
-
+        one (container*): present_ (false) {}
+        one (const T& x, container*) : x_ (x), present_ (true) {}
         one (const one& x, flags, container*)
             : x_ (x.x_), present_ (x.present_)
         {
@@ -258,6 +250,8 @@ namespace xsd
       class optional<T, false>
       {
       public:
+        typedef T value_type;
+
         ~optional ();
 
         explicit
@@ -373,11 +367,10 @@ namespace xsd
       class optional<T, true>
       {
       public:
+        typedef T value_type;
+
         explicit
-        optional (container* = 0)
-            : present_ (false)
-        {
-        }
+        optional (container* = 0) : present_ (false) {}
 
         explicit
         optional (const T&, container* = 0);

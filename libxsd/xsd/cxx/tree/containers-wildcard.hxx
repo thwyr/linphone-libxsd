@@ -28,6 +28,8 @@ namespace xsd
       class element_one
       {
       public:
+        typedef xercesc::DOMElement value_type;
+
         ~element_one ()
         {
           if (x_)
@@ -126,6 +128,8 @@ namespace xsd
       class element_optional
       {
       public:
+        typedef xercesc::DOMElement value_type;
+
         ~element_optional ()
         {
           if (x_)
