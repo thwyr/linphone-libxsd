@@ -3607,7 +3607,8 @@ namespace CXX
             {
               os << name << "::" << endl
                  << name << " (" << auto_ptr << "< " << type << " > p)" << endl
-                 << ": " << member << " (p, 0)"
+                 << ": " << member << " (" <<
+                (std >= cxx_version::cxx11 ? "::std::move (p)" : "p") << ", 0)"
                  << "{"
                  << "}";
             }
