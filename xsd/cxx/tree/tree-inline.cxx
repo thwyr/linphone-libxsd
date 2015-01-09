@@ -297,7 +297,13 @@ namespace CXX
 
           // default c-tor
           //
-          if (options.generate_default_ctor ())
+          bool list_based (
+            ult_base.is_a<SemanticGraph::List> () ||
+            ult_base.is_a<SemanticGraph::Fundamental::NameTokens> () ||
+            ult_base.is_a<SemanticGraph::Fundamental::IdRefs> () ||
+            ult_base.is_a<SemanticGraph::Fundamental::Entities> ());
+
+          if (options.generate_default_ctor () || list_based)
           {
             os << inl
                << name << "::" <<  endl
