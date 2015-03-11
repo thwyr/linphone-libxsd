@@ -5,6 +5,7 @@
 #include <xercesc/util/XMLUni.hpp>
 
 #include <xercesc/dom/DOM.hpp>
+#include <xercesc/dom/impl/DOMDocumentImpl.hpp>
 #include <xercesc/dom/impl/DOMLSSerializerImpl.hpp>
 
 #include <xsd/cxx/xml/string.hxx>
@@ -216,6 +217,7 @@ public:
                 fNamespaceStack->addElement(namespaceMap);
               }
               namespaceMap->put((void*)prefix,(XMLCh*)uri);
+
               *fFormatter  << XMLFormatter::NoEscapes
                            << chSpace << XMLUni::fgXMLNSString << chColon << prefix
                            << chEqual << chDoubleQuote
@@ -326,6 +328,29 @@ public:
   }
 
   using DOMLSSerializerImpl::write; // Whole document.
+
+public:
+  // Update the namespace stack to point to the strings from the
+  // new document's string pool.
+  //
+  void
+  update_namespace_stack (DOMDocument& d)
+  {
+    DOMDocumentImpl& di (dynamic_cast<DOMDocumentImpl&> (d));
+
+    for (XMLSize_t i (0); i != fNamespaceStack->size (); ++i)
+    {
+      RefHashTableOf<XMLCh>& t (*fNamespaceStack->elementAt (i));
+      RefHashTableOfEnumerator<XMLCh> e (&t, false, fMemoryManager);
+      while (e.hasMoreElements ())
+      {
+        XMLCh* k ((XMLCh*) (e.nextElementKey ()));
+        XMLCh* v (t.get (k));
+        t.put ((void*) (di.getPooledString (k)),
+               (XMLCh*) (di.getPooledString (v)));
+      }
+    }
+  }
 
 private:
   XMLFormatTarget* target_;
@@ -550,6 +575,10 @@ clear_document ()
       e = static_cast<DOMElement*> (e->getFirstChild ());
     }
   }
+
+  // Update the namespace stack to use the new document.
+  //
+  serializer_->update_namespace_stack (*doc);
 
   doc_ = doc;
   element_count_ = 0;
