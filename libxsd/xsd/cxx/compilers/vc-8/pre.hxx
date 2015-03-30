@@ -20,6 +20,7 @@
 #pragma warning (disable:4275) // non dll-interface base
 #pragma warning (disable:4251) // base needs to have dll-interface
 #pragma warning (disable:4224) // nonstandard extension  (/Za option)
+#pragma warning (disable:4503) // decorated name length exceeded
 
 
 // Elevated warnings.
