@@ -5,11 +5,11 @@
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../build/bootstrap.make
 
 all_examples := binary caching embedded custom hello library messaging \
-mixed multiroot order performance polymorphism streaming wildcard \
+mixed multiroot order performance polymorphism secure streaming wildcard \
 compression xpath
 
 build_examples := binary caching embedded custom hello library messaging \
-mixed multiroot order performance polymorphism streaming wildcard
+mixed multiroot order performance polymorphism secure streaming wildcard
 
 ifeq ($(xsd_with_zlib),y)
 build_examples += compression

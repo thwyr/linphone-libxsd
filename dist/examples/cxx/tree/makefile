@@ -1,5 +1,5 @@
 dirs := binary caching embedded custom hello library messaging mixed \
-multiroot order performance polymorphism streaming wildcard
+multiroot order performance polymorphism secure streaming wildcard
 
 ifeq ($(WITH_ZLIB),1)
 dirs += compression
