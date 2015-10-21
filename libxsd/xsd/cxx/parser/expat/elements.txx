@@ -279,7 +279,7 @@ namespace xsd
         {
           parser_auto_ptr parser (XML_ParserCreateNS (0, XML_Char (' ')));
 
-          if (parser == 0)
+          if (parser.get () == 0)
             throw std::bad_alloc ();
 
           if (system_id || public_id)
