@@ -3532,10 +3532,19 @@ namespace CXX
         virtual void
         traverse (Type& e)
         {
-          if (element_type_ && doc_root_p (e))
-          {
-            SemanticGraph::Type& t (e.type ());
+          SemanticGraph::Type& t (e.type ());
 
+          // Check if this element is abstract.
+          //
+          bool abst;
+          {
+            SemanticGraph::Complex* tc;
+            abst = (tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
+              tc->abstract_p ();
+          }
+
+          if (!abst && element_type_ && doc_root_p (e))
+          {
             bool fund (false);
             {
               IsFundamentalType test (fund);
@@ -3719,7 +3728,7 @@ namespace CXX
             }
           }
 
-          if (polymorphic && e.substitutes_p () &&
+          if (!abst && polymorphic && e.substitutes_p () &&
               !options.suppress_parsing ())
           {
             String const& name (ename (e));

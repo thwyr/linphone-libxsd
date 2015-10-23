@@ -28,8 +28,29 @@ namespace CXX
           if (!doc_root_p (e))
             return;
 
-          String const& name (eparser (e));
           SemanticGraph::Type& t (e.type ());
+
+          // Check if we need to handle xsi:type and substitution groups.
+          // If this element's type is anonymous then we don't need to do
+          // anything.
+          //
+          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
+
+          // Check if this element is abstract.
+          //
+          bool abst;
+          {
+            SemanticGraph::Complex* tc;
+            abst = (tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
+              tc->abstract_p ();
+          }
+
+          // Nothing to do if we are abstract and not polymorphic.
+          //
+          if (abst && !polymorphic)
+            return;
+
+          String const& name (eparser (e));
           String type (type_name (e));
           String const& error_handler (error_handler_type);
 
@@ -289,12 +310,6 @@ namespace CXX
             test.dispatch (t);
           }
 
-          // Check if we need to handle xsi:type and substitution groups.
-          // If this element's type is anonymous then we don't need to do
-          // anything.
-          //
-          bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
-
           // const DOMDocument&
           //
           os << auto_ptr << "< " << type << " >" << endl
@@ -326,9 +341,7 @@ namespace CXX
                << strlit (e.name ()) << "," << endl
                << strlit (e.namespace_().name ()) << "," << endl;
 
-            SemanticGraph::Complex* tc;
-            if ((tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
-                tc->abstract_p ())
+            if (abst)
               os << "0,";
             else
               os << "&::xsd::cxx::tree::factory_impl< " << type << " >,";
@@ -426,9 +439,7 @@ namespace CXX
                << strlit (e.name ()) << "," << endl
                << strlit (e.namespace_().name ()) << "," << endl;
 
-            SemanticGraph::Complex* tc;
-            if ((tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
-                tc->abstract_p ())
+            if (abst)
               os << "0,";
             else
               os << "&::xsd::cxx::tree::factory_impl< " << type << " >,";
