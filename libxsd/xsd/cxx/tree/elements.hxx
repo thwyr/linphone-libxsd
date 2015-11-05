@@ -1838,11 +1838,18 @@ namespace xsd
           return s < table_[i];
         }
 
+        // This overload shouldn't be necessary according to the standard
+        // and removing it doesn't appear to trip any old compilers that
+        // we still support. But let's keeps preprocessed-out until we
+        // go C++11-only.
+        //
+#if 0
         bool
         operator() (std::size_t i, std::size_t j) const
         {
           return std::basic_string<C> (table_[i]) < table_[j];
         }
+#endif
 
       private:
         const C* const* table_;
