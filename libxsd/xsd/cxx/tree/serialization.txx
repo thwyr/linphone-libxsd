@@ -648,7 +648,9 @@ namespace xsd
 
         if (x.qualified ())
         {
-          std::basic_string<C> p (xml::dom::prefix (x.namespace_ (), e));
+          // Note: prefix<C> in case uri doesn't derive from basic_string.
+          //
+          std::basic_string<C> p (xml::dom::prefix<C> (x.namespace_ (), e));
 
           if (!p.empty ())
             os << p << C (':');
@@ -666,8 +668,10 @@ namespace xsd
 
         if (x.qualified ())
         {
+          // Note: prefix<C> in case uri doesn't derive from basic_string.
+          //
           std::basic_string<C> p (
-            xml::dom::prefix (x.namespace_ (), *a.getOwnerElement ()));
+            xml::dom::prefix<C> (x.namespace_ (), *a.getOwnerElement ()));
 
           if (!p.empty ())
             os << p << C (':');
@@ -683,8 +687,10 @@ namespace xsd
       {
         if (x.qualified ())
         {
+          // Note: prefix<C> in case uri doesn't derive from basic_string.
+          //
           std::basic_string<C> p (
-            xml::dom::prefix (x.namespace_ (), ls.parent_));
+            xml::dom::prefix<C> (x.namespace_ (), ls.parent_));
 
           if (!p.empty ())
             ls.os_ << p << C (':');
