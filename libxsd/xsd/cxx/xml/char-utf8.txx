@@ -152,7 +152,7 @@ namespace xsd
 
         for (const C* p (s); p < end; ++p)
         {
-          unsigned char c (*p);
+          unsigned char c (static_cast<unsigned char> (*p));
 
           if (c < 0x80)
           {
@@ -201,7 +201,7 @@ namespace xsd
 
         for (const C* p (s); p < end; ++p)
         {
-          unsigned char c (*p);
+          unsigned char c (static_cast<unsigned char> (*p));
 
           if (c < 0x80)
           {
