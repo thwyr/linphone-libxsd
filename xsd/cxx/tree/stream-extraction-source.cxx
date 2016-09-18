@@ -575,6 +575,8 @@ namespace CXX
         virtual void
         traverse (Type& c)
         {
+          SemanticGraph::Context& ctx (c.context ());
+
           String name (ename (c));
 
           // If renamed name is empty then we do not need to generate
@@ -583,6 +585,7 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
+          bool ordered (ordered_p (c) && !ctx.count ("order-in-base"));
           bool has_members (has<Traversal::Member> (c));
 
           bool facets (false);
@@ -608,7 +611,6 @@ namespace CXX
           for (NarrowStrings::const_iterator i (st.begin ()); i != st.end ();
                ++i)
           {
-
             os << name << "::" << endl
                << name << " (" << istream_type << "< " <<
               i->c_str () << " >& s," << endl
@@ -646,7 +648,7 @@ namespace CXX
 
             // Parse
             //
-            if (has_members)
+            if (ordered || has_members)
             {
               os << "void " << name << "::" << endl
                  << unclash (name, "parse") << " (" <<
@@ -654,6 +656,35 @@ namespace CXX
                  << flags_type << " f)"
                  << "{"
                  << "XSD_UNUSED (f);"; // Can be unused.
+
+              // Read the order sequence.
+              //
+              if (ordered)
+              {
+                String const& t (ctx.get<String> ("order-type"));
+                String const& m (ctx.get<String> ("order-member"));
+
+                os << "{"
+                   << "::std::size_t n;"
+                   << "::xsd::cxx::tree::istream_common::as_size< " <<
+                  "::std::size_t > na (n);"
+                   << "s >> na;"
+                   << "if (n > 0)"
+                   << "{"
+                   << "this->" << m << ".reserve (n);"
+                   << "while (n--)"
+                   << "{"
+                   << "::std::size_t id, in;"
+                   << "::xsd::cxx::tree::istream_common::as_size< " <<
+                  "::std::size_t > ida (id), ina (in);"
+                   << "s >> ida;"
+                   << "s >> ina;"
+                   << "this->" << m << ".push_back (" << t << " (id, in));"
+                   << "}" // while
+                   << "}" // if
+                   << "}";
+              }
+
               {
                 Element element (*this, *i);
                 Attribute attribute (*this);

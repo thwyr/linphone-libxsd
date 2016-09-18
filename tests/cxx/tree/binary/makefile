@@ -4,7 +4,7 @@
 
 include $(dir $(lastword $(MAKEFILE_LIST)))../../../../build/bootstrap.make
 
-tests := cdr polymorphic xdr
+tests := cdr polymorphic xdr xdr-ordered
 
 default   := $(out_base)/
 test      := $(out_base)/.test

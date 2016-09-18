@@ -398,6 +398,8 @@ namespace CXX
         virtual void
         traverse (Type& c)
         {
+          SemanticGraph::Context& ctx (c.context ());
+
           String name (ename (c));
 
           // If renamed name is empty then we do not need to generate
@@ -406,7 +408,10 @@ namespace CXX
           if (renamed_type (c, name) && !name)
             return;
 
-          bool has_body (has<Traversal::Member> (c) || c.inherits_p ());
+          bool ordered (ordered_p (c) && !ctx.count ("order-in-base"));
+          bool has_body (ordered ||
+                         has<Traversal::Member> (c) ||
+                         c.inherits_p ());
 
           size_t n (0);
           NarrowStrings const& st (options.generate_insertion ());
@@ -427,6 +432,29 @@ namespace CXX
               inherits (c, inherits_);
 
               os << "& > (x);";
+            }
+
+            // Write the order sequence.
+            //
+            if (ordered)
+            {
+              String const& ci (ctx.get<String> ("order-const-iterator"));
+              String const& an (ctx.get<String> ("order-aname"));
+
+              os << "s << ::xsd::cxx::tree::ostream_common::as_size< " <<
+                "::std::size_t > (" << endl
+                 << "x." << an << " ().size ());"
+                 << endl
+                 << "for (" << name << "::" << ci << endl
+                 << "b (x." << an << " ().begin ()), n (x." << an <<
+                " ().end ());" << endl
+                 << "b != n; ++b)"
+                 << "{"
+                 << "s << ::xsd::cxx::tree::ostream_common::as_size< " <<
+                "::std::size_t > (b->id);"
+                 << "s << ::xsd::cxx::tree::ostream_common::as_size< " <<
+                "::std::size_t > (b->index);"
+                 << "}";
             }
 
             {
