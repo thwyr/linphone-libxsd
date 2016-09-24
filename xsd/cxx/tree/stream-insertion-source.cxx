@@ -269,6 +269,16 @@ namespace CXX
           //
           bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
+          // Check if this element is abstract.
+          //
+          bool abst (false);
+          if (poly)
+          {
+            SemanticGraph::Complex* tc;
+            abst = (tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
+              tc->abstract_p ();
+          }
+
           if (max (e) != 1)
           {
             // sequence
@@ -286,12 +296,14 @@ namespace CXX
 
             if (poly)
             {
-              os << "bool d (typeid (" << type << ") != typeid (*i));"
-                 << "s << d;"
-                 << "if (!d)" << endl
-                 << "s << *i;"
-                 << "else" << endl
-                 << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
+              if (!abst)
+                os << "bool d (typeid (" << type << ") != typeid (*i));"
+                   << "s << d;"
+                   << "if (!d)" << endl
+                   << "s << *i;"
+                   << "else" << endl;
+
+              os << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().insert (s, *i);";
             }
@@ -313,13 +325,16 @@ namespace CXX
             if (poly)
             {
               os << "{"
-                 << "const " << type << "& i (*x." << aname << " ());"
-                 << "bool d (typeid (" << type << ") != typeid (i));"
-                 << "s << d;"
-                 << "if (!d)" << endl
-                 << "s << i;"
-                 << "else" << endl
-                 << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
+                 << "const " << type << "& i (*x." << aname << " ());";
+
+              if (!abst)
+                 os << "bool d (typeid (" << type << ") != typeid (i));"
+                    << "s << d;"
+                    << "if (!d)" << endl
+                    << "s << i;"
+                    << "else" << endl;
+
+              os << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().insert (s, i);"
                  << "}";
@@ -337,13 +352,16 @@ namespace CXX
             if (poly)
             {
               os << "{"
-                 << "const " << type << "& i (x." << aname << " ());"
-                 << "bool d (typeid (" << type << ") != typeid (i));"
-                 << "s << d;"
-                 << "if (!d)" << endl
-                 << "s << i;"
-                 << "else" << endl
-                 << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
+                 << "const " << type << "& i (x." << aname << " ());";
+
+              if (!abst)
+                os << "bool d (typeid (" << type << ") != typeid (i));"
+                   << "s << d;"
+                   << "if (!d)" << endl
+                   << "s << i;"
+                   << "else" << endl;
+
+              os << "::xsd::cxx::tree::stream_insertion_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().insert (s, i);"
                  << "}";

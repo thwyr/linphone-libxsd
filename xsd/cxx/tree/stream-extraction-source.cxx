@@ -337,6 +337,16 @@ namespace CXX
           //
           bool poly (polymorphic && polymorphic_p (t) && !anonymous_p (t));
 
+          // Check if this element is abstract.
+          //
+          bool abst (false);
+          if (poly)
+          {
+            SemanticGraph::Complex* tc;
+            abst = (tc = dynamic_cast<SemanticGraph::Complex*> (&t)) != 0 &&
+              tc->abstract_p ();
+          }
+
           char const* r (
             (poly || !fund) && std >= cxx_version::cxx11
             ? "::std::move (r)"
@@ -362,15 +372,18 @@ namespace CXX
 
             if (poly)
             {
-              os << "bool d;"
-                 << auto_ptr << "< " << type << " > r;"
-                 << "s >> d;"
-                 << endl
-                 << "if (!d)" << endl
-                 << "r.reset (new " << type << " (s, f, this));"
-                 << "else"
-                 << "{"
-                 << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
+              os << auto_ptr << "< " << type << " > r;";
+
+              if (!abst)
+                os << "bool d;"
+                   << "s >> d;"
+                   << endl
+                   << "if (!d)" << endl
+                   << "r.reset (new " << type << " (s, f, this));"
+                   << "else"
+                   << "{";
+
+              os << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                  << "::xsd::cxx::tree::stream_extraction_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().extract (" << endl
@@ -380,8 +393,10 @@ namespace CXX
                  << "tmp.release ();"
                  << "else" << endl
                  << "throw ::xsd::cxx::tree::not_derived< " << char_type <<
-                " > ();"
-                 << "}";
+                " > ();";
+
+              if (!abst)
+                os << "}";
             }
             else if (fund)
             {
@@ -411,15 +426,18 @@ namespace CXX
 
             if (poly)
             {
-              os << "bool d;"
-                 << auto_ptr << "< " << type << " > r;"
-                 << "s >> d;"
-                 << endl
-                 << "if (!d)" << endl
-                 << "r.reset (new " << type << " (s, f, this));"
-                 << "else"
-                 << "{"
-                 << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
+              os << auto_ptr << "< " << type << " > r;";
+
+              if (!abst)
+                os << "bool d;"
+                   << "s >> d;"
+                   << endl
+                   << "if (!d)" << endl
+                   << "r.reset (new " << type << " (s, f, this));"
+                   << "else"
+                   << "{";
+
+              os << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                  << "::xsd::cxx::tree::stream_extraction_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().extract (" << endl
@@ -429,8 +447,10 @@ namespace CXX
                  << "tmp.release ();"
                  << "else" << endl
                  << "throw ::xsd::cxx::tree::not_derived< " << char_type <<
-                " > ();"
-                 << "}";
+                " > ();";
+
+              if (!abst)
+                os << "}";
             }
             else if (fund)
             {
@@ -455,15 +475,18 @@ namespace CXX
 
             if (poly)
             {
-              os << "bool d;"
-                 << auto_ptr << "< " << type << " > r;"
-                 << "s >> d;"
-                 << endl
-                 << "if (!d)" << endl
-                 << "r.reset (new " << type << " (s, f, this));"
-                 << "else"
-                 << "{"
-                 << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
+              os << auto_ptr << "< " << type << " > r;";
+
+              if (!abst)
+                os << "bool d;"
+                   << "s >> d;"
+                   << endl
+                   << "if (!d)" << endl
+                   << "r.reset (new " << type << " (s, f, this));"
+                   << "else"
+                   << "{";
+
+              os << auto_ptr << "< ::xsd::cxx::tree::type > tmp (" << endl
                  << "::xsd::cxx::tree::stream_extraction_map_instance< " <<
                 poly_plate << ", " << stream << ", " << char_type <<
                 " > ().extract (" << endl
@@ -473,8 +496,10 @@ namespace CXX
                  << "tmp.release ();"
                  << "else" << endl
                  << "throw ::xsd::cxx::tree::not_derived< " << char_type <<
-                " > ();"
-                 << "}";
+                " > ();";
+
+              if (!abst)
+                os << "}";
             }
             else if (fund)
             {
