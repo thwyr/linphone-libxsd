@@ -22,7 +22,7 @@
 // 3.0.0.b2    02999952
 //
 
-#define XSD_STR_VERSION "4.1.0.a9"
-#define XSD_INT_VERSION 4009909L
+#define XSD_STR_VERSION "4.1.0.a10"
+#define XSD_INT_VERSION 4009910L
 
 #endif  // XSD_CXX_VERSION_HXX
