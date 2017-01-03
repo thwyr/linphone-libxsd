@@ -1,5 +1,5 @@
 // file      : xsd/cxx/xml/dom/serialization-source.hxx
-// copyright : Copyright (c) 2005-2014 Code Synthesis Tools CC
+// copyright : Copyright (c) 2005-2017 Code Synthesis Tools CC
 // license   : GNU GPL v2 + exceptions; see accompanying LICENSE file
 
 #ifndef XSD_CXX_XML_DOM_SERIALIZATION_SOURCE_HXX
