@@ -27,6 +27,34 @@
 #  LIBXSD_INCLUDE_DIRS - the belmsrp include directory
 #  LIBXSD_LIBRARIES - The libraries needed to use libxsd 
 
+find_program(XSD_PROGRAM
+	NAMES xsd xsdcxx
+)
+
+function(ADD_XSD_WRAPPERS file _comment)
+	get_filename_component(filepath "${file}" DIRECTORY)
+	get_filename_component(filename "${file}" NAME)
+	set(destinations "${CMAKE_CURRENT_SOURCE_DIR}/${file}.h" "${CMAKE_CURRENT_SOURCE_DIR}/${file}.cpp")
+	set(source "${CMAKE_CURRENT_SOURCE_DIR}/${file}.xsd")
+
+	set(regex "%http://.+/(.+)%\\\$$1%")
+
+	add_custom_command(OUTPUT ${destinations}
+		COMMAND "${XSD_PROGRAM}" "cxx-tree" "--generate-wildcard"
+  			"--generate-serialization" "--generate-ostream"
+  			"--generate-detach" "--std" "c++11" "--type-naming" "java"
+			"--function-naming" "java"  "--location-regex-trace" "--show-sloc"
+			"--hxx-suffix" ".h" "--ixx-suffix" ".h" "--cxx-suffix" ".cpp"
+			"--location-regex" "\"${regex}\""
+			"--output-dir" "${filepath}" "${source}"
+		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+		COMMENT "${_comment}")
+
+	add_custom_target(xsd-${filename} DEPENDS ${destinations} SOURCES ${source})
+
+	set_source_files_properties(${destinations} PROPERTIES GENERATED ON)
+endfunction()
+
 set(LIBXSD_INCLUDE_DIRS @CMAKE_INSTALL_FULL_INCLUDEDIR@ @XERCES_INCLUDE_DIRS@)
 list(REMOVE_DUPLICATES LIBXSD_INCLUDE_DIRS)
 set(LIBXSD_LIBRARIES @XERCES_LIBRARIES@)
