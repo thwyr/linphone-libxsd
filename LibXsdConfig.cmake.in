@@ -35,7 +35,7 @@ function(ADD_XSD_WRAPPERS file _comment)
 	get_filename_component(filepath "${file}" DIRECTORY)
 	get_filename_component(filename "${file}" NAME)
 	set(destinations "${CMAKE_CURRENT_SOURCE_DIR}/${file}.h" "${CMAKE_CURRENT_SOURCE_DIR}/${file}.cpp")
-	set(source "${CMAKE_CURRENT_SOURCE_DIR}/${file}.xsd")
+	set(source "${file}.xsd")
 
 	set(regex "%http://.+/(.+)%\\\$$1%")
 
