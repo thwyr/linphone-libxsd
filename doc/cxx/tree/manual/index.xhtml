@@ -6617,7 +6617,7 @@ XMLPlatformUtils::Initialize ();
      xml_schema::flags::keep_dom |
      xml_schema::flags::dont_initialize));
 
-  DOMNode* n = root->_node ();
+  DOMNode* n = r->_node ();
   assert (n->getNodeType () == DOMNode::ELEMENT_NODE);
   DOMElement* re = static_cast&lt;DOMElement*> (n);
 
