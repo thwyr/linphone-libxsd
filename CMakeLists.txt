@@ -27,7 +27,7 @@ project(libxsd VERSION 4.0.0 LANGUAGES CXX)
 include(GNUInstallDirs)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
-find_package(Xerces REQUIRED)
+find_package(XercesC REQUIRED)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
