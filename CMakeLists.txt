@@ -24,28 +24,6 @@ cmake_minimum_required(VERSION 3.0)
 
 project(libxsd VERSION 4.0.0 LANGUAGES CXX)
 
-include(GNUInstallDirs)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
-find_package(XercesC REQUIRED)
-
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-	"${CMAKE_CURRENT_BINARY_DIR}/LibXsdConfigVersion.cmake"
-	VERSION ${PROJECT_VERSION}
-	COMPATIBILITY AnyNewerVersion
-)
-configure_file(LibXsdConfig.cmake.in
-	"${CMAKE_CURRENT_BINARY_DIR}/LibXsdConfig.cmake"
-	@ONLY
-)
-install(FILES
-	"${CMAKE_CURRENT_BINARY_DIR}/LibXsdConfig.cmake"
-	"${CMAKE_CURRENT_BINARY_DIR}/LibXsdConfigVersion.cmake"
-	DESTINATION "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake"
-)
-
-
 install(DIRECTORY xsd
 	DESTINATION include
 )
