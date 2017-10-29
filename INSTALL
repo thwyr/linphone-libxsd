@@ -3,14 +3,14 @@ Compiler Prerequisites
   build-time:
 
     - g++              >= 3.4.3   http://gcc.gnu.org
-    - build            >= 0.3.10  http://www.codesynthesis.com/projects/build/
-    - cli              >= 1.2.0   http://www.codesynthesis.com/projects/cli/
+    - build            >= 0.3.10  https://www.codesynthesis.com/projects/build/
+    - cli              >= 1.2.0   https://www.codesynthesis.com/projects/cli/
 
   run-time:
 
     - libxerces-c      >= 3.0.0   http://xerces.apache.org/xerces-c/
-    - libcutl          >= 1.8.0   http://www.codesynthesis.com/projects/libcutl/
-    - libxsd-frontend  >= 2.0.0   http://www.codesynthesis.com/projects/libxsd-frontend/
+    - libcutl          >= 1.8.0   https://www.codesynthesis.com/projects/libcutl/
+    - libxsd-frontend  >= 2.0.0   https://www.codesynthesis.com/projects/libxsd-frontend/
 
 
 Generated Code Prerequisites

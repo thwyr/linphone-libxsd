@@ -2,7 +2,7 @@ This package contains precompiled binaries of CodeSynthesis XSD, a
 W3C XML Schema to C++ Data Binding compiler. For more information
 about XSD visit
 
-http://www.codesynthesis.com/products/xsd/
+https://www.codesynthesis.com/products/xsd/
 
 This README file describes how to start using XSD in UNIX or
 UNIX-like (for example, Cygwin/Mingw) environments.
