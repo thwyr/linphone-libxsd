@@ -32,8 +32,7 @@ main (int argc, char* argv[])
 
       if (s[0] != "abc" ||
           s[1] != "\xD5\x95" ||
-          s[2] != "\xEA\xAA\xAA" ||
-          s[3] != "\xF2\xAA\xAA\xAA")
+          s[2] != "\xEA\xAA\xAA")
       {
         cerr << "invalid encoding" << endl;
         return 1;
@@ -45,8 +44,7 @@ main (int argc, char* argv[])
 
       if (s[0] != strenum::abc ||
           s[1] != strenum::a_c ||
-          s[2] != strenum::cxx_bc ||
-          s[3] != strenum::ab_)
+          s[2] != strenum::cxx_bc)
       {
         cerr << "invalid encoding" << endl;
         return 1;

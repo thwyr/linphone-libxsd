@@ -4,11 +4,11 @@
 
   <a>abc</a>
   <a>&#x1FFF;&#xD7FF;</a>
-  <a>&#x10000;&#x10FFFD;</a>
+  <a>&#x1000;&#x10FF;</a>
 
   <b>abc</b>
   <b>a&#x1FFF;&#xD7FF;c</b>
-  <b>&#x10000;&#x10FFFD;bc</b>
-  <b>ab&#x10000;&#x10FFFD;</b>
+  <b>&#x1000;&#x10FF;bc</b>
+  <b>ab&#x1000;&#x10FF;</b>
 
 </t:root>

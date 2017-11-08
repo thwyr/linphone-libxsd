@@ -43,7 +43,7 @@ main (int argc, char* argv[])
       if (s[0] != "abc" ||
           s[1] != "\xE6" ||
           s[2] != "\xA2\xA3\xA4\xA5" ||
-          s[3] != "???")
+          s[3] != "??")
       {
         cerr << "invalid encoding" << endl;
         return 1;

@@ -9,7 +9,6 @@
         abc
         a&#x555;c
         &#xAAAA;bc
-        ab&#xAAAAA;
       </documentation>
     </annotation>
 
@@ -17,7 +16,6 @@
       <enumeration value="abc"/>
       <enumeration value="a&#x555;c"/>
       <enumeration value="&#xAAAA;bc"/>
-      <enumeration value="ab&#xAAAAA;"/>
     </restriction>
   </simpleType>
 

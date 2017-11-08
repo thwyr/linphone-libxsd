@@ -8,16 +8,16 @@
         Test enum. Valid values are:
         abc
         a&#x1FFF;&#xD7FF;c
-        &#x10000;&#x10FFFD;bc
-        ab&#x10000;&#x10FFFD;
+        &#x1000;&#x10FF;bc
+        ab&#x1000;&#x10FF;
       </documentation>
     </annotation>
 
     <restriction base="string">
       <enumeration value="abc"/>
       <enumeration value="a&#x1FFF;&#xD7FF;c"/>
-      <enumeration value="&#x10000;&#x10FFFD;bc"/>
-      <enumeration value="ab&#x10000;&#x10FFFD;"/>
+      <enumeration value="&#x1000;&#x10FF;bc"/>
+      <enumeration value="ab&#x1000;&#x10FF;"/>
     </restriction>
   </simpleType>
 
