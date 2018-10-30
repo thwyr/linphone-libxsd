@@ -22,7 +22,7 @@
 
 cmake_minimum_required(VERSION 3.0)
 
-project(libxsd VERSION 4.0.0 LANGUAGES CXX)
+project(libxsd VERSION 4.0.0 LANGUAGES NONE)
 
 install(DIRECTORY xsd
 	DESTINATION include
