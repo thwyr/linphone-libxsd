@@ -792,6 +792,8 @@ namespace xsd
       template <typename T>
       class sequence<T, false>: public sequence_common
       {
+      private:
+        using Self = sequence<T, false>;
       protected:
         // For IBM XL C++ 8.0.
         //
@@ -829,6 +831,12 @@ namespace xsd
         sequence (container* c = 0)
             : sequence_common (c)
         {
+        }
+
+        Self& operator=(const Self& other)
+        {
+          *this = other;
+          return *this;
         }
 
         // The first version causes trouble on IBM XL C++ 7.0 when
@@ -1114,12 +1122,20 @@ namespace xsd
       template <typename T>
       class sequence<T, true>: public std::vector<T>
       {
+      private:
+        using Self = sequence<T, false>;
         typedef std::vector<T> base_sequence;
 
       public:
         explicit
         sequence (container* = 0)
         {
+        }
+
+        Self& operator=(const Self& other)
+        {
+          *this = other;
+          return *this;
         }
 
         explicit
